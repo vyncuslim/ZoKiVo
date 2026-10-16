@@ -14,6 +14,9 @@ export async function POST(req:NextRequest){
   if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your email before hosting.",code:"EMAIL_UNVERIFIED"},403);
   const body=await req.json().catch(()=>({})),id=body?.quizId||SAMPLE;
   const questionSeconds=body?.questionSeconds===undefined?15:body.questionSeconds;
+  const allowLateJoining=body?.allowLateJoining===undefined?false:body.allowLateJoining;
+  const randomPlayerNames=body?.randomPlayerNames===undefined?false:body.randomPlayerNames;
+  if(typeof allowLateJoining!=="boolean"||typeof randomPlayerNames!=="boolean")throw new AuthError("Invalid host settings.");
   if(![10,15,20,30,45,60].includes(questionSeconds))throw new AuthError("Invalid question timer.");
   if(typeof id!=="string"||!isId(id))throw new AuthError("Choose a valid quiz.");
   const sql=db(),secret=token();
@@ -22,8 +25,8 @@ export async function POST(req:NextRequest){
   if(!available.length)return noCache({error:"Quiz is not published or no longer available."},409);
   for(let i=0;i<6;i++){
    const pin=String(randomInt(100000,1000000));
-   const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id,question_seconds)
-     VALUES(${pin},${id},${hash(secret)},${auth.user.id},${questionSeconds})
+   const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id,question_seconds,allow_late_joining,random_player_names)
+     VALUES(${pin},${id},${hash(secret)},${auth.user.id},${questionSeconds},${allowLateJoining},${randomPlayerNames})
      ON CONFLICT DO NOTHING RETURNING pin`;
    if(created.length){await emitRoomRefresh('quiz',pin);return applyRenew(noCache({pin,token:secret}),req,auth.renew)}
   }

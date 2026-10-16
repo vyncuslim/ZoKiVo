@@ -12,3 +12,10 @@
 .game-page .next-control button:disabled{opacity:.8}
 .game-host-instructions{font-size:12px;font-weight:900;color:#5b4b73;margin:14px 0}
 @media(max-width:680px){.host-launch .host-quiz-picker select{min-height:48px}.game-page[data-role="host"] .game-choice:disabled{min-height:75px}}
+
+/* Host options: preserve ZoKivo's existing bold purple card. */
+.host-options{display:grid;gap:14px;margin:19px 0 22px}
+.host-options .host-option-field{display:grid;gap:8px;color:#fff8df;font-weight:900;font-size:13px}
+.host-options .host-option-field select{width:100%;background:#fffefa;color:#24213a;border:2px solid #e8d9ff;border-radius:12px;padding:12px;min-height:52px}
+.host-options .host-option-toggle{display:flex;gap:12px;align-items:center;color:#fff8df;font-size:13px;font-weight:800;line-height:1.45;cursor:pointer}
+.host-options .host-option-toggle input{accent-color:#ffd14d;width:20px;height:20px;flex:none}

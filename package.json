@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prebuild": "node scripts/verify-seo.cjs && node scripts/verify-auth.cjs && node scripts/verify-quiz.cjs && node scripts/verify-realtime.cjs && node scripts/verify-improvements.cjs && node scripts/verify-paper-ui.cjs && node scripts/verify-scoreboard.cjs && node scripts/verify-ai-history.cjs && node scripts/verify-lobby.cjs && node scripts/verify-paper-camera-access.cjs && node scripts/verify-paper-decoding.cjs",
+    "prebuild": "node scripts/verify-seo.cjs && node scripts/verify-auth.cjs && node scripts/verify-quiz.cjs && node scripts/verify-realtime.cjs && node scripts/verify-improvements.cjs && node scripts/verify-paper-ui.cjs && node scripts/verify-scoreboard.cjs && node scripts/verify-ai-history.cjs && node scripts/verify-lobby.cjs && node scripts/verify-paper-camera-access.cjs && node scripts/verify-host-settings.cjs && node scripts/verify-paper-decoding.cjs",
     "test:paper": "node scripts/verify-paper-decoding.cjs",
     "test:auth": "node scripts/verify-auth.cjs",
     "test:quiz": "node scripts/verify-quiz.cjs",
@@ -17,7 +17,8 @@
     "test:scoreboard": "node scripts/verify-scoreboard.cjs",
     "test:ai-history": "node scripts/verify-ai-history.cjs",
     "test:lobby": "node scripts/verify-lobby.cjs",
-    "test:camera-access": "node scripts/verify-paper-camera-access.cjs"
+    "test:camera-access": "node scripts/verify-paper-camera-access.cjs",
+    "test:host-settings": "node scripts/verify-host-settings.cjs"
   },
   "dependencies": {
     "next": "15.5.28",
