@@ -1,8 +1,14 @@
+import {NextRequest} from "next/server";
+import {findUser,checkOrigin,noCache,authError} from "@/lib/mother-auth";
 import {db,hash,same,bad} from "@/lib/store";
 export const runtime="nodejs";
 type CardSource="zokivo"|"wayground";
 type Answer={card:number;choice:number;card_source:CardSource};
-export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
+export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
+ try{checkOrigin(req)}catch{return noCache({error:"Invalid request origin"},403)}
+ const auth=await findUser(req).catch(()=>null);
+ if(!auth)return noCache({error:"Authentication unavailable"},503);
+ if(!auth.user)return noCache({error:"Sign in as the room host"},401);
  const{pin}=await params,t=req.headers.get("x-host-token");
  if(!/^\d{6}$/.test(pin)||!t)return bad("Host authorization required",401);
  try{
@@ -17,8 +23,8 @@ export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
     responses.push({card:x.card,choice:x.choice,card_source:source});
   }
   if(new Set(responses.map(r=>r.card_source+":"+r.card)).size!==responses.length)return bad("Duplicate card identities",400);
-  const sql=db(),sessions=await sql`SELECT host_token_hash FROM paper_sessions WHERE pin=${pin}`;
-  if(!sessions.length||!same(sessions[0].host_token_hash,hash(t)))return bad("Not authorized",403);
+  const sql=db(),sessions=await sql`SELECT host_token_hash,owner_user_id FROM paper_sessions WHERE pin=${pin}`;
+  if(!sessions.length||!same(sessions[0].host_token_hash,hash(t))||sessions[0].owner_user_id&&sessions[0].owner_user_id!==auth.user.id)return bad("Not authorized",403);
   const json=JSON.stringify(responses);
   const result=await sql`WITH active AS(
     SELECT quiz_set_id FROM paper_sessions WHERE pin=${pin} AND status='playing' AND current_index=${index}
