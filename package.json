@@ -24,7 +24,8 @@
     "test:media": "node scripts/verify-media.cjs",
     "test:locker": "node scripts/verify-locker.cjs",
     "test:reports": "node scripts/verify-reports.cjs",
-    "test:advanced-host": "node scripts/verify-advanced-host.cjs"
+    "test:advanced-host": "node scripts/verify-advanced-host.cjs",
+    "qa:realtime": "node scripts/stress-room.mjs"
   },
   "dependencies": {
     "next": "15.5.28",
