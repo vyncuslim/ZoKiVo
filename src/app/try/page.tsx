@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { MiniQuiz } from "@/components/mini-quiz";
-export const metadata:Metadata={title:"Try a quiz",description:"Try a free practice question and see how ZoKivo quiz games work."};
+export const metadata:Metadata={alternates:{canonical:"/try"},title:"Try a quiz",description:"Try a free practice question and see how ZoKivo quiz games work."};
 export default function Try(){
  return <main id="main-content" className="try-page">
    <div className="wrap"><nav className="crumbs crumbs-light" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><strong>Try a quiz</strong></nav>

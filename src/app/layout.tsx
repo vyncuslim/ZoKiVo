@@ -12,6 +12,7 @@ import { Brand } from "@/components/brand";
 export const metadata: Metadata = {
  title: {default: "ZoKivo! — Play. Learn. Win.",template:"%s | ZoKivo!"},
  description: "Explore classroom quiz games, learn how to play, or join a live ZoKivo game with a six-digit PIN.",
+ metadataBase:new URL("https://zokivo.vynalthai.com"),
  icons: {icon:"/icon.svg"},
  verification: {google:"uYmJ_568JPu-rjsyRzA2KU2vQpiQDOvN97G5Qgd5-38"}
 };

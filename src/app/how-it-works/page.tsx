@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-export const metadata:Metadata={title:"How it works",description:"Learn how to host or join a ZoKivo live classroom game."};
+export const metadata:Metadata={alternates:{canonical:"/how-it-works"},title:"How it works",description:"Learn how to host or join a ZoKivo live classroom game."};
 const hostSteps=[
  {n:"01",title:"Start a Quiz Party",body:"Open the host page and create a room using the World Explorer starter quiz."},
  {n:"02",title:"Share the six-digit PIN",body:"Your new room comes with a PIN. Send it to your players."},

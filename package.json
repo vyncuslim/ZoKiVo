@@ -6,11 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prebuild": "node scripts/verify-auth.cjs && node scripts/verify-quiz.cjs && node scripts/verify-realtime.cjs && node scripts/verify-paper-decoding.cjs",
+    "prebuild": "node scripts/verify-seo.cjs && node scripts/verify-auth.cjs && node scripts/verify-quiz.cjs && node scripts/verify-realtime.cjs && node scripts/verify-paper-decoding.cjs",
     "test:paper": "node scripts/verify-paper-decoding.cjs",
     "test:auth": "node scripts/verify-auth.cjs",
     "test:quiz": "node scripts/verify-quiz.cjs",
-    "test:realtime": "node scripts/verify-realtime.cjs"
+    "test:realtime": "node scripts/verify-realtime.cjs",
+    "test:seo": "node scripts/verify-seo.cjs"
   },
   "dependencies": {
     "next": "15.5.28",

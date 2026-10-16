@@ -1,5 +1,7 @@
+import type {Metadata} from "next";
 import Link from "next/link";
 import { BrandMark } from "@/components/brand";
+export const metadata:Metadata={alternates:{canonical:"/"},robots:{index:true,follow:true}};
 export default function Home() {
  return <main id="main-content" className="home-v2">
  <section className="hero-section wrap home-hero" aria-labelledby="home-title">

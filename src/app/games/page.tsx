@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import {BrandMark} from "@/components/brand";
-export const metadata:Metadata={title:"Game modes",description:"Discover current and upcoming ZoKivo classroom game modes."};
+export const metadata:Metadata={alternates:{canonical:"/games"},title:"Game modes",description:"Discover current and upcoming ZoKivo classroom game modes."};
 const upcoming=[
  {label:"TEAM PLAY",name:"Team Clash",description:"Team up with friends, share ideas and aim for a collective win.",symbol:"↗",tone:"mode-peach"},
  {label:"QUICK THINKING",name:"Speed Run",description:"A race to think fast and answer before the clock runs out.",symbol:"➜",tone:"mode-yellow"}
