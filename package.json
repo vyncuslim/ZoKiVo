@@ -18,7 +18,8 @@
     "react-dom": "19.1.10",
     "@neondatabase/serverless": "1.0.2",
     "jsqr": "1.4.0",
-    "qrcode": "1.5.4"
+    "qrcode": "1.5.4",
+    "@supabase/supabase-js": "2.91.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
