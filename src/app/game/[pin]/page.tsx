@@ -7,7 +7,7 @@ import {buildReportCsv} from "@/lib/report-csv";
 import {avatarSymbol} from "@/lib/avatars";
 import {ModeRewards} from "@/components/mode-rewards";
 import {gameModeName} from "@/lib/game-modes";
-type State={gameMode?:string;serverTime?:string;scoreboardPhase?:"previous-round"|"settled";answeredCount?:number;status:"lobby"|"playing"|"finished";index:number;total:number;deadline:string|null;question:{question:string;choices:string[]}|null;players:{id:string;nickname:string;score:number;avatar_id:string;mode_score?:number}[];answeredCount?:number;answeredIds:string[];viewer:{host:boolean;playerId:string|null;mode?:{reward_ready:boolean;credits:number;fish:number;served:number;cafe_level:number;defense_code:number}}};
+type State={gameMode?:string;serverTime?:string;scoreboardPhase?:"previous-round"|"settled";answeredCount?:number;status:"lobby"|"playing"|"finished";index:number;total:number;deadline:string|null;question:{question:string;choices:string[]}|null;players:{id:string;nickname:string;score:number;avatar_id:string;mode_score?:number}[];answeredIds:string[];viewer:{host:boolean;playerId:string|null;mode?:{reward_ready:boolean;credits:number;fish:number;served:number;cafe_level:number;defense_code:number}}};
 const letters=["A","B","C","D"];
 export default function Game(){
  const {pin}=useParams<{pin:string}>();const host=useSearchParams().get("host")==="1";
