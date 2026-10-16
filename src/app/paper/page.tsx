@@ -29,6 +29,6 @@ export default function PaperPage(){
    <article><span>02</span><h3>Project the quiz</h3><p>Start a teacher-led session on your phone. Open its board URL on a laptop or projector.</p></article>
    <article><span>03</span><h3>Rotate, scan, submit</h3><p>Students hold up cards with A, B, C or D on top. Scan and review each answer, then submit.</p></article>
   </div></section>
-  <div className="paper-beta-note">Early-access feature. The browser scanner currently recognizes one QR card at a time as you move your camera across the room. Native multi-card simultaneous scanning and teacher account verification are not yet available. Start with a small test group before classroom use.</div>
+  <div className="paper-beta-note">Early-access feature. The browser scanner now supports multiple ZoKivo QR cards per camera frame, subject to browser, lighting and phone performance. Wayground’s specialized printed markers are not yet supported. Teacher account verification is still in development. Start with a small test group before classroom use.</div>
  </main>;
 }
