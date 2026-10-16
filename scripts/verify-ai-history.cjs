@@ -42,5 +42,6 @@ const ui=fs.readFileSync("src/app/ai/page.tsx","utf8");
 ok(ui.includes('apiJson("/api/ai/conversations")')&&ui.includes("loadChat(first)"),"Refresh loads saved conversations");
 ok(ui.includes("seenReply.current")&&ui.includes("text.startsWith(last.text)"),"Partial/final repeated replies coalesced");
 ok(ui.includes("await save(message,id)")&&ui.includes('ws.send(JSON.stringify({type:"user_message",text}))'),"User message persisted before network send");
+ok(ui.includes("lastSent.current")&&ui.includes("Date.now()-lastSent.current.at<1200"),"Rapid duplicate user sends blocked");
 ok(ui.includes("useQuiz(suggestion)"),"AI quiz requires human editor handoff");
 console.log("AI_HISTORY_TEST_PASS: "+count+" assertions, authenticated storage, crypto integrity, quiz handoff.");

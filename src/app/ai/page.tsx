@@ -23,6 +23,7 @@ export default function AIPage(){
  const [draft,setDraft]=useState(""),[loading,setLoading]=useState(true),[working,setWorking]=useState(false);
  const socket=useRef<WebSocket|null>(null),activeRef=useRef(""),messagesRef=useRef<Message[]>([]);
  const seenReply=useRef<{id:string;text:string;at:number}|null>(null);
+ const lastSent=useRef<{text:string;at:number}|null>(null);
  const latestSession=useRef(0),bottom=useRef<HTMLDivElement>(null),sending=useRef(false);
  const setChat=(m:Message[]|((old:Message[])=>Message[]))=>{
   const next=typeof m==="function"?m(messagesRef.current):m;
@@ -125,7 +126,8 @@ export default function AIPage(){
       if(!text)return;
       const last=seenReply.current,now=Date.now();
       // Final AI replies can repeat or extend an earlier partial response; replace rather than append.
-      const sameTurn=!!last&&now-last.at<9000&&(text===last.text||text.startsWith(last.text)||last.text.startsWith(text));
+      const prefix=last?Math.min(70,Math.max(20,Math.floor(last.text.length/2))):0;
+      const sameTurn=!!last&&now-last.at<9000&&(text===last.text||text.startsWith(last.text)||last.text.startsWith(text)||(last.text.length>=40&&text.length>=last.text.length&&text.slice(0,prefix)===last.text.slice(0,prefix)));
       if(sameTurn&&last){
        const replacement={id:last.id,role:"assistant" as const,text:text.length>=last.text.length?text:last.text};
        seenReply.current={id:last.id,text:replacement.text,at:now};
@@ -150,6 +152,7 @@ export default function AIPage(){
  async function send(textOverride?:string){
   const text=(textOverride||draft).trim(),ws=socket.current,id=activeRef.current;
   if(!text||text.length>2000||!id||sending.current||ws?.readyState!==WebSocket.OPEN)return;
+  if(lastSent.current?.text===text&&Date.now()-lastSent.current.at<1200)return;
   sending.current=true;setWorking(true);setError("");seenReply.current=null;
   const message={id:uuid(),role:"user" as const,text};
   try{
@@ -158,6 +161,7 @@ export default function AIPage(){
    if(socket.current!==ws||ws.readyState!==WebSocket.OPEN)throw Error("AI disconnected after saving your message. Reconnect to continue.");
    setChat(all=>[...all,message]);setDraft("");
    ws.send(JSON.stringify({type:"user_message",text}));
+   lastSent.current={text,at:Date.now()};
    void refreshList();
   }catch(e){setError(e instanceof Error?e.message:"Message could not be sent.");setDraft(text)}
   finally{sending.current=false;setWorking(false)}
