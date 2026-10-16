@@ -19,7 +19,7 @@ export async function GET(req:NextRequest){
    FROM paper_sessions s JOIN quiz_sets q ON q.id=s.quiz_set_id
    WHERE s.owner_user_id=${owner} ORDER BY s.created_at DESC LIMIT 100`;
   const all=[...rooms.map(r=>({...r,kind:"quiz"})),...paper.map(r=>({...r,kind:"paper",game_mode:"paper"}))]
-   .sort((a,b)=>new Date(b.created_at).getTime()-new Date(a.created_at).getTime()).slice(0,100);
+   .sort((a,b)=>new Date(String((b as Record<string,unknown>).created_at)).getTime()-new Date(String((a as Record<string,unknown>).created_at)).getTime()).slice(0,100);
   return applyRenew(noCache({reports:all}),req,auth.renew);
  }catch(e){return authError(e)}
 }

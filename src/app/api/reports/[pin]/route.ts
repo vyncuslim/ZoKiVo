@@ -40,7 +40,8 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
    count(a.id) FILTER(WHERE a.chosen_index=1)::integer AS b,
    count(a.id) FILTER(WHERE a.chosen_index=2)::integer AS c,
    count(a.id) FILTER(WHERE a.chosen_index=3)::integer AS d
-   FROM questions q LEFT JOIN answers a ON a.room_pin=${pin} AND a.question_index=q.position
+   FROM questions q JOIN rooms r ON r.pin=${pin} LEFT JOIN answers a ON a.room_pin=${pin}
+    AND q.position=COALESCE((r.question_order->>a.question_index)::integer,a.question_index)
    WHERE q.quiz_set_id=${room[0].quiz_set_id} GROUP BY q.id ORDER BY q.position`;
   const rewards=await sql`SELECT action,count(*)::integer AS events,sum(delta)::integer AS earned
    FROM mode_events WHERE room_pin=${pin} GROUP BY action ORDER BY events DESC`;

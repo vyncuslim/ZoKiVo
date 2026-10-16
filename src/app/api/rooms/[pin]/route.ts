@@ -6,7 +6,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
  if(!/^\d{6}$/.test(pin))return bad("Invalid PIN");
  try{
   const sql=db();
-  const found=await sql`SELECT pin,quiz_set_id,status,current_index,deadline,host_token_hash,game_mode,now() AS server_time,
+  const found=await sql`SELECT pin,quiz_set_id,status,current_index,deadline,host_token_hash,game_mode,question_order,mute_sounds,score_goal,now() AS server_time,
    (status='playing' AND deadline>now()) AS round_open FROM rooms WHERE pin=${pin}`;
   if(!found.length)return bad("Room not found",404);
   const r=found[0],hostKey=req.headers.get("x-host-token"),playerKey=req.headers.get("x-player-token");
@@ -26,8 +26,9 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     ELSE p.score END)::integer AS score
    FROM players p INNER JOIN rooms r ON r.pin=p.room_pin
    WHERE p.room_pin=${pin} ORDER BY score DESC,p.created_at ASC`;
+  const position=Array.isArray(r.question_order)?r.question_order[r.current_index]:r.current_index;
   const question=r.status==="playing"?await sql`SELECT question,choices,image_url,audio_url,formula_text FROM questions
-   WHERE quiz_set_id=${r.quiz_set_id} AND position=${r.current_index}`:[];
+   WHERE quiz_set_id=${r.quiz_set_id} AND position=${position??r.current_index}`:[];
   const count=await sql`SELECT count(*)::integer AS n FROM questions WHERE quiz_set_id=${r.quiz_set_id}`;
   const ownMode=me.length&&r.game_mode!=="quiz_party"?await sql`SELECT
     EXISTS(SELECT 1 FROM answers WHERE player_id=${me[0].id} AND room_pin=${pin} AND question_index=${r.current_index} AND is_correct) AND
@@ -39,7 +40,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     (SELECT defense_code FROM players WHERE id=${me[0].id}) AS defense_code`:[];
   const answers=await sql`SELECT player_id FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`;
   return Response.json({
-   status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,
+   status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
    serverTime:r.server_time,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:answers.length,
    answeredIds:answers.filter(a=>host||a.player_id===me[0]?.id).map(a=>a.player_id),
