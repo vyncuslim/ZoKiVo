@@ -3,6 +3,7 @@ import "./ux.css";
 import "./auth/auth.css";
 import "./quiz-studio.css";
 import "./quiz-studio-extra.css";
+import "./ai/ai.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
  icons: {icon:"/icon.svg"},
  verification: {google:"uYmJ_568JPu-rjsyRzA2KU2vQpiQDOvN97G5Qgd5-38"}
 };
-const links=[{href:"/library",label:"Quiz library"},{href:"/create",label:"Create"},{href:"/games",label:"Games"},{href:"/how-it-works",label:"How it works"},{href:"/try",label:"Try it"}];
+const links=[{href:"/library",label:"Quiz library"},{href:"/create",label:"Create"},{href:"/ai",label:"ZoKivo AI"},{href:"/games",label:"Games"},{href:"/how-it-works",label:"How it works"},{href:"/try",label:"Try it"}];
 export default function RootLayout({children}:{children:React.ReactNode}) {
  return <html lang="en"><body><div className="site-shell">
    <header className="site-header"><div className="site-header-inner">
