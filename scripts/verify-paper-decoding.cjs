@@ -94,7 +94,7 @@ function check(condition,name){assert.ok(condition,name);pass++}
   check(got.length===n,"WG same-frame "+n+" markers: got "+got.length);
   for(let c=1;c<=n;c++)check(got.some(x=>x.card===c&&x.choice===(c-1+(c-1)%4)%4),"WG frame "+n+" card "+c);
  }
- for(const id of [1,2,17,36,60])for(let turn=0;turn<4;turn++){
+ for(let id=1;id<=60;id++)for(let turn=0;turn<4;turn++){
   const frame=makeQr(id,turn);
   const got=(await zk.scanCardFrame(fakeCanvas(frame),null)).detections;
   check(got.length===1&&got[0].card===id&&got[0].choice===turn,"ZoKivo QR #"+id+" quarter "+turn+" expected "+turn+" got "+JSON.stringify(got));
