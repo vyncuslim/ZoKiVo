@@ -13,6 +13,8 @@ export async function POST(req:NextRequest){
   if(!auth.user)return noCache({error:"Sign in with Vynalth AI to host a game.",code:"AUTH_REQUIRED"},401);
   if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your email before hosting.",code:"EMAIL_UNVERIFIED"},403);
   const body=await req.json().catch(()=>({})),id=body?.quizId||SAMPLE;
+  const questionSeconds=body?.questionSeconds===undefined?15:body.questionSeconds;
+  if(![10,15,20,30,45,60].includes(questionSeconds))throw new AuthError("Invalid question timer.");
   if(typeof id!=="string"||!isId(id))throw new AuthError("Choose a valid quiz.");
   const sql=db(),secret=token();
   const available=await sql`SELECT id FROM quiz_sets WHERE id=${id} AND status='published'
@@ -20,8 +22,8 @@ export async function POST(req:NextRequest){
   if(!available.length)return noCache({error:"Quiz is not published or no longer available."},409);
   for(let i=0;i<6;i++){
    const pin=String(randomInt(100000,1000000));
-   const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id)
-     VALUES(${pin},${id},${hash(secret)},${auth.user.id})
+   const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id,question_seconds)
+     VALUES(${pin},${id},${hash(secret)},${auth.user.id},${questionSeconds})
      ON CONFLICT DO NOTHING RETURNING pin`;
    if(created.length){await emitRoomRefresh('quiz',pin);return applyRenew(noCache({pin,token:secret}),req,auth.renew)}
   }

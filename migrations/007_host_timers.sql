@@ -1,0 +1,1 @@
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS question_seconds INTEGER NOT NULL DEFAULT 15 CHECK (question_seconds IN (10,15,20,30,45,60));

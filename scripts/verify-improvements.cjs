@@ -1,0 +1,10 @@
+const fs=require("node:fs"),assert=require("node:assert/strict"),ts=require("typescript");
+const src=fs.readFileSync("src/lib/report-csv.ts","utf8");
+const js=ts.transpileModule(src,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;const m={exports:{}};new Function("require","module","exports",js)(require,m,m.exports);
+let n=0;const ok=(x,msg)=>{assert.ok(x,msg);n++};
+const output=m.exports.buildReportCsv({pin:"123456",status:"finished",players:[{rank:1,nickname:"=HYPERLINK(1)",score:100,answered:2,correct:1}],questions:[{number:1,question:'Say "Hello"',correctAnswer:"A",submissions:3,correct:2}]});
+ok(output.includes("'=HYPERLINK(1)"),"formula protected");ok(output.includes('Say ""Hello""'),"quotes escaped");ok(output.includes('"50"'),"player accuracy");ok(output.includes('"67"'),"question accuracy");
+assert.throws(()=>m.exports.buildReportCsv({status:"playing"}));n++;
+const room=fs.readFileSync("src/app/api/rooms/route.ts","utf8"),start=fs.readFileSync("src/app/api/rooms/[pin]/start/route.ts","utf8"),play=fs.readFileSync("src/app/play/page.tsx","utf8");
+ok(room.includes("question_seconds"),"persist room duration");ok(start.includes("make_interval"),"use duration on server");ok(play.includes("URLSearchParams(window.location.search)"),"join links prefill PIN");
+console.log("ZOKIVO_FEATURE_TEST_PASS: "+n+" assertions.");
