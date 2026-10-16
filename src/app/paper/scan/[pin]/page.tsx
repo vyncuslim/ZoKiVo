@@ -1,3 +1,4 @@
+import {useRoomRealtime} from "@/lib/use-room-realtime";
 "use client";
 import Link from "next/link";
 import {useParams} from "next/navigation";
@@ -30,7 +31,8 @@ export default function PaperScanner(){
  const host=useCallback(()=>typeof window==="undefined"?"":sessionStorage.getItem("paper-host:"+pin)||"",[pin]);
  const headers=useCallback(()=>({"x-host-token":host()}),[host]);
  const fetchState=useCallback(async()=>{try{const r=await fetch("/api/paper/"+pin,{cache:"no-store",headers:headers()}),d=await r.json();if(!r.ok)throw Error(d.error||"Can't load session");setSession(d);setError("")}catch(e){setError(e instanceof Error?e.message:"Unable to load session")}},[pin,headers]);
- useEffect(()=>{void fetchState();const interval=setInterval(()=>void fetchState(),2500);return()=>clearInterval(interval)},[fetchState]);
+ const realtimeConnected=useRoomRealtime("paper",pin,headers,fetchState);
+ useEffect(()=>{void fetchState();const interval=setInterval(()=>void fetchState(),realtimeConnected?12000:2500);return()=>clearInterval(interval)},[fetchState,realtimeConnected]);
  useEffect(()=>{setScans({});setInfo("");tracks.current.clear();frameNumber.current=0},[session?.index]);
  const stop=useCallback(()=>{running.current=false;if(frame.current!==null)cancelAnimationFrame(frame.current);frame.current=null;stream.current?.getTracks().forEach(t=>t.stop());stream.current=null;setCameraActive(false);setVisibleCards(0);const o=overlay.current;if(o){o.getContext("2d")?.clearRect(0,0,o.width,o.height)}},[]);
  useEffect(()=>()=>{running.current=false;if(frame.current!==null)cancelAnimationFrame(frame.current);stream.current?.getTracks().forEach(t=>t.stop())},[]);

@@ -1,3 +1,4 @@
+import {emitRoomRefresh} from "@/lib/realtime";
 import {NextRequest} from "next/server";
 import {findUser,checkOrigin,noCache,authError} from "@/lib/mother-auth";
 import {db,hash,same,bad} from "@/lib/store";
@@ -19,6 +20,6 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
  const status=hasQuestion.length?"playing":"finished";
  const updated=await sql`UPDATE paper_sessions SET current_index=${status==="finished"?s.current_index:next},status=${status} WHERE pin=${pin} AND current_index=${s.current_index} AND status=${s.status} RETURNING pin`;
  if(!updated.length)return bad("Round already advanced. Refresh and retry.",409);
- return Response.json({status,index:status==="finished"?s.current_index:next});
+ await emitRoomRefresh('paper',pin);return Response.json({status,index:status==="finished"?s.current_index:next});
  }catch(e){console.error("paper advance",e);return bad("Unable to advance Paper Mode",503)}
 }

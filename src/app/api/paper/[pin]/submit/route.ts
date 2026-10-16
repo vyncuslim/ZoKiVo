@@ -1,3 +1,4 @@
+import {emitRoomRefresh} from "@/lib/realtime";
 import {NextRequest} from "next/server";
 import {findUser,checkOrigin,noCache,authError} from "@/lib/mother-auth";
 import {db,hash,same,bad} from "@/lib/store";
@@ -44,6 +45,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
     const active=await sql`SELECT 1 FROM paper_sessions WHERE pin=${pin} AND status='playing' AND current_index=${index}`;
     if(!active.length)return bad("This question is no longer accepting answers",409);
   }
+  if(result[0].saved>0)await emitRoomRefresh('paper',pin);
   return Response.json({saved:result[0].saved,requested:responses.length},{headers:{"Cache-Control":"no-store"}});
  }catch(e){console.error("paper submit",e);return bad("Unable to submit paper answers",503)}
 }

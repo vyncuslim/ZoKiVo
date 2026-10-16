@@ -1,3 +1,4 @@
+import {emitRoomRefresh} from "@/lib/realtime";
 import {NextRequest} from "next/server";
 import {db,token,hash} from "@/lib/store";
 import {findUser,noCache,applyRenew,checkOrigin,authError,AuthError} from "@/lib/mother-auth";
@@ -22,7 +23,7 @@ export async function POST(req:NextRequest){
    const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id)
      VALUES(${pin},${id},${hash(secret)},${auth.user.id})
      ON CONFLICT DO NOTHING RETURNING pin`;
-   if(created.length)return applyRenew(noCache({pin,token:secret}),req,auth.renew);
+   if(created.length){await emitRoomRefresh('quiz',pin);return applyRenew(noCache({pin,token:secret}),req,auth.renew)}
   }
   return noCache({error:"Could not allocate a game PIN."},503);
  }catch(e){return authError(e)}

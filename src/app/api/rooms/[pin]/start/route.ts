@@ -1,3 +1,4 @@
+import {emitRoomRefresh} from "@/lib/realtime";
 import {NextRequest} from "next/server";
 import {db,hash,same,bad} from "@/lib/store";
 import {findUser,noCache,checkOrigin,authError,applyRenew} from "@/lib/mother-auth";
@@ -18,11 +19,11 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const question=await sql`SELECT 1 FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${next}`;
   if(!question.length){
    await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin} AND status='playing'`;
-   return applyRenew(noCache({status:"finished"}),req,auth.renew);
+   await emitRoomRefresh('quiz',pin);return applyRenew(noCache({status:"finished"}),req,auth.renew);
   }
   const updated=await sql`UPDATE rooms SET status='playing',current_index=${next},deadline=now()+interval '15 seconds'
    WHERE pin=${pin} AND current_index=${r.current_index} AND status=${r.status} RETURNING pin`;
   if(!updated.length)return noCache({error:"Another request already advanced this round."},409);
-  return applyRenew(noCache({index:next,status:"playing"}),req,auth.renew);
+  await emitRoomRefresh('quiz',pin);return applyRenew(noCache({index:next,status:"playing"}),req,auth.renew);
  }catch(e){return authError(e)}
 }

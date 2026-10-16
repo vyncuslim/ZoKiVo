@@ -1,3 +1,4 @@
+import {useRoomRealtime} from "@/lib/use-room-realtime";
 "use client";
 import {useState,useEffect,useCallback} from "react";import {useParams,useSearchParams} from "next/navigation";
 import {BrandMark} from "@/components/brand";
@@ -8,7 +9,8 @@ export default function Game(){
  const [state,setState]=useState<State|null>(null);const[error,setError]=useState("");const[busy,setBusy]=useState(false);const[clock,setClock]=useState(Date.now());const[feedback,setFeedback]=useState("");
  const headers=useCallback(()=>({[host?"x-host-token":"x-player-token"]:sessionStorage.getItem((host?"host:":"player:")+pin)||""}),[host,pin]);
  const reload=useCallback(async()=>{try{const r=await fetch("/api/rooms/"+pin,{headers:headers(),cache:"no-store"});const j=await r.json();if(!r.ok)throw Error(j.error||"Room not available");setState(j);setError("")}catch(e){setError(e instanceof Error?e.message:"Connection problem")}},[pin,headers]);
- useEffect(()=>{void reload();const a=setInterval(()=>void reload(),1600);const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload]);
+ const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
+ useEffect(()=>{void reload();const a=setInterval(()=>void reload(),realtimeConnected?12000:1600);const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected]);
  useEffect(()=>{setFeedback("")},[state?.index]);
  async function act(path:string,choice?:number){setBusy(true);setError("");try{const r=await fetch("/api/rooms/"+pin+"/"+path,{method:"POST",headers:{...headers(),"Content-Type":"application/json"},body:JSON.stringify({choice})});const j=await r.json();if(!r.ok)throw Error(j.error||"Try again");if(path==="answer")setFeedback("ANSWER LOCKED IN — RESULTS AFTER THE ROUND");await reload()}catch(e){setError(e instanceof Error?e.message:"Request failed")}finally{setBusy(false)}}
  const seconds=Math.max(0,Math.ceil((new Date(state?.deadline||0).getTime()-clock)/1000));const answered=!!(state?.viewer.playerId&&state.answeredIds.includes(state.viewer.playerId));const canPlay=state?.status==="playing";
