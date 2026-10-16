@@ -79,3 +79,7 @@
  .paper-print-grid{grid-template-columns:1fr 1fr!important}
  .paper-qr-card{break-inside:avoid;page-break-inside:avoid}
 }
+
+.paper-camera-permission-note{font-size:12px;line-height:1.6;background:#f6f0ff;color:#514365;border:1px solid #b9a7dc;border-radius:10px;padding:12px;margin:14px 0 8px}
+.paper-cam-actions .button{min-height:45px}
+.paper-alert .button{margin:12px 12px 0 0;display:inline-flex}

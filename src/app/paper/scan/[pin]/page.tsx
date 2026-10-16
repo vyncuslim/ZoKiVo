@@ -16,12 +16,12 @@ const cardTitle=(d:{card_source:CardSource;card:number})=>(d.card_source==="wayg
 export default function PaperScanner(){
  const{pin}=useParams<{pin:string}>();const [session,setSession]=useState<PaperState|null>(null);
  const[error,setError]=useState(""),[info,setInfo]=useState("");
- const[busy,setBusy]=useState(false),[cameraActive,setCameraActive]=useState(false);
+ const[busy,setBusy]=useState(false),[cameraActive,setCameraActive]=useState(false),[cameraRequesting,setCameraRequesting]=useState(false);
  const[scans,setScans]=useState<Record<string,Choice>>({});
  const [manualCard,setManualCard]=useState(""),[manualChoice,setManualChoice]=useState<Choice>(0),[manualSource,setManualSource]=useState<CardSource>("zokivo");
  const video=useRef<HTMLVideoElement>(null),overlay=useRef<HTMLCanvasElement>(null);
  const stream=useRef<MediaStream|null>(null),frame=useRef<number|null>(null),canvas=useRef<HTMLCanvasElement|null>(null);
- const running=useRef(false),processing=useRef(false),lastFrame=useRef(0),frameNumber=useRef(0);
+ const running=useRef(false),processing=useRef(false),lastFrame=useRef(0),frameNumber=useRef(0),cameraPending=useRef(false),cameraGeneration=useRef(0);
  const tracks=useRef(new Map<string,{choice:Choice;count:number;last:number}>());
  const detectorRef=useRef<MultiQrDetector|null>(null);
  const [visibleCards,setVisibleCards]=useState(0),[scannerEngine,setScannerEngine]=useState("Preparing scanner");
@@ -34,17 +34,26 @@ export default function PaperScanner(){
  const realtimeConnected=useRoomRealtime("paper",pin,headers,fetchState);
  useEffect(()=>{void fetchState();const interval=setInterval(()=>void fetchState(),realtimeConnected?12000:2500);return()=>clearInterval(interval)},[fetchState,realtimeConnected]);
  useEffect(()=>{setScans({});setInfo("");tracks.current.clear();frameNumber.current=0},[session?.index]);
- const stop=useCallback(()=>{running.current=false;if(frame.current!==null)cancelAnimationFrame(frame.current);frame.current=null;stream.current?.getTracks().forEach(t=>t.stop());stream.current=null;setCameraActive(false);setVisibleCards(0);const o=overlay.current;if(o){o.getContext("2d")?.clearRect(0,0,o.width,o.height)}},[]);
- useEffect(()=>()=>{running.current=false;if(frame.current!==null)cancelAnimationFrame(frame.current);stream.current?.getTracks().forEach(t=>t.stop())},[]);
+ const stop=useCallback(()=>{cameraGeneration.current++;cameraPending.current=false;setCameraRequesting(false);running.current=false;if(frame.current!==null)cancelAnimationFrame(frame.current);frame.current=null;stream.current?.getTracks().forEach(t=>t.stop());stream.current=null;setCameraActive(false);setVisibleCards(0);const o=overlay.current;if(o){o.getContext("2d")?.clearRect(0,0,o.width,o.height)}},[]);
+ useEffect(()=>()=>{cameraGeneration.current++;running.current=false;if(frame.current!==null)cancelAnimationFrame(frame.current);stream.current?.getTracks().forEach(t=>t.stop())},[]);
+ useEffect(()=>{if(session?.status==="finished"&&stream.current)stop()},[session?.status,stop]);
  async function startCamera(){
-  if(!navigator.mediaDevices?.getUserMedia){setError("This browser does not support the camera scanner.");return}
+  if(cameraPending.current||cameraActive)return;
+  if(!window.isSecureContext){setError("Camera requires a secure HTTPS page. Open https://zokivo.vynalthai.com/paper/scan/"+pin);return}
+  if(!navigator.mediaDevices?.getUserMedia){setError("Camera API is unavailable. Open this page directly in Chrome, Safari or Edge, not inside an embedded browser.");return}
+  cameraPending.current=true;setCameraRequesting(true);setError("");
+  const generation=++cameraGeneration.current;
+  let opened:MediaStream|null=null;
   try{
-   setError("");
-   const s=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}}});
-   stream.current=s;
-   if(!video.current)throw Error("Camera view unavailable");
-   video.current.srcObject=s;
-   await video.current.play();
+   // Invoked only from the teacher's explicit user click; this triggers the browser permission prompt.
+   opened=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}}});
+   if(generation!==cameraGeneration.current){opened.getTracks().forEach(t=>t.stop());return}
+   stream.current=opened;
+   const preview=video.current;
+   if(!preview)throw Error("Camera preview is not mounted. Reload the page.");
+   preview.srcObject=opened;
+   await preview.play();
+   if(generation!==cameraGeneration.current){opened.getTracks().forEach(t=>t.stop());return}
    detectorRef.current=await createNativeQrDetector();
    setScannerEngine(detectorRef.current?"Multi-QR native + orientation verification":"Portable multi-QR fallback");
    setCameraActive(true);running.current=true;lastFrame.current=0;frameNumber.current=0;tracks.current.clear();
@@ -115,7 +124,15 @@ export default function PaperScanner(){
        .finally(()=>{processing.current=false});
    };
    frame.current=requestAnimationFrame(tick);
-  }catch(e){stop();setError("Camera unavailable: "+(e instanceof Error?e.message:"permission denied")+". You can enter cards manually.")}
+  }catch(e){
+   const reason=e instanceof DOMException?e.name:"";
+   const guidance=reason==="NotAllowedError"||reason==="PermissionDeniedError"?
+    "Camera permission was denied. Open your browser site permissions, allow Camera for ZoKivo, then retry.":
+    reason==="NotFoundError"?"No usable camera was found on this device.":
+    reason==="NotReadableError"?"The camera is busy in another app. Close other camera apps and retry.":
+    "Camera could not start. "+(e instanceof Error?e.message:"Please try another browser.");
+   stop();setError(guidance+" Manual entry is available.");
+  }finally{if(generation===cameraGeneration.current){cameraPending.current=false;setCameraRequesting(false)}}
  }
  async function action(path:string,body?:unknown){
   setBusy(true);setError("");try{
@@ -134,12 +151,12 @@ export default function PaperScanner(){
  const entries=Object.entries(scans).map(([key,choice])=>{const [card_source,card]=key.split(":");return {card_source:card_source as CardSource,card:Number(card),choice}}).sort((a,b)=>a.card_source.localeCompare(b.card_source)||a.card-b.card);
  return <main className="paper-root wrap paper-scanner-page"><nav className="paper-crumbs"><Link href="/paper">← Paper Mode</Link><span>/ Teacher scanner</span></nav>
  <div className="paper-scan-header"><div><span className="paper-eyebrow">TEACHER CONTROL · BETA</span><h1>Paper scanner</h1><p>Scan answers, double-check them, then submit the round.</p></div><div className="paper-session-pin"><span>GAME PIN</span><strong>{pin}</strong></div></div>
- {!session?.isHost?<div className="paper-alert" role="alert"><h2>Host access required</h2><p>This phone does not have this session&apos;s host authorization. For the prototype, create your Paper Mode session on the same phone you will use for scanning.</p><Link className="button button-dark" href="/paper">Start a new session</Link></div>:<>
+ {!session?.isHost?<div className="paper-alert" role="alert"><h2>Host access required</h2><p>This phone does not have this session&apos;s host authorization. Sign in with the original Vynalth AI account that created this room. Camera and submit controls are protected; sharing the six-digit PIN alone does not grant host access.</p><Link className="button button-dark" href={"/auth/login?next="+encodeURIComponent("/paper/scan/"+pin)}>Sign in as host →</Link> <Link className="button button-outline" href="/paper">Paper Mode home</Link></div>:<>
  <div className="paper-scanner-columns"><section className="paper-control-card">
    <div className="paper-control-top"><span>LIVE SESSION</span><span className="paper-status">{session.status.toUpperCase()}</span></div>
    {session.status==="lobby"?<><h2>Get the cards ready!</h2><p>Print your Q-cards and hand one to each student. Open the board on a classroom screen:</p><Link href={"/paper/board/"+pin} target="_blank" rel="noopener noreferrer" className="paper-board-url">/paper/board/{pin} ↗</Link><button className="button button-dark button-full" disabled={busy} onClick={()=>void action("advance")}>Show first question ↗</button></>:session.status==="finished"?<><h2>All done! ★</h2><p>Your classroom quiz is complete. Below are the recorded card scores.</p><Link href="/paper" className="button button-dark">New Paper session</Link></>:<><span className="paper-round-label">QUESTION {session.index+1} / {session.total}</span><h2>{session.question?.question}</h2><div className="paper-answer-list">{session.question?.choices.map((c,i)=><p key={i}><b>{CHOICES[i]}</b>{c}</p>)}</div><div className="paper-control-stats"><span><strong>{session.submittedCount}</strong> already recorded</span><span><strong>{entries.length}</strong> pending review</span></div><div className="paper-control-actions"><button className="button button-dark" disabled={busy||entries.length===0} onClick={()=>void action("submit",{index:session.index,responses:entries})}>Submit {entries.length} answers ↗</button><button className="button button-outline" disabled={busy} onClick={()=>void action("advance")}>Next question →</button></div></>}
  </section>
- <aside className="paper-scan-panel"><div className="paper-cam-head"><h2>Multi-card scanner</h2><span>{cameraActive?"● SCANNING":"○ CAMERA OFF"}</span></div>
+ <aside className="paper-scan-panel"><div className="paper-cam-head"><h2>Multi-card scanner</h2><span>{cameraActive?"● SCANNING":cameraRequesting?"◌ PERMISSION REQUEST":"○ CAMERA OFF"}</span></div>
   <div className="paper-format-switch">
   <label htmlFor="paper-card-format">Scan card types</label>
   <select id="paper-card-format" value={cardFormat} disabled={cameraActive} onChange={e=>{
@@ -154,7 +171,8 @@ export default function PaperScanner(){
   </select>
   <p className="paper-muted">Both card types can appear in the same frame and room. Matching card numbers remain separate.</p>
 </div><div className="paper-camera-frame"><video ref={video} muted playsInline aria-label="Live camera view for scanning ZoKivo Q-cards"/><canvas ref={overlay} className="paper-scan-overlay" aria-hidden="true"/>{!cameraActive&&<div className="paper-camera-placeholder"><span>⌗</span><p>Point at ZoKivo and Wayground Q-Cards together</p></div>}</div><div className="paper-detection-metrics" role="status"><b>{visibleCards} cards visible in this frame</b><span>{scannerEngine}{unstable>0?" · "+unstable+" unreadable code(s)":""}</span></div>
-  <div className="paper-cam-actions"><button type="button" className="button button-dark" disabled={cameraActive||session.status!=="playing"} onClick={()=>void startCamera()}>Start camera</button><button type="button" className="button button-outline" disabled={!cameraActive} onClick={stop}>Stop</button></div>
+  <p className="paper-camera-permission-note">Tap the button to request real camera access from your browser. Available in the lobby for testing; submit answers only after the first question starts. Your browser may require Camera permission in site settings.</p>
+  <div className="paper-cam-actions"><button type="button" className="button button-dark" disabled={cameraActive||cameraRequesting||session.status==="finished"} onClick={()=>void startCamera()}>{cameraRequesting?"Requesting permission…":cameraActive?"Camera active":"Enable camera · request permission"}</button><button type="button" className="button button-outline" disabled={!cameraActive&&!cameraRequesting} onClick={stop}>Stop</button></div>
   <p className="paper-scan-tip">Use ZoKivo QR Cards and original Wayground Q-Cards separately or together. Hold each card upright with your chosen A/B/C/D at the top. Keep cards close, face-on and well lit. The camera verifies detections across two frames. Review all answers before submitting.</p>
  </aside></div>
  <div className="paper-review-grid"><section className="paper-review-card"><div className="paper-review-heading"><h2>Review scanned answers</h2><span>{entries.length} / 120 identities</span></div>

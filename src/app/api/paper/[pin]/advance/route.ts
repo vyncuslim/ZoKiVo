@@ -9,10 +9,12 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
  if(!auth)return noCache({error:"Authentication unavailable"},503);
  if(!auth.user)return noCache({error:"Sign in as the room host"},401);
  const{pin}=await params,t=req.headers.get("x-host-token");
- if(!/^\d{6}$/.test(pin)||!t)return bad("Host authorization required",401);
+ if(!/^\d{6}$/.test(pin))return bad("Invalid Paper Mode PIN",400);
  try{
  const sql=db(),rows=await sql`SELECT quiz_set_id,status,current_index,host_token_hash,owner_user_id FROM paper_sessions WHERE pin=${pin}`;
- if(!rows.length||!same(rows[0].host_token_hash,hash(t)))return bad("Not authorized to control session",403);
+ if(!rows.length)return bad("Paper session not found",404);
+ const linked=!!rows[0].owner_user_id;
+ if(linked?(rows[0].owner_user_id!==auth.user.id||!auth.user.email_confirmed_at):(!t||!same(rows[0].host_token_hash,hash(t))))return bad("Not authorized to control session",403);
  if(rows[0].owner_user_id&&rows[0].owner_user_id!==auth.user.id)return noCache({error:"Only the original host can control this room"},403);
  const s=rows[0];if(s.status==="finished")return bad("The Paper Mode session is finished",409);
  const next=s.current_index+1;

@@ -11,7 +11,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
  if(!auth)return noCache({error:"Authentication unavailable"},503);
  if(!auth.user)return noCache({error:"Sign in as the room host"},401);
  const{pin}=await params,t=req.headers.get("x-host-token");
- if(!/^\d{6}$/.test(pin)||!t)return bad("Host authorization required",401);
+ if(!/^\d{6}$/.test(pin))return bad("Invalid Paper Mode PIN",400);
  try{
   const body=await req.json() as {index?:unknown;responses?:unknown};
   const index=body.index,raw=body.responses;
@@ -25,7 +25,9 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   }
   if(new Set(responses.map(r=>r.card_source+":"+r.card)).size!==responses.length)return bad("Duplicate card identities",400);
   const sql=db(),sessions=await sql`SELECT host_token_hash,owner_user_id FROM paper_sessions WHERE pin=${pin}`;
-  if(!sessions.length||!same(sessions[0].host_token_hash,hash(t))||sessions[0].owner_user_id&&sessions[0].owner_user_id!==auth.user.id)return bad("Not authorized",403);
+  if(!sessions.length)return bad("Paper session not found",404);
+  const linked=!!sessions[0].owner_user_id;
+  if(linked?(sessions[0].owner_user_id!==auth.user.id||!auth.user.email_confirmed_at):(!t||!same(sessions[0].host_token_hash,hash(t))))return bad("Not authorized",403);
   const json=JSON.stringify(responses);
   const result=await sql`WITH active AS(
     SELECT quiz_set_id FROM paper_sessions WHERE pin=${pin} AND status='playing' AND current_index=${index}
