@@ -1,5 +1,7 @@
 import "./style.css";
 import "./ux.css";
+import "./auth/auth.css";
+import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Brand } from "@/components/brand";
@@ -15,8 +17,8 @@ export default function RootLayout({children}:{children:React.ReactNode}) {
    <header className="site-header"><div className="site-header-inner">
      <Brand/>
      <nav className="desktop-nav" aria-label="Primary navigation">{links.map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}</nav>
-     <div className="header-actions"><Link className="nav-join" href="/play">Enter PIN <span aria-hidden="true">↗</span></Link><Link className="nav-host" href="/host">Host game <span aria-hidden="true">→</span></Link></div>
-     <details className="mobile-menu"><summary aria-label="Open navigation menu">☰ <span>Menu</span></summary><nav aria-label="Mobile navigation">{links.map(l=><Link key={l.href} href={l.href}>{l.label}<span aria-hidden="true">↗</span></Link>)}<Link href="/host">Host a game <span aria-hidden="true">↗</span></Link></nav></details>
+     <div className="header-actions"><AuthNav/><Link className="nav-join" href="/play">Enter PIN <span aria-hidden="true">↗</span></Link><Link className="nav-host" href="/host">Host game <span aria-hidden="true">→</span></Link></div>
+     <details className="mobile-menu"><summary aria-label="Open navigation menu">☰ <span>Menu</span></summary><nav aria-label="Mobile navigation">{links.map(l=><Link key={l.href} href={l.href}>{l.label}<span aria-hidden="true">↗</span></Link>)}<Link href="/host">Host a game <span aria-hidden="true">↗</span></Link><Link href="/auth/login">Sign in / My account <span aria-hidden="true">↗</span></Link></nav></details>
    </div></header>
    {children}
    <footer className="site-footer"><div className="footer-inner">
