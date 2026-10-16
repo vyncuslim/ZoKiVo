@@ -8,7 +8,7 @@ type PaperState={pin:string;status:"lobby"|"playing"|"finished";index:number;tot
 type Choice=0|1|2|3;
 type Detected={card:number;choice:Choice};
 const CHOICES=["A","B","C","D"];
-function parseResult(raw:string,location:ReturnType<typeof jsQR>["location"]):Detected|null{
+function parseResult(raw:string,location:NonNullable<ReturnType<typeof jsQR>>["location"]):Detected|null{
  const match=/^ZK1:(\d{3})$/.exec(raw);if(!match||!location)return null;
  const card=Number(match[1]);if(card<1||card>60)return null;
  const dx=location.topRightCorner.x-location.topLeftCorner.x;
