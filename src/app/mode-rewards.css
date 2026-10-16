@@ -1,0 +1,20 @@
+/* Original ZoKivo mini-game treatments retain the existing visual system. */
+.mode-rewards{margin-top:28px;padding:20px 22px;border:3px solid #24213d;border-radius:18px;box-shadow:5px 5px 0 #24213d;background:#fff8e9}
+.mode-reward-heading>span{letter-spacing:1.7px;font-size:10px;font-weight:950;color:#7454b7}
+.mode-reward-heading h3{font-size:27px;letter-spacing:-.6px;margin:7px 0}
+.mode-reward-heading p{font-size:13px;line-height:1.6;color:#50465e}
+.mode-reward-stats{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
+.mode-reward-stats span{padding:8px 12px;background:#e9e1ff;border:2px solid #332c52;border-radius:10px;font-size:11px;font-weight:900}
+.mode-reward-actions{display:grid;gap:12px}
+.mode-reward-actions label{font-size:12px;font-weight:900;display:grid;gap:6px;min-width:0;color:#28213d}
+.mode-reward-actions select{min-height:43px;border:2px solid #29213e;border-radius:9px;padding:9px;background:#fffefa;color:#27223e;max-width:100%}
+.mode-reward-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode-reward-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.mode-reward-choice{background:#ffdc75;color:#28213c;border:2px solid #29213d;border-radius:12px;padding:14px;font-weight:900;min-height:65px;box-shadow:3px 4px 0 #29213d;cursor:pointer}
+.mode-reward-choice:nth-child(2){background:#d9c6ff}.mode-reward-choice:nth-child(3){background:#b8e9d4}
+.mode-reward-choice:disabled{opacity:.5;cursor:not-allowed}
+.mode-reward-choice:focus-visible{outline:3px solid #7048ce;outline-offset:3px}
+.mode-reward-wait{font-size:12px;color:#73647d;font-weight:800;line-height:1.7}
+.mode-reward-success{color:#187451;font-weight:900;font-size:13px}
+.mode-reward-stats span:first-child{background:#ffe29b}
+@media(max-width:610px){.mode-reward-controls{grid-template-columns:1fr}.mode-rewards{padding:15px}.mode-reward-buttons{grid-template-columns:1fr 1fr}}

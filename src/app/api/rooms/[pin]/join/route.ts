@@ -19,8 +19,8 @@ export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
   const avatar=avatarId(body.avatar),name=config[0].random_player_names?
     choices[randomInt(choices.length)]+String(randomInt(10000,99999)):desired;
   const t=token();
-  const rows=await sql`INSERT INTO players(room_pin,nickname,token_hash,avatar_id)
-    SELECT pin,${name},${hash(t)},${avatar} FROM rooms
+  const rows=await sql`INSERT INTO players(room_pin,nickname,token_hash,avatar_id,defense_code)
+    SELECT pin,${name},${hash(t)},${avatar},${randomInt(0,3)} FROM rooms
     WHERE pin=${pin} AND (status='lobby' OR (status='playing' AND allow_late_joining))
     ON CONFLICT DO NOTHING RETURNING id`;
   if(!rows.length)return bad("Room closed or nickname already taken",409);
