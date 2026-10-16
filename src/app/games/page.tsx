@@ -17,6 +17,7 @@ export default function Games(){
      <div className="feature-actions"><Link className="button button-dark" href="/host">Host Quiz Party ↗</Link><Link className="text-arrow" href="/try">Try a practice question →</Link></div>
     </div>
  </section>
+ <section className="paper-game-strip" aria-labelledby="paper-title"><div><span className="eyebrow eyebrow--mini">CLASSROOM BETA · NO STUDENT PHONES NEEDED</span><h2 id="paper-title">✳ Paper Mode</h2><p>Give students numbered answer cards, project questions, and scan their choices with one teacher phone. Camera scanning is currently an early-access prototype.</p></div><Link href="/paper" className="button button-dark">Explore Paper Mode ↗</Link></section>
  <div className="subsection-title"><div><span className="eyebrow eyebrow--mini">COMING NEXT</span><h2>More ways to play</h2></div><p>These modes are in development and cannot be launched yet.</p></div>
  <section className="upcoming-grid" aria-label="Upcoming game modes">{upcoming.map((m,i)=><article className={"upcoming-card "+m.tone} key={m.name}><div className="mode-row"><span>{String(i+2).padStart(2,"0")} / 03</span><span className="mode-state">COMING SOON</span></div><div className="upcoming-symbol" aria-hidden="true">{m.symbol}</div><span className="feature-kicker">{m.label}</span><h3>{m.name}</h3><p>{m.description}</p></article>)}</section>
  <div className="section-next"><span>NEW TO ZOKIVO?</span><Link href="/how-it-works">See how a game works <b aria-hidden="true">↗</b></Link></div>
