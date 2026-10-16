@@ -1,3 +1,4 @@
+import {NextRequest} from "next/server";
 import {avatarId,avatarInfo} from "@/lib/avatars";
 import {findUser} from "@/lib/mother-auth";
 import {emitRoomRefresh} from "@/lib/realtime";
@@ -5,7 +6,7 @@ import {randomInt} from "node:crypto";
 import {db,token,hash,bad} from "@/lib/store";
 export const runtime="nodejs";
 const choices=["Comet","Panda","Star","Otter","Rocket","Fox","Pixel","Quokka"];
-export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
+export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
  const {pin}=await params;
  if(!/^\d{6}$/.test(pin))return bad("Invalid PIN");
  try{
