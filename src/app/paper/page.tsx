@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect,useState} from "react";
 import {useRouter} from "next/navigation";
 import {BrandMark} from "@/components/brand";
 export default function PaperPage(){
- const[busy,setBusy]=useState(false),[error,setError]=useState("");const router=useRouter();
+ const[busy,setBusy]=useState(false),[error,setError]=useState(""),[quizzes,setQuizzes]=useState<{id:string;title:string}[]>([]),[selected,setSelected]=useState("");const router=useRouter();
+ useEffect(()=>{void fetch("/api/quizzes",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{const data=j?.quizzes||[];setQuizzes(data);if(data.length)setSelected(data[0].id)}).catch(()=>{})},[]);
  async function create(){
   setBusy(true);setError("");
   try{
-    const r=await fetch("/api/paper",{method:"POST"}),result=await r.json();
+    const r=await fetch("/api/paper",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({quizId:selected||undefined})}),result=await r.json();
     if(!r.ok)throw Error(result.error||"Failed to create a session");
     sessionStorage.setItem("paper-host:"+result.pin,result.hostToken);
     router.push("/paper/scan/"+result.pin);
@@ -20,7 +21,7 @@ export default function PaperPage(){
    <span className="paper-eyebrow">✳ CLASSROOM BETA · NO STUDENT DEVICES</span>
    <h1>All hands up.<br/><span>All cards out.</span></h1>
    <p>One teacher phone. One classroom screen. Use ZoKivo printable QR cards, original Wayground Q-Cards, or both in the same classroom game.</p>
-   <div className="paper-hero-actions"><button className="button button-dark" onClick={create} disabled={busy}>{busy?"Creating session...":"Start on this phone ↗"}</button><Link href="/paper/cards" className="button button-outline">Print ZoKivo cards ↓</Link><Link href="/paper/check" className="button button-outline">Test your camera ✓</Link></div>
+   <label className="host-quiz-picker">Select quiz<select value={selected} onChange={e=>setSelected(e.target.value)}>{quizzes.length?quizzes.map(q=><option key={q.id} value={q.id}>{q.title}</option>):<option value="">World Explorer sample</option>}</select></label><div className="paper-hero-actions"><button className="button button-dark" onClick={create} disabled={busy}>{busy?"Creating session...":"Start on this phone ↗"}</button><Link href="/paper/cards" className="button button-outline">Print ZoKivo cards ↓</Link><Link href="/paper/check" className="button button-outline">Test your camera ✓</Link></div>
    {error&&<p className="form-error" role="alert">{error}</p>}
    <p className="paper-help-note">Sign in with your Vynalth AI account before hosting. Start on the phone you will use to scan. The projected board opens separately on any other screen using the six-digit PIN.</p>
   </div><div className="paper-hero-mark"><BrandMark size={200}/><span className="paper-spin">A&nbsp; B&nbsp; C&nbsp; D</span><b>✳</b></div></section>

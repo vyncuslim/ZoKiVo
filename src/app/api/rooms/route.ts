@@ -1,8 +1,29 @@
 import {NextRequest} from "next/server";
-import {findUser,noCache,applyRenew,checkOrigin} from "@/lib/mother-auth";
-import {db,token,hash,bad} from '@/lib/store';export const runtime='nodejs';export async function POST(req:NextRequest){
- try{checkOrigin(req)}catch{return noCache({error:"Invalid request origin."},403)}
- const auth=await findUser(req).catch(()=>null);
- if(!auth)return noCache({error:"Authentication service temporarily unavailable."},503);
- if(!auth.user)return noCache({error:"Sign in with Vynalth AI to host a game.",code:"AUTH_REQUIRED"},401);
- if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your account email before hosting.",code:"EMAIL_UNVERIFIED"},403);try{const sql=db(),t=token();for(let i=0;i<5;i++){const pin=String(100000+Math.floor(Math.random()*900000));const r=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash) VALUES (${pin},'b91f4600-1000-4000-8000-000000000001',${hash(t)}) ON CONFLICT DO NOTHING RETURNING pin`;if(r.length)return applyRenew(noCache({pin,token:t}),req,auth.renew)}return bad('No PIN available',503)}catch(e){console.error(e);return bad('Database unavailable',503)}}
+import {db,token,hash} from "@/lib/store";
+import {findUser,noCache,applyRenew,checkOrigin,authError,AuthError} from "@/lib/mother-auth";
+import {isId} from "@/lib/quizzes";
+import {randomInt} from "node:crypto";
+export const runtime="nodejs";
+const SAMPLE="b91f4600-1000-4000-8000-000000000001";
+export async function POST(req:NextRequest){
+ try{
+  checkOrigin(req);
+  const auth=await findUser(req);
+  if(!auth.user)return noCache({error:"Sign in with Vynalth AI to host a game.",code:"AUTH_REQUIRED"},401);
+  if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your email before hosting.",code:"EMAIL_UNVERIFIED"},403);
+  const body=await req.json().catch(()=>({})),id=body?.quizId||SAMPLE;
+  if(typeof id!=="string"||!isId(id))throw new AuthError("Choose a valid quiz.");
+  const sql=db(),secret=token();
+  const available=await sql`SELECT id FROM quiz_sets WHERE id=${id} AND status='published'
+    AND EXISTS(SELECT 1 FROM questions WHERE quiz_set_id=${id})`;
+  if(!available.length)return noCache({error:"Quiz is not published or no longer available."},409);
+  for(let i=0;i<6;i++){
+   const pin=String(randomInt(100000,1000000));
+   const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id)
+     VALUES(${pin},${id},${hash(secret)},${auth.user.id})
+     ON CONFLICT DO NOTHING RETURNING pin`;
+   if(created.length)return applyRenew(noCache({pin,token:secret}),req,auth.renew);
+  }
+  return noCache({error:"Could not allocate a game PIN."},503);
+ }catch(e){return authError(e)}
+}
