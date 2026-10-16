@@ -1,11 +1,13 @@
 import {db,token,hash,bad} from "@/lib/store";
 import {NextRequest} from "next/server";
-import {findUser,noCache,applyRenew} from "@/lib/mother-auth";
+import {findUser,noCache,applyRenew,checkOrigin} from "@/lib/mother-auth";
 import {randomInt} from "node:crypto";
 export const runtime="nodejs";
 export async function POST(req:NextRequest){
+ try{checkOrigin(req)}catch{return noCache({error:"Invalid request origin."},403)}
  if(process.env.PAPER_MODE_ENABLED!=="true")return bad("Paper Mode is not enabled on this environment",503);
- const auth=await findUser(req).catch(()=>({user:null,renew:undefined}));
+ const auth=await findUser(req).catch(()=>null);
+ if(!auth)return noCache({error:"Authentication service temporarily unavailable."},503);
  if(!auth.user)return noCache({error:"Sign in with Vynalth AI to host Paper Mode.",code:"AUTH_REQUIRED"},401);
  if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your email before hosting.",code:"EMAIL_UNVERIFIED"},403);
  try{
