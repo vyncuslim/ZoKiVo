@@ -1,0 +1,43 @@
+const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
+const routeText=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
+const js=ts.transpileModule(routeText,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+let called=0;
+const sql=async(strings)=>{
+ const q=strings.join("?");
+ called++;
+ if(q.includes("SELECT pin,quiz_set_id,status"))return [{pin:"123456",status:"playing",quiz_set_id:"quiz",host_token_hash:"good-host",deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString()}];
+ if(q.includes("SELECT id FROM players"))return [{id:"p1"}];
+ if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
+ if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
+ if(q.includes("SELECT count(*)"))return [{n:4}];
+ if(q.includes("SELECT player_id FROM answers"))return [{player_id:"p1"}];
+ throw Error("Unexpected SQL in mock: "+q);
+};
+const store={db:()=>sql,hash:s=>s,same:(a,b)=>a===b,bad:(msg,status=400)=>Response.json({error:msg},{status})};
+const mod={exports:{}};
+new Function("require","module","exports",js)((n)=>n==="@/lib/store"?store:require(n),mod,mod.exports);
+const handler=mod.exports.GET;let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};
+async function get(headers){const response=await handler(new Request("https://zokivo.example/api/rooms/123456",{headers}),{params:Promise.resolve({pin:"123456"})});return {status:response.status,json:await response.json()} }
+(async()=>{
+ const h=await get({"x-host-token":"good-host"}),p=await get({"x-player-token":"good-player"});
+ ok(h.status===200&&p.status===200,"Host and player both authorized");
+ ok(JSON.stringify(h.json.players)===JSON.stringify(p.json.players),"Host and player score arrays identical");
+ ok(h.json.players[0].score===100,"Prior settled points visible");
+ ok(h.json.scoreboardPhase==="previous-round"&&p.json.scoreboardPhase==="previous-round","Correct round-lock policy for all roles");
+ ok(h.json.answeredCount===1&&p.json.answeredCount===1,"Submission count is consistent");
+ ok(h.json.answeredIds.length===1&&p.json.answeredIds.length===1,"Only the user's own submission is exposed to player");
+ ok(!h.json.question.correct_index&&!p.json.question.correct_index,"No answer key in game state");
+ const unauth=await get({});
+ ok(unauth.status===401,"Unknown client rejected");
+ ok(routeText.includes("a.question_index<r.current_index"),"In-flight question points excluded from EVERY viewer");
+ ok(routeText.includes("ELSE p.score"),"Closed-round points eventually fully visible");
+ ok(!routeText.includes("players.map(x=>({...x,score:0}))"),"Old player-only zeroing removed");
+ const client=fs.readFileSync("src/app/game/[pin]/page.tsx","utf8");
+ ok(client.includes("requestSequence.current"),"Out-of-order status responses ignored");
+ ok(client.includes("realtimeConnected?3000:1600"),"Polling fallback remains responsive");
+ ok(client.includes("clockOffset"),"Server timestamp used to align round timer");
+ const finish=fs.readFileSync("src/app/api/rooms/[pin]/finish/route.ts","utf8");
+ ok(finish.includes("checkOrigin(req)")&&finish.includes("owner_user_id")&&finish.includes("same(r[0].host_token_hash"),"Early finish requires host identity and tokens");
+ ok(called>5,"Mock exercised all intended queries");
+ console.log("SCOREBOARD_SYNC_TEST_PASS: "+n+" assertions; role consistency, stale response protection and authorization.");
+})().catch(e=>{console.error(e.stack||e);process.exitCode=1});
