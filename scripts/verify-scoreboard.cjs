@@ -5,7 +5,7 @@ let called=0;
 const sql=async(strings)=>{
  const q=strings.join("?");
  called++;
- if(q.includes("SELECT pin,quiz_set_id,status"))return [{pin:"123456",status:"playing",quiz_set_id:"quiz",host_token_hash:"good-host",deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString()}];
+ if(q.includes("SELECT pin,quiz_set_id,status"))return [{pin:"123456",status:"playing",game_mode:"quiz_party",quiz_set_id:"quiz",host_token_hash:"good-host",deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString()}];
  if(q.includes("SELECT id FROM players"))return [{id:"p1"}];
  if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
  if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
