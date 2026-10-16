@@ -9,7 +9,8 @@ import { Brand } from "@/components/brand";
 export const metadata: Metadata = {
  title: {default: "ZoKivo! — Play. Learn. Win.",template:"%s | ZoKivo!"},
  description: "Explore classroom quiz games, learn how to play, or join a live ZoKivo game with a six-digit PIN.",
- icons: {icon:"/icon.svg"}
+ icons: {icon:"/icon.svg"},
+ verification: {google:"uYmJ_568JPu-rjsyRzA2KU2vQpiQDOvN97G5Qgd5-38"}
 };
 const links=[{href:"/games",label:"Games"},{href:"/how-it-works",label:"How it works"},{href:"/try",label:"Try it"}];
 export default function RootLayout({children}:{children:React.ReactNode}) {
