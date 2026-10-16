@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prebuild": "node scripts/verify-paper-decoding.cjs",
-    "test:paper": "node scripts/verify-paper-decoding.cjs"
+    "prebuild": "node scripts/verify-auth.cjs && node scripts/verify-paper-decoding.cjs",
+    "test:paper": "node scripts/verify-paper-decoding.cjs",
+    "test:auth": "node scripts/verify-auth.cjs"
   },
   "dependencies": {
     "next": "15.5.28",
