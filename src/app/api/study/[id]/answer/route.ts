@@ -19,8 +19,16 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>
   const count=await sql`SELECT count(*)::integer AS count FROM study_attempts WHERE owner_user_id=${user!.id} AND created_at>now()-interval '1 minute'`;
   if(count[0].count>=45)return noCache({error:"Too many answers. Please wait one minute."},429);
   const correct=data.choice===question[0].correct_index;
-  await sql`INSERT INTO study_attempts(owner_user_id,quiz_set_id,question_position,chosen_index,correct)
-    VALUES(${user!.id},${id},${data.position},${data.choice},${correct})`;
+  await sql`WITH attempt AS(
+    INSERT INTO study_attempts(owner_user_id,quiz_set_id,question_position,chosen_index,correct)
+    VALUES(${user!.id},${id},${data.position},${data.choice},${correct}) RETURNING owner_user_id
+   ), reward AS(
+    INSERT INTO avatar_daily_rewards(owner_user_id,quiz_set_id,question_position)
+    SELECT owner_user_id,${id},${data.position} FROM attempt WHERE ${correct}
+    ON CONFLICT DO NOTHING RETURNING owner_user_id
+   ) INSERT INTO avatar_profiles(owner_user_id,xp,tokens)
+    SELECT owner_user_id,20,1 FROM reward
+    ON CONFLICT(owner_user_id) DO UPDATE SET xp=avatar_profiles.xp+20,tokens=avatar_profiles.tokens+1,updated_at=now()`;
   return applyRenew(noCache({correct,correctIndex:question[0].correct_index,explanation:question[0].explanation||""}),req,renew);
  }catch(e){return authError(e)}
 }

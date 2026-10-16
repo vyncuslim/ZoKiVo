@@ -3,7 +3,7 @@ const source=fs.readFileSync("src/lib/avatars.ts","utf8");
 const js=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
 const m={exports:{}};new Function("require","module","exports",js)(require,m,m.exports);
 let n=0;const ok=(v,msg)=>{assert.ok(v,msg);n++};
-ok(m.exports.AVATARS.length===8,"Eight original avatars available");
+ok(m.exports.AVATARS.length===12,"Twelve original avatars available");
 ok(new Set(m.exports.AVATARS.map(x=>x.id)).size===8,"No duplicate avatar IDs");
 ok(m.exports.avatarId("fox")==="fox","Recognized avatar");
 ok(m.exports.avatarId("untrusted")==="spark","Unknown avatar replaced by safe default");

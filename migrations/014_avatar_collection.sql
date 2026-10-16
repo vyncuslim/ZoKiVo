@@ -1,0 +1,4 @@
+-- Original ZoKivo collectible avatars and rate-limited study XP.
+CREATE TABLE IF NOT EXISTS avatar_profiles(owner_user_id TEXT PRIMARY KEY,xp INTEGER NOT NULL DEFAULT 0 CHECK(xp>=0),tokens INTEGER NOT NULL DEFAULT 0 CHECK(tokens>=0),equipped_avatar TEXT NOT NULL DEFAULT 'spark',updated_at TIMESTAMPTZ NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS avatar_unlocks(owner_user_id TEXT NOT NULL REFERENCES avatar_profiles(owner_user_id) ON DELETE CASCADE,avatar_id TEXT NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT now(),PRIMARY KEY(owner_user_id,avatar_id));
+CREATE TABLE IF NOT EXISTS avatar_daily_rewards(owner_user_id TEXT NOT NULL,quiz_set_id UUID NOT NULL REFERENCES quiz_sets(id) ON DELETE CASCADE,question_position INTEGER NOT NULL,reward_date DATE NOT NULL DEFAULT CURRENT_DATE,PRIMARY KEY(owner_user_id,quiz_set_id,question_position,reward_date));

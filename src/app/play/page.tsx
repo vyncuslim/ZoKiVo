@@ -4,7 +4,12 @@ import { useEffect,useState, type FormEvent } from "react";
 import { BrandMark } from "@/components/brand";
 import {AVATARS,avatarId} from "@/lib/avatars";
 export default function Play() {
- const [pin,setPin]=useState("");const[nickname,setNickname]=useState("");const[avatar,setAvatar]=useState("spark");const[error,setError]=useState("");const[busy,setBusy]=useState(false),[randomNames,setRandomNames]=useState(false),[roomOpen,setRoomOpen]=useState(true);const router=useRouter();
+ const [pin,setPin]=useState("");const[nickname,setNickname]=useState("");const[avatar,setAvatar]=useState("spark");const[ownedAvatars,setOwnedAvatars]=useState<string[]>(AVATARS.filter(a=>a.price===0).map(a=>a.id));const[error,setError]=useState("");const[busy,setBusy]=useState(false),[randomNames,setRandomNames]=useState(false),[roomOpen,setRoomOpen]=useState(true);const router=useRouter();
+ useEffect(()=>{
+  void fetch("/api/avatars",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{
+   if(j?.avatars){setOwnedAvatars(j.avatars.filter((x:{unlocked:boolean})=>x.unlocked).map((x:{id:string})=>x.id));if(j.equipped)setAvatar(j.equipped)}
+  }).catch(()=>{});
+ },[]);
  useEffect(()=>{const candidate=new URLSearchParams(window.location.search).get("pin");if(candidate&&/^\d{6}$/.test(candidate))setPin(candidate)},[]);
  useEffect(()=>{
   if(pin.length!==6){setRandomNames(false);setRoomOpen(true);return}
@@ -23,7 +28,7 @@ export default function Play() {
   <section className="form-pane"><span className="eyebrow eyebrow--mini">PLAYER ENTRANCE</span><h1>Have a <span>PIN?</span><br/>Let&apos;s go!</h1><p className="form-lead">Your host has the code. You bring the good energy.</p>
    <form onSubmit={join} className="entry-form"><label htmlFor="game-pin">GAME PIN <span>6 DIGITS</span></label><input id="game-pin" className="pin-input" autoComplete="off" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} placeholder="000 000" value={pin} onChange={e=>setPin(e.target.value.replace(/\D/g,""))} required/>
    <label htmlFor="nickname">YOUR NICKNAME <span>2–24 CHARACTERS</span></label><input id="nickname" className="name-input" autoComplete="nickname" maxLength={24} minLength={randomNames?0:2} disabled={randomNames} required={!randomNames} placeholder={randomNames?"Your host will assign a nickname":"e.g. SuperNova"} value={nickname} onChange={e=>setNickname(e.target.value)}/>
-   <fieldset className="zokivo-avatar-chooser"><legend>CHOOSE YOUR LOOK <span>JUST FOR THIS GAME</span></legend><div className="zokivo-avatar-grid">{AVATARS.map(a=><button key={a.id} type="button" aria-label={a.label} aria-pressed={avatar===a.id} title={a.label} className={"zokivo-avatar-option"+(avatar===a.id?" selected":"")} onClick={()=>setAvatar(a.id)}>{a.symbol}</button>)}</div></fieldset>
+   <fieldset className="zokivo-avatar-chooser"><legend>CHOOSE YOUR LOOK <span>JUST FOR THIS GAME</span></legend><div className="zokivo-avatar-grid">{AVATARS.map(a=><button key={a.id} type="button" aria-label={a.label} aria-pressed={avatar===a.id} disabled={!ownedAvatars.includes(a.id)} title={ownedAvatars.includes(a.id)?a.label:a.label+" · Locked"} className={"zokivo-avatar-option"+(avatar===a.id?" selected":"")} onClick={()=>setAvatar(a.id)}>{a.symbol}{!ownedAvatars.includes(a.id)&&<small>🔒</small>}</button>)}</div><p className="form-footnote"><a href="/locker">Earn tokens in Study and unlock more ZoKivo characters →</a></p></fieldset>
    <button className="button button-dark button-full" type="submit" disabled={busy||!roomOpen||pin.length!==6||(!randomNames&&nickname.trim().length<2)}>{busy?"Joining the game...":"I'm in!  ↗"}</button>
    {randomNames&&<p className="form-footnote">Your host enabled randomly assigned nicknames.</p>}{!roomOpen&&<p className="form-error" role="status">This room is not accepting new players.</p>}
    {error&&<p className="form-error" role="alert">{error}</p>}</form>

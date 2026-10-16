@@ -1,4 +1,5 @@
-import {avatarId} from "@/lib/avatars";
+import {avatarId,avatarInfo} from "@/lib/avatars";
+import {findUser} from "@/lib/mother-auth";
 import {emitRoomRefresh} from "@/lib/realtime";
 import {randomInt} from "node:crypto";
 import {db,token,hash,bad} from "@/lib/store";
@@ -16,7 +17,15 @@ export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
   if(!config.length)return bad("Room not found",404);
   if(config[0].status!=="lobby"&&!(config[0].status==="playing"&&config[0].allow_late_joining))return bad("Room is not accepting new players.",409);
   if(!config[0].random_player_names&&desired.length<2)return bad("Nickname too short");
-  const avatar=avatarId(body.avatar),name=config[0].random_player_names?
+  const selected=avatarInfo(body.avatar);
+  const avatar=avatarId(body.avatar);
+  if(selected?.price){
+   const auth=await findUser(req).catch(()=>({user:null}));
+   if(!auth.user?.email_confirmed_at)return bad("Sign in to use this collectible avatar",403);
+   const unlock=await sql`SELECT 1 FROM avatar_unlocks WHERE owner_user_id=${auth.user.id} AND avatar_id=${selected.id}`;
+   if(!unlock.length)return bad("This avatar is not unlocked for your account",403);
+  }
+  const name=config[0].random_player_names?
     choices[randomInt(choices.length)]+String(randomInt(10000,99999)):desired;
   const t=token();
   const rows=await sql`INSERT INTO players(room_pin,nickname,token_hash,avatar_id,defense_code)
