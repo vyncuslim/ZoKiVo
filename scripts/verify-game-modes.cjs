@@ -3,7 +3,7 @@ const read=p=>fs.readFileSync(p,"utf8");let n=0;const ok=(a,t)=>{assert.ok(a,t);
 const mode=read("src/lib/game-modes.ts");
 for(const id of ["quiz_party","gold_quest","crypto_hack","fishing_frenzy","cafe"])ok(mode.includes('id:"'+id+'"'),"Mode declared: "+id);
 const host=read("src/app/host/page.tsx"),rooms=read("src/app/api/rooms/route.ts"),join=read("src/app/api/rooms/[pin]/join/route.ts");
-ok(host.includes("gameMode,setGameMode")&&host.includes("gameMode})"),"Host chooses a mode");
+ok(host.includes("gameMode,setGameMode")&&host.includes("gameMode,randomQuestionOrder:shuffle"),"Host chooses a mode");
 ok(rooms.includes("game_mode)")&&rooms.includes("Invalid game mode"),"Server validates selected mode");
 ok(join.includes("defense_code")&&join.includes("randomInt(0,3)"),"Defense key randomized server-side");
 const reward=read("src/app/api/rooms/[pin]/reward/route.ts");
