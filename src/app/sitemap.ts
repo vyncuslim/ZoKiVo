@@ -14,7 +14,8 @@ export default function sitemap():MetadataRoute.Sitemap {
     {path:"/try",priority:0.7,changeFrequency:"monthly" as const},
     {path:"/paper",priority:0.8,changeFrequency:"monthly" as const},
     {path:"/paper/cards",priority:0.6,changeFrequency:"monthly" as const},
-    {path:"/library",priority:0.7,changeFrequency:"weekly" as const}
+    {path:"/library",priority:0.7,changeFrequency:"weekly" as const},
+    {path:"/study",priority:0.7,changeFrequency:"weekly" as const}
   ];
   return pages.map((p)=>({url:BASE+p.path,changeFrequency:p.changeFrequency,priority:p.priority}));
 }

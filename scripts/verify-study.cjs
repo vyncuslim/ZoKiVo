@@ -1,0 +1,21 @@
+const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
+let n=0;const check=(x,m)=>{assert.ok(x,m);n++},read=p=>fs.readFileSync(p,"utf8");
+const details=read("src/app/api/study/[id]/route.ts"),answer=read("src/app/api/study/[id]/answer/route.ts"),history=read("src/app/api/study/history/route.ts"),page=read("src/app/study/page.tsx");
+check(details.includes("status='published'"),"Only published quizzes usable for study");
+check(details.includes("SELECT position,question,choices"),"Public question data excludes correct index");
+check(!details.includes("SELECT position,question,choices,correct_index"),"GET never sends answer key");
+check(details.includes("owner_user_id="),"Progress is scoped to signed-in account");
+check(details.includes("DISTINCT ON(question_position)"),"Most recent answer determines missed-question review");
+check(answer.includes("checkOrigin(req)")&&answer.includes("authUser(req)"),"Recording a study answer requires verified account and same origin");
+check(answer.includes("s.status='published'"),"Only published quiz answers may be submitted");
+check(answer.includes("count[0].count>=45"),"High-volume answer requests are throttled");
+check(answer.includes("INSERT INTO study_attempts"),"Server calculates correct answer, then records attempt");
+check(history.includes("a.owner_user_id="),"Learning history scoped to verified owner");
+check(page.includes("Review mistakes")&&page.includes("study-history"),"Solo study offers progress and wrong-answer review");
+check(page.includes('"/api/study/"+encodeURIComponent(id)+"/answer"'),"Client posts answer to server");
+check(!page.includes("correct_option_index"),"Client practice does not load private answer key before submission");
+const sql=read("migrations/011_study_attempts.sql");
+check(sql.includes("study_attempts")&&sql.includes("REFERENCES quiz_sets(id)"),"Study attempts schema uses quiz FK");
+const apps=["src/app/api/study/[id]/route.ts","src/app/api/study/[id]/answer/route.ts","src/app/api/study/history/route.ts","src/app/study/page.tsx"];
+for(const f of apps){const r=ts.transpileModule(read(f),{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}});check((r.diagnostics||[]).length===0,"TypeScript syntax valid: "+f)}
+console.log("ZOKIVO_STUDY_TEST_PASS: "+n+" assertions.");
