@@ -1,10 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect,useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { BrandMark } from "@/components/brand";
 export default function Play() {
  const [pin,setPin]=useState("");const[nickname,setNickname]=useState("");const[error,setError]=useState("");const[busy,setBusy]=useState(false);const router=useRouter();
- useEffect(()=>{const candidate=new URLSearchParams(window.location.search).get("pin");if(candidate&&/^\d{6}$/.test(candidate))setPin(candidate)},[]);
  async function join(e:FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);setError("");try{
   const r=await fetch("/api/rooms/"+pin+"/join",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nickname})});const j=await r.json();
   if(!r.ok)throw Error(j.error || "Couldn't join this game");

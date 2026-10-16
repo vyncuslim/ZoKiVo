@@ -2,7 +2,6 @@
 import Link from "next/link";
 import {useEffect,useState} from "react";
 import {useRouter} from "next/navigation";
-import {parseQuizCsv,CSV_TEMPLATE} from "@/lib/quiz-csv";
 type Item={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string};
 type Quiz={title:string;subject:string;grade_level:string;description:string;language:"en"|"zh"|"ms";questions:Item[]};
 const fresh=():Item=>({question:"",options:["","","",""],correct_option_index:0,explanation:""});
@@ -10,7 +9,6 @@ const initial=():Quiz=>({title:"",subject:"Geography",grade_level:"Year 7",langu
 const AB=["A","B","C","D"];
 export default function CreateQuiz(){
  const router=useRouter();
- const [importing,setImporting]=useState(false);
  const [quiz,setQuiz]=useState<Quiz>(initial),[id,setId]=useState(""),[saving,setSaving]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState(""),[loading,setLoading]=useState(true),[status,setStatus]=useState("draft");
  useEffect(()=>{const edit=new URLSearchParams(location.search).get("edit");
   if(!edit){setLoading(false);return}
@@ -25,27 +23,6 @@ export default function CreateQuiz(){
  },[]);
  function updateMeta(key:keyof Omit<Quiz,"questions">,value:string){setQuiz(q=>({...q,[key]:value}))}
  function questionChange(index:number,patch:Partial<Item>){setQuiz(q=>({...q,questions:q.questions.map((x,i)=>i===index?{...x,...patch}:x)}))}
- async function importCsv(file:File|undefined){
-  if(!file)return;
-  setError("");setMessage("");
-  if(status!=="draft"){setError("Published quizzes cannot be edited. Create a new draft.");return}
-  if(file.size>1024*1024){setError("CSV file must be 1 MB or smaller.");return}
-  setImporting(true);
-  try{
-   const items=parseQuizCsv(await file.text());
-   const isEmpty=quiz.questions.length===1&&!quiz.questions[0].question.trim()&&quiz.questions[0].options.every(x=>!x.trim());
-   const prior=isEmpty?[]:quiz.questions;
-   if(prior.length+items.length>40)throw Error("This would exceed the 40-question limit.");
-   setQuiz(q=>({...q,questions:[...prior,...items]}));
-   setMessage(items.length+" question(s) imported. Review all answers and save your draft.");
-  }catch(e){setError(e instanceof Error?e.message:"CSV import failed.");}
-  finally{setImporting(false)}
- }
- function downloadTemplate(){
-  const url=URL.createObjectURL(new Blob([CSV_TEMPLATE],{type:"text/csv;charset=utf-8"}));
-  const link=document.createElement("a");link.href=url;link.download="zokivo-quiz-template.csv";link.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
- }
  async function save(){
   setError("");setMessage("");setSaving(true);
   try{
@@ -78,11 +55,6 @@ export default function CreateQuiz(){
     </div><label className="quiz-field-wide">Description<textarea rows={2} maxLength={600} value={quiz.description} placeholder="A quick overview of what students will practice." onChange={e=>updateMeta("description",e.target.value)}/></label>
    </section>
    <div className="quiz-question-heading"><h2>Questions <span>{quiz.questions.length}/40</span></h2><button type="button" disabled={quiz.questions.length>=40||status!=="draft"} onClick={()=>setQuiz(q=>({...q,questions:[...q.questions,fresh()]}))}>+ Add question</button></div>
-   <div className="quiz-toolbar" aria-label="Question import tools">
-    <label>Import CSV questions <input type="file" accept=".csv,text/csv" disabled={importing||saving||status!=="draft"} onChange={e=>{const f=e.target.files?.[0];e.target.value="";void importCsv(f)}}/></label>
-    <button type="button" className="button button-outline" onClick={downloadTemplate}>Download CSV template ↓</button>
-    <span className="quiz-footnote">Columns: question, option_a, option_b, option_c, option_d, correct, explanation</span>
-   </div>
    {quiz.questions.map((q,index)=><section className="quiz-question-editor" key={index}>
     <div className="quiz-editor-head"><strong>QUESTION {String(index+1).padStart(2,"0")}</strong><button type="button" disabled={quiz.questions.length<=1||status!=="draft"} onClick={()=>setQuiz(v=>({...v,questions:v.questions.filter((_,i)=>i!==index)}))}>Remove</button></div>
     <label className="quiz-field-wide">Question<input disabled={status!=="draft"} value={q.question} maxLength={750} placeholder="What is ...?" onChange={e=>questionChange(index,{question:e.target.value})}/></label>

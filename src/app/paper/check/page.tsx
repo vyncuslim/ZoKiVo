@@ -79,6 +79,7 @@ export default function CameraCheck(){
   <nav className="paper-crumbs"><Link href="/paper">← Paper Mode</Link><span>/ Camera test</span></nav>
   <header className="camera-heading"><span className="paper-eyebrow">PHONE + COMPUTER CAMERA CHECK</span><h1>Test A, B, C, D.<br/><span>See what the camera sees.</span></h1>
    <p>Verify every direction before using Paper Mode in class. No game PIN, database connection, or sign-in needed.</p></header>
+  <div className="paper-result-steps"><Link href="/paper/cards">① Print ZoKivo cards ↗</Link><a href="https://cf.quizizz.com/pdf/Quizizz-QCards/en.pdf" target="_blank" rel="noopener noreferrer">② Wayground original cards ↗</a><span>③ Rotate a card so the chosen letter faces up, then scan</span></div>
   <div className="camera-test-grid">
    <section className="camera-test-card"><h2>1. Pick a card</h2>
     <label className="camera-label" htmlFor="test-mode">Paper card format</label>

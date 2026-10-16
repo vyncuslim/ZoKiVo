@@ -1,0 +1,14 @@
+/* Localized readability repairs; no ZoKivo brand or layout replacement. */
+.host-launch .host-quiz-picker{color:#f9f5ff;font-size:13px;font-weight:900;opacity:1;display:grid;gap:9px}
+.host-launch .host-quiz-picker select{width:100%;min-height:52px;border:2px solid #f4eafc;background:#fffdfa;color:#20203a;border-radius:12px;font-size:15px}
+.host-launch .host-quiz-picker select:focus-visible{outline:3px solid #ffd14d;outline-offset:2px}
+.host-launch .quiz-more-link{color:#ffe69d;font-weight:900;text-decoration:underline;text-underline-offset:4px}
+.host-launch .quiz-more-link:focus-visible{outline:3px solid #ffd14d}
+.game-page[data-role="host"] .game-choice:disabled{opacity:1;cursor:default;filter:none;color:#211c37}
+.game-page[data-role="host"] .game-choice:disabled .answer-letter{opacity:1;color:#211c37}
+.game-page[data-role="host"] .game-choice:disabled .answer-chevron{opacity:.65}
+.game-page[data-role="host"] .game-choice:disabled:hover{transform:none}
+.game-page .next-control p{font-size:13px;font-weight:900;color:#514566}
+.game-page .next-control button:disabled{opacity:.8}
+.game-host-instructions{font-size:12px;font-weight:900;color:#5b4b73;margin:14px 0}
+@media(max-width:680px){.host-launch .host-quiz-picker select{min-height:48px}.game-page[data-role="host"] .game-choice:disabled{min-height:75px}}
