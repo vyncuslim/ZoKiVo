@@ -14,10 +14,10 @@ ok(play.includes("!roomOpen"),"Closed room cannot be joined by UI");
 ok(options.includes('randomNames:!!rows[0].random_player_names')&&options.includes("acceptingPlayers:"),"Public join settings contain no answers or tokens");
 const compiled=ts.transpileModule(options,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
 let status="playing",late=true;const store={db:()=>async()=>[{status,allow_late_joining:late,random_player_names:true}],bad:(m,s=400)=>Response.json({error:m},{status:s})};
-const module={exports:{}};new Function("require","module","exports",compiled)((name)=>name==="@/lib/store"?store:require(name),module,module.exports);
+const holder={exports:{}};new Function("require","module","exports",compiled)((name)=>name==="@/lib/store"?store:require(name),holder,holder.exports);
 (async()=>{
- let res=await module.exports.GET(new Request("https://zokivo.vynalthai.com/game"),{params:Promise.resolve({pin:"123456"})});
+ let res=await holder.exports.GET(new Request("https://zokivo.vynalthai.com/game"),{params:Promise.resolve({pin:"123456"})});
  let data=await res.json();ok(data.acceptingPlayers&&data.randomNames,"Join rules available with late joining enabled");
- late=false;res=await module.exports.GET(new Request("https://zokivo.vynalthai.com/game"),{params:Promise.resolve({pin:"123456"})});data=await res.json();ok(!data.acceptingPlayers,"Playing rooms refuse joins when not opted in");
+ late=false;res=await holder.exports.GET(new Request("https://zokivo.vynalthai.com/game"),{params:Promise.resolve({pin:"123456"})});data=await res.json();ok(!data.acceptingPlayers,"Playing rooms refuse joins when not opted in");
  console.log("ZOKIVO_HOST_SETTINGS_TEST_PASS: "+n+" assertions.");
 })().catch(e=>{console.error(e);process.exitCode=1});
