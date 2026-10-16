@@ -1,1 +1,22 @@
-{"name":"zokivo","version":"0.1.0","private":true,"scripts":{"dev":"next dev","build":"next build","start":"next start"},"dependencies":{"next":"15.5.6","react":"19.1.1","react-dom":"19.1.1","@neondatabase/serverless":"1.0.2"},"devDependencies":{"typescript":"^5.9.3","@types/react":"^19","@types/react-dom":"^19","@types/node":"^22"}}
+{
+  "name": "zokivo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "15.5.28",
+    "react": "19.1.10",
+    "react-dom": "19.1.10",
+    "@neondatabase/serverless": "1.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/node": "^22"
+  }
+}
