@@ -1,0 +1,23 @@
+const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
+const src=p=>fs.readFileSync(p,"utf8");const compiled=ts.transpileModule(src("src/lib/quizzes.ts"),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+class AuthError extends Error{};const holder={exports:{}};new Function("require","module","exports",compiled)((n)=>n==="@/lib/mother-auth"?{AuthError}:require(n),holder,holder.exports);
+let n=0;const ok=(c,msg)=>{assert.ok(c,msg);n++},fails=(f,msg)=>{assert.throws(f,AuthError,msg);n++};const q=holder.exports;
+const question={question:"Calculate the result.",options:["1","2","3","4"],correct_option_index:1,image_url:"https://example.com/picture.png",audio_url:"https://example.com/voice.mp3",formula_text:"x^{2}+\\frac{1}{2}",point_value:175,time_limit:30};
+const quiz={title:"Math & Media Review",subject:"Math",language:"en",questions:[question]};const valid=q.validateQuiz(quiz);
+ok(valid.questions[0].image_url.includes("https://"),"Image URL kept after validation");
+ok(valid.questions[0].formula_text===question.formula_text,"Equation kept");
+ok(valid.questions[0].point_value===175&&valid.questions[0].time_limit===30,"Custom timing and points");
+ok(JSON.parse(q.questionRows(valid))[0].point_value===175,"Media settings serialized");
+fails(()=>q.validateQuiz({...quiz,questions:[{...question,image_url:"http://localhost/a.png"}]}),"HTTP localhost blocked");
+fails(()=>q.validateQuiz({...quiz,questions:[{...question,audio_url:"javascript:alert(1)"}]}),"Unsafe media URL blocked");
+fails(()=>q.validateQuiz({...quiz,questions:[{...question,image_url:"https://192.168.1.2/test.png"}]}),"Private-IP media blocked");
+fails(()=>q.validateQuiz({...quiz,questions:[{...question,time_limit:11}]}),"Unsupported timing blocked");
+fails(()=>q.validateQuiz({...quiz,questions:[{...question,point_value:501}]}),"Invalid points blocked");
+const paths=["src/app/api/quizzes/route.ts","src/app/api/quizzes/[id]/route.ts"];
+for(const p of paths){ok(src(p).includes("image_url,audio_url,formula_text,point_value,time_limit"),"Persist all media fields: "+p)}
+ok(src("src/app/api/rooms/[pin]/start/route.ts").includes("question[0].time_limit??r.question_seconds"),"Per-question time overrides host default");
+ok(src("src/app/api/rooms/[pin]/answer/route.ts").includes("q.point_value"),"Server calculates customizable points");
+ok(src("src/app/api/rooms/[pin]/route.ts").includes("formula_text"),"Game state includes safe media descriptors");
+ok(src("src/app/api/study/[id]/route.ts").includes("formula_text"),"Study supplies question media");
+for(const p of ["src/app/create/page.tsx","src/app/study/page.tsx","src/app/game/[pin]/page.tsx"])ok(src(p).includes("QuestionMedia"),"Media renderer used by "+p);
+console.log("ZOKIVO_MEDIA_TEST_PASS: "+n+" checks.");

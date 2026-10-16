@@ -9,6 +9,7 @@ import "./ui-fixes.css";
 import "./avatar-lobby.css";
 import "./study/study.css";
 import "./mode-rewards.css";
+import "./question-media.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";

@@ -1,0 +1,14 @@
+/* Rich media and math use native elements; original ZoKivo design stays unchanged. */
+.quiz-media-editor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0;background:#f2ecff;border-radius:14px;padding:15px}
+.quiz-media-editor label{min-width:0;display:grid;gap:7px;font-size:12px;font-weight:900;color:#372b55}
+.quiz-media-editor input,.quiz-media-editor select{min-width:0;width:100%;border:2px solid #332848;border-radius:9px;background:#fffefa;padding:11px;color:#211c36;font-size:13px}
+.quiz-media-editor input:focus-visible,.quiz-media-editor select:focus-visible{outline:3px solid #855bdf;outline-offset:2px}
+.zokivo-question-media{display:grid;justify-items:center;gap:14px;width:100%;margin:14px 0 20px;padding:14px;background:#faf6ff;border:2px solid #e1d6f5;border-radius:14px}
+.zokivo-question-media img{display:block;max-width:min(100%,560px);max-height:260px;width:auto;height:auto;object-fit:contain;border-radius:12px}
+.zokivo-formula{font-size:clamp(19px,2.6vw,29px);font-weight:750;color:#27213d;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px;overflow-wrap:anywhere}
+.zokivo-formula sup,.zokivo-formula sub{font-size:.63em}
+.zokivo-fraction{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;font-size:.87em;margin:0 5px}
+.zokivo-fraction>span:first-child{border-bottom:2px solid currentColor;padding:0 9px 2px}.zokivo-fraction>span:last-child{padding:2px 9px 0}
+.zokivo-radicand{border-top:2px solid currentColor;padding:1px 5px}
+.zokivo-audio{width:min(100%,470px);display:grid;gap:9px}.zokivo-audio span{font-size:11px;font-weight:900;letter-spacing:.5px}.zokivo-audio audio{width:100%}
+@media(max-width:620px){.quiz-media-editor{grid-template-columns:1fr}.zokivo-question-media img{max-height:210px}}

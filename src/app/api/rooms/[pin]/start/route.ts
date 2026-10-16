@@ -16,12 +16,12 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   if(r.status==="finished")return noCache({error:"Game already finished."},409);
   if(r.status==="playing"&&r.deadline&&new Date(r.deadline).getTime()>Date.now())return noCache({error:"Round still in progress."},409);
   const next=r.status==="lobby"?0:r.current_index+1;
-  const question=await sql`SELECT 1 FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${next}`;
+  const question=await sql`SELECT time_limit FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${next}`;
   if(!question.length){
    await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin} AND status='playing'`;
    await emitRoomRefresh('quiz',pin);return applyRenew(noCache({status:"finished"}),req,auth.renew);
   }
-  const updated=await sql`UPDATE rooms SET status='playing',current_index=${next},deadline=now()+make_interval(secs => ${r.question_seconds})
+  const updated=await sql`UPDATE rooms SET status='playing',current_index=${next},deadline=now()+make_interval(secs => ${question[0].time_limit??r.question_seconds})
    WHERE pin=${pin} AND current_index=${r.current_index} AND status=${r.status} RETURNING pin`;
   if(!updated.length)return noCache({error:"Another request already advanced this round."},409);
   await emitRoomRefresh('quiz',pin);return applyRenew(noCache({index:next,status:"playing"}),req,auth.renew);

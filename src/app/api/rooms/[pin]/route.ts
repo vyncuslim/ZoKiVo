@@ -26,7 +26,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     ELSE p.score END)::integer AS score
    FROM players p INNER JOIN rooms r ON r.pin=p.room_pin
    WHERE p.room_pin=${pin} ORDER BY score DESC,p.created_at ASC`;
-  const question=r.status==="playing"?await sql`SELECT question,choices FROM questions
+  const question=r.status==="playing"?await sql`SELECT question,choices,image_url,audio_url,formula_text FROM questions
    WHERE quiz_set_id=${r.quiz_set_id} AND position=${r.current_index}`:[];
   const count=await sql`SELECT count(*)::integer AS n FROM questions WHERE quiz_set_id=${r.quiz_set_id}`;
   const ownMode=me.length&&r.game_mode!=="quiz_party"?await sql`SELECT

@@ -1,8 +1,9 @@
 "use client";
 import {useEffect,useMemo,useState} from "react";
 import Link from "next/link";
+import {QuestionMedia} from "@/components/question-media";
 type Listing={id:string;title:string;subject:string;question_count:number};
-type Question={position:number;question:string;options:[string,string,string,string]};
+type Question={position:number;question:string;options:[string,string,string,string];image_url?:string;audio_url?:string;formula_text?:string};
 type Progress={completed:number;correct:number;mistakes:number[]};
 type Answer={correct:boolean;correctIndex:number;explanation:string};
 type History={id:string;title:string;subject:string;attempts:number;correct:number;last_practiced:string};
@@ -72,7 +73,7 @@ export default function Study(){
    {loading?<p>Loading questions…</p>:error&&!q?<p role="alert" className="form-error">{error}</p>:!list.length?<p>No published quizzes yet.</p>:done?<div className="study-finish"><span>★</span><h2>Great practice!</h2><p>Practice history and mistakes are saved to your ZoKivo account.</p><div><button className="button button-dark" onClick={()=>restart(false)}>Study again ↗</button>{progress.mistakes.length>0&&<button className="button button-outline" onClick={()=>restart(true)}>Review mistakes ({progress.mistakes.length})</button>}</div></div>:!q?<div className="study-finish"><h2>All caught up! ✳</h2><p>You have no incorrect questions awaiting review in this quiz.</p><button className="button button-dark" onClick={()=>restart(false)}>Review all questions</button></div>:<>
     <div className="study-progress"><span>QUESTION {number+1} / {queue.length}</span><span>{title}</span></div>
     <div className="study-progress-bar"><i style={{width:((number+1)/Math.max(queue.length,1)*100)+"%"}}/></div>
-    <h2>{q.question}</h2>
+    <h2>{q.question}</h2><QuestionMedia imageUrl={q.image_url} audioUrl={q.audio_url} formula={q.formula_text}/>
     <div className="study-options">{q.options.map((opt,i)=><button type="button" key={i} disabled={!!result||busy||!signedIn} className={"study-option"+(result&&i===result.correctIndex?" correct":result&&i!==result.correctIndex?" dimmed":"")} onClick={()=>void answer(i)}><strong>{letters[i]}</strong><span>{opt}</span></button>)}</div>
     {result&&<div className={"study-feedback"+(result.correct?" is-correct":" is-incorrect")} role="status"><b>{result.correct?"✓ Correct!":"Not quite — review the correct answer."}</b><p>{result.explanation||"Check which option is highlighted, then continue."}</p><button type="button" onClick={next} className="button button-dark">{number+1>=queue.length?"Finish practice →":"Next question →"}</button></div>}
     {error&&<p role="alert" className="form-error">{error}</p>}

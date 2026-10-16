@@ -8,7 +8,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{id:string}>}
   const {id}=await params;if(!isId(id))return noCache({error:"Invalid quiz ID"},400);
   const sql=db();const quiz=await sql`SELECT id,title,subject,grade_level,language FROM quiz_sets WHERE id=${id} AND status='published'`;
   if(!quiz.length)return noCache({error:"Published quiz not found"},404);
-  const items=await sql`SELECT position,question,choices FROM questions WHERE quiz_set_id=${id} ORDER BY position`;
+  const items=await sql`SELECT position,question,choices,image_url,audio_url,formula_text FROM questions WHERE quiz_set_id=${id} ORDER BY position`;
   const result=await findUser(req);
   let mistakes:number[]=[],completed=0,correct=0;
   if(result.user){
@@ -21,7 +21,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{id:string}>}
    ) latest WHERE NOT correct`;
    mistakes=wrong.map(w=>w.question_position);
   }
-  return applyRenew(noCache({quiz:quiz[0],questions:items.map(q=>({position:q.position,question:q.question,options:q.choices})),
+  return applyRenew(noCache({quiz:quiz[0],questions:items.map(q=>({position:q.position,question:q.question,options:q.choices,image_url:q.image_url,audio_url:q.audio_url,formula_text:q.formula_text})),
    progress:{completed,correct,mistakes},signedIn:!!result.user}),req,result.renew);
  }catch(e){return authError(e)}
 }

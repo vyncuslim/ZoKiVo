@@ -1,7 +1,20 @@
 import {NextRequest} from "next/server";
 import {findUser,AuthError,type MotherUser} from "@/lib/mother-auth";
-export type QuizItem={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string};
+export type QuizItem={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string;image_url?:string;audio_url?:string;formula_text?:string;point_value?:number;time_limit?:number|null};
 export type QuizInput={title:string;subject:string;grade_level:string;language:"en"|"zh"|"ms";description:string;questions:QuizItem[]};
+function safeMedia(x:unknown){
+ if(x===undefined||x===null||x==="")return "";
+ if(typeof x!=="string"||x.length>1024)throw new AuthError("Media URL must be a short HTTPS address.");
+ try{
+  const url=new URL(x);
+  const host=url.hostname.toLowerCase();
+  if(url.protocol!=="https:"||url.username||url.password||!host.includes(".")||
+   host==="localhost"||host.endsWith(".localhost")||host.endsWith(".local")||
+   host.endsWith(".internal")||host.endsWith(".invalid")||/^\d+\.\d+\.\d+\.\d+$/.test(host)||
+   (url.port&&url.port!=="443"))throw Error("Unsafe URL");
+  return url.href;
+ }catch{throw new AuthError("Use a publicly hosted HTTPS image or audio URL.");}
+}
 function stringField(x:unknown,max:number){return typeof x==="string"&&x.trim().length<=max?x.trim():""}
 export function teacherApproved(user:MotherUser){
  const m=user.app_metadata||{};
@@ -28,11 +41,18 @@ export function validateQuiz(raw:unknown):QuizInput{
   if(answers.some(x=>x.length===0)||new Set(answers.map(x=>x.toLowerCase())).size!==4)throw new AuthError("Question "+(i+1)+" requires four unique choices.");
   const answer=q.correct_option_index??q.correct_index;
   if(typeof answer!=="number"||!Number.isInteger(answer)||answer<0||answer>3)throw new AuthError("Question "+(i+1)+" needs a correct answer.");
-  return {question,options:answers as [string,string,string,string],correct_option_index:answer,explanation:stringField(q.explanation,800)};
+  const formula=stringField(q.formula_text,240);
+  if(q.formula_text&&formula.length===0)throw new AuthError("Formula must be under 240 characters.");
+  const points=q.point_value===undefined?100:q.point_value;
+  if(typeof points!=="number"||!Number.isInteger(points)||points<50||points>500||points%25!==0)throw new AuthError("Question points must be 50–500 in steps of 25.");
+  const secs=q.time_limit===undefined||q.time_limit===null||q.time_limit===""?null:q.time_limit;
+  if(secs!==null&&![10,15,20,30,45,60].includes(secs as number))throw new AuthError("Invalid question duration.");
+  return {question,options:answers as [string,string,string,string],correct_option_index:answer,explanation:stringField(q.explanation,800),
+   image_url:safeMedia(q.image_url),audio_url:safeMedia(q.audio_url),formula_text:formula,point_value:points,time_limit:secs as number|null};
  });
  return {title,subject,language,grade_level:stringField(obj.grade_level,40)||"Mixed",description:stringField(obj.description,600),questions};
 }
 export function questionRows(q:QuizInput){
- return JSON.stringify(q.questions.map((entry,position)=>({position,question:entry.question,choices:entry.options,correct_index:entry.correct_option_index,explanation:entry.explanation})));
+ return JSON.stringify(q.questions.map((entry,position)=>({position,question:entry.question,choices:entry.options,correct_index:entry.correct_option_index,explanation:entry.explanation,image_url:entry.image_url||"",audio_url:entry.audio_url||"",formula_text:entry.formula_text||"",point_value:entry.point_value??100,time_limit:entry.time_limit??null})));
 }
 export function isId(id:string){return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)}

@@ -3,9 +3,10 @@ import Link from "next/link";
 import {useEffect,useState} from "react";
 import {useRouter} from "next/navigation";
 import {parseSuggestedQuiz} from "@/lib/ai-quiz-import";
-type Item={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string};
+import {QuestionMedia} from "@/components/question-media";
+type Item={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string;image_url?:string;audio_url?:string;formula_text?:string;point_value?:number;time_limit?:number|null};
 type Quiz={title:string;subject:string;grade_level:string;description:string;language:"en"|"zh"|"ms";questions:Item[]};
-const fresh=():Item=>({question:"",options:["","","",""],correct_option_index:0,explanation:""});
+const fresh=():Item=>({question:"",options:["","","",""],correct_option_index:0,explanation:"",image_url:"",audio_url:"",formula_text:"",point_value:100,time_limit:null});
 const initial=():Quiz=>({title:"",subject:"Geography",grade_level:"Year 7",language:"en",description:"",questions:[fresh()]});
 const AB=["A","B","C","D"];
 export default function CreateQuiz(){
@@ -32,7 +33,7 @@ export default function CreateQuiz(){
    setId(j.quiz.id);setStatus(j.quiz.status);
    setQuiz({title:j.quiz.title,subject:j.quiz.subject,grade_level:j.quiz.grade_level,
     language:j.quiz.language,description:j.quiz.description,
-    questions:j.quiz.questions.map((q:Item)=>({question:q.question,options:q.options,correct_option_index:q.correct_option_index,explanation:q.explanation}))});
+    questions:j.quiz.questions.map((q:Item)=>({question:q.question,options:q.options,correct_option_index:q.correct_option_index,explanation:q.explanation,image_url:q.image_url||"",audio_url:q.audio_url||"",formula_text:q.formula_text||"",point_value:q.point_value??100,time_limit:q.time_limit??null}))});
   }).catch(e=>setError(e instanceof Error?e.message:"Unable to load quiz")).finally(()=>setLoading(false));
  },[]);
  function updateMeta(key:keyof Omit<Quiz,"questions">,value:string){setQuiz(q=>({...q,[key]:value}))}
@@ -72,7 +73,15 @@ export default function CreateQuiz(){
    {quiz.questions.map((q,index)=><section className="quiz-question-editor" key={index}>
     <div className="quiz-editor-head"><strong>QUESTION {String(index+1).padStart(2,"0")}</strong><button type="button" disabled={quiz.questions.length<=1||status!=="draft"} onClick={()=>setQuiz(v=>({...v,questions:v.questions.filter((_,i)=>i!==index)}))}>Remove</button></div>
     <label className="quiz-field-wide">Question<input disabled={status!=="draft"} value={q.question} maxLength={750} placeholder="What is ...?" onChange={e=>questionChange(index,{question:e.target.value})}/></label>
-    <div className="quiz-choice-grid">{AB.map((letter,i)=><label key={letter}><span className="quiz-choice-letter">{letter}</span><input disabled={status!=="draft"} value={q.options[i]} maxLength={250} placeholder={"Answer "+letter} onChange={e=>questionChange(index,{options:q.options.map((v,j)=>j===i?e.target.value:v) as Item["options"]})}/></label>)}</div>
+    <div className="quiz-media-editor">
+ <label>Image URL (HTTPS)<input disabled={status!=="draft"} type="url" value={q.image_url||""} placeholder="https://example.com/image.png" maxLength={1024} onChange={e=>questionChange(index,{image_url:e.target.value})}/></label>
+ <label>Audio URL (HTTPS)<input disabled={status!=="draft"} type="url" value={q.audio_url||""} placeholder="https://example.com/audio.mp3" maxLength={1024} onChange={e=>questionChange(index,{audio_url:e.target.value})}/></label>
+ <label>Math expression<input disabled={status!=="draft"} value={q.formula_text||""} placeholder="\\frac{a}{b} + x^{2}" maxLength={240} onChange={e=>questionChange(index,{formula_text:e.target.value})}/></label>
+ <label>Points per correct answer<select disabled={status!=="draft"} value={q.point_value??100} onChange={e=>questionChange(index,{point_value:Number(e.target.value)})}>{Array.from({length:19},(_,i)=>50+i*25).map(n=><option key={n} value={n}>{n} points</option>)}</select></label>
+ <label>Question time limit<select disabled={status!=="draft"} value={q.time_limit??""} onChange={e=>questionChange(index,{time_limit:e.target.value===""?null:Number(e.target.value)})}><option value="">Use host timer</option>{[10,15,20,30,45,60].map(n=><option key={n} value={n}>{n} seconds</option>)}</select></label>
+ </div>
+ <QuestionMedia imageUrl={q.image_url} audioUrl={q.audio_url} formula={q.formula_text}/>
+ <div className="quiz-choice-grid">{AB.map((letter,i)=><label key={letter}><span className="quiz-choice-letter">{letter}</span><input disabled={status!=="draft"} value={q.options[i]} maxLength={250} placeholder={"Answer "+letter} onChange={e=>questionChange(index,{options:q.options.map((v,j)=>j===i?e.target.value:v) as Item["options"]})}/></label>)}</div>
     <div className="quiz-editor-bottom"><label>Correct answer<select disabled={status!=="draft"} value={q.correct_option_index} onChange={e=>questionChange(index,{correct_option_index:Number(e.target.value)})}>{AB.map((l,i)=><option value={i} key={i}>{l}</option>)}</select></label><label>Explanation (shown after round)<input disabled={status!=="draft"} value={q.explanation} maxLength={800} placeholder="Explain the correct answer…" onChange={e=>questionChange(index,{explanation:e.target.value})}/></label></div>
    </section>)}
    {error&&<p role="alert" className="form-error">{error}</p>}{message&&<p role="status" className="quiz-success">{message}</p>}

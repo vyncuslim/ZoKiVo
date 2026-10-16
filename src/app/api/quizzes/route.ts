@@ -31,10 +31,10 @@ export async function POST(req:NextRequest){
    INSERT INTO quiz_sets(title,owner_user_id,status,subject,grade_level,language,description)
    VALUES(${quiz.title},${user!.id},'draft',${quiz.subject},${quiz.grade_level},${quiz.language},${quiz.description}) RETURNING id
   ), new_questions AS(
-   INSERT INTO questions(quiz_set_id,position,question,choices,correct_index,explanation)
-   SELECT new_quiz.id,entry.position,entry.question,entry.choices,entry.correct_index,entry.explanation
+   INSERT INTO questions(quiz_set_id,position,question,choices,correct_index,explanation,image_url,audio_url,formula_text,point_value,time_limit)
+   SELECT new_quiz.id,entry.position,entry.question,entry.choices,entry.correct_index,entry.explanation,entry.image_url,entry.audio_url,entry.formula_text,entry.point_value,entry.time_limit
    FROM new_quiz CROSS JOIN jsonb_to_recordset(${json}::jsonb)
-   AS entry(position integer,question text,choices jsonb,correct_index smallint,explanation text) RETURNING id
+   AS entry(position integer,question text,choices jsonb,correct_index smallint,explanation text,image_url text,audio_url text,formula_text text,point_value integer,time_limit integer) RETURNING id
   ) SELECT id FROM new_quiz`;
   if(!rows.length)return noCache({error:"Could not save quiz."},503);
   return applyRenew(noCache({ok:true,id:rows[0].id,status:"draft"},201),req,renew);
