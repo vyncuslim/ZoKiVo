@@ -19,16 +19,16 @@ export default function PaperPage(){
   <section className="paper-hero"><div>
    <span className="paper-eyebrow">✳ CLASSROOM BETA · NO STUDENT DEVICES</span>
    <h1>All hands up.<br/><span>All cards out.</span></h1>
-   <p>One teacher phone. One classroom screen. A pack of printable answer cards. That's all you need to start a paper-powered Quiz Party.</p>
-   <div className="paper-hero-actions"><button className="button button-dark" onClick={create} disabled={busy}>{busy?"Creating session...":"Start on this phone ↗"}</button><Link href="/paper/cards" className="button button-outline">Print answer cards ↓</Link></div>
+   <p>One teacher phone. One classroom screen. Use ZoKivo printable QR cards, original Wayground Q-Cards, or both in the same classroom game.</p>
+   <div className="paper-hero-actions"><button className="button button-dark" onClick={create} disabled={busy}>{busy?"Creating session...":"Start on this phone ↗"}</button><Link href="/paper/cards" className="button button-outline">Print ZoKivo cards ↓</Link></div>
    {error&&<p className="form-error" role="alert">{error}</p>}
    <p className="paper-help-note">Start on the phone you will use to scan. The projected board opens separately on any other screen using the six-digit PIN.</p>
   </div><div className="paper-hero-mark"><BrandMark size={200}/><span className="paper-spin">A&nbsp; B&nbsp; C&nbsp; D</span><b>✳</b></div></section>
   <section className="paper-info"><h2>How Paper Mode works</h2><div className="paper-steps">
-   <article><span>01</span><h3>Print &amp; hand out</h3><p>Print 60 numbered, reusable cards. Each card has its own QR code and four possible orientations.</p></article>
+   <article><span>01</span><h3>Print &amp; hand out</h3><p>Print ZoKivo cards or reuse existing Wayground/Quizizz Q-Cards — up to 60 of each type.</p></article>
    <article><span>02</span><h3>Project the quiz</h3><p>Start a teacher-led session on your phone. Open its board URL on a laptop or projector.</p></article>
-   <article><span>03</span><h3>Rotate, scan, submit</h3><p>Students hold up cards with A, B, C or D on top. Scan and review each answer, then submit.</p></article>
+   <article><span>03</span><h3>Rotate, scan, submit</h3><p>Students rotate their cards until A, B, C or D faces up. Scan both formats in the same camera view and confirm before submitting.</p></article>
   </div></section>
-  <div className="paper-beta-note">Early-access feature. The browser scanner now supports multiple ZoKivo QR cards per camera frame, subject to browser, lighting and phone performance. Wayground’s original 60-card 6×6 markers are supported in an experimental, front-facing scan mode. Accuracy still requires real phone testing. Teacher account verification is still in development. Start with a small test group before classroom use.</div>
+  <div className="paper-beta-note"><strong>Works with two types of paper cards:</strong> <Link href="/paper/cards">ZoKivo printable QR Q-Cards</Link> and <a href="https://cf.quizizz.com/pdf/Quizizz-QCards/en.pdf" target="_blank" rel="noopener noreferrer">Wayground / Quizizz original Q-Cards ↗</a>. The scanner automatically keeps the two brands separate, even when both use card #1. Experimental camera recognition needs real classroom validation; teacher authentication and public access controls are still under development. Paper Mode session creation remains disabled until explicitly enabled on a configured test environment.</div>
  </main>;
 }

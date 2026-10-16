@@ -1,1 +1,2 @@
 .paper-format-switch{display:grid;gap:7px;margin:8px 0 15px}.paper-format-switch label{font-size:12px;font-weight:1000}.paper-format-switch select{background:#fff;color:#20203a;border:2px solid #20203a;border-radius:9px;padding:12px;max-width:100%;font-size:13px}.paper-format-switch select:disabled{opacity:.7}
+.paper-scanned-list{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.paper-scanned-card b{flex:1;min-width:0}.paper-format-switch p{margin:0;font-size:12px;line-height:1.55}.paper-beta-note a{text-decoration:underline;text-underline-offset:3px}
