@@ -2,6 +2,7 @@
 import Link from "next/link";
 import {useEffect,useState} from "react";
 import {useRouter} from "next/navigation";
+import {parseSuggestedQuiz} from "@/lib/ai-quiz-import";
 type Item={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string};
 type Quiz={title:string;subject:string;grade_level:string;description:string;language:"en"|"zh"|"ms";questions:Item[]};
 const fresh=():Item=>({question:"",options:["","","",""],correct_option_index:0,explanation:""});
@@ -10,7 +11,20 @@ const AB=["A","B","C","D"];
 export default function CreateQuiz(){
  const router=useRouter();
  const [quiz,setQuiz]=useState<Quiz>(initial),[id,setId]=useState(""),[saving,setSaving]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState(""),[loading,setLoading]=useState(true),[status,setStatus]=useState("draft");
- useEffect(()=>{const edit=new URLSearchParams(location.search).get("edit");
+ useEffect(()=>{
+  const params=new URLSearchParams(location.search);
+  if(params.get("source")==="ai"){
+   const transfer=sessionStorage.getItem("zokivo-ai-quiz-import-v1");
+   const imported=transfer?parseSuggestedQuiz(transfer):null;
+   if(imported){
+    setQuiz(imported);
+    sessionStorage.removeItem("zokivo-ai-quiz-import-v1");
+    setMessage("AI suggestions imported for your review. Verify each answer before saving your private draft.");
+   }else setError("No valid AI quiz JSON was found. Ask ZoKivo AI to generate a structured quiz.");
+   setLoading(false);
+   return;
+  }
+  const edit=params.get("edit");
   if(!edit){setLoading(false);return}
   void fetch("/api/quizzes/"+encodeURIComponent(edit),{cache:"no-store"}).then(async r=>{
    const j=await r.json();if(!r.ok)throw Error(j.error||"Cannot load quiz");

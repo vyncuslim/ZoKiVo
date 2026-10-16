@@ -4,6 +4,7 @@ import "./auth/auth.css";
 import "./quiz-studio.css";
 import "./quiz-studio-extra.css";
 import "./ai/ai.css";
+import "./ai/studio.css";
 import "./ui-fixes.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";

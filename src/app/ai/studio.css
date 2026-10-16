@@ -1,0 +1,39 @@
+/* ZoKivo AI Studio: build on existing cream/purple brand, not Blooket assets. */
+.ai-page{max-width:1420px}
+.ai-workspace{display:grid;grid-template-columns:minmax(190px,230px) minmax(0,1fr) minmax(230px,265px);align-items:stretch;gap:18px}
+.ai-history,.ai-chat-card,.ai-tasks{min-width:0}
+.ai-history{background:#fffefa;border:3px solid #29213b;border-radius:20px;box-shadow:5px 6px 0 #29213b;padding:16px;display:flex;flex-direction:column;max-height:670px}
+.ai-history-top,.ai-chat-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between}
+.ai-history-top h2{font-size:18px;margin:0}
+.ai-history-top button{font-size:12px;padding:9px 11px;border:2px solid #29213b;background:#ffd55e;border-radius:9px;font-weight:900;cursor:pointer}
+.ai-history-list{overflow:auto;display:flex;flex-direction:column;gap:8px;margin:14px -4px 0;padding:0 4px;flex:1}
+.ai-history-list>p{font-size:12px;line-height:1.6;color:#6c5e78}
+.ai-history-item{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;background:#faf7ff;color:#27203d;border:2px solid #e0d7ef;border-radius:12px;min-width:0;padding:12px;cursor:pointer}
+.ai-history-item span{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:900}
+.ai-history-item small{font-size:10px;color:#74688b}
+.ai-history-item:hover,.ai-history-item.is-active{border-color:#6042a8;background:#e9e0ff}
+.ai-history-item:focus-visible,.ai-page button:focus-visible{outline:3px solid #6540bd;outline-offset:3px}
+.ai-history-privacy{font-size:11px;color:#706384;line-height:1.6;border-top:1px solid #e6def0;margin:16px 0 0;padding-top:13px}
+.ai-chat-card{min-height:590px;display:flex;flex-direction:column}
+.ai-toolbar small{display:block;font-size:11px;font-weight:700;color:#766986;margin-top:4px}
+.ai-chat-actions button{min-height:39px}
+.ai-toolbar .ai-delete{background:#fffefa;color:#ae3856;border-color:#e0b3c1}
+.ai-messages{height:480px;flex:1;min-height:340px;overflow:auto;scroll-behavior:smooth;overscroll-behavior:contain}
+.ai-message{max-width:94%}
+.ai-message-assistant{max-width:96%}
+.ai-message-user{max-width:84%}
+.ai-start{display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center;margin:auto;padding:32px 12px;max-width:390px}
+.ai-start-icon{width:72px;height:72px;background:#f9d461;border:3px solid #29213b;border-radius:20px;display:grid;place-items:center;font-size:40px;box-shadow:5px 5px 0 #29213b}
+.ai-start h3{font-size:24px;letter-spacing:-.6px;margin:24px 0 5px}
+.ai-start p,.ai-empty{color:#71637f;font-size:13px;line-height:1.7}
+.ai-start button{margin-top:15px;padding:13px 19px;border-radius:12px;border:2px solid #29213b;background:#fffefa;font-weight:900}
+.ai-compose{flex-shrink:0}
+.ai-compose input:disabled{background:#f2edf6;color:#6b6179}
+.ai-notice{font-size:12px;color:#635079;line-height:1.45;margin:9px 0 0}
+.ai-tasks .button{width:100%;text-align:center;display:inline-flex;justify-content:center;white-space:normal;cursor:pointer}
+.ai-quiz-hint{font-size:12px!important;padding:12px;background:#f7f1ff;border:1px solid #ddd1ef;border-radius:11px}
+.ai-tasks{align-self:stretch}
+.ai-tasks h2{font-size:25px}
+.ai-beta-note{margin-top:auto}
+@media(max-width:1100px){.ai-workspace{grid-template-columns:minmax(175px,220px) minmax(0,1fr)}.ai-tasks{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start}.ai-tasks h2,.ai-tasks>p,.ai-beta-note{grid-column:1/-1}.ai-tasks .button{align-self:start}}
+@media(max-width:730px){.ai-workspace{grid-template-columns:minmax(0,1fr)}.ai-history{max-height:180px;padding:13px}.ai-history-list{flex-direction:row;overflow-x:auto;margin:9px -4px 0;padding:0 4px}.ai-history-item{flex:0 0 165px}.ai-history-privacy{display:none}.ai-chat-card{padding:14px;min-height:510px}.ai-toolbar h2{font-size:18px}.ai-chat-actions{justify-content:flex-end}.ai-chat-actions button{padding:9px;font-size:11px}.ai-messages{height:420px;min-height:300px}.ai-tasks{grid-template-columns:1fr}.ai-tasks .button,.ai-tasks h2,.ai-tasks>p,.ai-beta-note{grid-column:1}.ai-compose input{font-size:16px}}
