@@ -67,9 +67,32 @@ function maskedJsQrScan(ctx:CanvasRenderingContext2D,width:number,height:number,
   const pixels=new Uint8ClampedArray(original.data);
   const out:CardDetection[]=[];
   for(let pass=0;pass<max;pass++){
-    const qr=jsQR(pixels,width,height,{inversionAttempts:"dontInvert"});
+    let qr=jsQR(pixels,width,height,{inversionAttempts:"dontInvert"});
+    let shiftX=0,shiftY=0;
+    // A full-frame jsQR lookup may be confused by the finder patterns of
+    // *multiple* QR codes. Search overlapping square tiles from the SAME
+    // frame, then shift the detected corners back into full-frame space.
+    if(!qr){
+      const tile=Math.min(310,width,height);
+      const step=Math.max(35,Math.floor(tile/3));
+      const starts=(len:number)=>{
+        const positions:number[]=[];
+        for(let pos=0;pos<=len-tile;pos+=step)positions.push(pos);
+        if(!positions.includes(len-tile))positions.push(len-tile);
+        return positions;
+      };
+      tiled:for(const y of starts(height))for(const x of starts(width)){
+        const block=new Uint8ClampedArray(tile*tile*4);
+        for(let r=0;r<tile;r++){
+          const from=4*((y+r)*width+x);
+          block.set(pixels.subarray(from,from+tile*4),r*tile*4);
+        }
+        const candidate=jsQR(block,tile,tile,{inversionAttempts:"dontInvert"});
+        if(candidate){qr=candidate;shiftX=x;shiftY=y;break tiled}
+      }
+    }
     if(!qr)break;
-    const corners=cornersFromQR(qr.location);
+    const corners=cornersFromQR(qr.location,shiftX,shiftY);
     const parsed=parseZoKivoCard(qr.data,corners);
     if(parsed&&!out.some(x=>x.card===parsed.card))out.push(parsed);
     // Remove this detected region from a COPY of the frame. The next
