@@ -1,0 +1,23 @@
+const assert=require("node:assert/strict"),fs=require("node:fs"),ts=require("typescript");
+const source=fs.readFileSync("src/lib/avatars.ts","utf8");
+const js=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const m={exports:{}};new Function("require","module","exports",js)(require,m,m.exports);
+let n=0;const ok=(v,msg)=>{assert.ok(v,msg);n++};
+ok(m.exports.AVATARS.length===8,"Eight original avatars available");
+ok(new Set(m.exports.AVATARS.map(x=>x.id)).size===8,"No duplicate avatar IDs");
+ok(m.exports.avatarId("fox")==="fox","Recognized avatar");
+ok(m.exports.avatarId("untrusted")==="spark","Unknown avatar replaced by safe default");
+ok(m.exports.avatarSymbol("robot")==="🤖","Avatar resolves to original emoji");
+const join=fs.readFileSync("src/app/api/rooms/[pin]/join/route.ts","utf8");
+const state=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
+const play=fs.readFileSync("src/app/play/page.tsx","utf8");
+const game=fs.readFileSync("src/app/game/[pin]/page.tsx","utf8");
+const modes=fs.readFileSync("src/app/games/page.tsx","utf8");
+ok(join.includes("avatarId(body.avatar)")&&join.includes("avatar_id"),"Validated avatar persisted in Neon");
+ok(state.includes("p.avatar_id"),"Authoritative room API includes avatar");
+ok(play.includes("zokivo-avatar-chooser"),"Join page offers avatar selector");
+ok(game.includes("zokivo-lobby-players")&&game.includes("avatarSymbol(p.avatar_id)"),"Lobby and scoreboard use same avatar");
+for(const name of ["Gold Quest","Crypto Hack","Fishing Frenzy","Café"])
+ ok(modes.includes(name),"Mode roadmap clearly labels "+name);
+ok(modes.includes("COMING SOON"),"Future modes not mislabeled as live");
+console.log("ZOKIVO_LOBBY_TEST_PASS: "+n+" assertions.");

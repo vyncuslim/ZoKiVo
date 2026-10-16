@@ -2,11 +2,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect,useState, type FormEvent } from "react";
 import { BrandMark } from "@/components/brand";
+import {AVATARS,avatarId} from "@/lib/avatars";
 export default function Play() {
- const [pin,setPin]=useState("");const[nickname,setNickname]=useState("");const[error,setError]=useState("");const[busy,setBusy]=useState(false);const router=useRouter();
+ const [pin,setPin]=useState("");const[nickname,setNickname]=useState("");const[avatar,setAvatar]=useState("spark");const[error,setError]=useState("");const[busy,setBusy]=useState(false);const router=useRouter();
  useEffect(()=>{const candidate=new URLSearchParams(window.location.search).get("pin");if(candidate&&/^\d{6}$/.test(candidate))setPin(candidate)},[]);
  async function join(e:FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);setError("");try{
-  const r=await fetch("/api/rooms/"+pin+"/join",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nickname})});const j=await r.json();
+  const r=await fetch("/api/rooms/"+pin+"/join",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nickname,avatar:avatarId(avatar)})});const j=await r.json();
   if(!r.ok)throw Error(j.error || "Couldn't join this game");
   sessionStorage.setItem("player:"+pin,j.token);router.push("/game/"+pin);
  }catch(e){setError(e instanceof Error?e.message:"Couldn't join this game")}finally{setBusy(false)}}
@@ -15,6 +16,7 @@ export default function Play() {
   <section className="form-pane"><span className="eyebrow eyebrow--mini">PLAYER ENTRANCE</span><h1>Have a <span>PIN?</span><br/>Let&apos;s go!</h1><p className="form-lead">Your host has the code. You bring the good energy.</p>
    <form onSubmit={join} className="entry-form"><label htmlFor="game-pin">GAME PIN <span>6 DIGITS</span></label><input id="game-pin" className="pin-input" autoComplete="off" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} placeholder="000 000" value={pin} onChange={e=>setPin(e.target.value.replace(/\D/g,""))} required/>
    <label htmlFor="nickname">YOUR NICKNAME <span>2–24 CHARACTERS</span></label><input id="nickname" className="name-input" autoComplete="nickname" maxLength={24} minLength={2} placeholder="e.g. SuperNova" value={nickname} onChange={e=>setNickname(e.target.value)} required/>
+   <fieldset className="zokivo-avatar-chooser"><legend>CHOOSE YOUR LOOK <span>JUST FOR THIS GAME</span></legend><div className="zokivo-avatar-grid">{AVATARS.map(a=><button key={a.id} type="button" aria-label={a.label} aria-pressed={avatar===a.id} title={a.label} className={"zokivo-avatar-option"+(avatar===a.id?" selected":"")} onClick={()=>setAvatar(a.id)}>{a.symbol}</button>)}</div></fieldset>
    <button className="button button-dark button-full" type="submit" disabled={busy||pin.length!==6||nickname.trim().length<2}>{busy?"Joining the game...":"I'm in!  ↗"}</button>
    {error&&<p className="form-error" role="alert">{error}</p>}</form>
    <p className="form-footnote">No account needed to join. Just pick a nickname. ✦</p>

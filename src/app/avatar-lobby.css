@@ -1,0 +1,16 @@
+/* Original ZoKivo avatar and lobby layout, using the existing brand palette. */
+.zokivo-avatar-chooser{margin:14px 0 20px;padding:0;border:0;min-width:0}
+.zokivo-avatar-chooser legend{font-size:11px;letter-spacing:1px;font-weight:1000;padding:0;margin-bottom:11px}
+.zokivo-avatar-chooser legend span{margin-left:6px;letter-spacing:0;color:#716681;font-weight:700;font-size:10px}
+.zokivo-avatar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.zokivo-avatar-option{border:2px solid #29213c;background:#fffefa;color:#26203c;border-radius:12px;min-height:60px;font-size:29px;box-shadow:3px 4px 0 #29213c;transition:transform .12s}
+.zokivo-avatar-option:hover{transform:translateY(-2px)}
+.zokivo-avatar-option.selected{background:#d7c6ff;outline:2px solid #7653e7;outline-offset:2px}
+.zokivo-avatar-option:focus-visible{outline:3px solid #7653e7;outline-offset:3px}
+.zokivo-lobby-players{margin:20px auto 25px;max-width:540px;width:100%;text-align:left}
+.zokivo-lobby-players>strong{display:block;letter-spacing:1.1px;font-size:11px;color:#48395b;margin-bottom:11px;text-align:center}
+.zokivo-lobby-players>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.zokivo-lobby-player{border:2px solid #29213c;border-radius:11px;background:#fffefa;padding:8px 10px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:900;min-width:0;overflow-wrap:anywhere}
+.zokivo-lobby-player i{font-style:normal;font-size:25px;background:#f0e8ff;border-radius:9px;display:grid;place-items:center;flex:none;width:41px;height:41px}
+.leaderboard-card .player-avatar{font-size:23px;line-height:1.2;display:grid;place-items:center}
+@media(max-width:530px){.zokivo-avatar-option{min-height:55px}.zokivo-lobby-players>div{grid-template-columns:1fr}.zokivo-lobby-player i{font-size:22px}}

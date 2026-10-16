@@ -14,7 +14,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   const me=playerKey?await sql`SELECT id FROM players WHERE room_pin=${pin} AND token_hash=${hash(playerKey)} LIMIT 1`:[];
   if(!host&&!me.length)return bad("Unauthorized",401);
   // Identical score policy for host and player. Do not leak correct answers via current-round score changes.
-  const players=await sql`SELECT p.id,p.nickname,
+  const players=await sql`SELECT p.id,p.nickname,p.avatar_id,
    (CASE WHEN r.status='playing' AND r.deadline>now() THEN
     COALESCE((SELECT SUM(a.points) FROM answers a WHERE a.player_id=p.id AND a.room_pin=r.pin
       AND a.question_index<r.current_index),0)

@@ -6,6 +6,7 @@ import "./quiz-studio-extra.css";
 import "./ai/ai.css";
 import "./ai/studio.css";
 import "./ui-fixes.css";
+import "./avatar-lobby.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";
