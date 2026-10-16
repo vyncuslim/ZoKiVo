@@ -11,7 +11,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
   if(!sessions.length)return bad("Paper session not found",404);
   const s=sessions[0],hostToken=req.headers.get("x-host-token");
   const auth=await findUser(req).catch(()=>({user:null}));
-  const verifiedOwner=!!s.owner_user_id&&auth.user?.id===s.owner_user_id&&!!auth.user.email_confirmed_at;
+  const verifiedOwner=!!s.owner_user_id&&auth.user?.id===s.owner_user_id&&!!auth.user?.email_confirmed_at;
   const legacyHost=!s.owner_user_id&&!!auth.user?.email_confirmed_at&&!!hostToken&&same(s.host_token_hash,hash(hostToken));
   const host=verifiedOwner||legacyHost;
   const q=s.current_index>=0?await sql`SELECT question,choices FROM questions WHERE quiz_set_id=${s.quiz_set_id} AND position=${s.current_index}`:[];
