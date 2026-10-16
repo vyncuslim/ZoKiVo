@@ -20,7 +20,7 @@ export default function PaperPage(){
    <span className="paper-eyebrow">✳ CLASSROOM BETA · NO STUDENT DEVICES</span>
    <h1>All hands up.<br/><span>All cards out.</span></h1>
    <p>One teacher phone. One classroom screen. Use ZoKivo printable QR cards, original Wayground Q-Cards, or both in the same classroom game.</p>
-   <div className="paper-hero-actions"><button className="button button-dark" onClick={create} disabled={busy}>{busy?"Creating session...":"Start on this phone ↗"}</button><Link href="/paper/cards" className="button button-outline">Print ZoKivo cards ↓</Link></div>
+   <div className="paper-hero-actions"><button className="button button-dark" onClick={create} disabled={busy}>{busy?"Creating session...":"Start on this phone ↗"}</button><Link href="/paper/cards" className="button button-outline">Print ZoKivo cards ↓</Link><Link href="/paper/check" className="button button-outline">Test your camera ✓</Link></div>
    {error&&<p className="form-error" role="alert">{error}</p>}
    <p className="paper-help-note">Start on the phone you will use to scan. The projected board opens separately on any other screen using the six-digit PIN.</p>
   </div><div className="paper-hero-mark"><BrandMark size={200}/><span className="paper-spin">A&nbsp; B&nbsp; C&nbsp; D</span><b>✳</b></div></section>
