@@ -1,5 +1,5 @@
-import {useRoomRealtime} from "@/lib/use-room-realtime";
 "use client";
+import {useRoomRealtime} from "@/lib/use-room-realtime";
 import {useState,useEffect,useCallback} from "react";import {useParams,useSearchParams} from "next/navigation";
 import {BrandMark} from "@/components/brand";
 type State={status:"lobby"|"playing"|"finished";index:number;total:number;deadline:string|null;question:{question:string;choices:string[]}|null;players:{id:string;nickname:string;score:number}[];answeredIds:string[];viewer:{host:boolean;playerId:string|null}};

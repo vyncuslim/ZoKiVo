@@ -1,5 +1,5 @@
-import {useRoomRealtime} from "@/lib/use-room-realtime";
 "use client";
+import {useRoomRealtime} from "@/lib/use-room-realtime";
 import {useParams} from "next/navigation";
 import Link from "next/link";
 import {useCallback,useEffect,useState} from "react";
