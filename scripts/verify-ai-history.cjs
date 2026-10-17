@@ -49,7 +49,7 @@ ok(ui.includes("function retryQuizJson()")&&ui.includes("parseSuggestedQuiz(text
 ok(ui.includes('call.tool_name==="submit_quiz_draft"')&&ui.includes("parseSuggestedQuiz(JSON.stringify(call.parameters??null))"),"Only exact allowlisted tool accepts structured validated quiz");
 ok(ui.includes("awaitingQuiz.current")&&ui.includes("await save(message,id)"),"Quiz tool only accepted for explicit user generation and chat sends are saved");
 ok(ui.includes('language:"en"')===false,"No hardcoded English-only system override introduced");
-ok(!ui.includes("api/quizzes/"+'"'+'),"Client tool cannot directly auto-publish quiz");
+ok(!ui.includes('/publish"')&&ui.includes('Direct publishing or database access is prohibited.'),"Client tool cannot auto-publish and rejects privileged tools");
 ok(ui.includes("setQuizCount")&&ui.includes("setQuizSubject")&&ui.includes("setQuizGrade")&&ui.includes("setQuizLanguage"),"User can specify quiz subject, year, count and language");
 
 console.log("AI_HISTORY_TEST_PASS: "+count+" assertions, authenticated storage, crypto integrity, quiz handoff.");
