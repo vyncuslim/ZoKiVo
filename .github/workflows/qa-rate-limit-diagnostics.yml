@@ -1,0 +1,29 @@
+name: ZoKivo official-domain rate-limit diagnostics
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/qa-rate-limit-diagnostics.yml"
+      - "scripts/qa-rate-limit-diagnostics.mjs"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read-only-limit-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --check scripts/qa-rate-limit-diagnostics.mjs
+      - name: Probe 25-reader steps with 429-stop safeguard
+        run: node scripts/qa-rate-limit-diagnostics.mjs
+      - name: Save diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-rate-limit-readonly-qa
+          path: zokivo-rate-limit-diagnostics.json
+          if-no-files-found: warn
