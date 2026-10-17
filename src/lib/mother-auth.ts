@@ -1,6 +1,6 @@
 import {randomBytes,createHash} from "node:crypto";
 import {NextRequest,NextResponse} from "next/server";
-export type MotherUser={id:string;email?:string;email_confirmed_at?:string|null;created_at?:string;user_metadata?:{full_name?:string;name?:string};app_metadata?:Record<string,unknown>};
+export type MotherUser={id:string;email?:string;email_confirmed_at?:string|null;created_at?:string;user_metadata?:{full_name?:string;name?:string;zokivo_view_role?:string};app_metadata?:Record<string,unknown>};
 export type Tokens={access_token:string;refresh_token:string;expires_in:number;user?:MotherUser};
 export class AuthError extends Error{constructor(message:string,public status=400){super(message)}}
 const ACCESS="zk_auth_access",REFRESH="zk_auth_refresh",PKCE="zk_auth_pkce",FLOW="zk_auth_flow",AFTER="zk_auth_after",RECOVERY="zk_auth_recovery";
@@ -71,9 +71,18 @@ export async function findUser(req:NextRequest):Promise<{user:MotherUser|null;re
  }catch(e){if(e instanceof AuthError&&e.status===503)throw e;return {user:null}}
 }
 export function applyRenew(res:NextResponse,req:NextRequest,renew?:Tokens){if(renew)setTokens(res,req,renew);return res}
+export function chosenRole(u:MotherUser):"student"|"teacher"{
+ return u.user_metadata?.zokivo_view_role==="teacher"?"teacher":"student";
+}
+export function verifiedTeacher(u:MotherUser){
+ const m=u.app_metadata||{};
+ const roles=Array.isArray(m.zokivo_roles)?m.zokivo_roles:Array.isArray(m.roles)?m.roles:[];
+ return m.zokivo_role==="teacher"||m.zokivo_role==="admin"||
+  roles.includes("zokivo_teacher")||roles.includes("zokivo_admin");
+}
 export function safeUser(u:MotherUser){
  const n=u.user_metadata?.full_name||u.user_metadata?.name;
- return {id:u.id,email:u.email||"",emailVerified:!!u.email_confirmed_at,displayName:typeof n==="string"?n.slice(0,100):"",createdAt:u.created_at||null};
+ return {id:u.id,email:u.email||"",emailVerified:!!u.email_confirmed_at,displayName:typeof n==="string"?n.slice(0,100):"",createdAt:u.created_at||null,role:chosenRole(u),teacherVerified:verifiedTeacher(u)};
 }
 export function authError(e:unknown){const er=e instanceof AuthError?e:new AuthError("Authentication temporarily unavailable.",503);return noCache({error:er.message},er.status)}
 export function emailValue(v:unknown){const e=typeof v==="string"?v.trim().toLowerCase():"";return e.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:null}
