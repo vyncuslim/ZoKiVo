@@ -1,0 +1,29 @@
+name: ZoKivo official-domain browser region verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/qa-region-handshake.yml"
+      - "scripts/qa-region-handshake.mjs"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-domain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --check scripts/qa-region-handshake.mjs
+      - name: Verify public domain using legitimate Cloudflare region handshake
+        run: node scripts/qa-region-handshake.mjs
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-official-domain-qa
+          path: zokivo-official-domain-verification.json
+          if-no-files-found: warn
