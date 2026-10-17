@@ -1,0 +1,36 @@
+name: ZoKivo bounded 100 player super-stress acceptance 2026-10-17
+on:
+  push:
+    branches:
+      - qa/super-stress-isolated-20261017
+    paths:
+      - ".github/workflows/qa-super-stress-20261017.yml"
+permissions:
+  contents: read
+concurrency:
+  group: zokivo-qa-super-stress-room-978160
+  cancel-in-progress: false
+jobs:
+  bounded-super-stress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      ZOKIVO_TEST_ROOM_PIN: "978160"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate stress script without sending requests
+        run: |
+          node --check scripts/qa-super-stress-100.mjs
+          node --test scripts/qa-cookie-jar.test.mjs
+      - name: Bounded official-domain 100 clients and 1200 read requests, fail-fast
+        run: node scripts/qa-super-stress-100.mjs
+      - name: Preserve sanitized QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-super-stress-100-20261017
+          path: zokivo-super-stress-100-report.json
+          if-no-files-found: warn
