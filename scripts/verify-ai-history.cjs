@@ -44,4 +44,12 @@ ok(ui.includes("seenReply.current")&&ui.includes("text.startsWith(last.text)"),"
 ok(ui.includes("await save(message,id)")&&ui.includes('ws.send(JSON.stringify({type:"user_message",text}))'),"User message persisted before network send");
 ok(ui.includes("lastSent.current")&&ui.includes("Date.now()-lastSent.current.at<1200"),"Rapid duplicate user sends blocked");
 ok(ui.includes("useQuiz(suggestion)"),"AI quiz requires human editor handoff");
+ok(ui.includes("function requestQuiz()")&&ui.includes("queuedQuizPrompt.current=prompt")&&ui.includes("if(queued)void send(queued)"),"One-click quiz generator can queue and send after secure websocket connects");
+ok(ui.includes("function retryQuizJson()")&&ui.includes("parseSuggestedQuiz(text)"),"Agent free-text results are validated and recoverable");
+ok(ui.includes('call.tool_name==="submit_quiz_draft"')&&ui.includes("parseSuggestedQuiz(JSON.stringify(call.parameters??null))"),"Only exact allowlisted tool accepts structured validated quiz");
+ok(ui.includes("awaitingQuiz.current")&&ui.includes("await save(message,id)"),"Quiz tool only accepted for explicit user generation and chat sends are saved");
+ok(ui.includes('language:"en"')===false,"No hardcoded English-only system override introduced");
+ok(!ui.includes("api/quizzes/"+'"'+'),"Client tool cannot directly auto-publish quiz");
+ok(ui.includes("setQuizCount")&&ui.includes("setQuizSubject")&&ui.includes("setQuizGrade")&&ui.includes("setQuizLanguage"),"User can specify quiz subject, year, count and language");
+
 console.log("AI_HISTORY_TEST_PASS: "+count+" assertions, authenticated storage, crypto integrity, quiz handoff.");
