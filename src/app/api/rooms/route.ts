@@ -36,7 +36,7 @@ export async function POST(req:NextRequest){
   for(let i=0;i<6;i++){
    const pin=String(randomInt(100000,1000000));
    const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id,question_seconds,allow_late_joining,random_player_names,game_mode,question_order,random_question_order,mute_sounds,score_goal)
-     VALUES(${pin},${id},${hash(secret)},${auth.user.id},${questionSeconds},${allowLateJoining},${randomPlayerNames},${gameMode})
+     VALUES(${pin},${id},${hash(secret)},${auth.user.id},${questionSeconds},${allowLateJoining},${randomPlayerNames},${gameMode},${orderJson}::jsonb,${shuffle},${muteSounds},${scoreGoal})
      ON CONFLICT DO NOTHING RETURNING pin`;
    if(created.length){await emitRoomRefresh('quiz',pin);return applyRenew(noCache({pin,token:secret}),req,auth.renew)}
   }
