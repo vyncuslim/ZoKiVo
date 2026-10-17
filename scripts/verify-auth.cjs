@@ -19,6 +19,20 @@ ok(a.emailValue(" TEST@EXAMPLE.COM ")==="test@example.com","email normalization"
 ok(a.emailValue("invalid")===null,"invalid email rejected");
 ok(a.passwordValue("a".repeat(8),8)!==null,"valid signup password");
 ok(a.passwordValue("x",8)===null,"short signup password rejected");
+ok(a.chosenRole({id:"a"})==="student","Unset accounts default to Student view");
+ok(a.chosenRole({id:"a",user_metadata:{zokivo_view_role:"teacher"}})==="teacher","Teacher preference is honored as view");
+ok(a.chosenRole({id:"a",user_metadata:{zokivo_view_role:"administrator"}})==="student","Unknown preference is not privileged");
+ok(!a.verifiedTeacher({id:"a",user_metadata:{zokivo_view_role:"teacher"}}),"Self-selected teacher has no verified educator authority");
+ok(a.verifiedTeacher({id:"a",app_metadata:{zokivo_role:"teacher"}}),"Verified educator requires trusted app_metadata");
+const rolesRoute=fs.readFileSync("src/app/api/auth/role/route.ts","utf8");
+ok(rolesRoute.includes("checkOrigin(req)")&&rolesRoute.includes('method:"PUT"')&&rolesRoute.includes("findUser(req)"),"Role endpoint authenticates, guards CSRF, updates user metadata");
+const signupSource=fs.readFileSync("src/app/api/auth/signup/route.ts","utf8");
+ok(signupSource.includes("zokivo_view_role:role")&&signupSource.includes('role==="teacher"'),"Signup supports declared account roles");
+const publishSource=fs.readFileSync("src/app/api/quizzes/[id]/publish/route.ts","utf8");
+ok(publishSource.includes("teacherApproved(user!)"),"Published quizzes remain restricted to verified educators");
+const assignRoute=fs.readFileSync("src/app/api/assignments/route.ts","utf8");
+ok(assignRoute.includes("checkOrigin(req)")&&assignRoute.includes("chosenRole(user!)")&&assignRoute.includes("q.status='published'"),"Assignment creation requires authenticated teacher view and published quiz");
+
 a.checkOrigin(req("/api/auth/signin",{origin:"https://zokivo.vercel.app"}));ok(true,"same-origin POST allowed");
 try{a.checkOrigin(req("/api/auth/signin",{origin:"https://evil.example"}));assert.fail("CSRF allowed")}catch(e){ok(e.status===403,"cross-site POST rejected")}
 const response=NextResponse.json({ok:true});
