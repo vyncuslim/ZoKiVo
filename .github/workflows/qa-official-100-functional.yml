@@ -1,30 +1,34 @@
 name: ZoKivo official domain 100 simulated-player end-to-end acceptance
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/qa-official-100-functional.yml"
-      - "scripts/qa-official-100-functional.mjs"
   workflow_dispatch:
+    inputs:
+      test_pin:
+        description: "Fresh, isolated 6-digit QA room PIN created by an authorized operator"
+        type: string
+        required: true
 permissions:
   contents: read
 concurrency:
-  group: zokivo-official-100-room-967651
+  group: zokivo-official-100-functional-qa
   cancel-in-progress: false
 jobs:
   real-official-domain-qa:
     runs-on: ubuntu-latest
     timeout-minutes: 6
+    env:
+      ZOKIVO_TEST_ROOM_PIN: ${{ inputs.test_pin }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validate test script
-        run: node --check scripts/qa-official-100-functional.mjs
-      - name: 100 regional sessions, game joins, answers, and settled scores
+      - name: Validate script and isolated QA room PIN
+        run: |
+          node --check scripts/qa-official-100-functional.mjs
+          node -e 'if (!/^\d{6}$/.test(process.env.ZOKIVO_TEST_ROOM_PIN)) process.exit(2)'
+      - name: 100 distinct region sessions, joins, answers, and settled scores
         run: node scripts/qa-official-100-functional.mjs
-      - name: Save sanitized metrics
+      - name: Upload sanitized QA report
         if: always()
         uses: actions/upload-artifact@v4
         with:
