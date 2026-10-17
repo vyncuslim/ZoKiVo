@@ -1,0 +1,39 @@
+name: ZoKivo 2-room 200-client long-running bounded stress (one-time)
+on:
+  push:
+    branches: [qa/multiroom-200-20261017]
+    paths: [".github/workflows/qa-multiroom-200-20261017.yml"]
+permissions: 
+  contents: read
+concurrency:
+  group: zokivo-200-multiroom-20261017
+  cancel-in-progress: false
+jobs:
+  two-rooms:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        room: ["981406", "981407"]
+    env:
+      ZOKIVO_TEST_ROOM_PIN: ${{ matrix.room }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Non-network QA script and cookie tests
+        run: |
+          node --check scripts/qa-multiroom-200.mjs
+          node --test scripts/qa-cookie-jar.test.mjs
+      - name: Concurrent 100-player official-host sustained test (one bounded room per runner)
+        run: node scripts/qa-multiroom-200.mjs
+      - name: Upload sanitized metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "zokivo-room-${{ matrix.room }}-stress-20261017"
+          path: zokivo-super-stress-100-report.json
+          if-no-files-found: warn
