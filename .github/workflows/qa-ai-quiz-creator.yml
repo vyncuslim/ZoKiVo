@@ -1,0 +1,32 @@
+name: ZoKivo AI quiz Creator regression
+on:
+  push:
+    branches: [fix/ai-quiz-generation-20261017]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/ai/**"
+      - "src/lib/ai-quiz-import.ts"
+      - "scripts/verify-ai-history.cjs"
+      - ".github/workflows/qa-ai-quiz-creator.yml"
+permissions:
+  contents: read
+jobs:
+  quiz-creator-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install for deterministic type and integration checks
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Test encrypted AI history and quiz draft import
+        run: node scripts/verify-ai-history.cjs
+      - name: Test quiz schema and publish protections
+        run: node scripts/verify-quiz.cjs
+      - name: TypeScript compile validation
+        run: npx tsc --noEmit
+      - name: Next production build
+        run: npm run build

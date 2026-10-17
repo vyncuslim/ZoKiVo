@@ -37,3 +37,14 @@
 .ai-beta-note{margin-top:auto}
 @media(max-width:1100px){.ai-workspace{grid-template-columns:minmax(175px,220px) minmax(0,1fr)}.ai-tasks{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start}.ai-tasks h2,.ai-tasks>p,.ai-beta-note{grid-column:1/-1}.ai-tasks .button{align-self:start}}
 @media(max-width:730px){.ai-workspace{grid-template-columns:minmax(0,1fr)}.ai-history{max-height:180px;padding:13px}.ai-history-list{flex-direction:row;overflow-x:auto;margin:9px -4px 0;padding:0 4px}.ai-history-item{flex:0 0 165px}.ai-history-privacy{display:none}.ai-chat-card{padding:14px;min-height:510px}.ai-toolbar h2{font-size:18px}.ai-chat-actions{justify-content:flex-end}.ai-chat-actions button{padding:9px;font-size:11px}.ai-messages{height:420px;min-height:300px}.ai-tasks{grid-template-columns:1fr}.ai-tasks .button,.ai-tasks h2,.ai-tasks>p,.ai-beta-note{grid-column:1}.ai-compose input{font-size:16px}}
+
+/* One-click AI quiz builder: deliberately separate prompt fields from chat composer. */
+.ai-generator{display:grid;gap:10px;margin:15px 0}
+.ai-generator label{display:grid;gap:5px;color:#514265;font-size:12px;font-weight:850}
+.ai-generator input,.ai-generator select{width:100%;min-width:0;border:2px solid #cfc3df;background:#fff;border-radius:10px;padding:10px;color:#2b213a;font:inherit;font-size:13px}
+.ai-generator input:focus-visible,.ai-generator select:focus-visible{outline:3px solid #7652ce;outline-offset:2px}
+.ai-generator-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.ai-generator .button{min-height:44px;line-height:1.35}
+.ai-generator .button:disabled{opacity:.55;cursor:wait}
+@media(max-width:1100px){.ai-tasks .ai-generator{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}.ai-generator>.button{grid-column:1/-1}}
+@media(max-width:730px){.ai-tasks .ai-generator{grid-template-columns:1fr}.ai-generator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
