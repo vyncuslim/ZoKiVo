@@ -5,7 +5,7 @@ for(const id of ["quiz_party","gold_quest","crypto_hack","fishing_frenzy","cafe"
 const host=read("src/app/host/page.tsx"),rooms=read("src/app/api/rooms/route.ts"),join=read("src/app/api/rooms/[pin]/join/route.ts");
 ok(host.includes("gameMode,setGameMode")&&host.includes("gameMode,randomQuestionOrder:shuffle"),"Host chooses a mode");
 ok(rooms.includes("game_mode,")&&rooms.includes("Invalid game mode"),"Server validates selected mode");
-ok(join.includes("defense_code")&&join.includes("randomInt(0,3)"),"Defense key randomized server-side");
+ok(join.includes("zokivo_join_room")&&join.includes("randomInt(0,3)"),"Defense key randomized server-side");
 const reward=read("src/app/api/rooms/[pin]/reward/route.ts");
 ok(reward.includes("checkOrigin(req)"),"Reward requests must be same origin");
 ok(reward.includes('req.headers.get("x-player-token")'),"Player token required");

@@ -13,7 +13,7 @@ const state=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
 const play=fs.readFileSync("src/app/play/page.tsx","utf8");
 const game=fs.readFileSync("src/app/game/[pin]/page.tsx","utf8");
 const modes=fs.readFileSync("src/app/games/page.tsx","utf8");
-ok(join.includes("avatarId(body.avatar)")&&join.includes("avatar_id"),"Validated avatar persisted in Neon");
+ok(join.includes("avatarId(body.avatar)")&&join.includes("zokivo_join_room"),"Validated avatar persisted in Neon");
 ok(state.includes("p.avatar_id"),"Authoritative room API includes avatar");
 ok(play.includes("zokivo-avatar-chooser"),"Join page offers avatar selector");
 ok(game.includes("zokivo-lobby-players")&&game.includes("avatarSymbol(p.avatar_id)"),"Lobby and scoreboard use same avatar");

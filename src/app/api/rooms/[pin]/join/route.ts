@@ -29,12 +29,18 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const name=config[0].random_player_names?
     choices[randomInt(choices.length)]+String(randomInt(10000,99999)):desired;
   const t=token();
-  const rows=await sql`INSERT INTO players(room_pin,nickname,token_hash,avatar_id,defense_code)
-    SELECT pin,${name},${hash(t)},${avatar},${randomInt(0,3)} FROM rooms
-    WHERE pin=${pin} AND (status='lobby' OR (status='playing' AND allow_late_joining))
-    ON CONFLICT DO NOTHING RETURNING id`;
-  if(!rows.length)return bad("Room closed or nickname already taken",409);
+  // Database procedure locks the room row before checking the limit, preventing over-capacity joins.
+  const rows=await sql`SELECT zokivo_join_room(${pin}::char(6),${name}::varchar(24),
+    ${hash(t)}::char(64),${avatar},${randomInt(0,3)}::smallint,100) AS id`;
+  if(!rows.length||!rows[0].id)return bad("Unable to join this room",409);
   await emitRoomRefresh("quiz",pin);
   return Response.json({token:t,nickname:name},{headers:{"Cache-Control":"no-store"}});
- }catch(e){console.error("Unable to join ZoKivo room",e);return bad("Unable to join",503)}
+ }catch(e){
+  const message=e instanceof Error?e.message:"";
+  if(/Room is full/i.test(message))return bad("Room is full (maximum 100 players).",409);
+  if(/Room is not accepting|Room closed/i.test(message))return bad("Room is not accepting new players.",409);
+  if(/Room not found/i.test(message))return bad("Room not found",404);
+  if(/duplicate key|players_room_pin_nickname_key|unique constraint/i.test(message))return bad("Nickname already taken. Try another.",409);
+  console.error("Unable to join ZoKivo room",e);return bad("Unable to join",503)
+ }
 }

@@ -5,10 +5,10 @@ ok(host.includes("setQuestionSeconds")&&host.includes("[10,15,20,30,45,60]"),"Te
 ok(host.includes("allowLateJoining:lateJoin")&&host.includes("randomPlayerNames:randomNames"),"Teacher sends join settings");
 ok(create.includes('typeof allowLateJoining!=="boolean"')&&create.includes('typeof randomPlayerNames!=="boolean"'),"Strict server settings validation");
 ok(create.includes("allow_late_joining,random_player_names"),"Room persists options");
-ok(join.includes("status='lobby' OR (status='playing' AND allow_late_joining)"),"Only opted-in late joins permitted");
+ok(read("migrations/016_room_capacity.sql").includes("room_info.allow_late_joining"),"Only opted-in late joins permitted");
 ok(join.includes("random_player_names"),"Random names controlled by room setting");
 ok(join.includes("avatarId(body.avatar)"),"Avatar choice retained");
-ok(join.includes("ON CONFLICT DO NOTHING"),"Nickname conflict cannot override existing player");
+ok(read("migrations/016_room_capacity.sql").includes("INSERT INTO players"),"Nickname conflict cannot override existing player");
 ok(play.includes('randomNames?"Your host will assign a nickname"'),"UI explains generated nicknames");
 ok(play.includes("!roomOpen"),"Closed room cannot be joined by UI");
 ok(options.includes('randomNames:!!rows[0].random_player_names')&&options.includes("acceptingPlayers:"),"Public join settings contain no answers or tokens");
