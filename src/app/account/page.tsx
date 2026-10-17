@@ -18,7 +18,7 @@ export default function Account(){
   try{
    const r=await fetch("/api/auth/role",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({role:next})});
    const j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.error||"Could not switch account role");
-   setUser(v=>v?{...v,role:next}:v);router.refresh();
+   setUser(v=>v?{...v,role:next}:v);if(next==="teacher")router.push("/teacher");router.refresh();
   }catch(e){setError(e instanceof Error?e.message:"Could not switch account role")}
   finally{setBusy(false)}
  }
