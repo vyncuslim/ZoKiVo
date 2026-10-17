@@ -1,0 +1,38 @@
+name: ZoKivo 100-client load smoke
+on:
+  push:
+    paths:
+      - ".github/workflows/qa-100-readers.yml"
+      - "scripts/qa-100-readers.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zokivo-readonly-load-smoke
+  cancel-in-progress: false
+
+jobs:
+  hundred-readers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: 100 simultaneous clients (read-only)
+        run: node scripts/qa-100-readers.mjs
+        env:
+          ZOKIVO_TEST_BASE_URL: https://zokivo.vercel.app
+          ZOKIVO_TEST_PAPER_PIN: "995777"
+          ZOKIVO_TEST_CLIENTS: "100"
+          ZOKIVO_TEST_ROUNDS: "2"
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-100-client-readonly
+          path: zokivo-load-result.json
+          if-no-files-found: warn
