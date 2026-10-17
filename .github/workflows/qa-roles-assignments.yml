@@ -1,0 +1,37 @@
+name: ZoKivo student teacher role and assignment regression
+on:
+  push:
+    branches: [feat/account-role-switch-and-multiroom-qa-20261017]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/api/auth/**"
+      - "src/app/api/assignments/**"
+      - "src/app/auth/**"
+      - "src/app/account/**"
+      - "src/app/teacher/**"
+      - "src/app/assignment/**"
+      - "src/lib/mother-auth.ts"
+      - "src/lib/quizzes.ts"
+      - "scripts/verify-auth.cjs"
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Mother Auth boundaries and role escalation
+        run: node scripts/verify-auth.cjs
+      - name: Quiz teacher publish and assignments validations
+        run: node scripts/verify-quiz.cjs
+      - name: TypeScript compile
+        run: npx tsc --noEmit
+      - name: Build production site
+        run: npm run build
