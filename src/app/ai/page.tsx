@@ -28,7 +28,7 @@ export default function AIPage(){
  const seenReply=useRef<{id:string;text:string;at:number}|null>(null);
  const lastSent=useRef<{text:string;at:number}|null>(null);
  const latestSession=useRef(0),bottom=useRef<HTMLDivElement>(null),sending=useRef(false);
- const queuedQuizPrompt=useRef<string|null>(null),awaitingQuiz=useRef(false);
+ const queuedQuizPrompt=useRef<string|null>(null),awaitingQuiz=useRef(false),expectedQuizCount=useRef<number|null>(null);
  const setChat=(m:Message[]|((old:Message[])=>Message[]))=>{
   const next=typeof m==="function"?m(messagesRef.current):m;
   messagesRef.current=next;setMessages(next);
@@ -133,7 +133,7 @@ export default function AIPage(){
       if(!text)return;
       if(awaitingQuiz.current){
        const proposed=parseSuggestedQuiz(text);
-       if(proposed){awaitingQuiz.current=false;setNotice("Quiz ready: "+proposed.questions.length+" questions. Review every answer in Creator before saving.");}
+       if(proposed&&proposed.questions.length===expectedQuizCount.current){awaitingQuiz.current=false;setNotice("Quiz ready: "+proposed.questions.length+" questions. Review every answer in Creator before saving.");}
        else setNotice("The Agent replied without complete quiz JSON. Select Retry JSON below, or configure the ElevenLabs Agent's instructions.");
       }
       const last=seenReply.current,now=Date.now();
@@ -158,7 +158,7 @@ export default function AIPage(){
       // Only this local, review-only tool is allowed. Never grant publishing privileges to AI.
       if(call.tool_name==="submit_quiz_draft"&&awaitingQuiz.current){
        const proposed=parseSuggestedQuiz(JSON.stringify(call.parameters??null));
-       if(!proposed){
+       if(!proposed||proposed.questions.length!==expectedQuizCount.current){
         ws.send(JSON.stringify({type:"client_tool_result",tool_call_id:toolId,is_error:true,result:"Invalid quiz schema. Require title, subject, grade_level, language, description, 1-40 questions, four distinct options and a numeric correct_option_index (0-3)."}));
        }else{
         const record={id:uuid(),role:"assistant" as const,text:JSON.stringify(proposed)};
@@ -214,12 +214,12 @@ export default function AIPage(){
    'Strict JSON schema: {"title":"string","subject":"string","grade_level":"string","language":"'+quizLanguage+'","description":"string","questions":[{"question":"string","options":["string A","string B","string C","string D"],"correct_option_index":0,"explanation":"string"}]}',
    "Use exactly "+quizCount+" DISTINCT questions. Every question has four DISTINCT plausible options and exactly one verified correct answer. correct_option_index MUST be an integer 0, 1, 2 or 3. Include a concise explanation for each answer.",
    "Do not say you cannot save or lack tools. You only need to return JSON; a teacher can review it in Creator before saving."
-  ].join("\\n");
+  ].join("\n");
  }
  function requestQuiz(){
   const prompt=buildQuizPrompt();
   setError("");setNotice("Preparing a "+quizCount+"-question quiz with ZoKivo AI…");
-  awaitingQuiz.current=true;
+  awaitingQuiz.current=true;expectedQuizCount.current=Number(quizCount);
   if(socket.current?.readyState===WebSocket.OPEN){void send(prompt);return;}
   queuedQuizPrompt.current=prompt;
   if(status!=="connecting")void connect();
@@ -227,7 +227,7 @@ export default function AIPage(){
  function retryQuizJson(){
   const prompt="Your last response was not importable. Return the COMPLETE quiz as ONE valid JSON object, without Markdown, speech, follow-up questions, or tool disclaimers. Follow the exact structure and parameters in my previous request; include ALL requested questions and exactly four options plus numeric correct_option_index and explanation for each.";
   setError("");setNotice("Requesting structured JSON from ElevenLabs…");
-  awaitingQuiz.current=true;
+  awaitingQuiz.current=true;expectedQuizCount.current=Number(quizCount);
   if(socket.current?.readyState===WebSocket.OPEN){void send(prompt);return;}
   queuedQuizPrompt.current=buildQuizPrompt();
   if(status!=="connecting")void connect();
@@ -236,7 +236,7 @@ export default function AIPage(){
   sessionStorage.setItem("zokivo-ai-quiz-import-v1",JSON.stringify(q));
   location.assign("/create?source=ai");
  }
- const suggestion=findSuggestedQuiz(messages);
+ const suggestion=awaitingQuiz.current?null:findSuggestedQuiz(messages);
  return <main className="ai-page wrap">
   <nav className="quiz-breadcrumb"><Link href="/">← ZoKivo</Link><span>/ ZoKivo AI</span></nav>
   <header className="ai-header"><div><span className="eyebrow eyebrow--mini">POWERED BY VYNALTH AI + ELEVENLABS</span><h1>Meet <em>ZoKivo AI.</em></h1><p>Explore subjects, create quiz ideas and revisit your learning conversations.</p></div><div className="ai-status"><span>{status==="ready"?"● CONNECTED":status==="connecting"?"◌ CONNECTING":"○ DISCONNECTED"}</span><strong>EN · 中文 · BM</strong></div></header>
