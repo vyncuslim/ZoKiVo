@@ -1,0 +1,18 @@
+name: ZoKivo role and assignment production authorization smoke 20261017
+on:
+  push:
+    branches: [qa/role-api-production-smoke-20261017]
+    paths: [".github/workflows/qa-role-production-smoke-20261017.yml"]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Non-destructive anonymous authorization smoke on production
+        run: node scripts/qa-role-production-smoke.mjs
