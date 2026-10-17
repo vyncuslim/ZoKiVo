@@ -45,7 +45,13 @@ const nickname=i=>"CQA"+PIN+"-"+String(i).padStart(3,"0");
 const visitors=Array.from({length:N},(_,i)=>({i:i+1,jar:newQaCookieJar()}));
 const timezone=Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC";
 const handshake=await Promise.all(visitors.map(async p=>{
- const r=await hit("/__shield/gps/region-check",{method:"POST",payload:{timezone},jar:p.jar});
+ let r;
+ for(let attempt=0;attempt<3;attempt++){
+  r=await hit("/__shield/gps/region-check",{method:"POST",payload:{timezone},jar:p.jar});
+  // Re-attempt only an actual transport failure, never 403/429 or application rejection.
+  if(r.status!==0)break;
+  await new Promise(resolve=>setTimeout(resolve,250*(attempt+1)));
+ }
  const cookie=p.jar.header();
  const ok=r.status===200&&r.data?.checked===true&&r.data?.gpsRequired===false&&
    p.jar.has("__Host-vynalth-region");
