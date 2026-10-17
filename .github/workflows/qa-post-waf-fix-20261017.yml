@@ -1,0 +1,36 @@
+name: ZoKivo post-Cloudflare-fix 100 simulated player verification
+on:
+  push:
+    branches:
+      - qa/official-100-post-waf-fix-20261017
+    paths:
+      - ".github/workflows/qa-post-waf-fix-20261017.yml"
+permissions:
+  contents: read
+concurrency:
+  group: zokivo-post-waf-100-976904
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      ZOKIVO_TEST_ROOM_PIN: "976904"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate 100-player QA scripts
+        run: |
+          node --check scripts/qa-official-100-functional.mjs
+          node --test scripts/qa-cookie-jar.test.mjs
+      - name: Test 100 distinct players against official domain
+        run: node scripts/qa-official-100-functional.mjs
+      - name: Save sanitized response metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-post-waf-100-20261017
+          path: zokivo-official-100-session.json
+          if-no-files-found: warn
