@@ -1,0 +1,27 @@
+name: ZoKivo QA cookie isolation regression
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/qa-cookie-jar.mjs"
+      - "scripts/qa-cookie-jar.test.mjs"
+      - "scripts/qa-official-100-functional.mjs"
+      - ".github/workflows/qa-cookie-isolation.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cookie-isolation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify source syntax without sending traffic
+        run: |
+          node --check scripts/qa-official-100-functional.mjs
+          node --check scripts/qa-cookie-jar.mjs
+      - name: Verify independent cookie jars
+        run: node --test scripts/qa-cookie-jar.test.mjs
