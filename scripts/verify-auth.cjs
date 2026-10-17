@@ -19,6 +19,16 @@ ok(a.emailValue(" TEST@EXAMPLE.COM ")==="test@example.com","email normalization"
 ok(a.emailValue("invalid")===null,"invalid email rejected");
 ok(a.passwordValue("a".repeat(8),8)!==null,"valid signup password");
 ok(a.passwordValue("x",8)===null,"short signup password rejected");
+const googleSource=fs.readFileSync("src/app/api/auth/google/route.ts","utf8");
+const googleCallback=fs.readFileSync("src/app/auth/callback/route.ts","utf8");
+const signupUi=fs.readFileSync("src/components/auth-form.tsx","utf8");
+const accountUi=fs.readFileSync("src/app/account/page.tsx","utf8");
+ok(googleSource.includes('signup_role')&&googleSource.includes("zk_auth_signup_role"),"Google registration carries user-selected role as short-lived HttpOnly preference");
+ok(googleCallback.includes('method:"PUT"')&&googleCallback.includes('zokivo_view_role:signupRole'),"Google callback persists only non-privileged view preference through signed-in user token");
+ok(googleCallback.includes('signupRole==="teacher"')&&googleCallback.includes('target="/teacher"'),"Google signup can land in teacher workspace on verified preference update");
+ok(signupUi.includes('signup_role="+role')&&signupUi.includes('mode==="register"&&role==="teacher"'),"Registration honors role for both Google and email paths");
+ok(accountUi.includes('router.push("/teacher")'),"Switching to Teacher opens the teaching workspace");
+
 ok(a.chosenRole({id:"a"})==="student","Unset accounts default to Student view");
 ok(a.chosenRole({id:"a",user_metadata:{zokivo_view_role:"teacher"}})==="teacher","Teacher preference is honored as view");
 ok(a.chosenRole({id:"a",user_metadata:{zokivo_view_role:"administrator"}})==="student","Unknown preference is not privileged");
