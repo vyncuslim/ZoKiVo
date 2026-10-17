@@ -1,0 +1,35 @@
+name: ZoKivo one-time official 100-session retest 20261017
+on:
+  push:
+    branches: [qa/official-100-retest-20261017]
+    paths:
+      - ".github/workflows/qa-official-100-retest-20261017.yml"
+permissions:
+  contents: read
+concurrency:
+  group: zokivo-one-time-100-sessions-976802
+  cancel-in-progress: false
+jobs:
+  bounded-official-100:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      ZOKIVO_TEST_ROOM_PIN: "976802"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate isolated live-load test
+        run: |
+          node --check scripts/qa-official-100-functional.mjs
+          node --test scripts/qa-cookie-jar.test.mjs
+      - name: Real official domain 100-player end-to-end test
+        run: node scripts/qa-official-100-functional.mjs
+      - name: Upload sanitized test metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-official-100-retest-20261017
+          path: zokivo-official-100-session.json
+          if-no-files-found: warn
