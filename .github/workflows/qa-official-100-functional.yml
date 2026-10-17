@@ -1,0 +1,33 @@
+name: ZoKivo official domain 100 simulated-player end-to-end acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/qa-official-100-functional.yml"
+      - "scripts/qa-official-100-functional.mjs"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: zokivo-official-100-room-967651
+  cancel-in-progress: false
+jobs:
+  real-official-domain-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate test script
+        run: node --check scripts/qa-official-100-functional.mjs
+      - name: 100 regional sessions, game joins, answers, and settled scores
+        run: node scripts/qa-official-100-functional.mjs
+      - name: Save sanitized metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-official-100-player-qa
+          path: zokivo-official-100-session.json
+          if-no-files-found: warn
