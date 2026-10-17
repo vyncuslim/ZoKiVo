@@ -9,12 +9,25 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   if(!hostToken||!/^\d{6}$/.test(pin))return noCache({error:"Invalid host credentials."},401);
   const auth=await findUser(req);
   if(!auth.user)return noCache({error:"Host account sign-in required."},401);
-  const sql=db(),rows=await sql`SELECT quiz_set_id,status,current_index,deadline,host_token_hash,owner_user_id,question_seconds,question_order FROM rooms WHERE pin=${pin}`;
+  const sql=db(),rows=await sql`SELECT quiz_set_id,status,current_index,deadline,host_token_hash,owner_user_id,question_seconds,question_order,score_goal FROM rooms WHERE pin=${pin}`;
   if(!rows.length||!same(rows[0].host_token_hash,hash(hostToken)))return noCache({error:"Not authorized."},403);
   const r=rows[0];
   if(r.owner_user_id&&r.owner_user_id!==auth.user.id)return noCache({error:"Only the original host account may control this room."},403);
   if(r.status==="finished")return noCache({error:"Game already finished."},409);
   if(r.status==="playing"&&r.deadline&&new Date(r.deadline).getTime()>Date.now())return noCache({error:"Round still in progress."},409);
+  // Advanced mini-games settle at the round boundary, not on the first correct answer.
+  // Otherwise winning the quiz goal would close the room BEFORE the player can claim their reward.
+  if(r.status==="playing"&&r.score_goal!==null&&r.score_goal!==undefined){
+   const reached=await sql`SELECT 1 FROM players WHERE room_pin=${pin} AND score>=${r.score_goal} LIMIT 1`;
+   if(reached.length){
+    const finalized=await sql`UPDATE rooms SET status='finished',deadline=NULL
+      WHERE pin=${pin} AND current_index=${r.current_index} AND status='playing'
+        AND (deadline<=now() OR deadline IS NULL) RETURNING pin`;
+    if(!finalized.length)return noCache({error:"The round was already changed. Refresh to continue."},409);
+    await emitRoomRefresh("quiz",pin);
+    return applyRenew(noCache({status:"finished"}),req,auth.renew);
+   }
+  }
   const next=r.status==="lobby"?0:r.current_index+1;
   const position=Array.isArray(r.question_order)?r.question_order[next]:next;
   const question=await sql`SELECT time_limit FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${position??next}`;

@@ -11,6 +11,8 @@ ok(start.includes("r.question_order"),"Host displays shuffled question indexes")
 ok(state.includes("r.question_order"),"Players see shuffled question");
 ok(answer.includes("question_position")&&answer.includes("q.position=a.question_position"),"Server grades logical round's real question");
 ok(answer.includes("score>=rooms.score_goal"),"Score-based finish checked by server");
+ok(answer.includes("game_mode='quiz_party'"),"Advanced modes remain active until players can claim their current-round rewards");
+ok(start.includes('SELECT 1 FROM players WHERE room_pin='), "Round boundary checks score-goal before closing advanced mode");
 const legacy=read("src/app/api/rooms/[pin]/report/route.ts"),historical=read("src/app/api/reports/[pin]/route.ts");
 ok(legacy.includes("r.question_order")&&historical.includes("r.question_order"),"Reports use physical question index after shuffling");
 const game=read("src/app/game/[pin]/page.tsx");
