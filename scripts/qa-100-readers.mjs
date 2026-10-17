@@ -9,11 +9,14 @@ import {writeFile} from "node:fs/promises";
 const base=(process.env.ZOKIVO_TEST_BASE_URL||"https://zokivo.vercel.app").replace(/\/$/,"");
 const clients=Math.min(100,Math.max(1,Number(process.env.ZOKIVO_TEST_CLIENTS||100)));
 const paperPin=process.env.ZOKIVO_TEST_PAPER_PIN||"995777";
-const rounds=Math.min(3,Math.max(1,Number(process.env.ZOKIVO_TEST_ROUNDS||2)));
+const rounds=Math.min(8,Math.max(1,Number(process.env.ZOKIVO_TEST_ROUNDS||2)));
 if(!/^https:\/\/[a-z0-9.-]+$/.test(base)||!/^\d{6}$/.test(paperPin)||
  !Number.isInteger(clients)||!Number.isInteger(rounds))throw Error("Invalid load test settings");
 const origins=[new URL(base).origin];
 const abortAfter=12000;
+const pauseMs=Math.min(8000,Math.max(0,Number(process.env.ZOKIVO_TEST_PAUSE_MS||0)));
+const paperOnly=process.env.ZOKIVO_TEST_PAPER_ONLY==="true";
+const runStart=performance.now();
 const outcomes=[];
 const paths=[{url:"/host",type:"html"},{url:"/paper/scan/"+paperPin,type:"html"},
  {url:"/api/paper/"+paperPin,type:"paper"}];
@@ -44,8 +47,9 @@ async function hit(client,round,choice) {
 for(let round=1;round<=rounds;round++){
  const start=performance.now();
  // All 100 clients enter the same start gate; requests are truly concurrent within this process.
- await Promise.all(Array.from({length:clients},(_,i)=>hit(i+1,round,paths[(i+round-1)%paths.length])));
+ await Promise.all(Array.from({length:clients},(_,i)=>hit(i+1,round,paperOnly?paths[2]:paths[(i+round-1)%paths.length])));
  console.log("Completed concurrent wave "+round+": "+clients+" independent read clients in "+Math.round(performance.now()-start)+" ms");
+ if(round<rounds&&pauseMs)await new Promise(resolve=>setTimeout(resolve,pauseMs));
 }
 
 const latencies=outcomes.map(o=>o.ms).sort((a,b)=>a-b);
@@ -57,7 +61,7 @@ const byRoute=Object.fromEntries(paths.map(p=>[p.url,{
  errors:outcomes.filter(o=>o.route===p.url&&!o.ok).slice(0,10)
 }]));
 const summary={project:"ZoKivo",base,datetime:new Date().toISOString(),
- clients,rounds,requests:outcomes.length,success:good,failures:outcomes.length-good,
+ clients,rounds,paperOnly,pauseMs,totalElapsedMs:Math.round(performance.now()-runStart),requests:outcomes.length,success:good,failures:outcomes.length-good,
  successRate:good/outcomes.length,p50Ms:percentile(.50),p95Ms:percentile(.95),p99Ms:percentile(.99),
  maxMs:latencies.at(-1),byRoute,
  limitations:["Read-only GET requests","No real teacher login or cookies",

@@ -29,6 +29,15 @@ jobs:
           ZOKIVO_TEST_PAPER_PIN: "995777"
           ZOKIVO_TEST_CLIENTS: "100"
           ZOKIVO_TEST_ROUNDS: "2"
+      - name: Sustained 100-client Paper Mode status polling
+        run: node scripts/qa-100-readers.mjs
+        env:
+          ZOKIVO_TEST_BASE_URL: https://zokivo.vercel.app
+          ZOKIVO_TEST_PAPER_PIN: "995777"
+          ZOKIVO_TEST_CLIENTS: "100"
+          ZOKIVO_TEST_ROUNDS: "6"
+          ZOKIVO_TEST_PAPER_ONLY: "true"
+          ZOKIVO_TEST_PAUSE_MS: "4000"
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
