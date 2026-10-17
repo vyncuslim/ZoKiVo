@@ -4,6 +4,7 @@ on:
     branches: [qa/official-100-retest-20261017]
     paths:
       - ".github/workflows/qa-official-100-retest-20261017.yml"
+      - "scripts/qa-official-100-functional.mjs"
 permissions:
   contents: read
 concurrency:
