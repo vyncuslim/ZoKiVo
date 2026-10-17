@@ -9,6 +9,10 @@ export async function GET(req:NextRequest){
   destination.searchParams.set("redirect_to",publicOrigin(req)+"/auth/callback");
   destination.searchParams.set("code_challenge_method","s256");
   const response=NextResponse.redirect(new URL("/auth/login?error=provider",req.url));
+  // Preference only: never trusted for educator authorization.
+  const signupRole=req.nextUrl.searchParams.get("signup_role");
+  if(signupRole==="teacher"||signupRole==="student")
+   response.cookies.set("zk_auth_signup_role",signupRole,{httpOnly:true,secure:req.nextUrl.protocol==="https:",sameSite:"lax",path:"/",maxAge:600});
   const challenge=beginFlow(req,response,"google",after);
   destination.searchParams.set("code_challenge",challenge);
   response.headers.set("Location",destination.toString());

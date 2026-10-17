@@ -28,7 +28,7 @@ export function AuthForm({mode}:{mode:Mode}){
    if(mode==="register"&&result.needsEmailConfirmation){setMessage("Check your email for a confirmation link. Please open it in the same browser.");return}
    if(mode==="forgot"){setMessage("If your email is registered, a reset link has been sent. Open it in the same browser.");return}
    if(mode==="reset"){setMessage("Password updated. Please sign in with your new password.");return}
-   router.replace(nextUrl());router.refresh();
+   router.replace(mode==="register"&&role==="teacher"&&nextUrl()==="/account"?"/teacher":nextUrl());router.refresh();
   }catch(e){setError(e instanceof Error?e.message:"Authentication failed")}finally{setWorking(false)}
  }
  return <main className="auth-root wrap">
@@ -36,7 +36,7 @@ export function AuthForm({mode}:{mode:Mode}){
   <section className="auth-card">
     <span className="auth-eyebrow">ZOKIVO ACCOUNT · VYNALTH AI</span>
     <h1>{headings[mode][0]}</h1><p className="auth-subtitle">{headings[mode][1]}</p>
-    {(mode==="login"||mode==="register")&&<a className="auth-google" href="/api/auth/google?next=/account">Continue with Google <b>↗</b></a>}
+    {(mode==="login"||mode==="register")&&<a className="auth-google" href={mode==="register"?"/api/auth/google?next=/account&signup_role="+role:"/api/auth/google?next=/account"}>Continue with Google <b>↗</b></a>}
     {(mode==="login"||mode==="register")&&<div className="auth-separator">or use email</div>}
     <form className="auth-form" onSubmit={e=>void submit(e)}>
      {mode==="register"&&<fieldset className="auth-role-picker"><legend>Choose how you will use ZoKivo</legend>
