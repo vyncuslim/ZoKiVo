@@ -153,8 +153,32 @@ export default function AIPage(){
       }
      }
      if(data.type==="ping"&&data.ping_event?.event_id!==undefined)ws.send(JSON.stringify({type:"pong",event_id:data.ping_event.event_id}));
-     if(data.type==="client_tool_call"&&data.client_tool_call?.tool_call_id)
-      ws.send(JSON.stringify({type:"client_tool_result",tool_call_id:data.client_tool_call.tool_call_id,is_error:true,result:"Direct AI tools are disabled. The teacher must review drafts in ZoKivo Creator."}));
+     if(data.type==="client_tool_call"&&data.client_tool_call?.tool_call_id){
+      const call=data.client_tool_call,toolId=call.tool_call_id;
+      // Only this local, review-only tool is allowed. Never grant publishing privileges to AI.
+      if(call.tool_name==="submit_quiz_draft"&&awaitingQuiz.current){
+       const proposed=parseSuggestedQuiz(JSON.stringify(call.parameters??null));
+       if(!proposed){
+        ws.send(JSON.stringify({type:"client_tool_result",tool_call_id:toolId,is_error:true,result:"Invalid quiz schema. Require title, subject, grade_level, language, description, 1-40 questions, four distinct options and a numeric correct_option_index (0-3)."}));
+       }else{
+        const record={id:uuid(),role:"assistant" as const,text:JSON.stringify(proposed)};
+        // Persist reviewable data to the same authenticated/encrypted conversation.
+        void save(record,conversationId).then(()=>{
+         if(run!==latestSession.current)return;
+         seenReply.current={id:record.id,text:record.text,at:Date.now()};
+         setChat(all=>[...all,record]);
+         awaitingQuiz.current=false;
+         setNotice(proposed.questions.length+" validated questions are ready. Select Review in Creator; nothing has been published.");
+         ws.send(JSON.stringify({type:"client_tool_result",tool_call_id:toolId,is_error:false,result:"Draft validated and saved for local human review only. The teacher will decide whether to save or publish."}));
+        }).catch(()=>{
+         ws.send(JSON.stringify({type:"client_tool_result",tool_call_id:toolId,is_error:true,result:"Unable to store the quiz draft. No draft was accepted."}));
+         setError("AI drafted questions but the secure save failed. Retry quiz generation.");
+        });
+       }
+      }else{
+       ws.send(JSON.stringify({type:"client_tool_result",tool_call_id:toolId,is_error:true,result:"Tool not available. Only submit_quiz_draft is enabled during a user-requested quiz generation. Direct publishing or database access is prohibited."}));
+      }
+     }
     }catch{setError("One AI event could not be decoded.")}
    };
    ws.onerror=()=>setError("AI WebSocket disconnected. Your saved history is still available.");
