@@ -1,0 +1,36 @@
+name: ZoKivo 100-client sustained acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/qa-100-sustained.yml"
+      - "scripts/qa-100-sustained.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zokivo-100-sustained-acceptance
+  cancel-in-progress: false
+
+jobs:
+  sustained-read-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate load test script
+        run: node --check scripts/qa-100-sustained.mjs
+      - name: 25 / 50 / 100 concurrency and sustained 100-client dynamic reads
+        run: node scripts/qa-100-sustained.mjs
+      - name: Upload metrics (also on failure)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-100-sustained-acceptance
+          path: zokivo-load-v2.json
+          if-no-files-found: warn
