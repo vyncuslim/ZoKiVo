@@ -15,6 +15,7 @@ function nextUrl(){
 }
 export function AuthForm({mode}:{mode:Mode}){
  const router=useRouter(),[email,setEmail]=useState(""),[name,setName]=useState(""),[password,setPassword]=useState(""),[confirmation,setConfirmation]=useState("");
+ const [role,setRole]=useState<"student"|"teacher">("student");
  const [working,setWorking]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState(""),[showPassword,setShowPassword]=useState(false);
  useEffect(()=>{if(new URLSearchParams(location.search).has("error"))setError("The authentication link failed or expired. Please try again.")},[]);
  async function submit(e:React.FormEvent<HTMLFormElement>){
@@ -22,7 +23,7 @@ export function AuthForm({mode}:{mode:Mode}){
   if((mode==="register"||mode==="reset")&&confirmation!==password){setError("Passwords do not match.");setWorking(false);return}
   const action={login:"signin",register:"signup",forgot:"recover",reset:"reset"}[mode];
   try{
-   const r=await fetch("/api/auth/"+action,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,name,password}),cache:"no-store"});
+   const r=await fetch("/api/auth/"+action,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,name,password,role}),cache:"no-store"});
    const result=await r.json().catch(()=>({}));if(!r.ok)throw Error(result.error||"Authentication failed");
    if(mode==="register"&&result.needsEmailConfirmation){setMessage("Check your email for a confirmation link. Please open it in the same browser.");return}
    if(mode==="forgot"){setMessage("If your email is registered, a reset link has been sent. Open it in the same browser.");return}
@@ -38,6 +39,10 @@ export function AuthForm({mode}:{mode:Mode}){
     {(mode==="login"||mode==="register")&&<a className="auth-google" href="/api/auth/google?next=/account">Continue with Google <b>↗</b></a>}
     {(mode==="login"||mode==="register")&&<div className="auth-separator">or use email</div>}
     <form className="auth-form" onSubmit={e=>void submit(e)}>
+     {mode==="register"&&<fieldset className="auth-role-picker"><legend>Choose how you will use ZoKivo</legend>
+      <label><input type="radio" name="role" value="student" checked={role==="student"} onChange={()=>setRole("student")}/><span><strong>🎒 Student</strong><small>Join games, study, track your learning.</small></span></label>
+      <label><input type="radio" name="role" value="teacher" checked={role==="teacher"} onChange={()=>setRole("teacher")}/><span><strong>🏫 Teacher</strong><small>Access teaching workspace, draft quizzes, host games and share assignments. Publishing requires verification.</small></span></label>
+     </fieldset>}
      {mode==="register"&&<label>Display name<input type="text" autoComplete="name" placeholder="Your name" minLength={2} maxLength={100} required value={name} onChange={e=>setName(e.target.value)}/></label>}
      {mode!=="reset"&&<label>Email address<input type="email" autoComplete="email" placeholder="you@example.com" maxLength={254} required value={email} onChange={e=>setEmail(e.target.value)}/></label>}
      {mode!=="forgot"&&<label>{mode==="reset"?"New password":"Password"}<span className="auth-password"><input type={showPassword?"text":"password"} autoComplete={mode==="login"?"current-password":"new-password"} placeholder={mode==="login"?"Your password":"At least 8 characters"} minLength={mode==="login"?1:8} maxLength={256} required value={password} onChange={e=>setPassword(e.target.value)}/><button type="button" onClick={()=>setShowPassword(x=>!x)}>{showPassword?"Hide":"Show"}</button></span></label>}
