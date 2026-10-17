@@ -1,5 +1,5 @@
 import {NextRequest} from "next/server";
-import {findUser,AuthError,verifiedTeacher,type MotherUser} from "@/lib/mother-auth";
+import {findUser,AuthError,type MotherUser} from "@/lib/mother-auth";
 export type QuizItem={question:string;options:[string,string,string,string];correct_option_index:number;explanation:string;image_url?:string;audio_url?:string;formula_text?:string;point_value?:number;time_limit?:number|null};
 export type QuizInput={title:string;subject:string;grade_level:string;language:"en"|"zh"|"ms";description:string;questions:QuizItem[]};
 function safeMedia(x:unknown){
@@ -16,7 +16,11 @@ function safeMedia(x:unknown){
  }catch{throw new AuthError("Use a publicly hosted HTTPS image or audio URL.");}
 }
 function stringField(x:unknown,max:number){return typeof x==="string"&&x.trim().length<=max?x.trim():""}
-export function teacherApproved(user:MotherUser){return verifiedTeacher(user)}
+export function teacherApproved(user:MotherUser){
+ const m=user.app_metadata||{};
+ const roles=Array.isArray(m.zokivo_roles)?m.zokivo_roles:Array.isArray(m.roles)?m.roles:[];
+ return m.zokivo_role==="teacher"||m.zokivo_role==="admin"||roles.includes("zokivo_teacher")||roles.includes("zokivo_admin");
+}
 export async function authUser(req:NextRequest){
  const result=await findUser(req);
  if(!result.user)throw new AuthError("Sign in to manage quizzes.",401);
