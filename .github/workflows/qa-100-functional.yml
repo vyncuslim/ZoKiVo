@@ -1,0 +1,36 @@
+name: ZoKivo real 100-player API and domain acceptance
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/qa-100-functional.yml"
+      - "scripts/qa-100-functional.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zokivo-100-functional-test-997321
+  cancel-in-progress: false
+
+jobs:
+  functional-100:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate functional test
+        run: node --check scripts/qa-100-functional.mjs
+      - name: Real 100-session join answer scoreboard and domain checks
+        run: node scripts/qa-100-functional.mjs
+      - name: Upload sanitized QA results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-100-functional-report
+          path: zokivo-functional-100-result.json
+          if-no-files-found: warn
