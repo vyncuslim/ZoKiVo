@@ -1,0 +1,51 @@
+name: ZoKivo production four-room 400-client VERIFIED fixture retry
+on:
+  push:
+    branches: [qa/realistic-400-multiroom-browser-20261018]
+    paths: [".github/workflows/qa-realistic-400-retry-20261018.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: zo-400-fixture-ready-retry-20261018
+  cancel-in-progress: false
+jobs:
+  four-production-rooms:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        pin: ["982501","982502","982503","982504"]
+    env:
+      ZOKIVO_TEST_ROOM_PIN: ${{ matrix.pin }}
+      ZOKIVO_QA_AUTHORIZED: "20261018"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify live QA room exists before generating load
+        run: |
+          node --input-type=module -e '
+          const pin=process.env.ZOKIVO_TEST_ROOM_PIN;
+          const r=await fetch("https://zokivo.vynalthai.com/api/rooms/"+pin+"/settings",{signal:AbortSignal.timeout(12000)});
+          const j=await r.json().catch(()=>({}));
+          console.log(JSON.stringify({roomPin:pin,status:r.status,acceptingPlayers:j.acceptingPlayers}));
+          if(r.status!==200||j.acceptingPlayers!==true)process.exitCode=1;'
+      - name: Validate load generator and cookie session isolation
+        run: |
+          node --check scripts/qa-realistic-400-room.mjs
+          node --test scripts/qa-cookie-jar.test.mjs
+      - name: Execute four parallel isolated game room load simulations
+        run: node scripts/qa-realistic-400-room.mjs
+      - name: Upload bounded-load results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zo-realistic-400-${{ matrix.pin }}
+          path: zokivo-realistic-400-room-report.json
+          if-no-files-found: warn
+          retention-days: 14
