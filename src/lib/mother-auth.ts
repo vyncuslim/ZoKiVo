@@ -80,9 +80,14 @@ export function verifiedTeacher(u:MotherUser){
  return m.zokivo_role==="teacher"||m.zokivo_role==="admin"||
   roles.includes("zokivo_teacher")||roles.includes("zokivo_admin");
 }
+// ZoKivo's self-service policy grants quiz publication to signed-in users
+// who selected Teacher mode. This is not independent identity verification.
+export function canPublishQuizzes(u:MotherUser){
+ return chosenRole(u)==="teacher"||verifiedTeacher(u);
+}
 export function safeUser(u:MotherUser){
  const n=u.user_metadata?.full_name||u.user_metadata?.name;
- return {id:u.id,email:u.email||"",emailVerified:!!u.email_confirmed_at,displayName:typeof n==="string"?n.slice(0,100):"",createdAt:u.created_at||null,role:chosenRole(u),teacherVerified:verifiedTeacher(u)};
+ return {id:u.id,email:u.email||"",emailVerified:!!u.email_confirmed_at,displayName:typeof n==="string"?n.slice(0,100):"",createdAt:u.created_at||null,role:chosenRole(u),teacherVerified:verifiedTeacher(u),canPublishQuizzes:canPublishQuizzes(u)};
 }
 export function authError(e:unknown){const er=e instanceof AuthError?e:new AuthError("Authentication temporarily unavailable.",503);return noCache({error:er.message},er.status)}
 export function emailValue(v:unknown){const e=typeof v==="string"?v.trim().toLowerCase():"";return e.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:null}
