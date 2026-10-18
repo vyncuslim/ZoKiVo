@@ -14,6 +14,7 @@ import "./question-media.css";
 import "./locker/locker.css";
 import "./reports/reports.css";
 import "./easy-play.css";
+import "./finished-results.css";
 import "./discover-library.css";
 import "./simple-games.css";
 import {AuthNav} from "@/components/auth-nav";
