@@ -90,5 +90,11 @@ export function safeUser(u:MotherUser){
  return {id:u.id,email:u.email||"",emailVerified:!!u.email_confirmed_at,displayName:typeof n==="string"?n.slice(0,100):"",createdAt:u.created_at||null,role:chosenRole(u),teacherVerified:verifiedTeacher(u),canPublishQuizzes:canPublishQuizzes(u)};
 }
 export function authError(e:unknown){const er=e instanceof AuthError?e:new AuthError("Authentication temporarily unavailable.",503);return noCache({error:er.message},er.status)}
+/** Pass the CAPTCHA proof through to GoTrue. The configured Supabase provider verifies it. */
+export function captchaSecurity(v:unknown){
+ if(v===undefined||v===null||v==="")return undefined;
+ if(typeof v!=="string"||!v.trim()||v.length>8192)throw new AuthError("Invalid security verification. Please retry.");
+ return {captcha_token:v.trim()};
+}
 export function emailValue(v:unknown){const e=typeof v==="string"?v.trim().toLowerCase():"";return e.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)?e:null}
 export function passwordValue(v:unknown,min=1){return typeof v==="string"&&v.length>=min&&v.length<=256?v:null}
