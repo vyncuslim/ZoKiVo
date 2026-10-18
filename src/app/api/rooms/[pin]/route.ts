@@ -54,10 +54,12 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   const canAdvance=r.status==='playing'&&(Boolean(expired)||(allAnswered&&!rewardsPending));
   // Only the authenticated host sees grading details, and only after the
   // answering window is closed. Projected host screens never reveal early.
-  const hostAnswer=host&&canShowResult&&r.status==="playing"
-   ?await sql`SELECT correct_index FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${position??r.current_index} LIMIT 1`:[];
+  const hostAnswer=host&&canShowResult&&(r.status==="playing"||r.status==="finished")
+   ?await sql`SELECT correct_index,question,choices FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${position??r.current_index} LIMIT 1`:[];
   const hostResults=hostAnswer.length?{
    correctIndex:Number(hostAnswer[0].correct_index),
+   questionText:String(hostAnswer[0].question||""),
+   correctAnswer:Array.isArray(hostAnswer[0].choices)?String(hostAnswer[0].choices[Number(hostAnswer[0].correct_index)]||""):"",
    correctCount:answers.filter(a=>a.is_correct===true).length,
    wrongCount:answers.filter(a=>a.is_correct===false).length,
    pendingCount:Math.max(0,players.length-answers.length),

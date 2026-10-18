@@ -1,11 +1,11 @@
 const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
 const routeText=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
 const js=ts.transpileModule(routeText,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-let called=0,answeredBoth=false,gradeQueries=0;
+let called=0,answeredBoth=false,finished=false,gradeQueries=0;
 const sql=async(strings)=>{
  const q=strings.join("?");
  called++;
- if(q.includes("SELECT pin,quiz_set_id,status"))return [{pin:"123456",status:"playing",game_mode:"quiz_party",quiz_set_id:"quiz",host_token_hash:"good-host",deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString()}];
+ if(q.includes("SELECT pin,quiz_set_id,status"))return [{pin:"123456",status:finished?"finished":"playing",game_mode:"quiz_party",quiz_set_id:"quiz",host_token_hash:"good-host",deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString()}];
  if(q.includes("SELECT id FROM players"))return [{id:"p1"}];
  if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
  if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
@@ -13,7 +13,7 @@ const sql=async(strings)=>{
  if(q.includes("SELECT player_id,chosen_index,is_correct FROM answers"))return answeredBoth?
    [{player_id:"p1",chosen_index:1,is_correct:true},{player_id:"p2",chosen_index:0,is_correct:false}]:
    [{player_id:"p1",chosen_index:1,is_correct:true}];
- if(q.includes("SELECT correct_index FROM questions")){gradeQueries++;return [{correct_index:1}]}
+ if(q.includes("SELECT correct_index,question,choices FROM questions")){gradeQueries++;return [{correct_index:1,question:"Question 2",choices:["A","B","C","D"]}]}
  if(q.includes("SELECT is_correct,points FROM answers"))return [{is_correct:true,points:100}];
  throw Error("Unexpected SQL in mock: "+q);
 };
@@ -43,6 +43,12 @@ async function get(headers){const response=await handler(new Request("https://zo
  ok(!Object.hasOwn(gradedPlayer.json,"hostResults")&&gradeQueries===gradeQueriesBeforePlayer,"Player response never includes or queries secret host grading");
  ok(!Object.hasOwn(gradedPlayer.json.question,"correct_index"),"Player cannot read correct_index after round");
  answeredBoth=false;
+ finished=true;
+ const finalHost=await get({"x-host-token":"good-host"});
+ const finalPlayer=await get({"x-player-token":"good-player"});
+ ok(finalHost.json.hostResults?.correctAnswer==="B","Final screen can show the last correct answer after game ends");
+ ok(!Object.hasOwn(finalPlayer.json,"hostResults"),"Finished player response never exposes host-only results");
+ finished=false;
  const unauth=await get({});
  ok(unauth.status===401,"Unknown client rejected");
  ok(routeText.includes("a.question_index<r.current_index"),"In-flight question points excluded from EVERY viewer");
@@ -54,6 +60,7 @@ async function get(headers){const response=await handler(new Request("https://zo
  ok(client.includes("clockOffset"),"Server timestamp used to align round timer");
  ok(client.includes("zk-host-answer-summary")&&client.includes("zk-host-choice-correct")&&client.includes("zk-player-grade"),"Host displays correct/wrong counts, answer highlights and per-player grading");
  ok(client.includes("},250)")&&client.includes("priorReview")&&client.includes("setLastReview"),"Host retains previous round grading without delaying advancement");
+ ok(client.includes("FINAL ROUND REVIEW")&&client.includes("state.hostResults.correctAnswer"),"Host finish screen retains final correct/wrong breakdown");
  const finish=fs.readFileSync("src/app/api/rooms/[pin]/finish/route.ts","utf8");
  ok(finish.includes("checkOrigin(req)")&&finish.includes("owner_user_id")&&finish.includes("same(r[0].host_token_hash"),"Early finish requires host identity and tokens");
  ok(called>5,"Mock exercised all intended queries");
