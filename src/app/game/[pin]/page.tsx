@@ -12,7 +12,7 @@ type State={muteSounds?:boolean;scoreGoal?:number|null;gameMode?:string;serverTi
 const letters=["A","B","C","D"];
 export default function Game(){
  const {pin}=useParams<{pin:string}>();const host=useSearchParams().get("host")==="1";
- const requestSequence=useRef(0);const [clockOffset,setClockOffset]=useState(0);const [state,setState]=useState<State|null>(null);const[error,setError]=useState("");const[busy,setBusy]=useState(false);const[clock,setClock]=useState(Date.now());const[feedback,setFeedback]=useState(""),[joinQr,setJoinQr]=useState(""),[downloading,setDownloading]=useState(false);
+ const requestSequence=useRef(0);const [clockOffset,setClockOffset]=useState(0);const [state,setState]=useState<State|null>(null);const[error,setError]=useState("");const[busy,setBusy]=useState(false);const[clock,setClock]=useState(Date.now());const[feedback,setFeedback]=useState(""),[bonusReceipt,setBonusReceipt]=useState(""),[joinQr,setJoinQr]=useState(""),[downloading,setDownloading]=useState(false);
  const headers=useCallback(()=>({[host?"x-host-token":"x-player-token"]:sessionStorage.getItem((host?"host:":"player:")+pin)||""}),[host,pin]);
  const reload=useCallback(async()=>{const request=++requestSequence.current;try{const r=await fetch("/api/rooms/"+pin,{headers:headers(),cache:"no-store"});const j=await r.json();if(!r.ok)throw Error(j.error||"Room not available");if(request!==requestSequence.current)return;if(j.serverTime)setClockOffset(new Date(j.serverTime).getTime()-Date.now());setState(j);setError("")}catch(e){if(request===requestSequence.current)setError(e instanceof Error?e.message:"Connection problem")}},[pin,headers]);
  useEffect(()=>{
@@ -37,7 +37,7 @@ export default function Game(){
  }
  const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
  useEffect(()=>{void reload();const a=setInterval(()=>void reload(),realtimeConnected?3000:1600);const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected]);
- useEffect(()=>{setFeedback("")},[state?.index]);
+ useEffect(()=>{setFeedback("");setBonusReceipt("")},[state?.index]);
  function beep(){
   if(state?.muteSounds)return;
   try{
@@ -60,10 +60,10 @@ export default function Game(){
  <div className="zk-bonus-stage"><div className="zk-bonus-intro"><span className="zk-reward-spark" aria-hidden="true">✦</span>
   <h2>Bonus unlocked!</h2><p>You answered. Now choose your next game move.</p></div>
   <ModeRewards mode={state.gameMode||"quiz_party"} pin={pin} token={headers()["x-player-token"]||""}
-   playerId={state.viewer.playerId} players={state.players} wallet={state.viewer.mode} onClaim={reload}/>
+   playerId={state.viewer.playerId} players={state.players} wallet={state.viewer.mode} onClaim={async receipt=>{setBonusReceipt(receipt||"");await reload()}}/>
  </div>:
  <div className="zk-answer-done" role="status"><span className="zk-status-icon" aria-hidden="true">✓</span>
-  <h2>Answer sent!</h2><p>Nice work. Waiting for the next question.</p>
+  <h2>{bonusReceipt?"Bonus collected! 🎉":"Answer sent!"}</h2><p>{bonusReceipt?"You earned: "+bonusReceipt:"Nice work. Waiting for the next question."}</p>
   <p className="zk-wait-counter">{seconds>0?seconds+"s left":"Your teacher is moving on soon…"}</p>
  </div>
  :<div className="zk-quiz-play"><h2>{state.question?.question}</h2>
