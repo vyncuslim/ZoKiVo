@@ -1,0 +1,34 @@
+name: ZoKivo earned reward feedback browser fix validation
+on:
+  push:
+    branches: [fix/game-reward-feedback-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/game/[pin]/page.tsx"
+      - "src/components/mode-rewards.tsx"
+      - "scripts/verify-reward-feedback.cjs"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify earned-reward feedback and original game authorization tests
+        run: |
+          node scripts/verify-reward-feedback.cjs
+          node scripts/verify-game-modes.cjs
+          node scripts/verify-scoreboard.cjs
+      - name: TypeScript and full production build
+        run: |
+          npx tsc --noEmit
+          npm run build
