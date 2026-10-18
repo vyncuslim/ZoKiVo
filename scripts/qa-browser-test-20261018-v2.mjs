@@ -12,6 +12,7 @@ for(const [i,c] of cases.entries()){
   const page=await context.newPage();
   await page.goto(url+"/play?pin="+pin,{waitUntil:"domcontentloaded",timeout:30000});
   await page.locator("#game-pin").waitFor({timeout:25000});
+  await page.waitForTimeout(1600);
   await page.locator("#game-pin").fill(pin);
   // Perform the same first-party Cloudflare region check as a visiting browser.
   const region=await page.evaluate(async()=>{
@@ -19,7 +20,7 @@ for(const [i,c] of cases.entries()){
    return {status:r.status,ok:r.ok};
   });
   console.log("BROWSER_REGION="+JSON.stringify({case:c.label,...region}));
-  await page.locator("#nickname").fill("BrowserQA"+pin+i);
+  await page.locator("#nickname").fill("BrowserQD"+pin+i);
   const button=page.locator(".entry-form button[type=submit]");
   await page.waitForTimeout(800);
   const diagnostics=await page.evaluate(()=>({
