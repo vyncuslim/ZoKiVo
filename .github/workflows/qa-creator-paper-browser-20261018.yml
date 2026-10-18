@@ -1,0 +1,34 @@
+name: ZoKivo released creator, paper and instant-ready rounds in desktop/mobile Chrome
+on:
+  push:
+    branches: [qa/released-creator-paper-fast-round-20261018]
+    paths: [".github/workflows/qa-creator-paper-browser-20261018.yml"]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install real Chromium
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Exercise real released UI with isolated dummy API data
+        run: |
+          node --check scripts/qa-creator-paper-round-browser-20261018.mjs
+          node scripts/qa-creator-paper-round-browser-20261018.mjs
+      - name: Upload screenshots and acceptance logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zokivo-creator-paper-fast-round-browser-acceptance
+          path: ux-browser-proof/
+          retention-days: 14
+          if-no-files-found: warn
