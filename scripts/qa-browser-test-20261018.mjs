@@ -12,6 +12,7 @@ for(const [i,c] of cases.entries()){
   const page=await context.newPage();
   await page.goto(url+"/play?pin="+pin,{waitUntil:"domcontentloaded",timeout:30000});
   await page.locator("#game-pin").waitFor({timeout:25000});
+  await page.locator("#game-pin").fill(pin);
   await page.locator("#nickname").fill("BrowserQA"+pin+i);
   await page.locator(".entry-form button[type=submit]").click();
   await page.waitForURL(new RegExp("/game/"+pin),{timeout:30000});
