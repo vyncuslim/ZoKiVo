@@ -1,7 +1,7 @@
 const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
 const routeText=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
 const js=ts.transpileModule(routeText,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-let called=0;
+let called=0,answeredBoth=false,gradeQueries=0;
 const sql=async(strings)=>{
  const q=strings.join("?");
  called++;
@@ -10,7 +10,11 @@ const sql=async(strings)=>{
  if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
  if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
  if(q.includes("SELECT count(*)"))return [{n:4}];
- if(q.includes("SELECT player_id FROM answers"))return [{player_id:"p1"}];
+ if(q.includes("SELECT player_id,chosen_index,is_correct FROM answers"))return answeredBoth?
+   [{player_id:"p1",chosen_index:1,is_correct:true},{player_id:"p2",chosen_index:0,is_correct:false}]:
+   [{player_id:"p1",chosen_index:1,is_correct:true}];
+ if(q.includes("SELECT correct_index FROM questions")){gradeQueries++;return [{correct_index:1}]}
+ if(q.includes("SELECT is_correct,points FROM answers"))return [{is_correct:true,points:100}];
  throw Error("Unexpected SQL in mock: "+q);
 };
 const store={db:()=>sql,hash:s=>s,same:(a,b)=>a===b,bad:(msg,status=400)=>Response.json({error:msg},{status})};
@@ -27,6 +31,18 @@ async function get(headers){const response=await handler(new Request("https://zo
  ok(h.json.answeredCount===1&&p.json.answeredCount===1,"Submission count is consistent");
  ok(h.json.answeredIds.length===1&&p.json.answeredIds.length===1,"Only the user's own submission is exposed to player");
  ok(!h.json.question.correct_index&&!p.json.question.correct_index,"No answer key in game state");
+ ok(h.json.hostResults===null&&!Object.hasOwn(p.json,"hostResults"),"No early grading result for either viewer");
+ answeredBoth=true;
+ const gradedHost=await get({"x-host-token":"good-host"});
+ const gradeQueriesBeforePlayer=gradeQueries;
+ const gradedPlayer=await get({"x-player-token":"good-player"});
+ ok(gradedHost.json.hostResults?.correctIndex===1,"Only host gets authoritative correct answer index after round");
+ ok(gradedHost.json.hostResults?.correctCount===1&&gradedHost.json.hostResults?.wrongCount===1&&gradedHost.json.hostResults?.pendingCount===0,"Host correct/wrong/pending counts match submissions");
+ ok(gradedHost.json.hostResults?.choiceCounts[0]===1&&gradedHost.json.hostResults?.choiceCounts[1]===1,"Host answer distribution is correct");
+ ok(gradedHost.json.hostResults?.playerResults[1]?.correct===false,"Host per-player Wrong status is available");
+ ok(!Object.hasOwn(gradedPlayer.json,"hostResults")&&gradeQueries===gradeQueriesBeforePlayer,"Player response never includes or queries secret host grading");
+ ok(!Object.hasOwn(gradedPlayer.json.question,"correct_index"),"Player cannot read correct_index after round");
+ answeredBoth=false;
  const unauth=await get({});
  ok(unauth.status===401,"Unknown client rejected");
  ok(routeText.includes("a.question_index<r.current_index"),"In-flight question points excluded from EVERY viewer");
@@ -36,6 +52,8 @@ async function get(headers){const response=await handler(new Request("https://zo
  ok(client.includes("requestSequence.current"),"Out-of-order status responses ignored");
  ok(client.includes("realtimeConnected?3000:1600"),"Polling fallback remains responsive");
  ok(client.includes("clockOffset"),"Server timestamp used to align round timer");
+ ok(client.includes("zk-host-answer-summary")&&client.includes("zk-host-choice-correct")&&client.includes("zk-player-grade"),"Host displays correct/wrong counts, answer highlights and per-player grading");
+ ok(client.includes("},3500)"),"Graded feedback remains on-screen before automated advancement");
  const finish=fs.readFileSync("src/app/api/rooms/[pin]/finish/route.ts","utf8");
  ok(finish.includes("checkOrigin(req)")&&finish.includes("owner_user_id")&&finish.includes("same(r[0].host_token_hash"),"Early finish requires host identity and tokens");
  ok(called>5,"Mock exercised all intended queries");
