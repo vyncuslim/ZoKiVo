@@ -41,7 +41,7 @@ export function AuthForm({mode}:{mode:Mode}){
     <form className="auth-form" onSubmit={e=>void submit(e)}>
      {mode==="register"&&<fieldset className="auth-role-picker"><legend>Choose how you will use ZoKivo</legend>
       <label><input type="radio" name="role" value="student" checked={role==="student"} onChange={()=>setRole("student")}/><span><strong>🎒 Student</strong><small>Join games, study, track your learning.</small></span></label>
-      <label><input type="radio" name="role" value="teacher" checked={role==="teacher"} onChange={()=>setRole("teacher")}/><span><strong>🏫 Teacher</strong><small>Access teaching workspace, draft quizzes, host games and share assignments. Publishing requires verification.</small></span></label>
+      <label><input type="radio" name="role" value="teacher" checked={role==="teacher"} onChange={()=>setRole("teacher")}/><span><strong>🏫 Teacher</strong><small>Access teaching tools, host games, share assignments and publish your own quiz drafts once your account email is confirmed.</small></span></label>
      </fieldset>}
      {mode==="register"&&<label>Display name<input type="text" autoComplete="name" placeholder="Your name" minLength={2} maxLength={100} required value={name} onChange={e=>setName(e.target.value)}/></label>}
      {mode!=="reset"&&<label>Email address<input type="email" autoComplete="email" placeholder="you@example.com" maxLength={254} required value={email} onChange={e=>setEmail(e.target.value)}/></label>}
