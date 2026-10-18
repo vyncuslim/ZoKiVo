@@ -6,6 +6,7 @@ const creator=file("src/app/create/page.tsx"),game=file("src/app/game/[pin]/page
 let count=0;const ok=(v,label)=>{assert.ok(v,label);count++;console.log("UX_TEST",label)};
 for(const p of ["src/app/create/page.tsx","src/app/game/[pin]/page.tsx","src/app/api/rooms/[pin]/route.ts","src/app/api/rooms/[pin]/start/route.ts","src/app/paper/page.tsx","src/app/paper/check/page.tsx"]){
  const ds=ts.transpileModule(file(p),{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).diagnostics||[];
+ if(ds.length)console.error("TS_DIAGNOSTICS",p,ds.map(d=>({message:ts.flattenDiagnosticMessageText(d.messageText," "),start:d.start,length:d.length})));
  ok(ds.length===0,p+" TypeScript parse");
 }
 ok(creator.includes("zk-single-question")&&creator.includes("<details"),"Teacher edits one question at a time");
