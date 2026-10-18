@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useState} from "react";
+import {TurnstileCaptcha} from "@/components/turnstile-captcha";
 import {useRouter} from "next/navigation";
 type Mode="login"|"register"|"forgot"|"reset";
+const captchaSiteKey=process.env.NEXT_PUBLIC_ZOKIVO_TURNSTILE_SITE_KEY||"";
 const headings:Record<Mode,[string,string]>={
  login:["Welcome back!","Sign in with your Vynalth AI account."],
  register:["Let's get you playing.","One Vynalth AI account for ZoKivo and more."],
@@ -17,19 +19,22 @@ export function AuthForm({mode}:{mode:Mode}){
  const router=useRouter(),[email,setEmail]=useState(""),[name,setName]=useState(""),[password,setPassword]=useState(""),[confirmation,setConfirmation]=useState("");
  const [role,setRole]=useState<"student"|"teacher">("student");
  const [working,setWorking]=useState(false),[error,setError]=useState(""),[message,setMessage]=useState(""),[showPassword,setShowPassword]=useState(false);
+  const [captchaToken,setCaptchaToken]=useState(""),[captchaRevision,setCaptchaRevision]=useState(0);
+  const needsCaptcha=mode==="register"||mode==="login"||mode==="forgot";
  useEffect(()=>{if(new URLSearchParams(location.search).has("error"))setError("The authentication link failed or expired. Please try again.")},[]);
  async function submit(e:React.FormEvent<HTMLFormElement>){
   e.preventDefault();setWorking(true);setMessage("");setError("");
   if((mode==="register"||mode==="reset")&&confirmation!==password){setError("Passwords do not match.");setWorking(false);return}
+   if(needsCaptcha&&captchaSiteKey&&!captchaToken){setError("Complete the security verification before continuing.");setWorking(false);return}
   const action={login:"signin",register:"signup",forgot:"recover",reset:"reset"}[mode];
   try{
-   const r=await fetch("/api/auth/"+action,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,name,password,role}),cache:"no-store"});
+   const r=await fetch("/api/auth/"+action,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,name,password,role,captchaToken}),cache:"no-store"});
    const result=await r.json().catch(()=>({}));if(!r.ok)throw Error(result.error||"Authentication failed");
    if(mode==="register"&&result.needsEmailConfirmation){setMessage("Check your email for a confirmation link. Please open it in the same browser.");return}
    if(mode==="forgot"){setMessage("If your email is registered, a reset link has been sent. Open it in the same browser.");return}
    if(mode==="reset"){setMessage("Password updated. Please sign in with your new password.");return}
    router.replace(mode==="register"&&role==="teacher"&&nextUrl()==="/account"?"/teacher":nextUrl());router.refresh();
-  }catch(e){setError(e instanceof Error?e.message:"Authentication failed")}finally{setWorking(false)}
+  }catch(e){setError(e instanceof Error?e.message:"Authentication failed")}finally{if(needsCaptcha&&captchaSiteKey){setCaptchaToken("");setCaptchaRevision(n=>n+1)}setWorking(false)}
  }
  return <main className="auth-root wrap">
   <aside className="auth-illustration" aria-hidden="true"><div><span>✦ THE QUIZ STARTS HERE</span><strong>PLAY.<br/>LEARN.<br/>WIN!</strong><span>★ MADE FOR THE CURIOUS</span></div></aside>
@@ -47,7 +52,9 @@ export function AuthForm({mode}:{mode:Mode}){
      {mode!=="reset"&&<label>Email address<input type="email" autoComplete="email" placeholder="you@example.com" maxLength={254} required value={email} onChange={e=>setEmail(e.target.value)}/></label>}
      {mode!=="forgot"&&<label>{mode==="reset"?"New password":"Password"}<span className="auth-password"><input type={showPassword?"text":"password"} autoComplete={mode==="login"?"current-password":"new-password"} placeholder={mode==="login"?"Your password":"At least 8 characters"} minLength={mode==="login"?1:8} maxLength={256} required value={password} onChange={e=>setPassword(e.target.value)}/><button type="button" onClick={()=>setShowPassword(x=>!x)}>{showPassword?"Hide":"Show"}</button></span></label>}
      {(mode==="register"||mode==="reset")&&<label>Confirm password<input type="password" autoComplete="new-password" placeholder="Repeat password" minLength={8} required value={confirmation} onChange={e=>setConfirmation(e.target.value)}/></label>}
-     {mode==="login"&&<div className="auth-forgot"><Link href="/auth/forgot">Forgot password?</Link></div>}
+     {needsCaptcha&&captchaSiteKey&&<TurnstileCaptcha key={captchaRevision} siteKey={captchaSiteKey} onToken={setCaptchaToken}/>}
+      {needsCaptcha&&!captchaSiteKey&&mode==="register"&&<p className="auth-captcha-config" role="status">Security verification has not been configured for this deployment. Email registration may be unavailable; please contact ZoKivo support.</p>}
+      {mode==="login"&&<div className="auth-forgot"><Link href="/auth/forgot">Forgot password?</Link></div>}
      {error&&<div className="auth-error" role="alert">{error}</div>}
      {message&&<div className="auth-success" role="status">{message}{mode==="reset"&&<> <Link href="/auth/login">Sign in</Link></>}</div>}
      <button className="auth-submit" disabled={working} type="submit">{working?"Working...":mode==="login"?"Sign in →":mode==="register"?"Create account →":mode==="forgot"?"Send reset email →":"Update password →"}</button>
