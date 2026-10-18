@@ -15,7 +15,7 @@ export default function Library(){
  },[]);
  return <main className="quiz-workspace wrap">
  <nav className="quiz-breadcrumb"><Link href="/games">← Games</Link><span>/ Quiz Library</span></nav>
- <div className="quiz-title-row"><div><span className="eyebrow eyebrow--mini">YOUR LEARNING, YOUR RULES</span><h1>Quiz <em>library.</em></h1><p>Create, review and host quizzes. Drafts remain private until a verified teacher publishes them.</p></div><Link className="button button-dark" href="/create">+ Create quiz</Link></div>
+ <div className="quiz-title-row"><div><span className="eyebrow eyebrow--mini">YOUR LEARNING, YOUR RULES</span><h1>Quiz <em>library.</em></h1><p>Create, review and host quizzes. Drafts remain private until their owner selects Teacher mode and explicitly publishes them.</p></div><Link className="button button-dark" href="/create">+ Create quiz</Link></div>
  {error&&<div className="quiz-info" role="status">{error} {!loggedIn&&<Link href="/auth/login?next=/library">Sign in ↗</Link>}</div>}
  {loading?<p>Loading quizzes…</p>:<>
   <section className="quiz-library-section"><div className="quiz-list-heading"><h2>My quizzes</h2><span>{mine.length} saved</span></div>

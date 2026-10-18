@@ -1,0 +1,40 @@
+name: ZoKivo self-service Teacher publish permission regression
+on:
+  push:
+    branches: [feat/self-service-teacher-quiz-publishing-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/lib/mother-auth.ts"
+      - "src/app/api/quizzes/**"
+      - "src/app/teacher/**"
+      - "src/app/create/**"
+      - "src/app/account/**"
+      - "scripts/verify-self-service-teacher-publish.cjs"
+      - "scripts/verify-auth.cjs"
+      - "package.json"
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify self-service Teacher publication with mocked identities and SQL
+        run: node scripts/verify-self-service-teacher-publish.cjs
+      - name: Verify Mother Supabase auth boundaries
+        run: node scripts/verify-auth.cjs
+      - name: Verify quiz schema and trusted educator compatibility
+        run: node scripts/verify-quiz.cjs
+      - name: Validate TypeScript
+        run: npx tsc --noEmit
+      - name: Build production
+        run: npm run build
