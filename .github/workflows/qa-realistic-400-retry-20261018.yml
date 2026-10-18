@@ -27,14 +27,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Verify live QA room exists before generating load
-        run: |
-          node --input-type=module -e '
-          const pin=process.env.ZOKIVO_TEST_ROOM_PIN;
-          const r=await fetch("https://zokivo.vynalthai.com/api/rooms/"+pin+"/settings",{signal:AbortSignal.timeout(12000)});
-          const j=await r.json().catch(()=>({}));
-          console.log(JSON.stringify({roomPin:pin,status:r.status,acceptingPlayers:j.acceptingPlayers}));
-          if(r.status!==200||j.acceptingPlayers!==true)process.exitCode=1;'
+      - name: Verify geolocation session and room readiness
+        run: node scripts/qa-room-ready-20261018.mjs
       - name: Validate load generator and cookie session isolation
         run: |
           node --check scripts/qa-realistic-400-room.mjs
