@@ -1,0 +1,34 @@
+name: ZoKivo released Discover and Games desktop/mobile smoke 20261018
+on:
+  push:
+    branches: [qa/verify-discover-games-publisher-release-20261018]
+    paths: [".github/workflows/qa-release-discover-games-20261018.yml"]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install real Chromium browser runner
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify final deployed public UI and search via Chrome in desktop and mobile sizes
+        run: |
+          node --check scripts/qa-verify-library-games-20261018.mjs
+          node scripts/qa-verify-library-games-20261018.mjs
+      - name: Upload actual screenshots and test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-games-discover-40-quizzes-20261018
+          path: qa-release-evidence/
+          retention-days: 14
+          if-no-files-found: warn
