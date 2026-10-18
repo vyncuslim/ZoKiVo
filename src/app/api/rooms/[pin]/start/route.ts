@@ -25,7 +25,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const first=readiness[0];
   const eligibleEarly=Boolean(first?.has_players&&first?.all_answered&&(r.game_mode==="quiz_party"||first?.rewards_settled));
   const timedOut=r.status==="playing"&&(!r.deadline||new Date(r.deadline).getTime()<=Date.now());
-  if(r.status==="playing"&&!timedOut&&!eligibleEarly)return noCache({error:"Waiting for other players or game rewards.",409);
+  if(r.status==="playing"&&!timedOut&&!eligibleEarly)return noCache({error:"Waiting for other players or game rewards."},409);
   // Re-evaluate eligibility under the write guard to avoid racing a late join.
   // Advanced mini-games settle at the round boundary, not on the first correct answer.
   // Otherwise winning the quiz goal would close the room BEFORE the player can claim their reward.
