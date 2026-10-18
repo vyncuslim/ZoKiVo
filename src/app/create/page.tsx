@@ -49,7 +49,7 @@ export default function CreateQuiz(){
  }
  async function publish(){
   if(!id){setError("Save the quiz draft before publishing.");return}
-  if(!window.confirm("Publish this quiz for hosting? This requires an approved teacher account."))return;
+  if(!window.confirm("Publish this quiz for hosting? Teacher mode is required; publication makes the quiz visible to other users."))return;
   setError("");setSaving(true);
   try{
    const r=await fetch("/api/quizzes/"+id+"/publish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({confirm:true})});
@@ -86,7 +86,7 @@ export default function CreateQuiz(){
    </section>)}
    {error&&<p role="alert" className="form-error">{error}</p>}{message&&<p role="status" className="quiz-success">{message}</p>}
    <div className="quiz-toolbar"><button type="button" className="button button-dark" disabled={saving||status!=="draft"} onClick={()=>void save()}>{saving?"Please wait…":"Save draft ↗"}</button><button type="button" className="button button-yellow" disabled={saving||!id||status!=="draft"} onClick={()=>void publish()}>Publish for games ✓</button><Link className="button button-outline" href="/library">Back to library</Link></div>
-   <p className="quiz-footnote">Answers stay private in your draft. Publishing requires an administrator-approved teacher role from Mother Supabase; no AI-generated identity claim can override that check.</p>
+   <p className="quiz-footnote">Answers stay private in your draft. Publishing requires a signed-in account in Teacher mode (or an independently verified educator). Only the owner can publish their draft; AI-generated claims cannot change account permissions.</p>
   </>}
  </main>;
 }
