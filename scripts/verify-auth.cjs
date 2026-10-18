@@ -39,7 +39,12 @@ ok(rolesRoute.includes("checkOrigin(req)")&&rolesRoute.includes('method:"PUT"')&
 const signupSource=fs.readFileSync("src/app/api/auth/signup/route.ts","utf8");
 ok(signupSource.includes("zokivo_view_role:role")&&signupSource.includes('role==="teacher"'),"Signup supports declared account roles");
 const publishSource=fs.readFileSync("src/app/api/quizzes/[id]/publish/route.ts","utf8");
-ok(publishSource.includes("teacherApproved(user!)"),"Published quizzes remain restricted to verified educators");
+ok(publishSource.includes("canPublishQuizzes(user!)"),"Publishing uses ZoKivo self-service Teacher mode policy");
+ok(publishSource.includes("owner_user_id=")&&publishSource.includes("status='draft'"),"Publication keeps server-side draft ownership and status requirements");
+ok(!a.canPublishQuizzes({id:"a",user_metadata:{zokivo_view_role:"student"}}),"Student cannot self-publish");
+ok(a.canPublishQuizzes({id:"a",user_metadata:{zokivo_view_role:"teacher"}}),"Chosen Teacher can publish their own drafts");
+ok(a.canPublishQuizzes({id:"a",app_metadata:{zokivo_role:"teacher"}}),"Verified educator retains publishing permission");
+ok(a.safeUser({id:"a",user_metadata:{zokivo_view_role:"teacher"}}).teacherVerified===false,"Self-selected Teacher is NOT represented as independently verified");
 const assignRoute=fs.readFileSync("src/app/api/assignments/route.ts","utf8");
 ok(assignRoute.includes("checkOrigin(req)")&&assignRoute.includes("chosenRole(user!)")&&assignRoute.includes("q.status='published'"),"Assignment creation requires authenticated teacher view and published quiz");
 
