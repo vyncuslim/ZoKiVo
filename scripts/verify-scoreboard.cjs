@@ -53,7 +53,7 @@ async function get(headers){const response=await handler(new Request("https://zo
  ok(client.includes("realtimeConnected?3000:1600"),"Polling fallback remains responsive");
  ok(client.includes("clockOffset"),"Server timestamp used to align round timer");
  ok(client.includes("zk-host-answer-summary")&&client.includes("zk-host-choice-correct")&&client.includes("zk-player-grade"),"Host displays correct/wrong counts, answer highlights and per-player grading");
- ok(client.includes("},3500)"),"Graded feedback remains on-screen before automated advancement");
+ ok(client.includes("},250)")&&client.includes("priorReview")&&client.includes("setLastReview"),"Host retains previous round grading without delaying advancement");
  const finish=fs.readFileSync("src/app/api/rooms/[pin]/finish/route.ts","utf8");
  ok(finish.includes("checkOrigin(req)")&&finish.includes("owner_user_id")&&finish.includes("same(r[0].host_token_hash"),"Early finish requires host identity and tokens");
  ok(called>5,"Mock exercised all intended queries");
