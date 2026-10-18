@@ -1,5 +1,5 @@
 import {NextRequest} from "next/server";
-import {authFetch,beginFlow,clearFlow,parseTokens,setTokens,checkOrigin,noCache,authError,emailValue,passwordValue,publicOrigin,AuthError} from "@/lib/mother-auth";
+import {authFetch,beginFlow,clearFlow,parseTokens,setTokens,checkOrigin,noCache,authError,emailValue,passwordValue,publicOrigin,AuthError,captchaSecurity} from "@/lib/mother-auth";
 export const runtime="nodejs";
 export async function POST(req:NextRequest){
  try{
@@ -14,7 +14,7 @@ export async function POST(req:NextRequest){
   if(!name||name.length<2)throw new AuthError("Please enter your name (at least 2 characters).");
   const res=noCache({ok:true,needsEmailConfirmation:true,message:"Check your email to confirm your account. Return to this browser to finish signing in."});
   const challenge=beginFlow(req,res,"signup",role==="teacher"?"/teacher":"/account");
-  const data=await authFetch("signup",{method:"POST",query:{redirect_to:publicOrigin(req)+"/auth/callback"},body:{email,password,data:{full_name:name,zokivo_view_role:role},code_challenge:challenge,code_challenge_method:"s256"}});
+  const data=await authFetch("signup",{method:"POST",query:{redirect_to:publicOrigin(req)+"/auth/callback"},body:{email,password,data:{full_name:name,zokivo_view_role:role},gotrue_meta_security:captchaSecurity(body.captchaToken),code_challenge:challenge,code_challenge_method:"s256"}});
   const tokens=parseTokens(data);
   if(tokens){
     setTokens(res,req,tokens);clearFlow(res,req);
