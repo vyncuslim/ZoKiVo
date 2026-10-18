@@ -1,0 +1,38 @@
+name: ZoKivo discover searchable classroom quiz catalog
+on:
+  push:
+    branches: [feat/discover-large-original-quiz-library-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/library/**"
+      - "src/app/api/quizzes/route.ts"
+      - "src/app/discover-library.css"
+      - "data/discover-topics-manifest.json"
+      - "scripts/verify-discover-library.cjs"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Check discover UX, public privacy and catalog integrity
+        run: node scripts/verify-discover-library.cjs
+      - name: Existing quiz, auth, host validations
+        run: |
+          node scripts/verify-quiz.cjs
+          node scripts/verify-auth.cjs
+          node scripts/verify-lobby.cjs
+      - name: Check TypeScript
+        run: npx tsc --noEmit
+      - name: Build Next production
+        run: npm run build
