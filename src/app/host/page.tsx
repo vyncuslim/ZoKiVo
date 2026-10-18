@@ -5,20 +5,51 @@ export default function Host(){const[error,setError]=useState("");const[busy,set
  useEffect(()=>{const choice=new URLSearchParams(location.search).get("mode");if(choice&&["quiz_party","gold_quest","crypto_hack","fishing_frenzy","cafe"].includes(choice))setGameMode(choice)},[]);
  useEffect(()=>{void fetch("/api/quizzes",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{const rows=j?.quizzes||[];setQuizzes(rows);const desired=new URLSearchParams(location.search).get("quiz");if(desired&&rows.some((q:QuizChoice)=>q.id===desired))setSelected(desired);else if(rows.length)setSelected(rows[0].id)}).catch(()=>{})},[]);
  async function create(){setBusy(true);setError("");try{const r=await fetch("/api/rooms",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({quizId:selected||undefined,questionSeconds,allowLateJoining:lateJoin,randomPlayerNames:randomNames,gameMode,randomQuestionOrder:shuffle,muteSounds,scoreGoal:scoreGoal||null})});const j=await r.json();if(!r.ok)throw Error(j.error||"Could not create a game");sessionStorage.setItem("host:"+j.pin,j.token);router.push("/game/"+j.pin+"?host=1")}catch(e){setError(e instanceof Error?e.message:"Could not create a game")}finally{setBusy(false)}}
- return <main className="inner-page wrap"><div className="host-heading"><span className="eyebrow eyebrow--mini">HOST ZONE</span><h1>Bring the <span>energy.</span></h1><p>Pick a game, grab a PIN, and get your whole crew in on the fun.</p></div>
- <div className="host-layout"><section className="host-selection"><div className="host-selected-head"><span>YOUR GAME MODE</span><span className="status-ready"><i/> READY TO PLAY</span></div><div className="host-mode-body"><div className="host-mode-art"><BrandMark size={152}/><b>★</b></div><div><span className="game-mode-overline">CHOOSE YOUR ADVENTURE</span><h2>{({quiz_party:"Quiz Party",gold_quest:"Gold Quest",crypto_hack:"Crypto Hack",fishing_frenzy:"Fishing Frenzy",cafe:"Café"} as Record<string,string>)[gameMode]}</h2><p>Answer questions first, then enjoy an original game mechanic. All rewards are fictional classroom points.</p><div className="host-chips"><span>{questionSeconds} SEC / QUESTION</span><span>4 QUESTIONS</span><span>SOLO PLAY</span></div></div></div></section>
- <aside className="host-launch"><p className="host-launch-label">LET&apos;S MAKE SOME NOISE</p><div className="host-launch-icon">↗</div><h2>Your room<br/>is one click away.</h2><p>Sign in with your Vynalth AI account, choose a quiz, and invite your players. Game PINs are temporary: when a game ends, its PIN may be reassigned to another host for a completely new game.</p><label className="host-quiz-picker">Quiz to play<select value={selected} onChange={e=>setSelected(e.target.value)}>{quizzes.length?quizzes.map(q=><option key={q.id} value={q.id}>{q.title} ({q.question_count} questions)</option>):<option value="">World Explorer (sample)</option>}</select></label><div className="host-options" aria-label="Host game options">
-<label className="host-option-field">Game mode
-<select value={gameMode} onChange={e=>setGameMode(e.target.value)}><option value="quiz_party">Quiz Party · Classic</option><option value="gold_quest">Gold Quest · Treasure chests</option><option value="crypto_hack">Crypto Hack · Virtual code challenges</option><option value="fishing_frenzy">Fishing Frenzy · Catch fish</option><option value="cafe">Café · Serve orders</option></select></label>
-<label className="host-option-field">Time per question
-<select value={questionSeconds} onChange={e=>setQuestionSeconds(Number(e.target.value))}>{[10,15,20,30,45,60].map(n=><option key={n} value={n}>{n} seconds</option>)}</select>
-</label>
-<label className="host-option-toggle"><input type="checkbox" checked={lateJoin} onChange={e=>setLateJoin(e.target.checked)}/> Allow students to join after starting</label>
-<label className="host-option-toggle"><input type="checkbox" checked={randomNames} onChange={e=>setRandomNames(e.target.checked)}/> Assign random player nicknames</label>
- <label className="host-option-toggle"><input type="checkbox" checked={shuffle} onChange={e=>setShuffle(e.target.checked)}/> Shuffle the question order for this room</label>
- <label className="host-option-toggle"><input type="checkbox" checked={muteSounds} onChange={e=>setMuteSounds(e.target.checked)}/> Mute game sound effects</label>
- <label className="host-option-field">End game when<select value={scoreGoal} onChange={e=>setScoreGoal(Number(e.target.value))}><option value={0}>All questions have been shown</option>{[500,1000,2000,5000].map(n=><option key={n} value={n}>A player reaches {n} quiz points</option>)}</select></label>
-</div><Link className="quiz-more-link" href="/library">Browse library / Create quiz ↗</Link><button className="button button-yellow button-full" disabled={busy} onClick={create}>{busy?"Getting ready...":"Create a room  ↗"}</button>{error&&<p role="alert" className="form-error">{error} <Link href="/auth/login?next=/host">Sign in ↗</Link></p>}</aside></div>
- <div className="prototype-note"><b>EARLY ACCESS</b><span>This is a prototype: sign-in is required to create rooms. Verified teacher permissions and additional public-room protections are still in development.</span></div>
+ const modes=[
+  {id:"quiz_party",icon:"⚡",name:"Quiz Party",hint:"Answer fast and score points"},
+  {id:"gold_quest",icon:"🎁",name:"Gold Quest",hint:"Answer and open treasure"},
+  {id:"crypto_hack",icon:"🧩",name:"Code Quest",hint:"Answer and solve fun codes"},
+  {id:"fishing_frenzy",icon:"🎣",name:"Fishing Frenzy",hint:"Answer and go fishing"},
+  {id:"cafe",icon:"🍔",name:"Café",hint:"Answer and serve customers"}
+ ];
+ const selectedQuiz=quizzes.find(q=>q.id===selected);
+ return <main className="zk-easy-page zk-host-simple wrap">
+  <header className="zk-easy-intro"><span className="zk-kicker">FOR TEACHERS · EASY SETUP</span><h1>Host a game 🎮</h1><p>Just 3 steps. Students join with a PIN — no account needed.</p></header>
+  <div className="zk-host-flow">
+   <section className="zk-easy-card" aria-labelledby="zk-host-step-1"><h2 id="zk-host-step-1"><span className="zk-step">1</span> Pick your quiz</h2>
+    <label className="zk-form-label" htmlFor="host-quiz-simple">Quiz questions</label>
+    <select id="host-quiz-simple" className="zk-big-select" value={selected} onChange={e=>setSelected(e.target.value)}>
+      {quizzes.length?quizzes.map(q=><option key={q.id} value={q.id}>{q.title} ({q.question_count} questions)</option>):<option value="">World Explorer (sample)</option>}
+    </select>
+    <p className="zk-small-hint">{selectedQuiz?selectedQuiz.question_count+" questions ready to play.":"You can also start with the sample quiz."} <Link href="/library">Explore quiz library →</Link></p>
+   </section>
+   <section className="zk-easy-card" aria-labelledby="zk-host-step-2"><h2 id="zk-host-step-2"><span className="zk-step">2</span> Choose how to play</h2>
+    <div className="zk-mode-picker" role="radiogroup" aria-label="Game mode">
+     {modes.map(m=><button key={m.id} type="button" role="radio" aria-checked={gameMode===m.id} className={"zk-mode-tile"+(gameMode===m.id?" is-selected":"")} onClick={()=>setGameMode(m.id)}>
+      <span className="zk-mode-icon" aria-hidden="true">{m.icon}</span><strong>{m.name}</strong><small>{m.hint}</small>
+     </button>)}
+    </div>
+    <details className="zk-simple-advanced"><summary>⚙ More game settings <span>Optional</span></summary>
+     <div className="host-options">
+      <label className="host-option-field">Time to answer each question
+       <select value={questionSeconds} onChange={e=>setQuestionSeconds(Number(e.target.value))}>{[10,15,20,30,45,60].map(n=><option key={n} value={n}>{n} seconds</option>)}</select>
+      </label>
+      <label className="host-option-toggle"><input type="checkbox" checked={lateJoin} onChange={e=>setLateJoin(e.target.checked)}/> Allow students to join after the game starts</label>
+      <label className="host-option-toggle"><input type="checkbox" checked={randomNames} onChange={e=>setRandomNames(e.target.checked)}/> Give students random nicknames</label>
+      <label className="host-option-toggle"><input type="checkbox" checked={shuffle} onChange={e=>setShuffle(e.target.checked)}/> Shuffle questions</label>
+      <label className="host-option-toggle"><input type="checkbox" checked={muteSounds} onChange={e=>setMuteSounds(e.target.checked)}/> Mute game sounds</label>
+      <label className="host-option-field">End game when
+       <select value={scoreGoal} onChange={e=>setScoreGoal(Number(e.target.value))}><option value={0}>All questions have been played</option>{[500,1000,2000,5000].map(n=><option key={n} value={n}>Someone earns {n} quiz points</option>)}</select>
+      </label>
+     </div>
+    </details>
+   </section>
+   <section className="zk-easy-card zk-host-start" aria-labelledby="zk-host-step-3"><h2 id="zk-host-step-3"><span className="zk-step">3</span> Invite your class</h2>
+    <p>Click the button, share the six-digit PIN, then press <strong>Start game</strong> when your students are ready.</p>
+    <button className="zk-primary-action" type="button" disabled={busy} onClick={create}>{busy?"Creating your room…":"Create game room →"}</button>
+    {error&&<p role="alert" className="form-error">{error} <Link href="/auth/login?next=/host">Sign in ↗</Link></p>}
+    <p className="zk-small-hint">Your PIN is temporary. After the game finishes, the number can be reused for a new game.</p>
+   </section>
+  </div>
  </main>;
 }
