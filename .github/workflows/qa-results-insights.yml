@@ -1,0 +1,29 @@
+name: ZoKivo secure results insights QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/api/rooms/**/insights/**"
+      - "scripts/verify-results-insights.cjs"
+      - ".github/workflows/qa-results-insights.yml"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install project dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify results authorization and grading
+        run: node scripts/verify-results-insights.cjs
+      - name: TypeScript check
+        run: npx tsc --noEmit
+      - name: Check production build and existing regressions
+        run: npm run build
