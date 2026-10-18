@@ -47,13 +47,17 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     AND NOT EXISTS(SELECT 1 FROM mode_events e WHERE e.room_pin=${pin} AND e.question_index=${r.current_index} AND e.player_id=a.player_id)`:[];
   const rewardsPending=(outstandingRewards[0]?.n||0)>0;
   const expired=r.status==='playing'&&r.deadline&&new Date(r.deadline).getTime()<=new Date(r.server_time).getTime();
+  // An individual result is revealed only when EVERY player is done or time is up.
+  const canShowResult=r.status==='finished'||Boolean(expired)||allAnswered;
+  const myResult=canShowResult&&me.length?await sql`SELECT is_correct,points FROM answers
+    WHERE player_id=${me[0].id} AND room_pin=${pin} AND question_index=${r.current_index} LIMIT 1`:[];
   const canAdvance=r.status==='playing'&&(Boolean(expired)||(allAnswered&&!rewardsPending));
   return Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
    serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:answers.length,
    answeredIds:answers.filter(a=>host||a.player_id===me[0]?.id).map(a=>a.player_id),
-   viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null}
+   viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null,result:myResult[0]||null}
   },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}});
  }catch(e){console.error("Game status unavailable",e);return bad("Game unavailable",503)}
 }
