@@ -35,10 +35,15 @@ export async function POST(req:NextRequest){
   const orderJson=shuffle?JSON.stringify(orderRows.map(r=>r.position)):null;
   for(let i=0;i<6;i++){
    const pin=String(randomInt(100000,1000000));
-   const created=await sql`INSERT INTO rooms(pin,quiz_set_id,host_token_hash,owner_user_id,question_seconds,allow_late_joining,random_player_names,game_mode,question_order,random_question_order,mute_sounds,score_goal)
-     VALUES(${pin},${id},${hash(secret)},${auth.user.id},${questionSeconds},${allowLateJoining},${randomPlayerNames},${gameMode},${orderJson}::jsonb,${shuffle},${muteSounds},${scoreGoal})
-     ON CONFLICT DO NOTHING RETURNING pin`;
-   if(created.length){await emitRoomRefresh('quiz',pin);return applyRenew(noCache({pin,token:secret}),req,auth.renew)}
+   // Atomic allocator prevents active PIN collisions and archives any finished
+   // previous game BEFORE replacing its room row. Old host/player tokens expire.
+   const created=await sql`SELECT zokivo_allocate_room_reusing_finished(
+     ${pin}::char(6),${id}::uuid,${hash(secret)}::char(64),${auth.user.id}::text,
+     ${questionSeconds}::integer,${allowLateJoining}::boolean,${randomPlayerNames}::boolean,
+     ${gameMode}::text,${orderJson}::jsonb,${shuffle}::boolean,
+     ${muteSounds}::boolean,${scoreGoal}::integer
+   ) AS allocated`;
+   if(created[0]?.allocated===true){await emitRoomRefresh('quiz',pin);return applyRenew(noCache({pin,token:secret}),req,auth.renew)}
   }
   return noCache({error:"Could not allocate a game PIN."},503);
  }catch(e){return authError(e)}
