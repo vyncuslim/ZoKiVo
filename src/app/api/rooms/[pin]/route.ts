@@ -39,9 +39,18 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     COALESCE((SELECT cafe_level FROM mode_wallets WHERE player_id=${me[0].id}),1)::integer AS cafe_level,
     (SELECT defense_code FROM players WHERE id=${me[0].id}) AS defense_code`:[];
   const answers=await sql`SELECT player_id FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`;
+  // Everyone answering closes the ANSWERING phase early; reward games stay open
+  // until successful answer bonuses have been claimed by those eligible.
+  const allAnswered=r.status==='playing'&&players.length>0&&answers.length>=players.length;
+  const outstandingRewards=allAnswered&&r.game_mode!=='quiz_party'?await sql`SELECT count(*)::integer AS n FROM answers a
+   WHERE a.room_pin=${pin} AND a.question_index=${r.current_index} AND a.is_correct
+    AND NOT EXISTS(SELECT 1 FROM mode_events e WHERE e.room_pin=${pin} AND e.question_index=${r.current_index} AND e.player_id=a.player_id)`:[];
+  const rewardsPending=(outstandingRewards[0]?.n||0)>0;
+  const expired=r.status==='playing'&&r.deadline&&new Date(r.deadline).getTime()<=new Date(r.server_time).getTime();
+  const canAdvance=r.status==='playing'&&(Boolean(expired)||(allAnswered&&!rewardsPending));
   return Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
-   serverTime:r.server_time,scoreboardPhase:r.round_open?"previous-round":"settled",
+   serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:answers.length,
    answeredIds:answers.filter(a=>host||a.player_id===me[0]?.id).map(a=>a.player_id),
    viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null}
