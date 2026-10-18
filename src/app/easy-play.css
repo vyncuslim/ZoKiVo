@@ -132,3 +132,15 @@ body:has(.zk-game-screen) .site-footer{display:none}
  .zk-game-screen .game-head{gap:8px}
 }
 @media(prefers-reduced-motion:reduce){.zk-primary-action,.zk-mode-tile,.zk-answer-pad,.zk-reward-tile{transition:none!important}}
+
+/* Keep all ZoKivo tools discoverable without crowding the top navigation. */
+.zk-simple-nav{gap:23px;align-items:center}
+.zk-more-menu{position:relative}
+.zk-more-menu summary{list-style:none;cursor:pointer;padding:9px 0;white-space:nowrap}
+.zk-more-menu summary::-webkit-details-marker{display:none}
+.zk-more-links{position:absolute;right:0;top:calc(100% + 9px);z-index:40;min-width:210px;
+ display:grid;gap:3px;padding:11px;border:1px solid #dfd5ed;background:#fffefa;border-radius:15px;
+ box-shadow:0 10px 30px #271a3a24}
+.zk-more-links a{padding:10px 13px;border-radius:8px;font-size:13px}
+.zk-more-links a:hover,.zk-more-links a:focus-visible{background:#f0e9ff}
+@media(max-width:820px){.zk-simple-nav{display:none}}
