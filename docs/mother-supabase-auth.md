@@ -36,3 +36,10 @@ No service-role secret is required for these flows. Sessions use Secure HttpOnly
 - Auth POST endpoints check same-origin Origin, but production deployment still needs CAPTCHA, persistent rate limiting, abuse monitoring, and strict account-status admission controls from Mother Supabase.
 - Mother Supabase profile/account_status policies were not changed. If the mother auth requires extra admission tickets, extend this integration to honor them BEFORE enabling privileged pages.
 - Never claim a live account signup/login works until a test email account and Google OAuth flow have been verified on the production domain.
+
+## CAPTCHA configuration (required when Mother Supabase Bot Protection is enabled)
+- Create a **Cloudflare Turnstile** widget whose hostname list covers every allowed ZoKivo auth host (for example, `zokivo.xyz`, `www.zokivo.xyz`, `zokivo.vynalthai.com` and `zokivo.vercel.app`).
+- Add its **public** site key in Vercel Environment Variables as `NEXT_PUBLIC_ZOKIVO_TURNSTILE_SITE_KEY` for Production, and for Preview with the appropriate preview-host coverage. Redeploy after changes.
+- In **Mother Supabase → Authentication → Bot and Abuse Protection**, select **Turnstile** and enter the matching **secret** key there, **not** in Vercel's public environment variable or GitHub.
+- The browser sends a short-lived, single-use token to the ZoKivo API, which forwards it under `gotrue_meta_security.captcha_token`; Supabase checks it with the configured provider. Registration, email sign-in, and recovery all use this flow. Never disable CAPTCHA on production to bypass a missing-token error.
+- Confirm the production page displays Turnstile, then test one authorized test account. If a key has not been configured, the registration page displays an operational warning; it does not pretend that the provider accepted the flow.
