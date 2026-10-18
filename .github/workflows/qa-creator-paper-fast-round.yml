@@ -1,0 +1,42 @@
+name: ZoKivo original creator, Paper Mode and classroom early-completion QA
+on:
+  push:
+    branches: [feat/creator-live-game-original-workflow-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/create/**"
+      - "src/app/game/**"
+      - "src/app/api/rooms/**"
+      - "src/app/paper/**"
+      - "src/app/creator-experience.css"
+      - "scripts/verify-creator-paper-quick-round.cjs"
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: New classroom UX and round protections
+        run: node scripts/verify-creator-paper-quick-round.cjs
+      - name: Existing game modes, scoring and quiz editor regressions
+        run: |
+          node scripts/verify-quiz.cjs
+          node scripts/verify-scoreboard.cjs
+          node scripts/verify-game-modes.cjs
+          node scripts/verify-simple-gameplay.cjs
+          node scripts/verify-media.cjs
+          node scripts/verify-lobby.cjs
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Full production build
+        run: npm run build
