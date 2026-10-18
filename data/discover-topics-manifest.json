@@ -1,0 +1,99 @@
+{
+  "collection": "ZoKivo independently authored classroom quiz launch batch",
+  "release": "2026-10-18",
+  "publicQuizSets": 15,
+  "originalQuestions": 255,
+  "notes": "Content stored in Neon. Correct answers are deliberately excluded from this public repository.",
+  "topics": [
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000001",
+      "title": "IQ & Logic Puzzles",
+      "subject": "Logic",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000002",
+      "title": "Robotics Basics & VEX IQ",
+      "subject": "Robotics",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000003",
+      "title": "Everyday Science Challenge",
+      "subject": "Science",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000004",
+      "title": "Year 7 English Grammar",
+      "subject": "English",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000005",
+      "title": "Around the World Geography",
+      "subject": "Geography",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000006",
+      "title": "History Time Explorers",
+      "subject": "History",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000007",
+      "title": "Computing & Internet Smarts",
+      "subject": "Computing",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000008",
+      "title": "Planet Protectors",
+      "subject": "Environment",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-000000000009",
+      "title": "Space Explorers",
+      "subject": "Space",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-00000000000a",
+      "title": "Sports Science & Games",
+      "subject": "Sports",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-00000000000b",
+      "title": "Bahasa Melayu: Kosa Kata",
+      "subject": "Bahasa Melayu",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-00000000000c",
+      "title": "中文词语小挑战",
+      "subject": "中文",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-00000000000d",
+      "title": "Everyday General Knowledge",
+      "subject": "General Knowledge",
+      "questionCount": 15
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-00000000000e",
+      "title": "Mental Maths Sprint",
+      "subject": "Mathematics",
+      "questionCount": 30
+    },
+    {
+      "id": "9a725c10-403e-4d80-a811-00000000000f",
+      "title": "Algebra & Number Patterns",
+      "subject": "Mathematics",
+      "questionCount": 30
+    }
+  ]
+}
