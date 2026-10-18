@@ -1,0 +1,176 @@
+{
+  "release": "2026-10-18 supplemental original question library",
+  "source": "independently written original content",
+  "sets": [
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000001",
+      "title": "Multiplication Power-Up",
+      "subject": "Mathematics",
+      "grade": "Year 5",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000002",
+      "title": "Division Detective",
+      "subject": "Mathematics",
+      "grade": "Year 5",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000003",
+      "title": "Fractions of Quantities",
+      "subject": "Mathematics",
+      "grade": "Year 6",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000004",
+      "title": "Percentage Explorer",
+      "subject": "Mathematics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000005",
+      "title": "Perimeter Puzzle Box",
+      "subject": "Mathematics",
+      "grade": "Year 6",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000006",
+      "title": "Area Architects",
+      "subject": "Mathematics",
+      "grade": "Year 6",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000007",
+      "title": "Integer Adventures",
+      "subject": "Mathematics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000008",
+      "title": "Clock & Calendar Maths",
+      "subject": "Mathematics",
+      "grade": "Year 5",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000009",
+      "title": "Decimals Made Easy",
+      "subject": "Mathematics",
+      "grade": "Year 6",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-00000000000a",
+      "title": "Solve for X",
+      "subject": "Mathematics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-00000000000b",
+      "title": "Sequence Sprint",
+      "subject": "Logic",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-00000000000c",
+      "title": "Ratio in Real Life",
+      "subject": "Mathematics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-00000000000d",
+      "title": "Speed × Time",
+      "subject": "Physics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-00000000000e",
+      "title": "Money & Change",
+      "subject": "Mathematics",
+      "grade": "Year 5",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-00000000000f",
+      "title": "AI Basics for Beginners",
+      "subject": "AI Basics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000010",
+      "title": "Internet Safety Essentials",
+      "subject": "Internet Safety",
+      "grade": "Year 6",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000011",
+      "title": "Music & Rhythm Quest",
+      "subject": "Music",
+      "grade": "Year 5",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000012",
+      "title": "Art & Design Basics",
+      "subject": "Art",
+      "grade": "Year 6",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000013",
+      "title": "Healthy Habits & Human Body",
+      "subject": "Health",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000014",
+      "title": "Chemistry for Curious Minds",
+      "subject": "Chemistry",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000015",
+      "title": "Physics Forces & Energy",
+      "subject": "Physics",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000016",
+      "title": "Biology Cells & Ecosystems",
+      "subject": "Science",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000017",
+      "title": "English Vocabulary Explorer",
+      "subject": "English",
+      "grade": "Year 7",
+      "questions": 20
+    },
+    {
+      "id": "c8202610-18a0-4a9b-9f00-000000000018",
+      "title": "Climate & Sustainability",
+      "subject": "Environment",
+      "grade": "Year 7",
+      "questions": 20
+    }
+  ],
+  "questionCount": 480,
+  "answerKeys": "Kept in Neon, excluded from public repository"
+}

@@ -53,3 +53,30 @@
 @media(max-width:1050px){.zk-discover-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:720px){.zk-discover-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.zk-quiz-cover{height:120px}.zk-cover-mark{font-size:47px}.zk-discover-card-body{padding:12px}.zk-discover-card-body h3{font-size:16px}.zk-discover-toolbar{align-items:flex-start;flex-direction:column}.zk-discover-toolbar label{align-self:stretch}.zk-discover-toolbar select{width:100%;max-width:100%}.zk-discover-search button{padding:12px 15px}.zk-discover-hero{padding:32px 16px}.zk-discover-hero h1{font-size:40px}}
 @media(max-width:350px){.zk-discover-grid{grid-template-columns:1fr}}
+
+/* 2026-10-18 search accessibility + compact classroom discovery */
+.zk-discover-page .zk-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;clip-path:inset(50%)!important}
+.zk-discover-page .zk-discover-hero{padding:clamp(24px,3.6vw,42px) 18px 27px;border-radius:25px}
+.zk-discover-page .zk-discover-hero h1{font-size:clamp(31px,4.3vw,52px);letter-spacing:-.045em;line-height:1.12;margin:10px auto 12px}
+.zk-discover-page .zk-discover-hero p{margin:0 auto 20px;max-width:600px}
+.zk-discover-page .zk-discover-search{max-width:660px;align-items:center;gap:4px;padding:6px 6px 6px 13px}
+.zk-discover-page .zk-discover-search .zk-search-icon{display:grid;place-items:center;flex:none;width:25px;color:#694ac0;font-size:24px;font-weight:700}
+.zk-discover-page .zk-discover-search input{display:block!important;min-width:0;flex:1;width:auto!important;margin:0!important;box-shadow:none!important;padding:11px 8px!important;outline:none!important}
+.zk-discover-page .zk-discover-search button{min-height:44px}
+.zk-popular-subjects{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:17px auto 0;max-width:840px}
+.zk-popular-subjects button{background:#ffffffd9;border:1px solid #dac9f4;border-radius:999px;color:#574185;font-size:12px;font-weight:800;padding:8px 12px;cursor:pointer}
+.zk-popular-subjects button.selected,.zk-popular-subjects button:hover{background:#6649b8;color:#fff;border-color:#6649b8}
+.zk-publisher{display:flex;align-items:center;gap:5px;color:#5d449f!important;font-size:12px!important;font-weight:850;line-height:1.4;margin:0 0 11px!important}
+.zk-publisher span{font-size:16px;color:#6749b8}
+.zk-discover-page .zk-discover-grid .zk-discover-card-body{min-height:190px}
+.zk-discover-page .zk-quiz-card-actions{margin-top:auto}
+.zk-popular-subjects button:focus-visible{outline:3px solid #402076;outline-offset:2px}
+@media(max-width:600px){
+ .zk-discover-page .zk-discover-hero{padding:24px 12px 22px}
+ .zk-discover-page .zk-discover-hero h1{font-size:clamp(29px,7.4vw,39px)}
+ .zk-discover-page .zk-discover-search{padding:5px 5px 5px 9px}
+ .zk-discover-page .zk-discover-search button{padding:11px 10px}
+ .zk-popular-subjects{justify-content:flex-start;gap:7px}
+ .zk-popular-subjects button{padding:7px 10px;font-size:11px}
+}
+.zk-quiz-cover--art{background:#ffd9b6;color:#a24c6e}.zk-quiz-cover--music{background:#c9e8fc;color:#3c619e}.zk-quiz-cover--health{background:#fbcfda;color:#a04c69}.zk-quiz-cover--ai{background:#d5cefb;color:#6345b6}.zk-quiz-cover--internet{background:#c1edea;color:#267d7f}.zk-quiz-cover--physics{background:#ffecb1;color:#997021}.zk-quiz-cover--chemistry{background:#daf4d0;color:#427b5b}

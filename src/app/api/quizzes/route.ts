@@ -30,6 +30,7 @@ export async function GET(req:NextRequest){
         OR q.description ILIKE '%'||${search}||'%' OR q.grade_level ILIKE '%'||${search}||'%')
    AND (${subject}='' OR lower(q.subject)=lower(${subject}))`;
   const rows=await sql`SELECT q.id,q.title,q.subject,q.grade_level,q.language,q.description,q.status,
+   CASE WHEN q.owner_user_id IS NULL THEN 'ZoKivo' ELSE 'Community teacher' END AS publisher_name,
    count(a.id)::integer AS question_count FROM quiz_sets q LEFT JOIN questions a ON a.quiz_set_id=q.id
    WHERE q.status='published'
    AND (${search}='' OR q.title ILIKE '%'||${search}||'%' OR q.subject ILIKE '%'||${search}||'%'

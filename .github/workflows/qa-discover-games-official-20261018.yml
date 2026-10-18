@@ -1,0 +1,42 @@
+name: ZoKivo Discover search Games UI publisher and 480 new questions regression
+on:
+  push:
+    branches: [fix/discover-games-official-publisher-more-quizzes-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/library/**"
+      - "src/app/discover-library.css"
+      - "src/app/games/**"
+      - "src/app/simple-games.css"
+      - "src/app/api/quizzes/route.ts"
+      - "data/discover-20261018-expansion-manifest.json"
+      - "scripts/verify-discover-games-publisher-expansion.cjs"
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify Discovery publishing labels and original Games UX
+        run: |
+          node scripts/verify-discover-games-publisher-expansion.cjs
+          node scripts/verify-discover-library.cjs
+      - name: Regression of teacher and student flows
+        run: |
+          node scripts/verify-quiz.cjs
+          node scripts/verify-auth.cjs
+          node scripts/verify-simple-gameplay.cjs
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Full Next.js production build
+        run: npm run build

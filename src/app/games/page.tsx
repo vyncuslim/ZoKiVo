@@ -1,30 +1,41 @@
 import Link from "next/link";
-import type { Metadata } from "next";
-import {BrandMark} from "@/components/brand";
-export const metadata:Metadata={alternates:{canonical:"/games"},title:"Game modes",description:"Discover current and upcoming ZoKivo classroom game modes."};
-const upcoming=[
- {label:"TREASURE & STRATEGY",name:"Gold Quest",description:"Earn virtual treasure and use strategic risk-taking after correct answers.",symbol:"💰",tone:"mode-yellow",id:"gold_quest"},
- {label:"LOGIC & MEMORY",name:"Crypto Hack",description:"Build an original classroom code-breaking game using fictional credits.",symbol:"💻",tone:"mode-peach",id:"crypto_hack"},
- {label:"SPEED & DISCOVERY",name:"Fishing Frenzy",description:"Learn to earn fishing chances and discover a growing collection of fish.",symbol:"🎣",tone:"mode-yellow",id:"fishing_frenzy"},
- {label:"CREATIVE MANAGEMENT",name:"Café",description:"Earn ingredients from quizzes and serve a virtual café.",symbol:"🍔",tone:"mode-peach",id:"cafe"},
- {label:"TEAM PLAY",name:"Team Clash",description:"Team up to solve questions and work toward a common goal.",symbol:"↗",tone:"mode-yellow",id:""},
- {label:"QUICK THINKING",name:"Speed Run",description:"Race against the clock with bite-sized question rounds.",symbol:"➜",tone:"mode-peach",id:""}
+import type {Metadata} from "next";
+export const metadata:Metadata={alternates:{canonical:"/games"},title:"Play and learn",description:"Four easy ways to explore ZoKivo: discover quizzes, host a game, enter a PIN or study solo."};
+const paths=[
+ {icon:"📚",name:"Discover quizzes",description:"Explore topics and find a quiz you love.",href:"/library",action:"Find quizzes →",color:"library"},
+ {icon:"🎤",name:"Host a game",description:"Teachers: pick questions, choose a mode, invite players.",href:"/host",action:"Create a room →",color:"host"},
+ {icon:"🎮",name:"Join with PIN",description:"Students: type the six-digit game PIN and play.",href:"/play",action:"Enter PIN →",color:"join"},
+ {icon:"✏️",name:"Study solo",description:"Practice at your own pace, no competition needed.",href:"/study",action:"Start studying →",color:"study"}
+];
+const playable=[
+ {id:"quiz_party",emoji:"⚡",title:"Quiz Party",text:"Answer quickly, earn points and climb the leaderboard."},
+ {id:"gold_quest",emoji:"🎁",title:"Gold Quest",text:"Answer questions and unlock mystery treasures."},
+ {id:"crypto_hack",emoji:"🧩",title:"Code Quest",text:"Solve fictional code challenges to collect virtual coins."},
+ {id:"fishing_frenzy",emoji:"🎣",title:"Fishing Frenzy",text:"Answer, cast a line and collect imaginary fish."},
+ {id:"cafe",emoji:"🧁",title:"Café",text:"Answer and serve happy café customers."}
 ];
 export default function Games(){
- return <main className="wrap section-page" id="main-content">
- <nav className="crumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><strong>Game modes</strong></nav>
- <header className="section-page-head"><span className="eyebrow eyebrow--mini">PICK YOUR VIBE</span><h1>Find your<br/><em>kind of fun.</em></h1><p>Different ways to learn and compete. We&apos;re rolling them out one game at a time.</p></header>
- <section className="feature-mode" aria-labelledby="quiz-party-title">
-    <div className="feature-mode-art"><div className="feature-mode-label">01 · AVAILABLE NOW</div><BrandMark size={194}/><span aria-hidden="true" className="feature-mode-spark">★</span></div>
-    <div className="feature-mode-info"><span className="feature-kicker">THE ORIGINAL · SOLO QUIZ</span><h2 id="quiz-party-title">Quiz Party</h2><p>Everyone gets the same questions. Answer before the timer ends, rack up points and watch the rankings change.</p>
-     <div className="feature-chips"><span>10–60 seconds per question</span><span>Custom teacher quizzes</span><span>Live leaderboard polling</span><span>Join with a PIN</span></div>
-     <div className="feature-actions"><Link className="button button-dark" href="/host">Host Quiz Party ↗</Link><Link className="text-arrow" href="/try">Try a practice question →</Link></div>
-    </div>
- </section>
- <section className="paper-game-strip" aria-labelledby="paper-title"><div><span className="eyebrow eyebrow--mini">CLASSROOM BETA · NO STUDENT PHONES NEEDED</span><h2 id="paper-title">✳ Paper Mode</h2><p>Give students numbered answer cards, project questions, and scan their choices with one teacher phone. Camera scanning is currently an early-access prototype.</p></div><Link href="/paper" className="button button-dark">Explore Paper Mode ↗</Link></section>
- <section className="paper-game-strip" aria-labelledby="study-title"><div><span className="eyebrow eyebrow--mini">AVAILABLE NOW · SOLO PRACTICE</span><h2 id="study-title">📚 Study Mode</h2><p>Practice published quizzes at your own pace, get immediate feedback and revisit missed questions. Signed-in students can keep a personal study history.</p></div><Link href="/study" className="button button-dark">Start studying ↗</Link></section>
- <div className="subsection-title"><div><span className="eyebrow eyebrow--mini">COMING NEXT</span><h2>More ways to play</h2></div><p>Four original reward modes are available as playable betas. Team Clash and Speed Run are still in development.</p></div>
- <section className="upcoming-grid" aria-label="Upcoming game modes">{upcoming.map((m,i)=><article className={"upcoming-card "+m.tone} key={m.name}><div className="mode-row"><span>{String(i+2).padStart(2,"0")} / 07</span><span className="mode-state">{m.id?"PLAYABLE BETA":"COMING SOON"}</span></div><div className="upcoming-symbol" aria-hidden="true">{m.symbol}</div><span className="feature-kicker">{m.label}</span><h3>{m.name}</h3><p>{m.description}</p>{m.id&&<Link className="text-arrow" href={"/host?mode="+m.id}>Host this mode ↗</Link>}</article>)}</section>
- <div className="section-next"><span>NEW TO ZOKIVO?</span><Link href="/how-it-works">See how a game works <b aria-hidden="true">↗</b></Link></div>
+ return <main className="wrap zk-games-page">
+  <header className="zk-games-hero"><span className="zk-kicker">ZOKIVO · PLAY · LEARN · WIN</span>
+   <h1>What would you like to <em>play?</em></h1>
+   <p>Pick one simple action to get started. ZoKivo works on phones and computers.</p>
+  </header>
+  <section aria-labelledby="games-start-title"><h2 className="zk-games-section-title" id="games-start-title">Let's get started ✨</h2>
+   <div className="zk-games-action-grid">{paths.map(p=><Link href={p.href} className={"zk-games-action zk-games-action--"+p.color} key={p.href}>
+    <span className="zk-games-action-icon" aria-hidden="true">{p.icon}</span><h3>{p.name}</h3><p>{p.description}</p>
+    <strong>{p.action}</strong></Link>)}</div>
+  </section>
+  <section aria-labelledby="games-modes-title" className="zk-games-modes">
+   <div className="zk-games-mode-head"><div><h2 className="zk-games-section-title" id="games-modes-title">Choose a game mode</h2>
+    <p>Five ZoKivo modes are available to host right now.</p></div><Link href="/how-it-works">How to play? →</Link></div>
+   <div className="zk-games-mode-grid">{playable.map(m=><article className="zk-games-mode" key={m.id}>
+    <span aria-hidden="true" className="zk-games-mode-icon">{m.emoji}</span><h3>{m.title}</h3><p>{m.text}</p>
+    <Link href={"/host?mode="+m.id}>Host this mode →</Link>
+   </article>)}</div>
+  </section>
+  <section className="zk-games-extras" aria-label="More ways to learn">
+   <div><h2>🗂️ Paper Mode</h2><p>Early-access classroom scanning prototype — not a finished live game.</p><Link href="/paper">Explore beta →</Link></div>
+   <div><h2>🚀 More games coming</h2><p>Team Clash and Speed Run are in development, not available to host yet.</p><Link href="/how-it-works">Learn more →</Link></div>
+  </section>
  </main>;
 }
