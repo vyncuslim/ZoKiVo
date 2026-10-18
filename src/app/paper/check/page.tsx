@@ -9,7 +9,7 @@ type Hit=CardDetection&{kind:Kind};
 const letters=["A","B","C","D"];
 const newResults=()=>({zokivo:[false,false,false,false],wayground:[false,false,false,false]});
 export default function CameraCheck(){
- const [mode,setMode]=useState<Mode>("both"),[number,setNumber]=useState("1"),[wanted,setWanted]=useState<Choice>(0);
+ const [mode,setMode]=useState<Mode>("zokivo"),[number,setNumber]=useState("1"),[wanted,setWanted]=useState<Choice>(0);
  const [running,setRunning]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState("");
  const [status,setStatus]=useState("Start your camera or upload a photo to check a card."),[found,setFound]=useState<Hit[]>([]);
  const [results,setResults]=useState(newResults),[frames,setFrames]=useState(0);
@@ -18,6 +18,8 @@ export default function CameraCheck(){
  const tracker=useRef(new Map<string,{choice:Choice;count:number;frame:number}>());
  const detector=useRef<MultiQrDetector|null>(null),options=useRef({mode,number,wanted});
  useEffect(()=>{options.current={mode,number,wanted};tracker.current.clear()},[mode,number,wanted]);
+ // A result for card #1 cannot count as a pass for a different student card.
+ useEffect(()=>{setResults(newResults());setFound([]);setFrames(0);frameNumber.current=0;},[mode,number]);
  const stop=useCallback(()=>{active.current=false;if(raf.current!==null)cancelAnimationFrame(raf.current);raf.current=null;media.current?.getTracks().forEach(t=>t.stop());media.current=null;setRunning(false)},[]);
  useEffect(()=>()=>{active.current=false;if(raf.current!==null)cancelAnimationFrame(raf.current);media.current?.getTracks().forEach(t=>t.stop())},[]);
  const check=useCallback(async(c:HTMLCanvasElement,live:boolean)=>{
@@ -63,7 +65,7 @@ export default function CameraCheck(){
  }
  async function photo(file:File|null){
   if(!file)return;setBusy(true);setError("");
-  if(!file.type.startsWith("image/")){setError("Please select an image.");setBusy(false);return}
+  if(!file.type.startsWith("image/")||file.size>10*1024*1024){setError("Choose an image under 10 MB.");setBusy(false);return}
   const url=URL.createObjectURL(file);
   try{
    const image=new Image();image.src=url;await image.decode();
@@ -75,32 +77,34 @@ export default function CameraCheck(){
  }
  const kinds:Kind[]=mode==="both"?["zokivo","wayground"]:[mode];
  const passed=kinds.reduce((sum,k)=>sum+results[k].filter(Boolean).length,0);
- return <main className="paper-root wrap camera-check">
+ return <main className="paper-root wrap camera-check zk-camera-simple">
   <nav className="paper-crumbs"><Link href="/paper">← Paper Mode</Link><span>/ Camera test</span></nav>
-  <header className="camera-heading"><span className="paper-eyebrow">PHONE + COMPUTER CAMERA CHECK</span><h1>Test A, B, C, D.<br/><span>See what the camera sees.</span></h1>
-   <p>Verify every direction before using Paper Mode in class. No game PIN, database connection, or sign-in needed.</p></header>
-  <div className="paper-result-steps"><Link href="/paper/cards">① Print ZoKivo cards ↗</Link><a href="https://cf.quizizz.com/pdf/Quizizz-QCards/en.pdf" target="_blank" rel="noopener noreferrer">② Wayground original cards ↗</a><span>③ Rotate a card so the chosen letter faces up, then scan</span></div>
+  <header className="camera-heading"><span className="paper-eyebrow">ZOKIVO · CAMERA TEST</span><h1>Is your camera <span>ready?</span></h1>
+   <p>Try your paper cards before class. Select a letter, show the card and check whether ZoKivo reads it correctly.</p></header>
+  <nav className="zk-camera-links" aria-label="Getting started"><Link href="/paper/cards">🖨️ Need a card? Print one →</Link><Link href="/paper">← Paper Mode guide</Link></nav>
   <div className="camera-test-grid">
-   <section className="camera-test-card"><h2>1. Pick a card</h2>
-    <label className="camera-label" htmlFor="test-mode">Paper card format</label>
-    <select id="test-mode" className="camera-field" value={mode} onChange={e=>setMode(e.target.value as Mode)}>
-     <option value="both">Both: ZoKivo + Wayground</option><option value="zokivo">ZoKivo QR cards</option><option value="wayground">Wayground original cards</option></select>
+   <section className="camera-test-card"><h2>1 · Pick your card</h2><p className="zk-camera-step-help">Start with card #1. Check A, then turn it to B, C and D.</p>
+    <details className="zk-camera-more"><summary>Using different paper cards?</summary>
+     <label className="camera-label" htmlFor="test-mode">Card format</label>
+     <select id="test-mode" className="camera-field" value={mode} onChange={e=>setMode(e.target.value as Mode)}>
+      <option value="zokivo">ZoKivo cards</option><option value="wayground">Wayground / Quizizz cards</option><option value="both">Both formats</option>
+     </select>
+    </details>
     <label className="camera-label" htmlFor="test-number">Card number (1–60)</label>
     <input className="camera-field" id="test-number" type="number" min="1" max="60" value={number} onChange={e=>setNumber(e.target.value)}/>
-    <p className="camera-label">Rotate your card so this letter is at the TOP:</p>
+    <p className="camera-label">2 · Which answer should face UP?</p>
     <div className="camera-choice-group">{letters.map((x,i)=><button type="button" key={x} aria-pressed={wanted===i} className={"camera-choice "+(wanted===i?"camera-choice-selected":"")} onClick={()=>setWanted(i as Choice)}>{x}</button>)}</div>
-    <p className="camera-tip">Choose A, hold the card with A on top, then repeat for B, C and D. The camera must read the same letter you chose.</p>
-    <div className="camera-buttons"><button type="button" className="button button-dark" onClick={()=>void start()} disabled={running||busy}>Start camera</button><button type="button" className="button button-outline" onClick={stop} disabled={!running}>Stop</button></div>
-    <label className="camera-photo">Or check an existing photo (not a live test)<input type="file" accept="image/*" onChange={e=>void photo(e.target.files?.[0]||null)} disabled={busy}/></label>
+    <p className="camera-tip">Turn the card until your chosen letter is at the top, then point it at the camera.</p>
+    <div className="camera-buttons"><button type="button" className="button button-dark" onClick={()=>void start()} disabled={running||busy}>{busy?"Starting…":"📷 "+(running?"Camera is on":"Start camera")}</button><button type="button" className="button button-outline" onClick={stop} disabled={!running}>Stop camera</button></div>
+    <details className="zk-camera-more"><summary>Cannot use your camera? Try a photo instead</summary><label className="camera-photo">Choose a photo (not a live verification)<input type="file" accept="image/*" onChange={e=>void photo(e.target.files?.[0]||null)} disabled={busy}/></label></details>
    </section>
-   <section className="camera-test-card"><div className="camera-preview-head"><h2>2. Recognition result</h2><span>{running?"● LIVE":"○ OFFLINE"}</span></div>
+   <section className="camera-test-card"><div className="camera-preview-head"><h2>3 · See the result</h2><span>{running?"● CAMERA ON":"○ CAMERA OFF"}</span></div>
     <div className="camera-test-preview"><video muted playsInline ref={video} aria-label="Real camera feed"/>{!running&&<div className="camera-test-placeholder">⌗<span>Waiting for camera</span></div>}</div>
-    <p className="camera-message" role="status">{status}</p><p className="camera-meta">{frames} frames analyzed</p>
-    <h3>Cards recognized ({found.length})</h3><div className="camera-readings">{found.length?found.map(c=><div key={c.kind+":"+c.card}><span>{c.kind==="zokivo"?"ZoKivo":"Wayground"} #{String(c.card).padStart(3,"0")}</span><strong>{letters[c.choice]}</strong></div>):<p>No cards detected in the last frame.</p>}</div>
+    <p className="camera-message" role="status">{status}</p><details className="zk-camera-more"><summary>Detailed scan information</summary><p className="camera-meta">{frames} frames checked</p><h3>Cards found ({found.length})</h3><div className="camera-readings">{found.length?found.map(c=><div key={c.kind+":"+c.card}><span>{c.kind==="zokivo"?"ZoKivo":"Wayground"} #{String(c.card).padStart(3,"0")}</span><strong>{letters[c.choice]}</strong></div>):<p>No cards detected in the last frame.</p>}</div></details>
     {error&&<p className="form-error" role="alert">{error}</p>}
    </section>
   </div>
-  <section className="camera-test-score"><div><span className="paper-eyebrow">CONFIRMED ON THIS DEVICE</span><h2>3. Results for four directions</h2><p>Only two consecutive correctly decoded live-camera frames count as a pass. Photo uploads show a reading but cannot mark this check as passed.</p></div><div className="camera-score-count"><strong>{passed}/{kinds.length*4}</strong><span>directions confirmed</span></div></section>
+  <section className="camera-test-score"><div><span className="paper-eyebrow">CONFIRMED ON THIS DEVICE</span><h2>Your camera checklist</h2><p>Hold each letter up for a moment. A checkmark means the camera recognised it twice in a row. Photos do not count as a live camera test.</p></div><div className="camera-score-count"><strong>{passed}/{kinds.length*4}</strong><span>directions confirmed</span></div></section>
   <div className="camera-result-grid">{kinds.map(kind=><section className="camera-test-card" key={kind}><h3>{kind==="zokivo"?"ZoKivo":"Wayground"} cards</h3><div className="camera-result-letters">{letters.map((l,i)=><div key={l} className={results[kind][i]?"verified":"pending"}><strong>{l}</strong><span>{results[kind][i]?"✓ CONFIRMED":"Not tested"}</span></div>)}</div></section>)}</div>
   <div className="camera-test-end"><button type="button" onClick={()=>{setResults(newResults());setFrames(0);setFound([]);tracker.current.clear();setStatus("Test reset. Start again with A, B, C, D.")}}>Reset test results</button><p>For full confidence, repeat the test on a phone and a computer. Real classrooms also need checks with multiple cards, different distances and lighting.</p></div>
  </main>;
