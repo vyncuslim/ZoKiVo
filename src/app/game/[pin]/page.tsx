@@ -8,6 +8,7 @@ import {avatarSymbol} from "@/lib/avatars";
 import {ModeRewards} from "@/components/mode-rewards";
 import {gameModeName} from "@/lib/game-modes";
 import {QuestionMedia} from "@/components/question-media";
+import {FinishedResults} from "@/components/finished-results";
 type State={muteSounds?:boolean;scoreGoal?:number|null;gameMode?:string;serverTime?:string;scoreboardPhase?:"previous-round"|"settled";allAnswered?:boolean;roundReady?:boolean;rewardsPending?:boolean;answeredCount?:number;status:"lobby"|"playing"|"finished";index:number;total:number;deadline:string|null;question:{question:string;choices:string[];image_url?:string;audio_url?:string;formula_text?:string}|null;players:{id:string;nickname:string;score:number;avatar_id:string;mode_score?:number}[];answeredIds:string[];hostResults?:{correctIndex:number;questionText?:string;correctAnswer?:string;correctCount:number;wrongCount:number;pendingCount:number;choiceCounts:number[];playerResults:{id:string;correct:boolean}[]}|null;viewer:{host:boolean;playerId:string|null;result?:{is_correct:boolean;points:number}|null;mode?:{reward_ready:boolean;credits:number;fish:number;served:number;cafe_level:number;defense_code:number}}};
 const letters=["A","B","C","D"];
 export default function Game(){
