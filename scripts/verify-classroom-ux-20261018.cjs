@@ -2,7 +2,7 @@ const fs=require("node:fs"),assert=require("node:assert/strict"),ts=require("typ
 const f=x=>fs.readFileSync(x,"utf8");let checks=0;
 function ok(value,msg){assert.ok(value,msg);checks++;console.log("CLASSROOM_QA "+msg);}
 const creator=f("src/app/create/page.tsx"),game=f("src/app/game/[pin]/page.tsx"),start=f("src/app/api/rooms/[pin]/start/route.ts"),state=f("src/app/api/rooms/[pin]/route.ts"),paper=f("src/app/paper/page.tsx"),camera=f("src/app/paper/check/page.tsx"),styles=f("src/app/paper/classroom-polish.css");
-ok(creator.includes("defaultOpen={index===0}"),"First question editor visible immediately");
+ok(creator.includes("open={index===0}"),"First question editor visible immediately");
 ok(creator.includes('correct_option_index:i'),"Correct answer selected intentionally");
 ok(creator.includes('aria-pressed={q.correct_option_index===i}'),"Correct answer buttons accessible");
 ok(creator.includes("Math &amp; symbols")&&creator.includes("Image &amp; audio"),"Media and math tools available");
