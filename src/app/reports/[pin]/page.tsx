@@ -14,13 +14,13 @@ export default function ReportDetail(){
  const summary=data?.questions.reduce((a,q)=>({answers:a.answers+q.submissions,correct:a.correct+q.correct}),{answers:0,correct:0});
  function exportCsv(){
   if(!data)return;
-  const csv=buildReportCsv({pin,status:"finished",
+  const csv=buildReportCsv({pin:data.room.pin,status:"finished",
    players:data.players.map((p,i)=>({rank:i+1,nickname:p.nickname,score:p.score,answered:p.answered,correct:p.correct})),
    questions:data.questions.map(q=>({number:q.position+1,question:q.question,correctAnswer:q.choices[q.correct_index],submissions:q.submissions,correct:q.correct}))});
   const url=URL.createObjectURL(new Blob(["\uFEFF",csv],{type:"text/csv;charset=utf-8"}));
-  const a=document.createElement("a");a.href=url;a.download="zokivo-report-"+pin+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const a=document.createElement("a");a.href=url;a.download="zokivo-report-"+data.room.pin+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
- return <main className="reports-page wrap"><nav className="quiz-breadcrumb"><Link href="/reports">← All reports</Link><span>/ PIN {pin}</span></nav>
+ return <main className="reports-page wrap"><nav className="quiz-breadcrumb"><Link href="/reports">← All reports</Link><span>/ Game PIN {data?.room.pin||"…"}</span></nav>
   {loading?<p>Loading your detailed report…</p>:error?<p role="alert" className="form-error">{error}</p>:data&&<>
   <div className="reports-heading"><span className="eyebrow eyebrow--mini">COMPLETED GAME REPORT</span><h1>{data.room.title}</h1><p>{data.room.kind==="paper"?"Paper Mode":"Quiz Party / "+(data.room.game_mode||"classic")}</p><button className="button button-yellow" type="button" onClick={exportCsv}>↓ Download CSV</button></div>
   <div className="reports-totals"><div><strong>{data.players.length}</strong><span>Players</span></div><div><strong>{data.questions.length}</strong><span>Questions</span></div><div><strong>{summary?.answers||0}</strong><span>Answers</span></div><div><strong>{summary?.answers?Math.round((summary.correct/summary.answers)*100):0}%</strong><span>Accuracy</span></div></div>

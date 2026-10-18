@@ -4,7 +4,7 @@ const host=read("src/app/host/page.tsx"),create=read("src/app/api/rooms/route.ts
 ok(host.includes("setQuestionSeconds")&&host.includes("[10,15,20,30,45,60]"),"Teacher can choose question timer");
 ok(host.includes("allowLateJoining:lateJoin")&&host.includes("randomPlayerNames:randomNames"),"Teacher sends join settings");
 ok(create.includes('typeof allowLateJoining!=="boolean"')&&create.includes('typeof randomPlayerNames!=="boolean"'),"Strict server settings validation");
-ok(create.includes("allow_late_joining,random_player_names"),"Room persists options");
+ok(create.includes("zokivo_allocate_room_reusing_finished(")&&create.includes("allowLateJoining")&&create.includes("randomPlayerNames"),"Room persists options through atomic allocator");
 ok(read("migrations/016_room_capacity.sql").includes("room_info.allow_late_joining"),"Only opted-in late joins permitted");
 ok(join.includes("random_player_names"),"Random names controlled by room setting");
 ok(join.includes("avatarId(body.avatar)"),"Avatar choice retained");

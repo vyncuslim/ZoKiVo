@@ -6,8 +6,15 @@ export const runtime="nodejs";
 export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
  try{
   const {pin}=await params,kind=req.nextUrl.searchParams.get("kind")==="paper"?"paper":"quiz";
-  if(!/^\d{6}$/.test(pin))return noCache({error:"Invalid PIN"},400);
+  const isArchive=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(pin);
+  if(!isArchive&&!/^\d{6}$/.test(pin))return noCache({error:"Invalid report ID"},400);
   const auth=await authUser(req),owner=auth.user!.id,sql=db();
+  if(isArchive){
+   if(kind==="paper")return noCache({error:"Report not found"},404);
+   const archived=await sql`SELECT report FROM room_archives WHERE id=${pin}::uuid AND owner_user_id=${owner}`;
+   if(!archived.length)return noCache({error:"Report not found"},404);
+   return applyRenew(noCache(archived[0].report),req,auth.renew);
+  }
   if(kind==="paper"){
    const room=await sql`SELECT s.pin,s.status,s.quiz_set_id,q.title FROM paper_sessions s JOIN quiz_sets q ON q.id=s.quiz_set_id WHERE s.pin=${pin} AND s.owner_user_id=${owner}`;
    if(!room.length)return noCache({error:"Report not found"},404);

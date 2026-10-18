@@ -33,12 +33,11 @@ async function main(){
   const sql=strings.join("?");
   if(sql.includes("SELECT id FROM quiz_sets"))return [{id:sample}];
   if(sql.includes("ORDER BY random()"))return [2,1,3,0].map(position=>({position}));
-  if(sql.includes("INSERT INTO rooms")){
-    const columns=sql.match(/INSERT INTO rooms\(([^)]+)\)/)?.[1].split(",")||[];
-    ok(columns.length===12,"All host settings are inserted into the real room schema");
-    ok(vars.length===12,"Each of 12 host columns has a matching bound SQL value");
+  if(sql.includes("zokivo_allocate_room_reusing_finished(")){
+    ok(vars.length===12,"All 12 room creation settings bound to the atomic allocator");
     ok(vars[8]==="[2,1,3,0]"&&vars[9]===true,"Randomized question mapping persists");
-    return [{pin:vars[0]}];
+    ok(vars[11]===1000,"Score goal still persists with recycled PIN");
+    return [{allocated:true}];
   }
   throw Error("Unexpected room creation query "+sql);
  };

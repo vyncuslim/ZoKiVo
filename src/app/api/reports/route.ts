@@ -18,7 +18,15 @@ export async function GET(req:NextRequest){
    (SELECT count(*) FILTER(WHERE correct)::integer FROM paper_card_submissions a WHERE a.session_pin=s.pin) AS correct
    FROM paper_sessions s JOIN quiz_sets q ON q.id=s.quiz_set_id
    WHERE s.owner_user_id=${owner} ORDER BY s.created_at DESC LIMIT 100`;
-  const all=[...rooms.map(r=>({...r,kind:"quiz"})),...paper.map(r=>({...r,kind:"paper",game_mode:"paper"}))]
+  // UUID-addressed archived reports survive old PIN reuse and are scoped to
+  // the original hosting account, never the new holder of the same six digits.
+  const archived=await sql`SELECT id AS archive_id,original_pin AS pin,created_at,
+   'finished'::text AS status,game_mode,title,players,submissions,correct
+   FROM room_archives WHERE owner_user_id=${owner}
+   ORDER BY created_at DESC LIMIT 100`;
+  const all=[...rooms.map(r=>({...r,kind:"quiz"})),
+   ...archived.map(r=>({...r,kind:"quiz"})),
+   ...paper.map(r=>({...r,kind:"paper",game_mode:"paper"}))]
    .sort((a,b)=>new Date(String((b as Record<string,unknown>).created_at)).getTime()-new Date(String((a as Record<string,unknown>).created_at)).getTime()).slice(0,100);
   return applyRenew(noCache({reports:all}),req,auth.renew);
  }catch(e){return authError(e)}

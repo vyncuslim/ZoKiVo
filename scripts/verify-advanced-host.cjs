@@ -5,7 +5,7 @@ ok(schema.includes("question_order JSONB")&&schema.includes("score_goal"),"Quest
 ok(host.includes("setShuffle")&&host.includes("setMuteSounds")&&host.includes("setScoreGoal"),"Host can control ordering, sounds and finish condition");
 ok(create.includes("ORDER BY random()")&&create.includes("orderJson"),"Server chooses random order");
 ok(create.includes('typeof body.randomQuestionOrder!=="boolean"'),"Host options typed server-side");
-ok(create.includes("score_goal)"),"Room persists end condition");
+ok(create.includes("zokivo_allocate_room_reusing_finished(")&&create.includes("scoreGoal"),"Atomic room allocation still persists host end condition");
 const start=read("src/app/api/rooms/[pin]/start/route.ts"),state=read("src/app/api/rooms/[pin]/route.ts"),answer=read("src/app/api/rooms/[pin]/answer/route.ts");
 ok(start.includes("r.question_order"),"Host displays shuffled question indexes");
 ok(state.includes("r.question_order"),"Players see shuffled question");
