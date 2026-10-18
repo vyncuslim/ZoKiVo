@@ -1,0 +1,71 @@
+name: ZoKivo real production 400-client four-room and Chromium QA 20261018
+on:
+  push:
+    branches: [qa/realistic-400-multiroom-browser-20261018]
+    paths: [".github/workflows/qa-realistic-400-20261018.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: zokivo-one-off-realistic-400-20261018
+  cancel-in-progress: false
+jobs:
+  four-production-rooms:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        pin: ["982501","982502","982503","982504"]
+    env:
+      ZOKIVO_TEST_ROOM_PIN: ${{ matrix.pin }}
+      ZOKIVO_QA_AUTHORIZED: "20261018"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate bounded QA script and per-client browser-style cookies
+        run: |
+          node --check scripts/qa-realistic-400-room.mjs
+          node --test scripts/qa-cookie-jar.test.mjs
+      - name: Four concurrent real domain QA rooms, 100 unique synthetic clients each
+        run: node scripts/qa-realistic-400-room.mjs
+      - name: Store sanitized load metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zo-400-room-${{ matrix.pin }}
+          path: zokivo-realistic-400-room-report.json
+          if-no-files-found: warn
+          retention-days: 14
+  real-chromium-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    env:
+      ZOKIVO_BROWSER_QA_PIN: "982599"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install pinned real Chromium browser runner
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Validate and execute desktop plus mobile-sized Chromium flows
+        run: |
+          node --check scripts/qa-browser-test-20261018.mjs
+          node scripts/qa-browser-test-20261018.mjs
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zo-real-chromium-ui
+          path: zokivo-browser-check.json
+          if-no-files-found: warn
+          retention-days: 14
