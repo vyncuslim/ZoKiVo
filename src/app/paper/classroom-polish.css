@@ -1,0 +1,53 @@
+/* ZoKivo paper mode classroom-first responsive finish. Original visual treatment. */
+.zk-paper-simple,.zk-camera-simple{width:min(1100px,calc(100% - 28px));max-width:1100px;overflow-wrap:anywhere}
+.zk-paper-simple .zk-paper-intro{max-width:820px;margin:0 auto 27px;text-align:center}
+.zk-paper-simple .zk-paper-intro h1{font-size:clamp(30px,4.3vw,51px);line-height:1.13;letter-spacing:-.045em}
+.zk-paper-simple .zk-paper-intro p{font-size:clamp(14px,1.7vw,18px);color:#5e5174;max-width:670px;margin:12px auto;line-height:1.65}
+.zk-paper-simple .zk-paper-easy{min-width:0;align-items:start}
+.zk-paper-simple .zk-paper-easy>*{min-width:0}
+.zk-paper-simple .zk-paper-three{display:grid;gap:10px}
+.zk-paper-simple .zk-paper-three article{display:flex;align-items:start;gap:14px;min-width:0}
+.zk-paper-simple .zk-paper-three article>span{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:13px;background:#ece1ff;color:#5436a2;font-weight:1000}
+.zk-paper-simple .zk-paper-three h3{font-size:18px;margin:0 0 6px}
+.zk-paper-simple .zk-paper-three p{font-size:13px;line-height:1.6;margin:0 0 7px}
+.zk-paper-simple .zk-paper-start{background:#fff6d9;border:1px solid #e5d5a8;box-shadow:0 6px 0 #f2e5ba;border-radius:20px}
+.zk-paper-simple .zk-paper-start select{width:100%;min-width:0;max-width:100%;font-size:16px}
+.zk-paper-simple .zk-paper-start button{width:100%;min-height:54px}
+.zk-paper-simple .zk-paper-unavailable{border-radius:13px;margin:13px 0;font-size:13px}
+.zk-paper-simple .zk-paper-quicklinks{display:flex;flex-wrap:wrap;gap:10px}
+.zk-paper-simple .zk-paper-quicklinks a{min-height:44px;display:inline-flex;align-items:center}
+.zk-paper-simple .zk-paper-extra{margin:20px 0;font-size:13px}
+.zk-camera-simple .camera-test-grid{display:grid;grid-template-columns:minmax(0,0.88fr) minmax(0,1.12fr);gap:16px}
+.zk-camera-simple .camera-test-grid>section{min-width:0;width:100%}
+.zk-camera-simple .camera-test-card{min-width:0}
+.zk-camera-simple .camera-test-card .camera-field{width:100%;max-width:100%;min-width:0}
+.zk-camera-simple .camera-preview-head{flex-wrap:wrap}
+.zk-camera-simple .camera-test-preview{width:100%;min-width:0;overflow:hidden;aspect-ratio:4/3}
+.zk-camera-simple .camera-test-preview video{width:100%;height:100%;max-width:100%;object-fit:contain;background:#171628}
+.zk-camera-simple .camera-choice-group{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.zk-camera-simple .camera-choice{min-width:0;min-height:54px;padding:7px;font-size:20px}
+.zk-camera-simple .camera-buttons{display:flex;flex-wrap:wrap}
+.zk-camera-simple .camera-buttons button{flex:1;min-width:140px}
+.zk-camera-simple .camera-message{overflow-wrap:anywhere;min-height:56px}
+.zk-camera-simple .camera-result-letters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.zk-camera-simple .camera-result-letters>div{min-width:0}
+.zk-camera-simple .camera-result-letters strong{font-size:24px}
+.zk-camera-simple .camera-result-letters span{white-space:normal;overflow-wrap:anywhere}
+.zk-camera-simple .camera-photo input{max-width:100%;width:100%}
+.zk-camera-simple .camera-score-count{max-width:100%}
+.zk-camera-simple .camera-test-end{flex-wrap:wrap}
+.zk-camera-simple :is(button,a,input,select,summary):focus-visible,
+.zk-paper-simple :is(button,a,input,select,summary):focus-visible{outline:3px solid #6b49b4;outline-offset:3px}
+@media(max-width:850px){.zk-camera-simple .camera-test-grid{grid-template-columns:1fr}}
+@media(max-width:620px){
+ .zk-paper-simple,.zk-camera-simple{width:calc(100% - 20px)}
+ .zk-paper-simple .zk-paper-easy{grid-template-columns:1fr}
+ .zk-paper-simple .zk-paper-quicklinks a{flex:1;justify-content:center}
+ .zk-camera-simple .camera-test-card{padding:14px;border-radius:16px}
+ .zk-camera-simple .camera-heading h1{font-size:clamp(29px,8.2vw,40px)}
+ .zk-camera-simple .camera-choice{min-height:56px}
+ .zk-camera-simple .camera-buttons button{min-width:120px}
+ .zk-camera-simple .camera-test-score{margin-top:23px}
+ .zk-camera-simple .camera-result-letters span{font-size:10px}
+}
+@media(max-width:355px){.zk-camera-simple .camera-result-letters{grid-template-columns:repeat(2,minmax(0,1fr))}}
