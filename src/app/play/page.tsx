@@ -23,15 +23,29 @@ export default function Play() {
   if(!r.ok)throw Error(j.error || "Couldn't join this game");
   sessionStorage.setItem("player:"+pin,j.token);router.push("/game/"+pin);
  }catch(e){setError(e instanceof Error?e.message:"Couldn't join this game")}finally{setBusy(false)}}
- return <main className="inner-page wrap"><div className="split-panel">
-  <aside className="split-showcase split-showcase-purple"><div className="showcase-badge">GOOD TIMES AHEAD ✳</div><div className="showcase-mascot"><BrandMark size={220}/></div><h2>Get in.<br/><span>Get game.</span></h2><p>Six digits are all that stand between you and the fun.</p><div className="showcase-deco">PLAY • LEARN • WIN</div></aside>
-  <section className="form-pane"><span className="eyebrow eyebrow--mini">PLAYER ENTRANCE</span><h1>Have a <span>PIN?</span><br/>Let&apos;s go!</h1><p className="form-lead">Your host has the code. You bring the good energy.</p>
-   <form onSubmit={join} className="entry-form"><label htmlFor="game-pin">GAME PIN <span>6 DIGITS</span></label><input id="game-pin" className="pin-input" autoComplete="off" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} placeholder="000 000" value={pin} onChange={e=>setPin(e.target.value.replace(/\D/g,""))} required/>
-   <label htmlFor="nickname">YOUR NICKNAME <span>2–24 CHARACTERS</span></label><input id="nickname" className="name-input" autoComplete="nickname" maxLength={24} minLength={randomNames?0:2} disabled={randomNames} required={!randomNames} placeholder={randomNames?"Your host will assign a nickname":"e.g. SuperNova"} value={nickname} onChange={e=>setNickname(e.target.value)}/>
-   <fieldset className="zokivo-avatar-chooser"><legend>CHOOSE YOUR LOOK <span>JUST FOR THIS GAME</span></legend><div className="zokivo-avatar-grid">{AVATARS.map(a=><button key={a.id} type="button" aria-label={a.label} aria-pressed={avatar===a.id} disabled={!ownedAvatars.includes(a.id)} title={ownedAvatars.includes(a.id)?a.label:a.label+" · Locked"} className={"zokivo-avatar-option"+(avatar===a.id?" selected":"")} onClick={()=>setAvatar(a.id)}>{a.symbol}{!ownedAvatars.includes(a.id)&&<small>🔒</small>}</button>)}</div><p className="form-footnote"><a href="/locker">Earn tokens in Study and unlock more ZoKivo characters →</a></p></fieldset>
-   <button className="button button-dark button-full" type="submit" disabled={busy||!roomOpen||pin.length!==6||(!randomNames&&nickname.trim().length<2)}>{busy?"Joining the game...":"I'm in!  ↗"}</button>
-   {randomNames&&<p className="form-footnote">Your host enabled randomly assigned nicknames.</p>}{!roomOpen&&<p className="form-error" role="status">This room is not accepting new players.</p>}
-   {error&&<p className="form-error" role="alert">{error}</p>}</form>
-   <p className="form-footnote">No account needed to join. Just pick a nickname. ✦</p>
-  </section></div></main>;
+ return <main className="zk-easy-page zk-join-page wrap">
+  <section className="zk-easy-card zk-join-card" aria-labelledby="zk-join-title">
+   <div className="zk-join-mascot" aria-hidden="true"><BrandMark size={92}/></div>
+   <span className="zk-kicker">STUDENTS · NO ACCOUNT NEEDED</span>
+   <h1 id="zk-join-title">Ready to play? ✨</h1>
+   <p className="zk-join-lead">Get a six-digit PIN from your teacher, then jump in!</p>
+   <form onSubmit={join} className="entry-form zk-join-form">
+    <label htmlFor="game-pin">1 · Enter game PIN</label>
+    <input id="game-pin" className="pin-input" autoComplete="off" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} placeholder="123456" value={pin} onChange={e=>setPin(e.target.value.replace(/\D/g,""))} required/>
+    <label htmlFor="nickname">2 · Pick your name</label>
+    <input id="nickname" className="name-input" autoComplete="nickname" maxLength={24} minLength={randomNames?0:2} disabled={randomNames} required={!randomNames} placeholder={randomNames?"Your teacher chooses random names":"Your game nickname"} value={nickname} onChange={e=>setNickname(e.target.value)}/>
+    <details className="zk-simple-advanced zk-avatar-options">
+     <summary>🌟 Pick a character <span>Optional</span></summary>
+     <fieldset className="zokivo-avatar-chooser"><legend>YOUR GAME CHARACTER</legend>
+      <div className="zokivo-avatar-grid">{AVATARS.map(a=><button key={a.id} type="button" aria-label={a.label} aria-pressed={avatar===a.id} disabled={!ownedAvatars.includes(a.id)} title={ownedAvatars.includes(a.id)?a.label:a.label+" · Locked"} className={"zokivo-avatar-option"+(avatar===a.id?" selected":"")} onClick={()=>setAvatar(a.id)}>{a.symbol}{!ownedAvatars.includes(a.id)&&<small>🔒</small>}</button>)}</div>
+     </fieldset><p className="zk-small-hint"><a href="/locker">Discover more original ZoKivo characters →</a></p>
+    </details>
+    <button className="zk-primary-action" type="submit" disabled={busy||!roomOpen||pin.length!==6||(!randomNames&&nickname.trim().length<2)}>{busy?"Joining game…":"Join game →"}</button>
+    {randomNames&&<p className="zk-small-hint">Your host enabled random names.</p>}
+    {!roomOpen&&<p className="form-error" role="status">This game isn't accepting more players.</p>}
+    {error&&<p className="form-error" role="alert">{error}</p>}
+   </form>
+   <p className="zk-small-hint">No student account needed · Learn together · Have fun!</p>
+  </section>
+ </main>;
 }
