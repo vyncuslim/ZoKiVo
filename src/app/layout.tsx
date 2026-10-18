@@ -13,6 +13,7 @@ import "./question-media.css";
 import "./locker/locker.css";
 import "./reports/reports.css";
 import "./easy-play.css";
+import "./discover-library.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";
