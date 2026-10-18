@@ -76,6 +76,10 @@ export default function Game(){
  const priorReview=host&&!roundResults&&state?.status==="playing"&&lastReview?.index===state.index-1?lastReview:null;
  const displayResults=roundResults||priorReview?.results;
  const gradeByPlayer=new Map(displayResults?.playerResults.map(result=>[result.id,result.correct] as const)||[]);
+ if(state?.status==="finished")return <main className="game-page zk-game-screen wrap" data-role={host?"host":"player"}>
+  {error&&<p role="alert" className="form-error">{error}</p>}
+  <FinishedResults pin={pin} host={host} state={state} getHeaders={headers} onDownload={()=>void downloadReport()} downloading={downloading}/>
+ </main>;
  return <main className="game-page zk-game-screen wrap" data-role={host?"host":"player"}><div className="game-head"><div><span className="eyebrow eyebrow--mini">{host?"TEACHER SCREEN":"YOUR GAME"}</span><h1>{state?.status==="lobby"?"Ready, players?":state?.status==="finished"?"Game finished!":"Play & learn!"}</h1></div><div className="game-pin-box"><span>GAME PIN · COPY</span><button type="button" title="Copy game PIN" onClick={()=>{void navigator.clipboard?.writeText(pin)}}>{pin} <span aria-hidden="true">⧉</span></button></div></div>
  {error&&<p className="form-error" role="alert">{error}</p>}
  <div className="game-layout zk-play-layout"><section className="game-main">
