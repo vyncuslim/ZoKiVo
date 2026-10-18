@@ -17,7 +17,7 @@ ok(join.includes("avatarId(body.avatar)")&&join.includes("zokivo_join_room"),"Va
 ok(state.includes("p.avatar_id"),"Authoritative room API includes avatar");
 ok(play.includes("zokivo-avatar-chooser"),"Join page offers avatar selector");
 ok(game.includes("zokivo-lobby-players")&&game.includes("avatarSymbol(p.avatar_id)"),"Lobby and scoreboard use same avatar");
-for(const name of ["Gold Quest","Crypto Hack","Fishing Frenzy","Café"])
+for(const name of ["Gold Quest","Code Quest","Fishing Frenzy","Café"])
  ok(modes.includes(name),"Mode roadmap clearly labels "+name);
-ok(modes.includes("COMING SOON"),"Future modes not mislabeled as live");
+ok(modes.includes("Team Clash and Speed Run are in development"),"Future modes not mislabeled as live");
 console.log("ZOKIVO_LOBBY_TEST_PASS: "+n+" assertions.");
