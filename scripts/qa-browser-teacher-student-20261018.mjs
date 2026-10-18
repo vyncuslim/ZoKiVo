@@ -154,7 +154,8 @@ async function student(page,state,label){
  await page.getByRole("button",{name:"Answer B: Wonderful"}).click();
  await page.getByRole("heading",{name:/Bonus unlocked!/}).waitFor({timeout:20000});
  await page.getByRole("button",{name:/Starlight pod/}).click();
- await page.getByText(/Next question is coming/).waitFor({timeout:20000});
+ await page.getByRole("heading",{name:/Bonus collected!/}).waitFor({timeout:20000});
+ await page.getByText(/You earned: Lucky Star · 10 virtual credits/).waitFor({timeout:20000});
  await page.screenshot({path:"ux-evidence/"+label+"-reward.png",fullPage:true});
  if(state.answerChoice!==1||!state.rewardClaimed)throw Error("Mocked answer and reward request not issued correctly");
  return {join:true,avatarOptional:true,question:quiz,answerChoice:state.answerChoice,correctSequence:true,rewardClaimed:true};
