@@ -22,5 +22,5 @@ const game=read("src/app/game/[pin]/page.tsx");
 ok(game.includes('data-role={host?"host":"player"}'),"Host-only legibility scope");
 ok(game.includes("game-host-instructions"),"Host preview instructions rendered");
 const check=read("src/app/paper/check/page.tsx");
-ok(check.includes("paper-result-steps"),"Camera test instructions included");
+ok(check.includes("zk-camera-links")&&check.includes("zk-camera-step-help")&&check.includes("camera-choice-group"),"Camera test gives printable-card links and easy A-D instructions");
 console.log("PAPER_UI_TEST_PASS: "+n+" assertions.");
