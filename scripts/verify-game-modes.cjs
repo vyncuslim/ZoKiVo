@@ -26,6 +26,6 @@ ok(state.includes("mode_score")&&state.includes("e.question_index<r.current_inde
 ok(state.includes("reward_ready")&&state.includes("mode_events"),"Reward eligibility calculated server-side");
 const game=read("src/app/game/[pin]/page.tsx"),widget=read("src/components/mode-rewards.tsx");
 ok(game.includes("<ModeRewards")&&game.includes("p.mode_score"),"Mode-specific UI and score views");
-ok(widget.includes("await onClaim()")&&widget.includes('"x-player-token":token'),"Reward refresh on server success");
+ok(widget.includes("await onClaim(receipt)")&&widget.includes('"x-player-token":token'),"Reward refresh on server success");
 ok(widget.includes('"chest"')&&widget.includes('"hack"')&&widget.includes('"fish"')&&widget.includes('"serve"'),"All four actions rendered");
 console.log("ZOKIVO_MODES_TEST_PASS: "+n+" checks for game modes, token guards and atomic reward ledgers.");
