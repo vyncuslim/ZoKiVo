@@ -1,14 +1,14 @@
 import {NextRequest} from "next/server";
 import {db} from "@/lib/store";
-import {authUser,isId,teacherApproved} from "@/lib/quizzes";
-import {checkOrigin,AuthError,noCache,authError,applyRenew} from "@/lib/mother-auth";
+import {authUser,isId} from "@/lib/quizzes";
+import {checkOrigin,AuthError,noCache,authError,applyRenew,canPublishQuizzes} from "@/lib/mother-auth";
 export const runtime="nodejs";
 export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>}){
  try{
   checkOrigin(req);
   const {id}=await params;if(!isId(id))throw new AuthError("Invalid quiz ID.");
   const {user,renew}=await authUser(req);
-  if(!teacherApproved(user!))return noCache({error:"Teacher approval required. Contact the ZoKivo administrator to verify your educator role."},403);
+  if(!canPublishQuizzes(user!))return noCache({error:"Switch to Teacher Account to publish your quizzes."},403);
   const data=await req.json().catch(()=>null);
   if(data?.confirm!==true)throw new AuthError("Confirm quiz publication explicitly.");
   const sql=db();
