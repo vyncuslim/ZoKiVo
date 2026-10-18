@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useState} from "react";
-type Member={role:"student"|"teacher";teacherVerified:boolean;email:string};
+type Member={role:"student"|"teacher";teacherVerified:boolean;canPublishQuizzes:boolean;email:string};
 type Quiz={id:string;title:string;question_count:number};
 type Assignment={id:string;title:string;quiz_title:string;due_at:string|null;created_at:string};
 export default function TeacherWorkspace(){
@@ -42,7 +42,7 @@ export default function TeacherWorkspace(){
      <Link className="button button-outline" href="/host">Host live game →</Link>
      <Link className="button button-outline" href="/library">Quiz library →</Link>
     </div>
-    <p className="auth-disclaimer">{member.teacherVerified?"✓ Verified educator: authorized quiz publication is available.":"Teacher account mode selected. Quiz publication still requires verified teacher authorization; you can create drafts and host already published quizzes."}</p>
+    <p className="auth-disclaimer">{member.teacherVerified?"✓ Verified educator. Quiz publishing enabled.":member.canPublishQuizzes?"Teacher mode: you can publish your own draft quizzes immediately. This does not mean your identity is independently verified.":"Quiz publishing is unavailable in your current mode."}</p>
    </div>
    <section className="quiz-work-card"><h2>Assign a practice quiz</h2>
     <p>Share a published quiz as a study assignment. Students sign in to save their own practice attempts. Per-assignment completion tracking is not yet available.</p>
