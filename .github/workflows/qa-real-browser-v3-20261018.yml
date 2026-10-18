@@ -1,0 +1,39 @@
+name: ZoKivo real Chromium player journey 20261018 v3
+on:
+  push:
+    branches: [qa/realistic-400-multiroom-browser-20261018]
+    paths: [".github/workflows/qa-real-browser-v3-20261018.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: zo-real-browser-v3-20261018
+  cancel-in-progress: false
+jobs:
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    env:
+      ZOKIVO_BROWSER_QA_PIN: "982600"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Chromium for actual browser DOM and user interaction
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Validate and run two independent Chromium page contexts
+        run: |
+          node --check scripts/qa-browser-test-20261018-v2.mjs
+          node scripts/qa-browser-test-20261018-v2.mjs
+      - name: Store sanitized QA results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zo-browser-qa-982600
+          path: zokivo-browser-check.json
+          if-no-files-found: warn
+          retention-days: 14
