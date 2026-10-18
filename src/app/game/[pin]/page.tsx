@@ -8,7 +8,7 @@ import {avatarSymbol} from "@/lib/avatars";
 import {ModeRewards} from "@/components/mode-rewards";
 import {gameModeName} from "@/lib/game-modes";
 import {QuestionMedia} from "@/components/question-media";
-type State={muteSounds?:boolean;scoreGoal?:number|null;gameMode?:string;serverTime?:string;scoreboardPhase?:"previous-round"|"settled";allAnswered?:boolean;roundReady?:boolean;rewardsPending?:boolean;answeredCount?:number;status:"lobby"|"playing"|"finished";index:number;total:number;deadline:string|null;question:{question:string;choices:string[];image_url?:string;audio_url?:string;formula_text?:string}|null;players:{id:string;nickname:string;score:number;avatar_id:string;mode_score?:number}[];answeredIds:string[];viewer:{host:boolean;playerId:string|null;mode?:{reward_ready:boolean;credits:number;fish:number;served:number;cafe_level:number;defense_code:number}}};
+type State={muteSounds?:boolean;scoreGoal?:number|null;gameMode?:string;serverTime?:string;scoreboardPhase?:"previous-round"|"settled";allAnswered?:boolean;roundReady?:boolean;rewardsPending?:boolean;answeredCount?:number;status:"lobby"|"playing"|"finished";index:number;total:number;deadline:string|null;question:{question:string;choices:string[];image_url?:string;audio_url?:string;formula_text?:string}|null;players:{id:string;nickname:string;score:number;avatar_id:string;mode_score?:number}[];answeredIds:string[];viewer:{host:boolean;playerId:string|null;result?:{is_correct:boolean;points:number}|null;mode?:{reward_ready:boolean;credits:number;fish:number;served:number;cafe_level:number;defense_code:number}}};
 const letters=["A","B","C","D"];
 export default function Game(){
  const {pin}=useParams<{pin:string}>();const host=useSearchParams().get("host")==="1";
@@ -81,7 +81,7 @@ export default function Game(){
    playerId={state.viewer.playerId} players={state.players} wallet={state.viewer.mode} onClaim={async receipt=>{setBonusReceipt(receipt||"");await reload()}}/>
  </div>:
  <div className="zk-answer-done" role="status"><span className="zk-status-icon" aria-hidden="true">✓</span>
-  <h2>{bonusReceipt?"Bonus collected! 🎉":"Answer sent!"}</h2><p>{bonusReceipt?"You earned: "+bonusReceipt:"Nice work. Waiting for the next question."}</p>
+  <h2>{bonusReceipt?"Bonus collected! 🎉":state.viewer.result?.is_correct?"Correct! ✨":state.viewer.result?"Good try! 💜":"Answer sent!"}</h2><p>{bonusReceipt?"You earned: "+bonusReceipt:state.viewer.result?.is_correct?"Great thinking! You earned "+state.viewer.result.points+" points.":state.viewer.result?"You can try the next one. Keep learning!":"Your answer is locked in. Waiting for the others."}</p>
   <p className="zk-wait-counter">{state.allAnswered?(state.rewardsPending?"Waiting for bonus choices…":"Everyone answered! Next question starting…"):seconds>0?"Waiting for classmates · "+state.answeredCount+"/"+state.players.length+" answered":"Time is up. Next question starting…"}</p>
  </div>
  :<div className="zk-quiz-play"><h2>{state.question?.question}</h2>
