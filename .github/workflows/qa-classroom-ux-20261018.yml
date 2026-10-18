@@ -1,0 +1,32 @@
+name: ZoKivo teacher creator, paper UX and all-answered early advance
+on:
+  push:
+    branches: [fix/classroom-final-polish-on-current-main-20261018]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify classroom UX, paper camera and secure early round advancing
+        run: |
+          node scripts/verify-classroom-ux-20261018.cjs
+          node scripts/verify-quiz.cjs
+          node scripts/verify-lobby.cjs
+          node scripts/verify-game-modes.cjs
+          node scripts/verify-simple-gameplay.cjs
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Full production build
+        run: npm run build
