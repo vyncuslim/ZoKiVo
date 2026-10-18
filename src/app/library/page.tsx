@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useState,type FormEvent} from "react";
-type Quiz={id:string;title:string;subject:string;grade_level:string;language:string;description:string;status:string;question_count:number};
-const subjects=["All subjects","Mathematics","Science","English","Geography","History","Computing","Logic","Robotics","General Knowledge","Bahasa Melayu","中文","Environment","Space","Sports"];
+type Quiz={id:string;title:string;subject:string;grade_level:string;language:string;description:string;status:string;question_count:number;publisher_name?:string};
+const subjects=["All subjects","Mathematics","Science","English","Geography","History","Computing","Logic","Robotics","General Knowledge","Bahasa Melayu","中文","Environment","Space","Sports","Art","Music","Health","AI Basics","Internet Safety","Physics","Chemistry"];
 const palettes:Record<string,{icon:string;color:string}>={
  "Mathematics":{icon:"∑",color:"math"},"Science":{icon:"⚗",color:"science"},
  "English":{icon:"Aa",color:"english"},"Geography":{icon:"🌍",color:"geography"},
@@ -10,7 +10,7 @@ const palettes:Record<string,{icon:string;color:string}>={
  "Logic":{icon:"🧩",color:"logic"},"Robotics":{icon:"⚙",color:"robotics"},
  "General Knowledge":{icon:"✦",color:"general"},"Bahasa Melayu":{icon:"BM",color:"bm"},
  "中文":{icon:"文",color:"chinese"},"Environment":{icon:"🌱",color:"environment"},
- "Space":{icon:"☄",color:"space"},"Sports":{icon:"🏅",color:"sports"}
+ "Space":{icon:"☄",color:"space"},"Sports":{icon:"🏅",color:"sports"},"Art":{icon:"✎",color:"art"},"Music":{icon:"♫",color:"music"},"Health":{icon:"♡",color:"health"},"AI Basics":{icon:"AI",color:"ai"},"Internet Safety":{icon:"🔒",color:"internet"},"Physics":{icon:"⚡",color:"physics"},"Chemistry":{icon:"⚛",color:"chemistry"}
 };
 function cover(subject:string){return palettes[subject]||{icon:"✦",color:"general"}}
 export default function Library(){
@@ -47,14 +47,19 @@ export default function Library(){
   <nav className="quiz-breadcrumb"><Link href="/games">← Games</Link><span>/ Discover quizzes</span></nav>
   <section className="zk-discover-hero">
    <span className="zk-kicker">ZOKIVO ORIGINAL QUIZ LIBRARY</span>
-   <h1>Discover something <em>amazing.</em></h1>
-   <p>Find questions for your classroom or study on your own. Choose a topic, pick a quiz, and start playing.</p>
+   <h1>Find your next <em>favorite quiz.</em></h1>
+   <p>Pick a subject, find a quiz, and start learning in a few clicks.</p>
    <form className="zk-discover-search" role="search" onSubmit={submit}>
-    <label className="sr-only" htmlFor="zk-search-quizzes">Search quiz sets by keyword</label>
-    <input id="zk-search-quizzes" type="search" maxLength={80} value={draftSearch} onChange={e=>setDraftSearch(e.target.value)}
+    <label className="zk-visually-hidden" htmlFor="zk-search-quizzes">Search quiz sets by keyword</label>
+    <span className="zk-search-icon" aria-hidden="true">⌕</span><input id="zk-search-quizzes" type="search" maxLength={80} value={draftSearch} onChange={e=>setDraftSearch(e.target.value)}
      placeholder="Search Maths, IQ, Science, English…" aria-label="Search quizzes"/>
-    <button type="submit">Search <span aria-hidden="true">⌕</span></button>
+    <button type="submit">Search</button>
    </form>
+   <nav className="zk-popular-subjects" aria-label="Popular subjects">
+    {["Mathematics","Science","English","Logic","Robotics","中文","Music","Art"].map(s=><button type="button" key={s}
+      className={subject===s?"selected":""} aria-pressed={subject===s}
+      onClick={()=>{setSubject(s);setPage(1)}}>{s==="Mathematics"?"Maths":s==="Logic"?"IQ & Logic":s}</button>)}
+   </nav>
   </section>
   <section className="zk-discover-main" aria-label="Public quiz sets">
    <div className="zk-discover-toolbar"><div><h2>Explore quizzes ✨</h2>
@@ -75,6 +80,7 @@ export default function Library(){
       </div>
       <div className="zk-discover-card-body"><span className="zk-card-subject">{q.subject}</span>
        <h3>{q.title}</h3><p>{q.grade_level} · {q.language==="zh"?"中文":q.language==="ms"?"Bahasa Melayu":"English"}</p>
+       <p className="zk-publisher"><span aria-hidden="true">✦</span> Published by {q.publisher_name||"Community teacher"}</p>
        <div className="zk-quiz-card-actions"><Link href={"/host?quiz="+q.id}>Host game →</Link><Link href={"/study?quiz="+q.id}>Study →</Link></div>
       </div>
      </article>})}</div>:<div className="quiz-empty">No quizzes match yet. Try another subject or search. <button type="button" onClick={reset}>Show all quizzes</button></div>}
