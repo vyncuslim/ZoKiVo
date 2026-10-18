@@ -1,0 +1,41 @@
+name: ZoKivo learner-first original game UI regression
+on:
+  push:
+    branches: [feat/child-friendly-simple-gameplay-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/host/page.tsx"
+      - "src/app/play/page.tsx"
+      - "src/app/game/**"
+      - "src/components/mode-rewards.tsx"
+      - "src/app/layout.tsx"
+      - "src/app/easy-play.css"
+      - "scripts/verify-simple-gameplay.cjs"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify child friendly UI and secure game actions
+        run: node scripts/verify-simple-gameplay.cjs
+      - name: Game score, host and original mode regressions
+        run: |
+          node scripts/verify-lobby.cjs
+          node scripts/verify-host-settings.cjs
+          node scripts/verify-game-modes.cjs
+          node scripts/verify-scoreboard.cjs
+      - name: Check TypeScript
+        run: npx tsc --noEmit
+      - name: Full Next.js production build
+        run: npm run build

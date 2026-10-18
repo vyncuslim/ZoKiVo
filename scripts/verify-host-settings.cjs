@@ -9,7 +9,7 @@ ok(read("migrations/016_room_capacity.sql").includes("room_info.allow_late_joini
 ok(join.includes("random_player_names"),"Random names controlled by room setting");
 ok(join.includes("avatarId(body.avatar)"),"Avatar choice retained");
 ok(read("migrations/016_room_capacity.sql").includes("INSERT INTO players"),"Nickname conflict cannot override existing player");
-ok(play.includes('randomNames?"Your host will assign a nickname"'),"UI explains generated nicknames");
+ok(play.includes('randomNames?"Your teacher chooses random names"'),"UI explains generated nicknames in student-friendly language");
 ok(play.includes("!roomOpen"),"Closed room cannot be joined by UI");
 ok(options.includes('randomNames:!!rows[0].random_player_names')&&options.includes("acceptingPlayers:"),"Public join settings contain no answers or tokens");
 const compiled=ts.transpileModule(options,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;

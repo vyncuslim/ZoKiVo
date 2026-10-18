@@ -12,6 +12,7 @@ import "./mode-rewards.css";
 import "./question-media.css";
 import "./locker/locker.css";
 import "./reports/reports.css";
+import "./easy-play.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -29,7 +30,13 @@ export default function RootLayout({children}:{children:React.ReactNode}) {
  return <html lang="en"><body><div className="site-shell">
    <header className="site-header"><div className="site-header-inner">
      <Brand/>
-     <nav className="desktop-nav" aria-label="Primary navigation">{links.map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}</nav>
+     <nav className="desktop-nav zk-simple-nav" aria-label="Primary navigation">
+  <Link href="/games">Games</Link><Link href="/library">Quizzes</Link><Link href="/study">Study</Link>
+  <details className="zk-more-menu"><summary>More <span aria-hidden="true">⌄</span></summary>
+   <div className="zk-more-links">{links.filter(l=>!["/games","/library","/study"].includes(l.href))
+    .map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}</div>
+  </details>
+ </nav>
      <div className="header-actions"><AuthNav/><Link className="nav-join" href="/play">Enter PIN <span aria-hidden="true">↗</span></Link><Link className="nav-host" href="/host">Host game <span aria-hidden="true">→</span></Link></div>
      <details className="mobile-menu"><summary aria-label="Open navigation menu">☰ <span>Menu</span></summary><nav aria-label="Mobile navigation">{links.map(l=><Link key={l.href} href={l.href}>{l.label}<span aria-hidden="true">↗</span></Link>)}<Link href="/host">Host a game <span aria-hidden="true">↗</span></Link><Link href="/auth/login">Sign in / My account <span aria-hidden="true">↗</span></Link></nav></details>
    </div></header>
