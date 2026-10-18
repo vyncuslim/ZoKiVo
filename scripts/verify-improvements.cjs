@@ -6,5 +6,5 @@ const output=m.exports.buildReportCsv({pin:"123456",status:"finished",players:[{
 ok(output.includes("'=HYPERLINK(1)"),"formula protected");ok(output.includes('Say ""Hello""'),"quotes escaped");ok(output.includes('"50"'),"player accuracy");ok(output.includes('"67"'),"question accuracy");
 assert.throws(()=>m.exports.buildReportCsv({status:"playing"}));n++;
 const room=fs.readFileSync("src/app/api/rooms/route.ts","utf8"),start=fs.readFileSync("src/app/api/rooms/[pin]/start/route.ts","utf8"),play=fs.readFileSync("src/app/play/page.tsx","utf8");
-ok(room.includes("question_seconds"),"persist room duration");ok(start.includes("make_interval"),"use duration on server");ok(play.includes("URLSearchParams(window.location.search)"),"join links prefill PIN");
+ok(room.includes("questionSeconds")&&room.includes("zokivo_allocate_room_reusing_finished("),"persist room duration via atomic allocator");ok(start.includes("make_interval"),"use duration on server");ok(play.includes("URLSearchParams(window.location.search)"),"join links prefill PIN");
 console.log("ZOKIVO_FEATURE_TEST_PASS: "+n+" assertions.");
