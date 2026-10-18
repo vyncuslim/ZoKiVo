@@ -62,7 +62,7 @@ export default function Game(){
     if(!r.ok){const j=await r.json();if(r.status!==409)setError(j.error||"Unable to move to the next question.");return}
     await reload();
    }catch{setError("Connection interrupted. Use Next question to continue.")}
-  },1400);
+  },250);
   return()=>window.clearTimeout(timer);
  },[host,state?.roundReady,state?.index,state?.deadline,state?.status,headers,pin,reload]);
  const seconds=Math.max(0,Math.ceil((new Date(state?.deadline||0).getTime()-(clock+clockOffset))/1000));const answered=!!(state?.viewer.playerId&&state.answeredIds.includes(state.viewer.playerId));const canPlay=state?.status==="playing";
@@ -82,7 +82,7 @@ export default function Game(){
  </div>:
  <div className="zk-answer-done" role="status"><span className="zk-status-icon" aria-hidden="true">✓</span>
   <h2>{bonusReceipt?"Bonus collected! 🎉":state.viewer.result?.is_correct?"Correct! ✨":state.viewer.result?"Good try! 💜":"Answer sent!"}</h2><p>{bonusReceipt?"You earned: "+bonusReceipt:state.viewer.result?.is_correct?"Great thinking! You earned "+state.viewer.result.points+" points.":state.viewer.result?"You can try the next one. Keep learning!":"Your answer is locked in. Waiting for the others."}</p>
-  <p className="zk-wait-counter">{state.allAnswered?(state.rewardsPending?"Waiting for bonus choices…":"Everyone answered! Next question starting…"):seconds>0?"Waiting for classmates · "+state.answeredCount+"/"+state.players.length+" answered":"Time is up. Next question starting…"}</p>
+  <p className="zk-wait-counter">{state.allAnswered?(state.rewardsPending?"Waiting for bonus choices…":"Everyone answered! Next question starting…"):seconds>0?"Waiting for classmates · "+state.answeredCount+"/"+state.players.length+" answered · "+seconds+"s max":"Time is up. Next question starting…"}</p>
  </div>
  :<div className="zk-quiz-play"><h2>{state.question?.question}</h2>
   <QuestionMedia imageUrl={state.question?.image_url} audioUrl={state.question?.audio_url} formula={state.question?.formula_text}/>
