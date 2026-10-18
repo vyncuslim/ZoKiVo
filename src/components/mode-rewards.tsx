@@ -3,7 +3,7 @@ import {useEffect,useState} from "react";
 import {gameModeName} from "@/lib/game-modes";
 type Rival={id:string;nickname:string};
 type Wallet={reward_ready?:boolean;credits?:number;fish?:number;served?:number;cafe_level?:number;defense_code?:number};
-type Props={mode:string;pin:string;token:string;playerId:string|null;players:Rival[];wallet?:Wallet|null;onClaim:()=>Promise<void>};
+type Props={mode:string;pin:string;token:string;playerId:string|null;players:Rival[];wallet?:Wallet|null;onClaim:(receipt?:string)=>Promise<void>};
 const descriptions:Record<string,string>={
  gold_quest:"Open one of three mystery pods. What will you discover?",
  crypto_hack:"Collect virtual coins or try a fun three-symbol puzzle.",
@@ -26,8 +26,9 @@ export function ModeRewards({mode,pin,token,playerId,players,wallet,onClaim}:Pro
     body:JSON.stringify({action:act,option:opt,target:target||null})});
    const j=await r.json();
    if(!r.ok)throw Error(j.error||"Reward unavailable");
-   setResult(j.reward.outcome+" · "+j.reward.earned+" virtual credits");
-   await onClaim();
+   const receipt=j.reward.outcome+" · "+j.reward.earned+" virtual credits";
+   setResult(receipt);
+   await onClaim(receipt);
   }catch(e){setError(e instanceof Error?e.message:"Could not claim reward")}
   finally{setLoading(false)}
  }

@@ -26,7 +26,7 @@ ok(game.includes('disabled={host||answered||seconds===0||busy}'),"Cannot answer 
 ok(game.includes('act("answer",i)'),"Real server answer submission preserved");
 ok(game.includes("state.viewer.mode?.reward_ready")&&game.includes("<ModeRewards"),"Mini-games offered only after server indicates reward eligibility");
 ok(game.includes('state?.scoreboardPhase==="previous-round"'),"Current-round scores stay hidden");
-ok(reward.includes('await onClaim()')&&reward.includes('"x-player-token":token'),"Minigame rewards use authenticated server endpoint");
+ok(reward.includes('await onClaim(receipt)')&&reward.includes('"x-player-token":token'),"Minigame rewards use authenticated server endpoint");
 ok(reward.includes('"chest"')&&reward.includes('"hack"')&&reward.includes('"fish"')&&reward.includes('"serve"'),"All four existing reward modes retained");
 ok(reward.includes("<details")&&reward.includes("code challenge"),"Optional strategic controls do not overwhelm students");
 ok(css.includes(".zk-answer-pads.answer-grid")&&css.includes("grid-template-columns:repeat(2"),"Two by two answer grid responsive");
