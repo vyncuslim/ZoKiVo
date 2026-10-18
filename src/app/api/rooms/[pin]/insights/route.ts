@@ -37,7 +37,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
    const matches=await sql`SELECT id,nickname,score,avatar_id FROM players
     WHERE room_pin=${pin} AND token_hash=${hash(playerToken)} LIMIT 1`;
    if(!matches.length)return bad("Invalid player session",403);
-   player=matches[0] as typeof player;
+   player={id:String(matches[0].id),nickname:String(matches[0].nickname),score:Number(matches[0].score),avatar_id:String(matches[0].avatar_id)};
   }
   if(room.status!=="finished")return bad("Answer review unlocks only after the game ends",409);
 
