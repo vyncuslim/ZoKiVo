@@ -1,0 +1,38 @@
+name: ZoKivo reusable finished game PIN and durable reports validation
+on:
+  push:
+    branches: [feat/reuse-finished-room-pin-archive-20261018]
+  pull_request:
+    branches: [main]
+    paths:
+      - "migrations/018_reusable_room_pins.sql"
+      - "src/app/api/rooms/route.ts"
+      - "src/app/api/reports/**"
+      - "src/app/reports/**"
+      - "scripts/verify-reusable-pins.cjs"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund --silent
+      - name: Verify atomic PIN recycle rules and archive ownership
+        run: node scripts/verify-reusable-pins.cjs
+      - name: Verify prior quiz, report and host protections
+        run: |
+          node scripts/verify-reports.cjs
+          node scripts/verify-advanced-host.cjs
+          node scripts/verify-e2e-handlers.cjs
+      - name: TypeScript
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build
