@@ -38,7 +38,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     COALESCE((SELECT served_count FROM mode_wallets WHERE player_id=${me[0].id}),0)::integer AS served,
     COALESCE((SELECT cafe_level FROM mode_wallets WHERE player_id=${me[0].id}),1)::integer AS cafe_level,
     (SELECT defense_code FROM players WHERE id=${me[0].id}) AS defense_code`:[];
-  const answers=await sql`SELECT player_id FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`;
+  const answers=await sql`SELECT player_id,chosen_index,is_correct FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`;
   // Everyone answering closes the ANSWERING phase early; reward games stay open
   // until successful answer bonuses have been claimed by those eligible.
   const allAnswered=r.status==='playing'&&players.length>0&&answers.length>=players.length;
@@ -52,11 +52,24 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   const myResult=canShowResult&&me.length?await sql`SELECT is_correct,points FROM answers
     WHERE player_id=${me[0].id} AND room_pin=${pin} AND question_index=${r.current_index} LIMIT 1`:[];
   const canAdvance=r.status==='playing'&&(Boolean(expired)||(allAnswered&&!rewardsPending));
+  // Only the authenticated host sees grading details, and only after the
+  // answering window is closed. Projected host screens never reveal early.
+  const hostAnswer=host&&canShowResult&&r.status==="playing"
+   ?await sql`SELECT correct_index FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${position??r.current_index} LIMIT 1`:[];
+  const hostResults=hostAnswer.length?{
+   correctIndex:Number(hostAnswer[0].correct_index),
+   correctCount:answers.filter(a=>a.is_correct===true).length,
+   wrongCount:answers.filter(a=>a.is_correct===false).length,
+   pendingCount:Math.max(0,players.length-answers.length),
+   choiceCounts:[0,1,2,3].map(index=>answers.filter(a=>Number(a.chosen_index)===index).length),
+   playerResults:answers.map(a=>({id:a.player_id,correct:a.is_correct===true}))
+  }:null;
   return Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
    serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:answers.length,
    answeredIds:answers.filter(a=>host||a.player_id===me[0]?.id).map(a=>a.player_id),
+   ...(host?{hostResults}:{}),
    viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null,result:myResult[0]||null}
   },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}});
  }catch(e){console.error("Game status unavailable",e);return bad("Game unavailable",503)}

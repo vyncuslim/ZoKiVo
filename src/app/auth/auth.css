@@ -12,3 +12,8 @@
 .auth-role-switch-actions button{border:2px solid #2b213d;background:#fff9e3;color:#25203b;font-weight:800;padding:10px 12px;border-radius:10px;cursor:pointer}
 .auth-role-switch-actions button:disabled{opacity:.45;cursor:not-allowed}
 .quiz-work-card .auth-form input,.quiz-work-card .auth-form select{width:100%;max-width:600px;padding:12px;border:2px solid #d6c7ea;border-radius:9px;background:white;color:#29213b}
+
+
+/* Cloudflare Turnstile: layout only; the public site key is injected at build time. */
+.auth-captcha{display:grid;gap:7px;min-height:64px;align-content:center;overflow:visible}
+.auth-captcha p,.auth-captcha-config{font-size:12px;line-height:1.6;color:#86613b;background:#fff2d1;border:1px solid #d9b777;border-radius:9px;padding:10px;margin:0}
