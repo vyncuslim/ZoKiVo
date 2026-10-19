@@ -9,8 +9,8 @@ const sql=async(strings)=>{
  if(q.includes("SELECT id FROM players"))return [{id:"p1"}];
  if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
  if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
- if(q.includes("SELECT count(*)"))return [{n:4}];
  if(q.includes("SELECT count(*)::integer AS submitted"))return [{submitted:answeredBoth?2:1,mine:true}];
+ if(q.includes("SELECT count(*)"))return [{n:4}];
  if(q.includes("SELECT player_id,chosen_index,is_correct FROM answers"))return answeredBoth?
    [{player_id:"p1",chosen_index:1,is_correct:true},{player_id:"p2",chosen_index:0,is_correct:false}]:
    [{player_id:"p1",chosen_index:1,is_correct:true}];
