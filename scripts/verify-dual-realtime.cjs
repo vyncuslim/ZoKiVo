@@ -48,7 +48,7 @@ const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/p
  ok(host.status===200,"Host may use provider strategy");
  const neon=moduleFrom("src/app/api/realtime/neon/route.ts",{
   "@/lib/store":{db,hash:x=>x,same:(a,b)=>a===b},
-  "@/lib/realtime":{isRoomPin:pin=>/^\\d{6}$/.test(pin)},
+  "@/lib/realtime":{isRoomPin:pin=>/^\d{6}$/.test(pin)},
   "@/lib/mother-auth":{noCache},
   "@neon/realtime/server":{
    createRealtime:({secret,db})=>({
