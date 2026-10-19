@@ -26,18 +26,19 @@ const mocks={
  "@/lib/realtime":{isRoomPin:pin=>/^\d{6}$/.test(pin),realtimeConfig:()=>({url:"test"})},
  "@/lib/mother-auth":{noCache}
 };
-const route=moduleFrom("src/app/api/realtime/plan/route.ts",mocks);
+const policy=moduleFrom("src/lib/realtime-provider-selection.ts",mocks);
+const route=moduleFrom("src/app/api/realtime/plan/route.ts",{...mocks,"@/lib/realtime-provider-selection":policy});
 const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/plan?pin=123456&kind=quiz"),headers:new Headers(headers)});
 (async()=>{
- ok(route.realtimeProviders("quiz","123456").join(",")==="supabase","Default production strategy preserves Supabase");
+ ok(policy.realtimeProviders("quiz","123456").join(",")==="supabase","Default production strategy preserves Supabase");
  process.env.ZOKIVO_NEON_REALTIME_ENABLED="true";
  process.env.NEON_REALTIME_URL="https://fake-neon.neon.tech/";
  process.env.NEON_REALTIME_SECRET="fake-secret-for-mock-only";
  process.env.ZOKIVO_NEON_REALTIME_PERCENT="100";
- ok(route.realtimeProviders("quiz","123456").join(",")==="neon,supabase","Neon primary with Supabase failover");
+ ok(policy.realtimeProviders("quiz","123456").join(",")==="neon,supabase","Neon primary with Supabase failover");
  process.env.ZOKIVO_NEON_REALTIME_PERCENT="0";
- ok(route.realtimeProviders("quiz","123456").join(",")==="supabase,neon","Supabase primary with Neon fallback");
- ok(route.realtimeProviders("paper","123456").join(",")==="supabase","Paper Mode never attempts Neon live SQL");
+ ok(policy.realtimeProviders("quiz","123456").join(",")==="supabase,neon","Supabase primary with Neon fallback");
+ ok(policy.realtimeProviders("paper","123456").join(",")==="supabase","Paper Mode never attempts Neon live SQL");
  const denied=await route.GET(request());
  ok(denied.status===401,"No session token cannot request provider strategy");
  const valid=await route.GET(request({"x-player-token":"player-test"}));
