@@ -13,10 +13,24 @@ type State={muteSounds?:boolean;scoreGoal?:number|null;gameMode?:string;serverTi
 const letters=["A","B","C","D"];
 export default function Game(){
  const {pin}=useParams<{pin:string}>();const host=useSearchParams().get("host")==="1";
- const requestSequence=useRef(0);const [clockOffset,setClockOffset]=useState(0);const [state,setState]=useState<State|null>(null);
+ const requestSequence=useRef(0);const inFlight=useRef<Promise<void>|null>(null);const [clockOffset,setClockOffset]=useState(0);const [state,setState]=useState<State|null>(null);
  const [lastReview,setLastReview]=useState<{index:number;question:string;choices:string[];results:NonNullable<State["hostResults"]>}|null>(null);const[error,setError]=useState("");const[busy,setBusy]=useState(false);const[clock,setClock]=useState(Date.now());const[feedback,setFeedback]=useState(""),[bonusReceipt,setBonusReceipt]=useState(""),[joinQr,setJoinQr]=useState(""),[downloading,setDownloading]=useState(false);
  const headers=useCallback(()=>({[host?"x-host-token":"x-player-token"]:sessionStorage.getItem((host?"host:":"player:")+pin)||""}),[host,pin]);
- const reload=useCallback(async()=>{const request=++requestSequence.current;try{const r=await fetch("/api/rooms/"+pin,{headers:headers(),cache:"no-store"});const j=await r.json();if(!r.ok)throw Error(j.error||"Room not available");if(request!==requestSequence.current)return;if(j.serverTime)setClockOffset(new Date(j.serverTime).getTime()-Date.now());setState(j);setError("")}catch(e){if(request===requestSequence.current)setError(e instanceof Error?e.message:"Connection problem")}},[pin,headers]);
+ const reload=useCallback(async(force=false)=>{
+  if(!force&&inFlight.current)return inFlight.current;
+  const request=++requestSequence.current;
+  const task=(async()=>{
+   try{
+    const r=await fetch("/api/rooms/"+pin,{headers:headers(),cache:"no-store"});
+    const j=await r.json();if(!r.ok)throw Error(j.error||"Room not available");
+    if(request!==requestSequence.current)return;
+    if(j.serverTime)setClockOffset(new Date(j.serverTime).getTime()-Date.now());
+    setState(j);setError("");
+   }catch(e){if(request===requestSequence.current)setError(e instanceof Error?e.message:"Connection problem")}
+  })();
+  inFlight.current=task;
+  try{await task}finally{if(inFlight.current===task)inFlight.current=null}
+ },[pin,headers]);
  useEffect(()=>{
    if(!host||!/^\d{6}$/.test(pin))return;
    let active=true;
@@ -38,7 +52,7 @@ export default function Game(){
    finally{setDownloading(false)}
  }
  const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
- useEffect(()=>{void reload();const a=setInterval(()=>void reload(),realtimeConnected?3000:1600);const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected]);
+ useEffect(()=>{void reload();const a=setInterval(()=>void reload(),host?(realtimeConnected?1800:1700):(realtimeConnected?5000:3000));const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected,host]);
  useEffect(()=>{setFeedback("");setBonusReceipt("")},[state?.index]);
  useEffect(()=>{
   if(host&&state?.hostResults&&state.question){
@@ -57,7 +71,7 @@ export default function Game(){
    osc.onended=()=>{void ctx.close()};
   }catch{/* Device or browser may not support audio */}
  }
- async function act(path:string,choice?:number){setBusy(true);setError("");try{const r=await fetch("/api/rooms/"+pin+"/"+path,{method:"POST",headers:{...headers(),"Content-Type":"application/json"},body:JSON.stringify({choice})});const j=await r.json();if(!r.ok)throw Error(j.error||"Try again");if(path==="answer"){beep();setFeedback("ANSWER LOCKED IN — RESULTS AFTER THE ROUND")}await reload()}catch(e){setError(e instanceof Error?e.message:"Request failed")}finally{setBusy(false)}}
+ async function act(path:string,choice?:number){setBusy(true);setError("");try{const r=await fetch("/api/rooms/"+pin+"/"+path,{method:"POST",headers:{...headers(),"Content-Type":"application/json"},body:JSON.stringify({choice})});const j=await r.json();if(!r.ok)throw Error(j.error||"Try again");if(path==="answer"){beep();setFeedback("ANSWER LOCKED IN — RESULTS AFTER THE ROUND")}await reload(true)}catch(e){setError(e instanceof Error?e.message:"Request failed")}finally{setBusy(false)}}
  useEffect(()=>{const onVisible=()=>{if(document.visibilityState==="visible")void reload()};document.addEventListener("visibilitychange",onVisible);return()=>document.removeEventListener("visibilitychange",onVisible)},[reload]);
  useEffect(()=>{
   if(!host||!state?.roundReady||state.status!=="playing")return;
@@ -67,7 +81,7 @@ export default function Game(){
    try{
     const r=await fetch("/api/rooms/"+pin+"/start",{method:"POST",headers:{...headers(),"Content-Type":"application/json"},body:"{}"});
     if(!r.ok){const j=await r.json();if(r.status!==409)setError(j.error||"Unable to move to the next question.");return}
-    await reload();
+    await reload(true);
    }catch{setError("Connection interrupted. Use Next question to continue.")}
   },250); // Advance promptly; keep the last host-only review visible across rounds.
   return()=>window.clearTimeout(timer);
