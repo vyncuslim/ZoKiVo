@@ -52,7 +52,7 @@ export default function Game(){
    finally{setDownloading(false)}
  }
  const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
- useEffect(()=>{void reload();const a=setInterval(()=>void reload(),host?(realtimeConnected?1800:1700):(realtimeConnected?5000:3000));const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected,host]);
+ useEffect(()=>{if(state?.status==="finished")return;void reload();const a=setInterval(()=>void reload(),host?(realtimeConnected?1800:1700):(realtimeConnected?5000:3000));const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected,host,state?.status]);
  useEffect(()=>{setFeedback("");setBonusReceipt("")},[state?.index]);
  useEffect(()=>{
   if(host&&state?.hostResults&&state.question){
