@@ -88,6 +88,6 @@ function request(pin,method,path,body,token){
  ok(repeat.status===409,"Duplicate answer rejected");
  const unauth=await answer.POST(request("810000","POST","answer",{choice:1},"forged"),{params:Promise.resolve({pin:"810000"})});
  ok(unauth.status===403,"Forged player token rejected");
- ok(events===2001,"All accepted joins and answers emit update notices");
+ ok(events===2000,"Accepted joins and answers emit update notices without duplicating rejected writes");
  console.log("MULTIPLAYER_1000_SYNTHETIC_PASS",JSON.stringify({rooms:10,players:1000,answers:1000,checks,syntheticOnly:true,latencyMeasured:false}));
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
