@@ -46,6 +46,27 @@ const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/p
  ok(valid.status===200&&j.providers.join(",")==="supabase,neon","Player obtains authorized strategy");
  const host=await route.GET(request({"x-host-token":"host-test"}));
  ok(host.status===200,"Host may use provider strategy");
+ const neon=moduleFrom("src/app/api/realtime/neon/route.ts",{
+  "@/lib/store":{db,hash:x=>x,same:(a,b)=>a===b},
+  "@/lib/realtime":{isRoomPin:pin=>/^\\d{6}$/.test(pin)},
+  "@/lib/mother-auth":{noCache},
+  "@neon/realtime/server":{
+   createRealtime:({secret,db})=>({
+    seal:async({query})=>{ok(secret==="fake-secret-for-mock-only"&&db==="neondb","Secret stays on server");return {synthetic:true,queryFingerprint:"sealed"}}
+   }),
+   rawSql:(sql,params)=>{
+    ok(!sql.includes("correct_index")&&!sql.includes("nickname")&&params[0]==="123456","Live SQL is minimal and parameterized");
+    return {sql,params}
+   }
+  }
+ });
+ const neonRequest=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/neon?pin=123456"),headers:new Headers(headers)});
+ const noNeon=await neon.GET(neonRequest());
+ ok(noNeon.status===401,"Unsigned Neon subscriptions are denied");
+ const validNeon=await neon.GET(neonRequest({"x-player-token":"player-test"}));
+ const tokenized=await validNeon.json();
+ ok(validNeon.status===200&&tokenized.enabled&&tokenized.query.synthetic,"Verified player receives only a sealed query");
+ ok(!JSON.stringify(tokenized).includes("fake-secret-for-mock-only"),"Neon sealing key never reaches the browser");
  const neonSource=fs.readFileSync("src/app/api/realtime/neon/route.ts","utf8");
  ok(neonSource.includes("same(found[0].host_token_hash,hash(tokenHost))"),"Neon token issuer verifies host HMAC");
  ok(neonSource.includes("token_hash=${hash(tokenPlayer)}"),"Neon token issuer validates player token");
