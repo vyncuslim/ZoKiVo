@@ -30,7 +30,9 @@ const store={
    return id?[{id}]:[];
   }
   if(q.includes("WITH active AS")){
-   const [id,pin,,choice]=args;const list=answers.get(pin);
+   const [roomPin,id,insertPin,choice]=args;const pin=roomPin;
+   if(roomPin!==insertPin)throw Error("Answer attempted cross-room insertion");
+   const list=answers.get(pin);
    if(!list||list.has(id))return [];
    list.set(id,choice);
    return [{points:choice===1?100:0,is_correct:choice===1,score:choice===1?100:0}];
