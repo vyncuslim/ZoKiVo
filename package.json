@@ -35,7 +35,8 @@
     "@neondatabase/serverless": "1.0.2",
     "jsqr": "1.4.0",
     "qrcode": "1.5.4",
-    "@supabase/supabase-js": "2.91.0"
+    "@supabase/supabase-js": "2.91.0",
+    "@neon/realtime": "0.0.3"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
