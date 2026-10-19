@@ -14,17 +14,38 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   const me=playerKey?await sql`SELECT id FROM players WHERE room_pin=${pin} AND token_hash=${hash(playerKey)} LIMIT 1`:[];
   if(!host&&!me.length)return bad("Unauthorized",401);
   // Identical score policy for host and player. Do not leak correct answers via current-round score changes.
-  const players=await sql`SELECT p.id,p.nickname,p.avatar_id,
-   CASE WHEN r.game_mode='quiz_party' THEN 0 ELSE
-    COALESCE((SELECT sum(CASE WHEN e.player_id=p.id THEN e.delta ELSE e.target_delta END)
-      FROM mode_events e WHERE e.room_pin=r.pin AND (e.player_id=p.id OR e.target_player_id=p.id)
-       AND (r.status='finished' OR r.deadline<=now() OR e.question_index<r.current_index)),0)
-   END::integer AS mode_score,
-   (CASE WHEN r.status='playing' AND r.deadline>now() THEN
-    COALESCE((SELECT SUM(a.points) FROM answers a WHERE a.player_id=p.id AND a.room_pin=r.pin
-      AND a.question_index<r.current_index),0)
-    ELSE p.score END)::integer AS score
+  // Aggregate answer points and mode-event totals ONCE per room, rather
+  // than running two correlated SUM queries for each of its 100 players.
+  // Keep in-flight scores hidden until the deadline/round settlement.
+  const players=await sql`WITH prior_scores AS (
+    SELECT a.player_id,SUM(a.points)::integer AS settled_points
+    FROM answers a JOIN rooms r ON r.pin=a.room_pin
+    WHERE a.room_pin=${pin} AND r.status='playing' AND r.deadline>now()
+      AND a.question_index<r.current_index
+    GROUP BY a.player_id
+   ),
+   mode_amount_rows AS (
+    SELECT e.player_id,e.delta AS amount
+    FROM mode_events e JOIN rooms r ON r.pin=e.room_pin
+    WHERE e.room_pin=${pin} AND r.game_mode<>'quiz_party'
+      AND (r.status='finished' OR r.deadline<=now() OR e.question_index<r.current_index)
+    UNION ALL
+    SELECT e.target_player_id AS player_id,e.target_delta AS amount
+    FROM mode_events e JOIN rooms r ON r.pin=e.room_pin
+    WHERE e.room_pin=${pin} AND e.target_player_id IS NOT NULL AND r.game_mode<>'quiz_party'
+      AND (r.status='finished' OR r.deadline<=now() OR e.question_index<r.current_index)
+   ),
+   mode_totals AS (
+    SELECT player_id,SUM(amount)::integer AS total
+    FROM mode_amount_rows GROUP BY player_id
+   )
+   SELECT p.id,p.nickname,p.avatar_id,
+    (CASE WHEN r.game_mode='quiz_party' THEN 0 ELSE COALESCE(m.total,0) END)::integer AS mode_score,
+    (CASE WHEN r.status='playing' AND r.deadline>now()
+      THEN COALESCE(pr.settled_points,0) ELSE p.score END)::integer AS score
    FROM players p INNER JOIN rooms r ON r.pin=p.room_pin
+   LEFT JOIN prior_scores pr ON pr.player_id=p.id
+   LEFT JOIN mode_totals m ON m.player_id=p.id
    WHERE p.room_pin=${pin} ORDER BY score DESC,p.created_at ASC`;
   const position=Array.isArray(r.question_order)?r.question_order[r.current_index]:r.current_index;
   const question=r.status==="playing"?await sql`SELECT question,choices,image_url,audio_url,formula_text FROM questions
