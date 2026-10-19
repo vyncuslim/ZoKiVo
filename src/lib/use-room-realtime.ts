@@ -16,6 +16,9 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
   if(!/^\d{6}$/.test(pin))return;
   let active=true,client:ReturnType<typeof createClient>|null=null;
   let lastRefresh=0;
+  let pendingTimer:ReturnType<typeof setTimeout>|null=null;
+  // Coalesce bursts from up to 100 classmates into at most one refresh
+  // per 1.5 seconds. Preserve a trailing refresh so the final event is seen.
   const attach=async()=>{
    try{
     const query=new URLSearchParams({kind,pin}).toString();
@@ -30,8 +33,18 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
     channel.on("broadcast",{event:"refresh"},()=>{
      if(!active)return;
      const now=Date.now();
-     if(now-lastRefresh<250)return; // Throttle unsolicited messages, never trust payload.
-     lastRefresh=now;latest.current.refresh();
+     const minimumInterval=kind==="quiz"?1500:250;
+     const remaining=minimumInterval-(now-lastRefresh);
+     if(remaining<=0&&!pendingTimer){
+      lastRefresh=now;latest.current.refresh();
+     }else if(!pendingTimer){
+      pendingTimer=setTimeout(()=>{
+       pendingTimer=null;
+       if(!active)return;
+       lastRefresh=Date.now();
+       latest.current.refresh();
+      },Math.max(25,remaining));
+     }
     });
     channel.subscribe(status=>{
      if(!active)return;
@@ -43,6 +56,7 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
   void attach();
   return ()=>{
    active=false;setConnected(false);
+   if(pendingTimer)clearTimeout(pendingTimer);
    if(client){void client.removeAllChannels().catch(()=>{});client.realtime.disconnect()}
   };
  },[kind,pin]);
