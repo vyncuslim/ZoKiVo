@@ -9,6 +9,7 @@ const sql=async(strings)=>{
  if(q.includes("SELECT id FROM players"))return [{id:"p1"}];
  if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
  if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
+ if(q.includes("SELECT count(*)::integer AS submitted"))return [{submitted:answeredBoth?2:1,mine:true}];
  if(q.includes("SELECT count(*)"))return [{n:4}];
  if(q.includes("SELECT player_id,chosen_index,is_correct FROM answers"))return answeredBoth?
    [{player_id:"p1",chosen_index:1,is_correct:true},{player_id:"p2",chosen_index:0,is_correct:false}]:
@@ -52,11 +53,13 @@ async function get(headers){const response=await handler(new Request("https://zo
  const unauth=await get({});
  ok(unauth.status===401,"Unknown client rejected");
  ok(routeText.includes("a.question_index<r.current_index"),"In-flight question points excluded from EVERY viewer");
+ ok(routeText.includes("WITH prior_scores")&&routeText.includes("mode_amount_rows"),"Player scores are aggregated once per room");
+ ok(routeText.includes("answerSummary=host?[]")&&routeText.includes("AS submitted"),"Student submission counts use one compact aggregate row");
  ok(routeText.includes("ELSE p.score"),"Closed-round points eventually fully visible");
  ok(!routeText.includes("players.map(x=>({...x,score:0}))"),"Old player-only zeroing removed");
  const client=fs.readFileSync("src/app/game/[pin]/page.tsx","utf8");
  ok(client.includes("requestSequence.current"),"Out-of-order status responses ignored");
- ok(client.includes("realtimeConnected?3000:1600"),"Polling fallback remains responsive");
+ ok(client.includes("realtimeConnected?5000:3000")&&client.includes("realtimeConnected?1800:1700"),"Player polls are reduced while host refresh remains responsive");
  ok(client.includes("clockOffset"),"Server timestamp used to align round timer");
  ok(client.includes("zk-host-answer-summary")&&client.includes("zk-host-choice-correct")&&client.includes("zk-player-grade"),"Host displays correct/wrong counts, answer highlights and per-player grading");
  ok(client.includes("},250)")&&client.includes("priorReview")&&client.includes("setLastReview"),"Host retains previous round grading without delaying advancement");

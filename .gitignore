@@ -3,3 +3,6 @@ node_modules
 .env*
 !.env.example
 .vercel
+
+# Private classroom capacity-test identities; NEVER commit real player tokens.
+qa/qa-1000-private.json
