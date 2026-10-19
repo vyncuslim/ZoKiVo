@@ -59,10 +59,16 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
     COALESCE((SELECT served_count FROM mode_wallets WHERE player_id=${me[0].id}),0)::integer AS served,
     COALESCE((SELECT cafe_level FROM mode_wallets WHERE player_id=${me[0].id}),1)::integer AS cafe_level,
     (SELECT defense_code FROM players WHERE id=${me[0].id}) AS defense_code`:[];
-  const answers=await sql`SELECT player_id,chosen_index,is_correct FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`;
+  // Players receive ONE aggregate row, not 100 classmates' answer records.
+  // Only hosts fetch per-player grading data for the closed-round review.
+  const answers=host?await sql`SELECT player_id,chosen_index,is_correct FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`:[];
+  const answerSummary=host?[]:await sql`SELECT count(*)::integer AS submitted,
+    (count(*) FILTER(WHERE player_id=${me[0].id})>0) AS mine
+    FROM answers WHERE room_pin=${pin} AND question_index=${r.current_index}`;
+  const submitted=host?answers.length:Number(answerSummary[0]?.submitted||0);
   // Everyone answering closes the ANSWERING phase early; reward games stay open
   // until successful answer bonuses have been claimed by those eligible.
-  const allAnswered=r.status==='playing'&&players.length>0&&answers.length>=players.length;
+  const allAnswered=r.status==='playing'&&players.length>0&&submitted>=players.length;
   const outstandingRewards=allAnswered&&r.game_mode!=='quiz_party'?await sql`SELECT count(*)::integer AS n FROM answers a
    WHERE a.room_pin=${pin} AND a.question_index=${r.current_index} AND a.is_correct
     AND NOT EXISTS(SELECT 1 FROM mode_events e WHERE e.room_pin=${pin} AND e.question_index=${r.current_index} AND e.player_id=a.player_id)`:[];
@@ -83,15 +89,15 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    correctAnswer:Array.isArray(hostAnswer[0].choices)?String(hostAnswer[0].choices[Number(hostAnswer[0].correct_index)]||""):"",
    correctCount:answers.filter(a=>a.is_correct===true).length,
    wrongCount:answers.filter(a=>a.is_correct===false).length,
-   pendingCount:Math.max(0,players.length-answers.length),
+   pendingCount:Math.max(0,players.length-submitted),
    choiceCounts:[0,1,2,3].map(index=>answers.filter(a=>Number(a.chosen_index)===index).length),
    playerResults:answers.map(a=>({id:a.player_id,correct:a.is_correct===true}))
   }:null;
   return Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
    serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
-   total:count[0].n,question:question[0]||null,players,answeredCount:answers.length,
-   answeredIds:answers.filter(a=>host||a.player_id===me[0]?.id).map(a=>a.player_id),
+   total:count[0].n,question:question[0]||null,players,answeredCount:submitted,
+   answeredIds:host?answers.map(a=>a.player_id):(answerSummary[0]?.mine?[me[0].id]:[]),
    ...(host?{hostResults}:{}),
    viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null,result:myResult[0]||null}
   },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}});
