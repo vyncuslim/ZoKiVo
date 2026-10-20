@@ -161,6 +161,8 @@ async function main(){
   slow:slow.map(([name])=>({name,p95:report.results[name]?.p95,p99:report.results[name]?.p99})),
   integrityFailure,errorFailure,limit:"Does not certify realtime fanout, Cloudflare or production"
  }));
+ report.acceptance={passed,latencyTargets,slow:slow.map(([name])=>name),incompleteBurst,integrityFailure,errorFailure};
+ fs.writeFileSync("/tmp/zokivo-1000-qa-summary.json",JSON.stringify(report,null,2));
  if(!passed)process.exitCode=1;
 }
 main().catch(e=>{console.error("QA_FATAL",e.stack||e);process.exitCode=2});
