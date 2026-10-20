@@ -11,6 +11,7 @@ export async function GET(req:NextRequest){
  if(!isRoomPin(pin)||(kind!=="quiz"&&kind!=="paper"))return noCache({error:"Invalid room"},400);
  try{
   const sql=db();
+  let verifiedParticipant=pin;
   if(kind==="quiz"){
    const found=await sql`SELECT host_token_hash FROM rooms WHERE pin=${pin} LIMIT 1`;
    if(!found.length)return noCache({error:"Room not found"},404);
@@ -18,10 +19,13 @@ export async function GET(req:NextRequest){
    const host=!!hostKey&&same(found[0].host_token_hash,hash(hostKey));
    const player=playerKey?await sql`SELECT id FROM players WHERE room_pin=${pin} AND token_hash=${hash(playerKey)} LIMIT 1`:[];
    if(!host&&!player.length)return noCache({error:"Room access required"},401);
+   // Never accept client-selected allocation identities: only verified database IDs.
+   // This keeps each player's assignment stable across reconnects and devices.
+   verifiedParticipant=host?"host:"+pin:"player:"+String(player[0].id);
   }else{
    const rows=await sql`SELECT 1 FROM paper_sessions WHERE pin=${pin} LIMIT 1`;
    if(!rows.length)return noCache({error:"Session not found"},404);
   }
-  return noCache({providers:realtimeProviders(kind,pin),version:1});
+  return noCache({providers:realtimeProviders(kind,pin,verifiedParticipant),version:2});
  }catch(e){console.error("Realtime plan unavailable",e);return noCache({providers:[],version:1},503)}
 }
