@@ -6,7 +6,7 @@ The existing **Mother Supabase Auth** is unchanged. Neon PostgreSQL remains the 
 - **Primary/backup:** Each authorized room uses one websocket transport at a time. If it fails, the client closes it and tries the secondary provider. Authenticated HTTP polling remains available throughout.
 - **Supabase** sends existing minimal refresh notices to its room topic. No score or answer payloads.
 - **Neon Realtime (Public Beta)** subscribes to one strictly parameterized, server-sealed SQL query returning only room PIN, status, current question index, and aggregated submitted-answer count. Server validates existing Host or player session before issuing short-lived sealed capabilities. No student names, answers, correct indices, points, or secrets are sent through the live query.
-- **Deterministic room routing:** Each room is assigned one primary transport by a stable SHA-256 room hash and `ZOKIVO_NEON_REALTIME_PERCENT`. When configured to 20, approximately 20% of distinct room PINs prefer Neon; it is *not* automatic autoscaling and doesn't guarantee 20% of players. Remaining rooms prefer Supabase, with reciprocal fallback.
+- **Deterministic 50/50 room routing:** Once Neon is explicitly enabled and both transports are configured, `ZOKIVO_NEON_REALTIME_PERCENT=50` makes approximately half of distinct rooms prefer Neon and the rest prefer Supabase, using stable SHA-256 room hashing. This is not automatic autoscaling, and a small set of ten rooms may not split exactly 5+5. Each room uses only one primary WebSocket provider, with the other held for failover.
 - **Circuit handling:** Each provider has a 7 s connection timeout; unhealthy primary is dropped before the secondary is tried. Both down => authenticated HTTP polling with 30 s retry backoff.
 - **Coalescing:** frontend limits bursts of room-update signals and always asks the authenticated room HTTP API for authoritative state.
 - **No double broadcasting / scoring:** Database API remains sole grading authority, and two providers do not duplicate writes.
@@ -17,7 +17,7 @@ The existing **Mother Supabase Auth** is unchanged. Neon PostgreSQL remains the 
 NEON_REALTIME_URL=https://<Neon-provided-invocation-url>/
 NEON_REALTIME_SECRET=<Neon-provided-secret>
 ZOKIVO_NEON_REALTIME_ENABLED=false
-ZOKIVO_NEON_REALTIME_PERCENT=0
+ZOKIVO_NEON_REALTIME_PERCENT=50
 ```
 
 Never use a `NEXT_PUBLIC_` variable for a Neon secret. Fetch from **Neon Production -> Postgres database -> Realtime**, or `neon env pull --service realtime`; store in Vercel encrypted environment settings, not GitHub or chat. Add the public Live SQL endpoint only to the server-side variable and verify its hostname. Supabase credentials remain as before.
