@@ -38,6 +38,21 @@ const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/p
  ok(policy.realtimeProviders("quiz","123456").join(",")==="neon,supabase","Neon primary with Supabase failover");
  process.env.ZOKIVO_NEON_REALTIME_PERCENT="0";
  ok(policy.realtimeProviders("quiz","123456").join(",")==="supabase,neon","Supabase primary with Neon fallback");
+ // The target is ~50% of independent classrooms, NOT a second socket per user.
+ delete process.env.ZOKIVO_NEON_REALTIME_PERCENT;
+ const defaultSplit=Array.from({length:10000},(_,i)=>policy.realtimeProviders("quiz",String(i).padStart(6,"0"))[0]);
+ const primaryNeon=defaultSplit.filter(provider=>provider==="neon").length;
+ const primarySupabase=defaultSplit.filter(provider=>provider==="supabase").length;
+ ok(primaryNeon+primarySupabase===10000,"Each classroom has exactly one primary provider");
+ ok(primaryNeon>=4800&&primaryNeon<=5200,"Default primary distribution is approximately 50 percent Neon across ten thousand rooms");
+ ok(primarySupabase>=4800&&primarySupabase<=5200,"Default primary distribution is approximately 50 percent Supabase");
+ ok(policy.realtimeProviders("quiz","123456")[0]===policy.realtimeProviders("quiz","123456")[0],"Room assignment remains stable");
+ process.env.ZOKIVO_NEON_REALTIME_PERCENT="50";
+ ok(policy.realtimeProviders("quiz","123456").length===2,"50 percent mode retains both providers for sequential failover");
+ process.env.ZOKIVO_NEON_REALTIME_PERCENT="invalid";
+ ok(policy.realtimeProviders("quiz","123456")[0]==="supabase","Invalid weight safely retains existing primary provider");
+ process.env.ZOKIVO_NEON_REALTIME_PERCENT="0";
+
  ok(policy.realtimeProviders("paper","123456").join(",")==="supabase","Paper Mode never attempts Neon live SQL");
  const denied=await route.GET(request());
  ok(denied.status===401,"No session token cannot request provider strategy");
