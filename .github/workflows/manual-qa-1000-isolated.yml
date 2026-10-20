@@ -1,0 +1,91 @@
+name: ZoKivo REAL 1000-player QA (isolated database only)
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Explicitly allow isolated QA load: type RUN_1000_QA_ONLY"
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: zokivo-qa-1000-isolated
+  cancel-in-progress: false
+jobs:
+  real-qa:
+    if: ${{ inputs.confirm == 'RUN_1000_QA_ONLY' }}
+    environment: zokivo-loadtest-qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      DATABASE_URL: ${{ secrets.ZOKIVO_QA_DATABASE_URL }}
+      ZOKIVO_SESSION_SECRET: ${{ secrets.ZOKIVO_QA_SESSION_SECRET }}
+      ZOKIVO_QA_CONFIRM: BRANCH_ONLY_1000
+      ZOKIVO_REALTIME_ENABLED: "false"
+      ZOKIVO_NEON_REALTIME_ENABLED: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Require dedicated QA secrets
+        run: |
+          node - <<'NODE'
+          const assert=require("node:assert/strict");
+          const u=process.env.DATABASE_URL||"",s=process.env.ZOKIVO_SESSION_SECRET||"";
+          assert(/^postgres(?:ql)?:\/\//.test(u),"Staging Neon connection required");
+          const host=new URL(u).hostname;
+          assert(host.endsWith(".neon.tech"),"Must be a Neon-hosted QA database");
+          assert(s.length>=32,"Dedicated QA session secret must be 32+ chars");
+          assert(process.env.ZOKIVO_QA_CONFIRM==="BRANCH_ONLY_1000");
+          console.log("QA secrets present; database contents checked next, no values printed");
+          NODE
+      - name: Install and build isolated app
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Run temporary localhost server
+        run: |
+          nohup npm run start -- -p 3000 >/tmp/zokivo-qa-server.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl --max-time 3 --silent --fail http://127.0.0.1:3000/ >/dev/null; then
+              echo "Local isolated QA server ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::QA server did not start"
+          tail -30 /tmp/zokivo-qa-server.log
+          exit 1
+      - name: Run 10 rooms × 100 players actual HTTP and DB consistency
+        run: |
+          set -o pipefail
+          node qa/staged-real-1000.cjs | tee /tmp/zokivo-qa-run.log
+      - name: Print passing conditions and performance
+        if: always()
+        run: |
+          if [ -f /tmp/zokivo-1000-qa-summary.json ]; then
+            node - <<'NODE'
+          const fs=require("node:fs");
+          const r=JSON.parse(fs.readFileSync("/tmp/zokivo-1000-qa-summary.json","utf8"));
+          for(const [name,x] of Object.entries(r.results)){
+            console.log(name,JSON.stringify(x));
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+              `- **${name}:** ${x.successful} successful / ${x.failed} failed; P95 ${x.p95}ms, P99 ${x.p99}ms\n`);
+          }
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+            "\nDB reconciliation: "+JSON.stringify(r.dbIntegrity)+"\n");
+          NODE
+          fi
+      - name: Upload non-secret summary and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-isolated-real-http-1000-evidence
+          path: /tmp/zokivo-1000-qa-summary.json
+          if-no-files-found: warn
+          retention-days: 7
