@@ -1,0 +1,27 @@
+name: ZoKivo bounded production HTTP performance probe
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "qa/measure-production-http.cjs"
+      - ".github/workflows/qa-http-performance.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Measure safe public requests from GitHub Actions
+        run: node qa/measure-production-http.cjs
+      - name: Upload latency evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-http-latency
+          path: /tmp/zokivo-qa/latency.json
+          if-no-files-found: warn
