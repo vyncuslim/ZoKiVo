@@ -97,7 +97,7 @@ async function readBurst(fixture){
    wallClockMs:Math.round(performance.now()-started),
    metrics:stats(m[stage]),success:counts[stage][0],failed:counts[stage][1]
   }));
-  if(counts[stage][1]!==0&&num>=500)break; // stop escalating on first 500+ burst failure
+  if(counts[stage][1]!==0&&num>=500)throw Error("QA automatic stop: failures at "+num+" concurrent reads; not escalating");
  }
 }
 async function playRound(fixture,round){
