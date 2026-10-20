@@ -38,15 +38,23 @@ const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/p
  ok(policy.realtimeProviders("quiz","123456").join(",")==="neon,supabase","Neon primary with Supabase failover");
  process.env.ZOKIVO_NEON_REALTIME_PERCENT="0";
  ok(policy.realtimeProviders("quiz","123456").join(",")==="supabase,neon","Supabase primary with Neon fallback");
- // The target is ~50% of independent classrooms, NOT a second socket per user.
+ // The target is ~50% of player connections, not a second socket per player.
  delete process.env.ZOKIVO_NEON_REALTIME_PERCENT;
- const defaultSplit=Array.from({length:10000},(_,i)=>policy.realtimeProviders("quiz",String(i).padStart(6,"0"))[0]);
+ const defaultSplit=Array.from({length:10000},(_,i)=>{
+  const pin=String(Math.floor(i/100)).padStart(6,"0");
+  return policy.realtimeProviders("quiz",pin,"player:qa-"+i)[0];
+ });
  const primaryNeon=defaultSplit.filter(provider=>provider==="neon").length;
  const primarySupabase=defaultSplit.filter(provider=>provider==="supabase").length;
- ok(primaryNeon+primarySupabase===10000,"Each classroom has exactly one primary provider");
- ok(primaryNeon>=4800&&primaryNeon<=5200,"Default primary distribution is approximately 50 percent Neon across ten thousand rooms");
- ok(primarySupabase>=4800&&primarySupabase<=5200,"Default primary distribution is approximately 50 percent Supabase");
- ok(policy.realtimeProviders("quiz","123456")[0]===policy.realtimeProviders("quiz","123456")[0],"Room assignment remains stable");
+ ok(primaryNeon+primarySupabase===10000,"Each player has exactly one primary provider");
+ ok(primaryNeon>=4800&&primaryNeon<=5200,"Neon receives approximately 50 percent of authenticated players");
+ ok(primarySupabase>=4800&&primarySupabase<=5200,"Supabase receives approximately 50 percent of authenticated players");
+ ok(policy.realtimeProviders("quiz","123456","player:p1")[0]===policy.realtimeProviders("quiz","123456","player:p1")[0],"Player keeps stable provider on reconnect");
+ const perRoomAssignments=Array.from({length:100},(_,i)=>policy.realtimeProviders("quiz","561614","player:classroom-"+i)[0]);
+ ok(perRoomAssignments.includes("neon")&&perRoomAssignments.includes("supabase"),"Large class distributes connections across both providers");
+ const tenRooms=Array.from({length:1000},(_,i)=>policy.realtimeProviders("quiz",String(810000+Math.floor(i/100)),"player:qa-"+i)[0]);
+ const neonConnections=tenRooms.filter(p=>p==="neon").length;
+ ok(neonConnections>430&&neonConnections<570,"Ten times 100 players divide close to 50/50");
  process.env.ZOKIVO_NEON_REALTIME_PERCENT="50";
  ok(policy.realtimeProviders("quiz","123456").length===2,"50 percent mode retains both providers for sequential failover");
  process.env.ZOKIVO_NEON_REALTIME_PERCENT="invalid";
@@ -59,6 +67,11 @@ const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/p
  const valid=await route.GET(request({"x-player-token":"player-test"}));
  const j=await valid.json();
  ok(valid.status===200&&j.providers.join(",")==="supabase,neon","Player obtains authorized strategy");
+ process.env.ZOKIVO_NEON_REALTIME_PERCENT="50";
+ const playerStrategy=await route.GET(request({"x-player-token":"player-test"}));
+ const expected=policy.realtimeProviders("quiz","123456","player:p1");
+ ok((await playerStrategy.json()).providers.join(",")===expected.join(","),"API uses verified player ID, not just shared room PIN");
+ process.env.ZOKIVO_NEON_REALTIME_PERCENT="0";
  const host=await route.GET(request({"x-host-token":"host-test"}));
  ok(host.status===200,"Host may use provider strategy");
  const neon=moduleFrom("src/app/api/realtime/neon/route.ts",{
