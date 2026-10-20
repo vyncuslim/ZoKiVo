@@ -6,9 +6,9 @@ const http=require("node:http");
 const {performance}=require("node:perf_hooks");
 const secret=process.env.ZOKIVO_SESSION_SECRET,dburl=process.env.DATABASE_URL;
 if(process.env.ZOKIVO_QA_CONFIRM!=="BRANCH_ONLY_1000"||!dburl||!secret||secret.length<32)throw Error("QA guard env is missing");
-const sql=neon(dburl),agent=new http.Agent({keepAlive:true,maxSockets:200});
-const m={join:[],state:[],answer:[],settled:[],reconnect:[]};
-const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0]};
+const sql=neon(dburl),agent=new http.Agent({keepAlive:true,maxSockets:1024});
+const m={join:[],state:[],answer:[],settled:[],reconnect:[],burst100:[],burst250:[],burst500:[],burst1000:[]};
+const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0],burst100:[0,0],burst250:[0,0],burst500:[0,0],burst1000:[0,0]};
 const failures=[],statusCodes={},roundOk=[];
 const hash=t=>createHmac("sha256",secret).update(t).digest("hex");
 function p95(a,p){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);return Math.round(s[Math.min(s.length-1,Math.ceil(s.length*p)-1)])}
@@ -82,6 +82,24 @@ async function verify(fixture,round){
  console.log("QA_DB_RECONCILIATION",JSON.stringify({round,passed:ok,answersPerRoom:rows.map(x=>x.n),scoresPerRoom:scores.map(x=>({total:x.total,min:x.low,max:x.high}))}));
  return ok;
 }
+// Graduated, isolated burst test: actual concurrent HTTP calls, NOT merely 1000 users in a loop.
+// Never run this against production; qaGuard() is required before fixtures can be created.
+async function readBurst(fixture){
+ const people=fixture.rooms.flatMap(room=>room.players.map(player=>({room,player})));
+ for(const num of [100,250,500,1000]){
+  const stage="burst"+num;
+  const started=performance.now();
+  const results=await Promise.all(people.slice(0,num).map(x=>
+   httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,timeout:15000})));
+  results.forEach(result=>track(stage,result));
+  console.log("QA_BURST",JSON.stringify({
+   clients:num,actualHttpRequests:results.length,phase:"lobby",
+   wallClockMs:Math.round(performance.now()-started),
+   metrics:stats(m[stage]),success:counts[stage][0],failed:counts[stage][1]
+  }));
+  if(counts[stage][1]!==0&&num>=500)break; // stop escalating on first 500+ burst failure
+ }
+}
 async function playRound(fixture,round){
  await pool(fixture.rooms,10,async room=>{
   await sql.query("UPDATE rooms SET status='playing',current_index=$1,deadline=now()+interval '5 minutes' WHERE pin=$2",[round,room.pin]);
@@ -120,10 +138,11 @@ async function main(){
  const players=fixture.rooms.reduce((n,r)=>n+r.players.length,0);
  console.log("QA_JOIN",JSON.stringify({players,metrics:stats(m.join),errors:counts.join}));
  if(players!==1000)throw Error("Joined "+players+"/1000: stage aborted");
+ await readBurst(fixture);
  for(let round=0;round<2;round++)await playRound(fixture,round);
  const report={at:new Date().toISOString(),durationSec:Math.round((Date.now()-started)/1000),
   rooms:10,players,rounds:2,results:Object.fromEntries(Object.keys(m).map(k=>[k,{...stats(m[k]),successful:counts[k][0],failed:counts[k][1]}])),
-  httpErrors:statusCodes,dbIntegrity:roundOk,failures,scope:"Staged Next.js origin (4 vCPU Singapore) + isolated Neon QA branch. No production Cloudflare or realtime sockets. No host auth API."};
+  httpErrors:statusCodes,dbIntegrity:roundOk,failures,scope:"Local Next.js origin with isolated Neon QA branch. Graduated 100/250/500/1000 simultaneous authorized HTTP GET, 1000 joins, 2 answer rounds capped at 120 in-flight writes. No production Cloudflare, serverless deployment or realtime sockets."};
  fs.writeFileSync("/tmp/zokivo-1000-qa-summary.json",JSON.stringify(report,null,2));
  console.log("QA_FINAL_REPORT",JSON.stringify(report));
  if(Object.values(counts).some(c=>c[1]>0)||roundOk.some(x=>!x))process.exitCode=1;
