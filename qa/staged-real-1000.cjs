@@ -145,7 +145,25 @@ async function main(){
   httpErrors:statusCodes,dbIntegrity:roundOk,failures,scope:"Local Next.js origin with isolated Neon QA branch. Graduated 100/250/500/1000 simultaneous authorized HTTP GET, 1000 joins, 2 answer rounds capped at 120 in-flight writes. No production Cloudflare, serverless deployment or realtime sockets."};
  fs.writeFileSync("/tmp/zokivo-1000-qa-summary.json",JSON.stringify(report,null,2));
  console.log("QA_FINAL_REPORT",JSON.stringify(report));
- if(Object.values(counts).some(c=>c[1]>0)||roundOk.some(x=>!x))process.exitCode=1;
+ // Do not label a run PASS just because HTTP returned 200: slow requests
+ // are a performance failure. These are *local QA HTTP* gates, not Realtime.
+ const latencyTargets={join:2000,state:1000,answer:1000,settled:1000,reconnect:1000,burst100:1000,burst250:1000,burst500:1000,burst1000:1000};
+ const slow=Object.entries(latencyTargets).filter(([name,target])=>{
+  const result=report.results[name];
+  return result?.count===0||result?.p95===null||result.p95>target||result.p99>Math.max(2000,target*2);
+ });
+ const incompleteBurst=report.results.burst1000?.count!==1000;
+ const integrityFailure=roundOk.length!==2||roundOk.some(x=>!x);
+ const errorFailure=Object.values(counts).some(c=>c[1]>0);
+ const passed=!incompleteBurst&&!integrityFailure&&!errorFailure&&!slow.length;
+ console.log("QA_PERFORMANCE_ACCEPTANCE",JSON.stringify({
+  passed,latencyTargets,p99MaxMs:2000,burst1000Samples:report.results.burst1000?.count||0,
+  slow:slow.map(([name])=>({name,p95:report.results[name]?.p95,p99:report.results[name]?.p99})),
+  integrityFailure,errorFailure,limit:"Does not certify realtime fanout, Cloudflare or production"
+ }));
+ report.acceptance={passed,latencyTargets,slow:slow.map(([name])=>name),incompleteBurst,integrityFailure,errorFailure};
+ fs.writeFileSync("/tmp/zokivo-1000-qa-summary.json",JSON.stringify(report,null,2));
+ if(!passed)process.exitCode=1;
 }
 main().catch(e=>{console.error("QA_FATAL",e.stack||e);process.exitCode=2});
 
