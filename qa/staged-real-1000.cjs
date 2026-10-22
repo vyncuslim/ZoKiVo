@@ -7,8 +7,8 @@ const {performance}=require("node:perf_hooks");
 const secret=process.env.ZOKIVO_SESSION_SECRET,dburl=process.env.DATABASE_URL;
 if(process.env.ZOKIVO_QA_CONFIRM!=="BRANCH_ONLY_1000"||!dburl||!secret||secret.length<32)throw Error("QA guard env is missing");
 const sql=neon(dburl),agent=new http.Agent({keepAlive:true,maxSockets:1024});
-const m={join:[],state:[],answer:[],settled:[],reconnect:[],burst100:[],burst250:[],burst500:[],burst1000:[]};
-const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0],burst100:[0,0],burst250:[0,0],burst500:[0,0],burst1000:[0,0]};
+const m={join:[],state:[],answer:[],settled:[],reconnect:[],burst100:[],burst250:[],burst500:[],burst1000:[],stagger1000:[]};
+const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0],burst100:[0,0],burst250:[0,0],burst500:[0,0],burst1000:[0,0],stagger1000:[0,0]};
 const failures=[],statusCodes={},roundOk=[];
 const hash=t=>createHmac("sha256",secret).update(t).digest("hex");
 function p95(a,p){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);return Math.round(s[Math.min(s.length-1,Math.ceil(s.length*p)-1)])}
@@ -84,6 +84,22 @@ async function verify(fixture,round){
 }
 // Graduated, isolated burst test: actual concurrent HTTP calls, NOT merely 1000 users in a loop.
 // Never run this against production; qaGuard() is required before fixtures can be created.
+function jitter(identity,windowMs=700){
+ let hash=2166136261;
+ for(let i=0;i<identity.length;i++){hash^=identity.charCodeAt(i);hash=Math.imul(hash,16777619)}
+ return (hash>>>0)%windowMs;
+}
+async function readStaggered1000(fixture){
+ const people=fixture.rooms.flatMap(room=>room.players.map(player=>({room,player})));
+ const start=performance.now();
+ const results=await Promise.all(people.map(async x=>{
+  await new Promise(resolve=>setTimeout(resolve,jitter(x.player.readToken||x.player.token,700)));
+  return httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,readToken:x.player.readToken,timeout:15000});
+ }));
+ results.forEach(r=>track("stagger1000",r));
+ console.log("QA_STAGGERED_1000",JSON.stringify({clients:1000,spreadMs:700,elapsedMs:Math.round(performance.now()-start),
+  metrics:stats(m.stagger1000),successful:counts.stagger1000[0],failed:counts.stagger1000[1]}));
+}
 async function readBurst(fixture){
  const people=fixture.rooms.flatMap(room=>room.players.map(player=>({room,player})));
  for(const num of [100,250,500,1000]){
@@ -142,6 +158,7 @@ async function main(){
  console.log("QA_JOIN",JSON.stringify({players,metrics:stats(m.join),errors:counts.join}));
  if(players!==1000)throw Error("Joined "+players+"/1000: stage aborted");
  await readBurst(fixture);
+ await readStaggered1000(fixture);
  for(let round=0;round<2;round++)await playRound(fixture,round);
  const report={at:new Date().toISOString(),durationSec:Math.round((Date.now()-started)/1000),
   rooms:10,players,rounds:2,results:Object.fromEntries(Object.keys(m).map(k=>[k,{...stats(m[k]),successful:counts[k][0],failed:counts[k][1]}])),
@@ -164,6 +181,18 @@ async function main(){
   slow:slow.map(([name])=>({name,p95:report.results[name]?.p95,p99:report.results[name]?.p99})),
   integrityFailure,errorFailure,limit:"Does not certify realtime fanout, Cloudflare or production"
  }));
+ const realisticStages=["join","state","answer","settled","reconnect","stagger1000"];
+ const classroomPassed=realisticStages.every(name=>
+  report.results[name]?.count>0&&report.results[name].failed===0&&
+  report.results[name].p95<= (name==="join"?2000:1000)&&
+  report.results[name].p99<=2000)&&
+  !integrityFailure;
+ console.log("QA_1000_CLASSROOM_SLO",JSON.stringify({passed:classroomPassed,
+  definition:"1000 active players with 700ms stable client jitter; not simultaneous same-millisecond GET",
+  rawSimultaneousBurstPassed:!slow.some(([name])=>name==="burst1000"),
+  staggeredP95:report.results.stagger1000?.p95,staggeredP99:report.results.stagger1000?.p99}));
+ report.classroomSLO={passed:classroomPassed,staggeredP95:report.results.stagger1000?.p95,
+  rawBurstPassed:!slow.some(([name])=>name==="burst1000")};
  report.acceptance={passed,latencyTargets,slow:slow.map(([name])=>name),incompleteBurst,integrityFailure,errorFailure};
  fs.writeFileSync("/tmp/zokivo-1000-qa-summary.json",JSON.stringify(report,null,2));
  if(!passed)process.exitCode=1;
