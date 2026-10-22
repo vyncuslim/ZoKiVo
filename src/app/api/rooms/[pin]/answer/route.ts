@@ -25,6 +25,7 @@ export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
     SELECT actor.id,${pin},q.current_index,${body.choice},q.correct_index=${body.choice},
      CASE WHEN q.correct_index=${body.choice} THEN q.point_value ELSE 0 END
     FROM q CROSS JOIN actor
+    WHERE true
     ON CONFLICT(player_id,question_index) DO NOTHING
     RETURNING player_id,points,is_correct
    ),awarded AS (
