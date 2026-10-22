@@ -60,9 +60,11 @@ export default {
    if(authProtocols.length!==1)return json({error:"One capability required"},401);
    const cap=await verifyCapability(authProtocols[0].slice(5),"quiz",pin,env.EDGE_REALTIME_SECRET);
    if(!cap)return json({error:"Invalid or expired capability"},401);
+   const subjectBytes=await crypto.subtle.digest("SHA-256",enc.encode("zokivo-edge-peer:"+pin+":"+cap.subject));
+   const subjectHash=Array.from(new Uint8Array(subjectBytes),x=>x.toString(16).padStart(2,"0")).join("");
    const id=env.ROOM_HUBS.idFromName("quiz:"+pin);
    return env.ROOM_HUBS.get(id).fetch(new Request("https://room.internal/connect",{
-    headers:{"Upgrade":"websocket","X-Room-Subject":cap.subject,"X-Room-Expiry":String(cap.expiry)}
+    headers:{"Upgrade":"websocket","X-Room-Subject-Hash":subjectHash,"X-Room-Expiry":String(cap.expiry)}
    }));
   }
   if(u.pathname==="/notify"&&req.method==="POST"){
@@ -90,14 +92,17 @@ export class RoomHub {
   const u=new URL(req.url);
   if(u.pathname==="/connect"&&req.headers.get("Upgrade")?.toLowerCase()==="websocket"){
    // Access to room.internal is only possible through authenticated Worker routing.
-   const subject=req.headers.get("X-Room-Subject");
+   const subjectHash=req.headers.get("X-Room-Subject-Hash");
    const expiry=Number(req.headers.get("X-Room-Expiry"));
-   if(!subject||!Number.isInteger(expiry)||expiry<Math.floor(Date.now()/1000))
+   if(!subjectHash||!/^[a-f0-9]{64}$/.test(subjectHash)||!Number.isInteger(expiry)||expiry<Math.floor(Date.now()/1000))
     return json({error:"Expired"},401);
-   if(this.ctx.getWebSockets().length>=128)return json({error:"Room socket safety cap reached"},429);
+   const sockets=this.ctx.getWebSockets();
+   if(sockets.length>=128)return json({error:"Room socket safety cap reached"},429);
+   const already=sockets.filter(ws=>ws.deserializeAttachment()?.sub===subjectHash).length;
+   if(already>=2)return json({error:"Too many sockets for this participant"},429);
    const pair=new WebSocketPair(),[client,server]=Object.values(pair);
    this.ctx.acceptWebSocket(server);
-   server.serializeAttachment({subject,expiry});
+   server.serializeAttachment({sub:subjectHash,expiry});
    return new Response(null,{status:101,webSocket:client,headers:{"Sec-WebSocket-Protocol":"zokivo.v1"}});
   }
   if(u.pathname==="/notify"&&req.method==="POST"){
