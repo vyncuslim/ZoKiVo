@@ -78,7 +78,6 @@ async function main(){
  const player={id:"p-001"};let answers=0;
  const answerDb=()=>async(strings,...vars)=>{
   const s=strings.join("?");
-  if(s.includes("SELECT id FROM players"))return [player];
   if(s.includes("WITH active AS")){
    const first=answers++===0;
    return [{authorized:true,accepted:first,goal:null}];
