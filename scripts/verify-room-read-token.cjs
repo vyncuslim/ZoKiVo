@@ -21,7 +21,8 @@ ok(m.exports.verifyRoomReadToken(pin,t)===null,"Secret rotation invalidates old 
 process.env.ZOKIVO_SESSION_SECRET=original;
 const api=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
 const answer=fs.readFileSync("src/app/api/rooms/[pin]/answer/route.ts","utf8");
-ok(api.includes('fast.players.some(p=>p.id===readIdentity)'),"Signed identity rechecked against current room membership");
+const responseSource=fs.readFileSync("src/lib/room-response-fast.ts","utf8");
+ok(api.includes("quizPartySignedPlayerResponse(fast,readIdentity)")&&responseSource.includes("reply.players.has(playerId)"),"Signed identity rechecked against current room membership");
 ok(api.includes('"x-player-read-token"')&&api.includes("verifyRoomReadToken"),"GET verifies read capability");
 ok(answer.includes("x-player-token")&&!answer.includes("x-player-read-token"),"Read token cannot write answers");
 console.log("ROOM_READ_TOKEN_TEST_PASS: "+checks+" security assertions");
