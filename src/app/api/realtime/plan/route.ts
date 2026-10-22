@@ -2,7 +2,7 @@ import {NextRequest} from "next/server";
 import {db,hash,same} from "@/lib/store";
 import {isRoomPin} from "@/lib/realtime";
 import {realtimeProviders} from "@/lib/realtime-provider-selection";
-import {edgeRealtimeUrl} from "@/lib/edge-realtime-auth";
+import {edgeRealtimeUrl,edgeCanaryRoom} from "@/lib/edge-realtime-auth";
 import {noCache} from "@/lib/mother-auth";
 
 export const runtime="nodejs";
@@ -30,7 +30,7 @@ export async function GET(req:NextRequest){
   const fallback=realtimeProviders(kind,pin,verifiedParticipant);
   // Edge pilot is strictly opt-in. Existing 50/50 Neon/Supabase selection
   // remains untouched when edge is off and remains the backup order when on.
-  const providers=kind==="quiz"&&edgeRealtimeUrl()
+  const providers=kind==="quiz"&&edgeRealtimeUrl()&&edgeCanaryRoom(pin)
    ?["edge",...fallback]:fallback;
   return noCache({providers,version:3});
  }catch(e){console.error("Realtime plan unavailable",e);return noCache({providers:[],version:1},503)}
