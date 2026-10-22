@@ -3,6 +3,7 @@ import {useEffect,useRef,useState} from "react";
 import {createClient} from "@supabase/supabase-js";
 import {createRealtimeClient,type SealedLiveQuery} from "@neon/realtime/client";
 import type {RoomKind} from "@/lib/realtime";
+import {roomJitterMs} from "@/lib/room-sync-jitter";
 
 type Transport="neon"|"supabase";
 type RoomMeta={pin:string;status:string;current_index:number;submitted:number};
@@ -25,6 +26,9 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
   let fallbackTimer:ReturnType<typeof setTimeout>|null=null;
   let refreshTimer:ReturnType<typeof setTimeout>|null=null;
   let lastRefresh=0;
+  const identity=latest.current.getHeaders();
+  const jitter=kind==="quiz"&&!identity["x-host-token"]
+   ?roomJitterMs(identity["x-player-read-token"]||identity["x-player-token"]||pin,700):0;
   let transitioning=false;
   let cleanupProvider=()=>{};
   let fallback:Transport[]=[];
@@ -33,7 +37,7 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
   const refreshCoalesced=()=>{
    if(!active)return;
    const now=Date.now(),interval=kind==="quiz"?1500:250;
-   const delay=Math.max(0,interval-(now-lastRefresh));
+   const delay=Math.max(0,interval-(now-lastRefresh),lastRefresh===0?jitter:0);
    if(delay===0&&!refreshTimer){
     lastRefresh=now;latest.current.refresh();
    }else if(!refreshTimer){
