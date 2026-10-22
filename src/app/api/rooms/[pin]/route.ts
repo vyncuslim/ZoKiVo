@@ -1,4 +1,5 @@
 import {db,hash,same,bad} from "@/lib/store";
+import {quizPartySnapshot} from "@/lib/quiz-party-snapshot";
 export const runtime="nodejs";
 /** All viewers see one authoritative score snapshot. Current-round points stay hidden until timeout. */
 export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
@@ -11,8 +12,53 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   if(!found.length)return bad("Room not found",404);
   const r=found[0],hostKey=req.headers.get("x-host-token"),playerKey=req.headers.get("x-player-token");
   const host=!!hostKey&&same(r.host_token_hash,hash(hostKey));
-  const me=playerKey?await sql`SELECT id FROM players WHERE room_pin=${pin} AND token_hash=${hash(playerKey)} LIMIT 1`:[];
+  const me=playerKey?await sql`SELECT p.id,a.is_correct,a.points,(a.id IS NOT NULL) AS answered
+   FROM players p JOIN rooms r ON r.pin=p.room_pin
+   LEFT JOIN answers a ON a.player_id=p.id AND a.room_pin=p.room_pin AND a.question_index=r.current_index
+   WHERE p.room_pin=${pin} AND p.token_hash=${hash(playerKey)} LIMIT 1`:[];
   if(!host&&!me.length)return bad("Unauthorized",401);
+  // Fast path: Quiz Party is the majority of student traffic. Authenticate
+  // BEFORE consulting a shared cache; no tokens or answer keys are cached.
+  if(r.game_mode==="quiz_party"&&process.env.ZOKIVO_ROOM_FAST_PATH_ENABLED!=="false"){
+   const key=[r.status,r.current_index,r.round_open?"open":"closed",
+    r.deadline?new Date(r.deadline).getTime():0].join(":");
+   const snapshot=await quizPartySnapshot(pin,key);
+   const {players,submitted,answers}=snapshot;
+   const allAnswered=r.status==="playing"&&players.length>0&&submitted>=players.length;
+   const expired=r.status==="playing"&&r.deadline&&new Date(r.deadline).getTime()<=new Date(r.server_time).getTime();
+   const canShowResult=r.status==="finished"||Boolean(expired)||allAnswered;
+   const playerAnswer=me[0];
+   // Each player's own answer is obtained from the authenticated lookup,
+   // not from the shared cache. Results remain hidden while a round is open.
+   const myResult=canShowResult&&playerAnswer?.answered
+    ?{is_correct:playerAnswer.is_correct,points:playerAnswer.points}:null;
+   const allowedQuestion=snapshot.question?{
+    question:snapshot.question.question,choices:snapshot.question.choices,
+    image_url:snapshot.question.image_url,audio_url:snapshot.question.audio_url,
+    formula_text:snapshot.question.formula_text
+   }:null;
+   const hostAnswer=host&&canShowResult?snapshot.question:null;
+   const hostResults=hostAnswer?{
+    correctIndex:Number(hostAnswer.correct_index),
+    questionText:String(hostAnswer.question||""),
+    correctAnswer:Array.isArray(hostAnswer.choices)?String(hostAnswer.choices[Number(hostAnswer.correct_index)]||""):"",
+    correctCount:answers.filter(a=>a.is_correct===true).length,
+    wrongCount:answers.filter(a=>a.is_correct===false).length,
+    pendingCount:Math.max(0,players.length-submitted),
+    choiceCounts:[0,1,2,3].map(index=>answers.filter(a=>Number(a.chosen_index)===index).length),
+    playerResults:answers.map(a=>({id:a.player_id,correct:a.is_correct===true}))
+   }:null;
+   return Response.json({
+    status:r.status,index:r.current_index,deadline:r.deadline,
+    gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
+    serverTime:r.server_time,allAnswered,roundReady:r.status==="playing"&&(Boolean(expired)||allAnswered),
+    rewardsPending:false,scoreboardPhase:r.round_open?"previous-round":"settled",
+    total:snapshot.total,question:allowedQuestion,players,answeredCount:submitted,
+    answeredIds:host?answers.map(a=>a.player_id):(playerAnswer?.answered?[playerAnswer.id]:[]),
+    ...(host?{hostResults}:{}),
+    viewer:{host,playerId:playerAnswer?.id||null,mode:null,result:myResult}
+   },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}});
+  }
   // Identical score policy for host and player. Do not leak correct answers via current-round score changes.
   // Aggregate answer points and mode-event totals ONCE per room, rather
   // than running two correlated SUM queries for each of its 100 players.
