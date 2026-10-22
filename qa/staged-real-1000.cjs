@@ -13,11 +13,11 @@ const failures=[],statusCodes={},roundOk=[];
 const hash=t=>createHmac("sha256",secret).update(t).digest("hex");
 function p95(a,p){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);return Math.round(s[Math.min(s.length-1,Math.ceil(s.length*p)-1)])}
 function stats(a){return {count:a.length,p50:p95(a,.5),p90:p95(a,.9),p95:p95(a,.95),p99:p95(a,.99),max:Math.round(Math.max(0,...a))}}
-function httpCall(path,{token,method="GET",body,timeout=10000}={}){
+function httpCall(path,{token,readToken,method="GET",body,timeout=10000}={}){
  return new Promise(resolve=>{
   const start=performance.now();
   const data=body?JSON.stringify(body):"";
-  const headers={accept:"application/json",...(token?{"x-player-token":token}:{}),...(body?{"content-type":"application/json","content-length":Buffer.byteLength(data)}:{})};
+  const headers={accept:"application/json",...(token?{"x-player-token":token}:{}),...(readToken?{"x-player-read-token":readToken}:{}),...(body?{"content-type":"application/json","content-length":Buffer.byteLength(data)}:{})};
   let done=false;
   const finish=(obj)=>{if(done)return;done=true;resolve({...obj,ms:performance.now()-start})};
   const req=http.request("http://127.0.0.1:3000"+path,{method,headers,agent,timeout},res=>{
@@ -90,7 +90,7 @@ async function readBurst(fixture){
   const stage="burst"+num;
   const started=performance.now();
   const results=await Promise.all(people.slice(0,num).map(x=>
-   httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,timeout:15000})));
+   httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,readToken:x.player.readToken,timeout:15000})));
   results.forEach(result=>track(stage,result));
   console.log("QA_BURST",JSON.stringify({
    clients:num,actualHttpRequests:results.length,phase:"lobby",
@@ -106,7 +106,7 @@ async function playRound(fixture,round){
  });
  const tasks=fixture.rooms.flatMap(room=>room.players.map((player,index)=>({room,player,index})));
  await pool(tasks,100,async x=>{
-  const r=await httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,timeout:14000});
+  const r=await httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,readToken:x.player.readToken,timeout:14000});
   if(track("state",r)&&r.data?.players?.length!==100&&failures.length<30)failures.push({kind:"bad room size",pin:x.room.pin});
  });
  await pool(tasks,120,async x=>{
@@ -115,11 +115,11 @@ async function playRound(fixture,round){
  });
  await pool(fixture.rooms,10,async room=>{await sql.query("UPDATE rooms SET deadline=now()-interval '5 seconds' WHERE pin=$1",[room.pin])});
  await pool(tasks,100,async x=>{
-  const r=await httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,timeout:14000});
+  const r=await httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,readToken:x.player.readToken,timeout:14000});
   if(track("settled",r)&&r.data?.players?.length!==100&&failures.length<30)failures.push({kind:"bad settled room size"});
  });
  await pool(tasks.filter((_,i)=>i%10===0),30,async x=>{
-  const r=await httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,timeout:14000});
+  const r=await httpCall("/api/rooms/"+x.room.pin,{token:x.player.token,readToken:x.player.readToken,timeout:14000});
   track("reconnect",r);
  });
  const ok=await verify(fixture,round);roundOk.push(ok);
@@ -133,7 +133,10 @@ async function main(){
  const joins=fixture.rooms.flatMap(room=>Array.from({length:100},(_,i)=>({room,nickname:"QA"+String(i).padStart(3,"0")})));
  await pool(joins,25,async x=>{
   const r=await httpCall("/api/rooms/"+x.room.pin+"/join",{method:"POST",body:{nickname:x.nickname,avatar:"spark"},timeout:18000});
-  if(track("join",r)&&r.data?.token)x.room.players.push({nickname:x.nickname,token:r.data.token});
+  if(track("join",r)&&r.data?.token){
+   if(typeof r.data.readToken!=="string"||!r.data.readToken.startsWith("zr1."))throw Error("Missing signed QA room-read token");
+   x.room.players.push({nickname:x.nickname,token:r.data.token,readToken:r.data.readToken});
+  }
  });
  const players=fixture.rooms.reduce((n,r)=>n+r.players.length,0);
  console.log("QA_JOIN",JSON.stringify({players,metrics:stats(m.join),errors:counts.join}));
