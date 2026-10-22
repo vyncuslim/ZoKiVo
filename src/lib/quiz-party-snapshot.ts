@@ -5,8 +5,10 @@ type CurrentQuestion={
  question:string;choices:string[];image_url:string;audio_url:string;
  formula_text:string;correct_index:number;
 };
-type ClassAnswer={player_id:string;chosen_index:number;is_correct:boolean};
+type ClassAnswer={player_id:string;chosen_index:number;is_correct:boolean;points:number};
+export type QuizRoomMeta={pin:string;status:string;current_index:number;deadline:string|null;game_mode:string;mute_sounds:boolean;score_goal:number|null;server_time:string;round_open:boolean};
 export type QuizPartySnapshot={
+ room:QuizRoomMeta;
  players:PublicPlayer[];
  question:CurrentQuestion|null;
  total:number;
@@ -46,6 +48,7 @@ async function readSharedSnapshot(pin:string):Promise<QuizPartySnapshot>{
  const rows=await sql`
  WITH room AS(
   SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.question_order,
+   r.game_mode,r.mute_sounds,r.score_goal,now() AS server_time,
    (r.status='playing' AND r.deadline>now()) AS round_open
   FROM rooms r WHERE r.pin=${pin}
  ),prior_scores AS(
@@ -59,10 +62,11 @@ async function readSharedSnapshot(pin:string):Promise<QuizPartySnapshot>{
   FROM players p JOIN room r ON r.pin=p.room_pin
   LEFT JOIN prior_scores pr ON pr.player_id=p.id
  ),current_answers AS(
-  SELECT a.player_id,a.chosen_index,a.is_correct
+  SELECT a.player_id,a.chosen_index,a.is_correct,a.points
   FROM answers a JOIN room r ON r.pin=a.room_pin AND a.question_index=r.current_index
  )
  SELECT
+  (SELECT to_jsonb(r) FROM room r) AS room,
   COALESCE((SELECT jsonb_agg(jsonb_build_object(
    'id',p.id,'nickname',p.nickname,'avatar_id',p.avatar_id,
    'score',p.score,'mode_score',0
@@ -77,12 +81,14 @@ async function readSharedSnapshot(pin:string):Promise<QuizPartySnapshot>{
   (SELECT count(*)::integer FROM questions q JOIN room r ON r.quiz_set_id=q.quiz_set_id) AS total,
   (SELECT count(*)::integer FROM current_answers) AS submitted,
   COALESCE((SELECT jsonb_agg(jsonb_build_object(
-   'player_id',a.player_id,'chosen_index',a.chosen_index,'is_correct',a.is_correct
+   'player_id',a.player_id,'chosen_index',a.chosen_index,'is_correct',a.is_correct,'points',a.points
   )) FROM current_answers a),'[]'::jsonb) AS answers
  `;
  const result=rows[0];
  if(!result)throw Error("Room snapshot missing");
+ if(!result.room)throw Error("Room no longer exists");
  return {
+  room:result.room,
   players:result.players||[],
   question:result.question||null,
   total:Number(result.total||0),
