@@ -21,7 +21,10 @@ export default function Play() {
  async function join(e:FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);setError("");try{
   const r=await fetch("/api/rooms/"+pin+"/join",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nickname,avatar:avatarId(avatar)})});const j=await r.json();
   if(!r.ok)throw Error(j.error || "Couldn't join this game");
-  sessionStorage.setItem("player:"+pin,j.token);router.push("/game/"+pin);
+  sessionStorage.setItem("player:"+pin,j.token);
+  if(typeof j.readToken==="string")sessionStorage.setItem("read:"+pin,j.readToken);
+  else sessionStorage.removeItem("read:"+pin);
+  router.push("/game/"+pin);
  }catch(e){setError(e instanceof Error?e.message:"Couldn't join this game")}finally{setBusy(false)}}
  return <main className="zk-easy-page zk-join-page wrap">
   <section className="zk-easy-card zk-join-card" aria-labelledby="zk-join-title">
