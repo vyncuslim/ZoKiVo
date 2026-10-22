@@ -15,12 +15,13 @@ const store={
  db:()=>async(strings,...vars)=>{
   sqlCalls++;
   const q=strings.join("?");
-  if(q.includes("SELECT pin,quiz_set_id,status"))return [{
+  if(q.includes("LEFT JOIN LATERAL"))return [{
    pin:"123456",quiz_set_id:"q1",status:finished?"finished":"playing",
    current_index:1,host_token_hash:"host-token",game_mode:"quiz_party",
    mute_sounds:false,score_goal:null,round_open:open,
    deadline:open?new Date(Date.now()+20000).toISOString():new Date(Date.now()-20000).toISOString(),
-   server_time:new Date().toISOString()
+   server_time:new Date().toISOString(),player_id:vars[0]==="player-token"?"p1":null,
+   answered:vars[0]==="player-token",player_is_correct:true,player_points:100
   }];
   if(q.includes("FROM players p JOIN rooms r")){
    if(vars[1]!=="player-token")return [];
