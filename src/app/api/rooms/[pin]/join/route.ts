@@ -4,6 +4,7 @@ import {findUser} from "@/lib/mother-auth";
 import {emitRoomRefresh} from "@/lib/realtime";
 import {randomInt} from "node:crypto";
 import {db,token,hash,bad} from "@/lib/store";
+import {issueRoomReadToken} from "@/lib/room-read-token";
 export const runtime="nodejs";
 const choices=["Comet","Panda","Star","Otter","Rocket","Fox","Pixel","Quokka"];
 export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
@@ -34,7 +35,12 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
     ${hash(t)}::char(64),${avatar},${randomInt(0,3)}::smallint,100) AS id`;
   if(!rows.length||!rows[0].id)return bad("Unable to join this room",409);
   await emitRoomRefresh("quiz",pin);
-  return Response.json({token:t,nickname:name},{headers:{"Cache-Control":"no-store"}});
+  // Read-only signed capability cuts redundant DB lookups for large live
+  // classrooms. The original token remains mandatory for answer writes.
+  const playerId=String(rows[0].id);
+  const readToken=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(playerId)
+   ?issueRoomReadToken(pin,playerId):null;
+  return Response.json({token:t,readToken,nickname:name},{headers:{"Cache-Control":"no-store"}});
  }catch(e){
   const message=e instanceof Error?e.message:"";
   if(/Room is full/i.test(message))return bad("Room is full (maximum 100 players).",409);

@@ -25,17 +25,19 @@ const store={
    identities.set(pin+":"+key,id);
    return [{id}];
   }
-  if(q.includes("SELECT id FROM players")){
+  if(q.includes("SELECT id FROM players")&&!q.includes("WITH active AS")){
    const [pin,token]=args,id=identities.get(pin+":"+token);
    return id?[{id}]:[];
   }
   if(q.includes("WITH active AS")){
-   const [roomPin,id,insertPin,choice]=args;const pin=roomPin;
-   if(roomPin!==insertPin)throw Error("Answer attempted cross-room insertion");
-   const list=answers.get(pin);
-   if(!list||list.has(id))return [];
+   const [activePin,actorPin,actorToken,answerPin,choice]=args;
+   if(activePin!==actorPin||activePin!==answerPin)throw Error("Cross-room answer blocked");
+   const id=identities.get(actorPin+":"+actorToken);
+   if(!id)return [{authorized:false,accepted:false,goal:null}];
+   const list=answers.get(activePin);
+   if(!list||list.has(id))return [{authorized:true,accepted:false,goal:null}];
    list.set(id,choice);
-   return [{points:choice===1?100:0,is_correct:choice===1,score:choice===1?100:0}];
+   return [{authorized:true,accepted:true,goal:null}];
   }
   if(q.includes("UPDATE rooms SET status='finished'"))return [];
   throw Error("Unexpected SQL "+q);
@@ -55,7 +57,8 @@ const deps={
  "@/lib/store":store,
  "@/lib/mother-auth":{findUser:async()=>({user:null})},
  "@/lib/avatars":{avatarId:()=>"spark",avatarInfo:()=>({id:"spark",price:0})},
- "@/lib/realtime":{emitRoomRefresh:async()=>{events++;return true}}
+ "@/lib/realtime":{emitRoomRefresh:async()=>{events++;return true}},
+ "@/lib/room-read-token":{issueRoomReadToken:()=>"signed-test-read"}
 };
 const join=load("src/app/api/rooms/[pin]/join/route.ts",deps);
 const answer=load("src/app/api/rooms/[pin]/answer/route.ts",deps);

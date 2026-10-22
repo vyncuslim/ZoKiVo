@@ -67,7 +67,8 @@ async function main(){
   throw Error("Unexpected join query "+sql);
  };
  const join=load("src/app/api/rooms/[pin]/join/route.ts",{"@/lib/store":{...mockStore,db:joinDb},
-  "@/lib/mother-auth":auth,"@/lib/realtime":realtime,"@/lib/avatars":avatars});
+  "@/lib/mother-auth":auth,"@/lib/realtime":realtime,"@/lib/avatars":avatars,
+  "@/lib/room-read-token":{issueRoomReadToken:()=>"signed-test-read"}});
  const statuses=await Promise.all(Array.from({length:120},(_,i)=>join.POST(req("/api/rooms/123456/join",{nickname:"QA-"+String(i).padStart(3,"0"),avatar:"spark"}),params).then(r=>r.status)));
  ok(statuses.filter(s=>s===200).length===100&&statuses.filter(s=>s===409).length===20,"100 simulated players accepted, extra 20 rejected");
  ok(joined.size===100,"No overflow or duplicate player identities");
@@ -77,10 +78,9 @@ async function main(){
  const player={id:"p-001"};let answers=0;
  const answerDb=()=>async(strings,...vars)=>{
   const s=strings.join("?");
-  if(s.includes("SELECT id FROM players"))return [player];
   if(s.includes("WITH active AS")){
-   if(answers++)return [];
-   return [{points:100,is_correct:true,score:100}];
+   const first=answers++===0;
+   return [{authorized:true,accepted:first,goal:null}];
   }
   if(s.includes("UPDATE rooms SET status="))return [];
   throw Error("Unexpected answer query "+s);
