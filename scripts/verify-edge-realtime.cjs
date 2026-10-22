@@ -40,7 +40,7 @@ ok(node.edgeCanaryRoom("123456"),"100% enablement selects room predictably");
   ALLOWED_ORIGINS:"https://zokivo.xyz",
   ROOM_HUBS:{
    idFromName(name){assigned=name;return name},
-   get(){return {fetch:async request=>{routed++;return new Response("",{status:request.method==="POST"?202:200})}}}
+   get(){return {fetch:async (request,init)=>{routed++;return new Response("",{status:(init?.method||request.method)==="POST"?202:200})}}}
   }
  };
  const socketRequest=(origin,token)=>
