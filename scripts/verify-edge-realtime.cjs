@@ -60,7 +60,7 @@ ok(node.edgeCanaryRoom("123456"),"100% enablement selects room predictably");
  const validNotify=await worker.default.fetch(new Request("https://edge.example/notify",{
   method:"POST",body,headers:{"X-ZoKivo-Timestamp":timestamp,"X-ZoKivo-Signature":sig}
  }),env);
- ok(validNotify.status===202&&routed===2,"Authenticated notify routed into same room");
+ ok(validNotify.status===202&&routed===2,"Authenticated notify routed into same room (status="+validNotify.status+", routed="+routed+", body="+await validNotify.clone().text()+")");
  let alarmAt=null,revision=0;
  const socket={sent:[],send(s){this.sent.push(s)},close(){}};
  const ctx={
