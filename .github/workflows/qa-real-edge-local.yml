@@ -32,9 +32,13 @@ jobs:
           const fs=require("fs"),assert=require("assert/strict");
           const s=fs.readFileSync("qa/real-edge-websocket-local.mjs","utf8");
           assert(s.includes('assert.equal(process.env.ZOKIVO_TEST_TARGET||"LOCAL","LOCAL"'));
-          assert(s.includes('MAX=1000,PER_ROOM=100'));
+          assert(s.includes('MAX=process.env.ZOKIVO_LOCAL_10K'));
           assert(s.includes('host:"127.0.0.1"'));
           console.log("EDGE_LOCAL_SAFETY_GUARD_PASS");
           NODE
       - name: Run full-room and 1000 local real WebSocket fanout
+        run: node qa/real-edge-websocket-local.mjs
+      - name: Run bounded 10000 local real WebSocket fanout experiment
+        env:
+          ZOKIVO_LOCAL_10K: ENABLE_ISOLATED_10000
         run: node qa/real-edge-websocket-local.mjs
