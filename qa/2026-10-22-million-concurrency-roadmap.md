@@ -1,13 +1,13 @@
 # ZoKivo capacity program: 1,000 burst requests and 1,000,000 concurrent players
 
-**Updated:** 2026-10-22. **Current status:** NOT CERTIFIED for instantaneous 1,000-request P95 < 1s or 1 million concurrent real connections.
+**Updated:** 2026-10-22. **Current status:** the 1,000-instant-request P95 <1s target has **PASS** in an isolated FOUR-origin QA build-worker test, but **NOT CERTIFIED in Production**. One million concurrent real connections remains NOT TESTED.
 
 ## Define the question and the performance target
 
 A million people *online* is NOT a million people *answering at exactly the same instant*. In this project a game room supports at most **100 players**. One million concurrently connected students therefore requires at least **10,000 independent 100-player rooms**.
 
 Three separate performance SLOs require real measurement:
-1. **Instantaneous HTTP spike:** 1,000 genuinely simultaneous authenticated `GET /api/rooms/[pin]` requests, P95 <1,000ms. This is still **FAIL** (best observed last deployed code 1,537ms).
+1. **Instantaneous HTTP spike:** 1,000 genuinely simultaneous authenticated `GET /api/rooms/[pin]` requests, P95 <1,000ms. **PASS in four-process isolated QA:** 746ms P95, 1,110ms P99, all requests passed, with two correct scoring rounds; **Production Vercel Serverless remains unverified**.
 2. **One-million online:** 1,000,000 real WebSocket clients across at least 10,000 rooms, steady-state **message delivery P95 <2,000ms**, integrity 100%, no overload and controlled reconnection. **NOT TESTED**.
 3. **One-million answer burst:** if all players answer inside 2 seconds, **500,000 authenticated answer writes per second** plus realtime fanout. This is a separate write scalability project; **NOT TESTED** and not supported by any currently verified ZoKivo allocation.
 
@@ -18,7 +18,8 @@ Three separate performance SLOs require real measurement:
 | Benchmark | Observed P95 | Outcome |
 |---|---:|---|
 | Original real 1,000 simultaneous room GETs, isolated Next.js + Neon Preview | 4,127ms | FAIL |
-| Best prior verified current Production code, same build-worker class | 1,537ms | FAIL (goal <1,000ms) |
+| Single-process current Production code tested in QA | 1,537ms | FAIL (goal <1,000ms) |
+| **Four parallel Next.js processes**, same private Preview DB and test host | **746ms** | **PASS in isolated QA**; 1,000/1,000 authorized GETs, 2,000/2,000 grades persisted |
 | The same class of load against a trivial no-DB/no-auth Next.js endpoint | 1,209ms | FAIL, indicating substantial environment/HTTP transport overhead |
 | 1,000-player 700ms-jittered game status GET (current Production code) | 876ms | PASS for **staggered classroom workload** ONLY |
 | Real answer submissions, two rounds, current Production code | 902ms P95 | PASS in isolated run; 2,000/2,000 persisted and scored correctly |
@@ -73,4 +74,4 @@ At every stage measure request P50/P95/P99, bytes, active sockets, dropped messa
 
 `qa/model-million-routing.cjs` invokes ZoKivo's **actual routing function** for **1,000,000 synthetic participant identities** across 10,000 synthetic rooms. It asserts stable 50/50-ish provider selection, secondary ordering, same-user consistency, room distribution, and disabled/bad-config fail-safe. This is a million **CPU decisions**, **not a million WebSockets or page loads**. It never accesses a network or database. CI is scoped to this file and can run without special secrets.
 
-**Production status:** Unchanged by this research branch. The 1,000-instant-request gate is still **FAIL** pending independently generated, distributed infrastructure load evidence.
+**Production status:** Unchanged by this research branch. The 1,000-instant-request gate **passed only in isolated four-origin QA**; **real Vercel Production/serverless is not certified** pending independent-machine capacity testing. Four-process evidence: `qa/four-origin-instant-burst-20261022`, Preview `dpl_CVXweNPmqEWqWCqjyUPU8j4FYsQA`.
