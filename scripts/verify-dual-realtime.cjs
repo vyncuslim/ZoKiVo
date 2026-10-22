@@ -27,7 +27,7 @@ const mocks={
  "@/lib/mother-auth":{noCache}
 };
 const policy=moduleFrom("src/lib/realtime-provider-selection.ts",mocks);
-const route=moduleFrom("src/app/api/realtime/plan/route.ts",{...mocks,"@/lib/realtime-provider-selection":policy});
+const route=moduleFrom("src/app/api/realtime/plan/route.ts",{...mocks,"@/lib/realtime-provider-selection":policy,"@/lib/edge-realtime-auth":{edgeRealtimeUrl:()=>null}});
 const request=(headers={})=>({nextUrl:new URL("https://qa.example/api/realtime/plan?pin=123456&kind=quiz"),headers:new Headers(headers)});
 (async()=>{
  ok(policy.realtimeProviders("quiz","123456").join(",")==="supabase","Default production strategy preserves Supabase");

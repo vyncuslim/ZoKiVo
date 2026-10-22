@@ -1,0 +1,16 @@
+# No automatic production deployment. Requires reviewed Cloudflare account setup.
+name = "zokivo-room-realtime-pilot"
+main = "worker.mjs"
+compatibility_date = "2026-10-22"
+workers_dev = false
+
+[vars]
+ALLOWED_ORIGINS = "https://zokivo.xyz,https://www.zokivo.xyz,https://zokivo.vynalthai.com"
+
+[[durable_objects.bindings]]
+name = "ROOM_HUBS"
+class_name = "RoomHub"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RoomHub"]

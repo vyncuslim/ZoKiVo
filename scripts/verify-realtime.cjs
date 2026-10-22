@@ -1,6 +1,8 @@
 const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
 const js=ts.transpileModule(fs.readFileSync("src/lib/realtime.ts","utf8"),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-const mod={exports:{}};new Function("require","module","exports",js)(require,mod,mod.exports);
+const mod={exports:{}};new Function("require","module","exports",js)(name=>
+ name==="@/lib/edge-realtime-auth"?{edgeRealtimeUrl:()=>null,signEdgeNotify:()=>"mock"}:require(name),
+ mod,mod.exports);
 const rt=mod.exports;
 process.env.ZOKIVO_SESSION_SECRET="test-only-secret-which-is-longer-than-32-characters";
 process.env.ZOKIVO_SUPABASE_URL="https://zokivo-test.supabase.co";

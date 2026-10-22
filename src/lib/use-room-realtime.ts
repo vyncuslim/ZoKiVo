@@ -5,7 +5,7 @@ import {createRealtimeClient,type SealedLiveQuery} from "@neon/realtime/client";
 import type {RoomKind} from "@/lib/realtime";
 import {roomJitterMs} from "@/lib/room-sync-jitter";
 
-type Transport="neon"|"supabase";
+type Transport="edge"|"neon"|"supabase";
 type RoomMeta={pin:string;status:string;current_index:number;submitted:number};
 type Plan={providers?:Transport[]};
 
@@ -102,6 +102,57 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
    }
   }
 
+  async function connectEdge():Promise<(()=>void)|null>{
+   let socket:WebSocket|null=null;
+   try{
+    if(kind!=="quiz")return null;
+    const reply=await fetch("/api/realtime/edge?pin="+encodeURIComponent(pin),{
+     headers:latest.current.getHeaders(),cache:"no-store"
+    });
+    if(!reply.ok||!active)return null;
+    const meta=await reply.json() as {enabled?:boolean;url?:string;capability?:string};
+    if(!meta.enabled||!meta.url||typeof meta.capability!=="string")return null;
+    const address=new URL(meta.url);
+    if(address.protocol!=="https:")return null;
+    address.protocol="wss:";
+    socket=new WebSocket(address.toString(),["zokivo.v1","auth."+meta.capability]);
+    const ws=socket;
+    let established=false,settled=false;
+    let finish:(ok:boolean)=>void=()=>{};
+    const ready=new Promise<boolean>(resolve=>{finish=resolve});
+    const watchdog=setTimeout(()=>{if(!settled){settled=true;finish(false)}},7000);
+    ws.onopen=()=>{
+     if(!active)return;
+     established=true;
+     if(!settled){settled=true;finish(true)}
+     refreshCoalesced();
+    };
+    ws.onmessage=event=>{
+     if(!active||typeof event.data!=="string"||event.data.length>256)return;
+     try{
+      const message=JSON.parse(event.data);
+      if(message?.type==="refresh"&&message?.v===1)refreshCoalesced();
+     }catch{}
+    };
+    ws.onerror=()=>{
+     if(!settled){settled=true;finish(false)}
+     else if(established)loseProvider();
+    };
+    ws.onclose=()=>{
+     if(!settled){settled=true;finish(false)}
+     else if(established)loseProvider();
+    };
+    const cleanup=()=>{
+     clearTimeout(watchdog);
+     ws.onopen=null;ws.onclose=null;ws.onerror=null;ws.onmessage=null;
+     if(ws.readyState===WebSocket.OPEN||ws.readyState===WebSocket.CONNECTING)ws.close(1000);
+    };
+    if(!(await ready)||!active){cleanup();return null}
+    clearTimeout(watchdog);
+    return cleanup;
+   }catch{socket?.close();return null}
+  }
+
   async function connectNeon():Promise<(()=>void)|null>{
    let cleanup=()=>{};
    try{
@@ -151,7 +202,7 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
    if(!active)return;
    while(active&&fallback.length){
     const candidate=fallback.shift();
-    const cleanup=candidate==="neon"?await connectNeon():await connectSupabase();
+    const cleanup=candidate==="edge"?await connectEdge():candidate==="neon"?await connectNeon():await connectSupabase();
     if(cleanup&&active){
      cleanupProvider=cleanup;
      setConnected(true);
@@ -179,7 +230,7 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
     if(response.ok){
      const plan=await response.json() as Plan;
      if(Array.isArray(plan.providers))
-      original=plan.providers.filter((p):p is Transport=>p==="supabase"||p==="neon");
+      original=plan.providers.filter((p):p is Transport=>p==="edge"||p==="supabase"||p==="neon");
     }else{
      original=["supabase"]; // Existing authorized Supabase config handles fallback.
     }
