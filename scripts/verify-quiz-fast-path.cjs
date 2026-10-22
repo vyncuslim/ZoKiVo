@@ -9,6 +9,8 @@ function load(path,mocks){
  return m.exports;
 }
 let sqlCalls=0,submitted=1,open=true,finished=false;
+const fixedOpenDeadline=new Date(Date.now()+20000).toISOString();
+const fixedClosedDeadline=new Date(Date.now()-20000).toISOString();
 const expectedPlayers=[{id:"p1",nickname:"One",avatar_id:"spark",score:0,mode_score:0},{id:"p2",nickname:"Two",avatar_id:"spark",score:0,mode_score:0}];
 const answers=[{player_id:"p1",chosen_index:1,is_correct:true},{player_id:"p2",chosen_index:0,is_correct:false}];
 const store={
@@ -19,7 +21,7 @@ const store={
    pin:"123456",quiz_set_id:"q1",status:finished?"finished":"playing",
    current_index:1,host_token_hash:"host-token",game_mode:"quiz_party",
    mute_sounds:false,score_goal:null,round_open:open,
-   deadline:open?new Date(Date.now()+20000).toISOString():new Date(Date.now()-20000).toISOString(),
+   deadline:open?fixedOpenDeadline:fixedClosedDeadline,
    server_time:new Date().toISOString(),player_id:vars[0]==="player-token"?"p1":null,
    answered:vars[0]==="player-token",player_is_correct:true,player_points:100
   }];
