@@ -35,6 +35,24 @@ async function notify(pin){
  if(r.status!==202)throw Error("Room notify refused: HTTP "+r.status);
  dispatched++;
 }
+async function expectHandshakeBlocked(pin,capability,origin,status){
+ return new Promise((resolve,reject)=>{
+  const ws=new WebSocket(wsBase+"/connect?pin="+pin,["zokivo.v1","auth."+capability],{
+   headers:{Origin:origin},handshakeTimeout:5000,perMessageDeflate:false
+  });
+  const watchdog=setTimeout(()=>{ws.terminate();reject(Error("Denied socket timed out"))},5500);
+  let handled=false;
+  ws.once("open",()=>{
+   if(!handled){handled=true;clearTimeout(watchdog);ws.terminate();reject(Error("Unauthorized socket ACCEPTED"))}
+  });
+  ws.once("unexpected-response",(_,response)=>{
+   if(!handled){handled=true;clearTimeout(watchdog);
+    if(response.statusCode===status)resolve();else reject(Error("Expected HTTP "+status+", got "+response.statusCode));}
+   response.resume();
+  });
+  ws.once("error",err=>{if(!handled){handled=true;clearTimeout(watchdog);reject(err)}});
+ });
+}
 async function openOne(pin,n){
  const capability=issue(pin,randomUUID());
  return new Promise((resolve,reject)=>{
@@ -123,6 +141,10 @@ async function main(){
  try{
   await mf.ready;
   console.log("EDGE_LOCAL_WORKER_READY");
+  const pilot=issue("860000",randomUUID());
+  await expectHandshakeBlocked("860000",pilot,"https://unauthorized.example",403);
+  await expectHandshakeBlocked("860000",pilot+"tamper","https://zokivo.xyz",401);
+  console.log("EDGE_LOCAL_UNAUTHORIZED_HANDSHAKES_REJECTED");
   // First run 100 real sockets in one room: all of a full classroom.
   const first=await openStage(100);
   const one=await broadcastStage(first);
