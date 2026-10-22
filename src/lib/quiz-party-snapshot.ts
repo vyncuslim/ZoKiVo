@@ -43,11 +43,11 @@ async function readSharedSnapshot(pin:string):Promise<QuizPartySnapshot>{
  const sql=db();
  // ONE database round trip for current question, 100-player leaderboard and
  // submission aggregates, instead of several identical queries per student.
- const rows=await sql\`
+ const rows=await sql`
  WITH room AS(
   SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.question_order,
    (r.status='playing' AND r.deadline>now()) AS round_open
-  FROM rooms r WHERE r.pin=\${pin}
+  FROM rooms r WHERE r.pin=${pin}
  ),prior_scores AS(
   SELECT a.player_id,SUM(a.points)::integer AS points
   FROM answers a JOIN room r ON r.pin=a.room_pin
@@ -79,7 +79,7 @@ async function readSharedSnapshot(pin:string):Promise<QuizPartySnapshot>{
   COALESCE((SELECT jsonb_agg(jsonb_build_object(
    'player_id',a.player_id,'chosen_index',a.chosen_index,'is_correct',a.is_correct
   )) FROM current_answers a),'[]'::jsonb) AS answers
- \`;
+ `;
  const result=rows[0];
  if(!result)throw Error("Room snapshot missing");
  return {
