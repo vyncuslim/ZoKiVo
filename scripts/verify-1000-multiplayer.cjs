@@ -25,7 +25,7 @@ const store={
    identities.set(pin+":"+key,id);
    return [{id}];
   }
-  if(q.includes("SELECT id FROM players")){
+  if(q.includes("SELECT id FROM players")&&!q.includes("WITH active AS")){
    const [pin,token]=args,id=identities.get(pin+":"+token);
    return id?[{id}]:[];
   }
