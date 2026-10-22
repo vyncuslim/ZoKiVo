@@ -73,7 +73,7 @@ async function readSharedSnapshot(pin:string):Promise<QuizPartySnapshot>{
    'correct_index',q.correct_index
   ) FROM questions q JOIN room r ON r.quiz_set_id=q.quiz_set_id
    WHERE q.position=COALESCE((r.question_order->>r.current_index)::integer,r.current_index)
-   AND r.status='playing' LIMIT 1) AS question,
+   LIMIT 1) AS question,
   (SELECT count(*)::integer FROM questions q JOIN room r ON r.quiz_set_id=q.quiz_set_id) AS total,
   (SELECT count(*)::integer FROM current_answers) AS submitted,
   COALESCE((SELECT jsonb_agg(jsonb_build_object(
