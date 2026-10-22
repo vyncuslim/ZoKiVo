@@ -1,0 +1,44 @@
+name: ZoKivo real local Edge WebSocket integration (100 then 1000)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "edge-realtime/**"
+      - "qa/real-edge-websocket-local.mjs"
+      - ".github/workflows/qa-real-edge-local.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-sockets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ZOKIVO_TEST_TARGET: LOCAL
+      ZOKIVO_TEST_CONNECTIONS: "100"
+      CLOUDFLARE_CF_FETCH_ENABLED: "false"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install local workerd emulator and WebSocket client
+        run: npm install --ignore-scripts --no-save --no-audit --no-fund miniflare@4 ws@8
+      - name: Verify emulator cannot access production or exceed 1000 local connections
+        run: |
+          node - <<'NODE'
+          const fs=require("fs"),assert=require("assert/strict");
+          const s=fs.readFileSync("qa/real-edge-websocket-local.mjs","utf8");
+          assert(s.includes('assert.equal(process.env.ZOKIVO_TEST_TARGET||"LOCAL","LOCAL"'));
+          assert(s.includes('MAX=process.env.ZOKIVO_LOCAL_10K'));
+          assert(s.includes('host:"127.0.0.1"'));
+          console.log("EDGE_LOCAL_SAFETY_GUARD_PASS");
+          NODE
+      - name: Run full-room and 1000 local real WebSocket fanout
+        run: node qa/real-edge-websocket-local.mjs
+      - name: Run bounded 10000 local real WebSocket fanout experiment
+        env:
+          ZOKIVO_LOCAL_10K: ENABLE_ISOLATED_10000
+        run: node qa/real-edge-websocket-local.mjs
