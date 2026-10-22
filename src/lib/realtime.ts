@@ -1,5 +1,5 @@
 import {createHmac,randomUUID} from "node:crypto";
-import {edgeRealtimeUrl,signEdgeNotify} from "@/lib/edge-realtime-auth";
+import {edgeRealtimeUrl,edgeCanaryRoom,signEdgeNotify} from "@/lib/edge-realtime-auth";
 
 export type RoomKind="quiz"|"paper";
 export function isRoomPin(pin:string){return /^\d{6}$/.test(pin)}
@@ -25,7 +25,7 @@ export function realtimeConfig(){
 }
 async function notifyEdge(kind:RoomKind,pin:string){
  const edge=edgeRealtimeUrl();
- if(!edge||kind!=="quiz")return false;
+ if(!edge||kind!=="quiz"||!edgeCanaryRoom(pin))return false;
  try{
   const body=JSON.stringify({kind,pin,nonce:randomUUID()});
   const timestamp=String(Date.now());
