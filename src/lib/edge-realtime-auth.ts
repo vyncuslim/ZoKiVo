@@ -1,5 +1,6 @@
 import {createHmac,randomUUID} from "node:crypto";
-import {isRoomPin,type RoomKind} from "@/lib/realtime";
+type RoomKind="quiz"|"paper";
+const isRoomPin=(pin:string)=>/^\d{6}$/.test(pin);
 
 const ttlSeconds=120;
 function edgeSecret(){
