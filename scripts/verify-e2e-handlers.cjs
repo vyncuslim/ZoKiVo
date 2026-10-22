@@ -80,8 +80,8 @@ async function main(){
   const s=strings.join("?");
   if(s.includes("SELECT id FROM players"))return [player];
   if(s.includes("WITH active AS")){
-   if(answers++)return [];
-   return [{points:100,is_correct:true,score:100}];
+   const first=answers++===0;
+   return [{authorized:true,accepted:first,goal:null}];
   }
   if(s.includes("UPDATE rooms SET status="))return [];
   throw Error("Unexpected answer query "+s);
