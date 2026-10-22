@@ -9,7 +9,7 @@ import {createHmac,randomUUID,randomBytes} from "node:crypto";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {performance} from "node:perf_hooks";
-const PORT=18878,MAX=1000,PER_ROOM=100;
+const PORT=18878,MAX=process.env.ZOKIVO_LOCAL_10K==="ENABLE_ISOLATED_10000"?10000:1000,PER_ROOM=100;
 const KEY=randomBytes(48).toString("hex");
 const base="http://127.0.0.1:"+PORT,wsBase="ws://127.0.0.1:"+PORT;
 const opened=[],samples=[],failures=[];
@@ -131,6 +131,8 @@ async function broadcastStage(clients){
 }
 async function main(){
  assert.equal(process.env.ZOKIVO_TEST_TARGET||"LOCAL","LOCAL","External target forbidden");
+ assert.ok(MAX===1000||MAX===10000,"No unbounded test size permitted");
+ if(MAX===10000)console.log("EDGE_LOCAL_10K_HARD_CAP_ACTIVE");
  assert.equal(process.env.ZOKIVO_TEST_CONNECTIONS||"100","100","Only fixed safe stage allowed");
  const mf=new Miniflare({
   modules:true,scriptPath:"edge-realtime/worker.mjs",compatibilityDate:"2026-08-06",
@@ -151,12 +153,12 @@ async function main(){
   console.log("EDGE_REAL_WS_STAGE_100="+JSON.stringify(one));
   for(const client of first)client.ws.close(1000);
   await new Promise(r=>setTimeout(r,600));
-  // Second stage: ten different rooms, 100 per room.
+  // Second stage: ten or one hundred different rooms, 100 per room.
   const clients=await openStage(MAX);
   const ten=await broadcastStage(clients);
-  console.log("EDGE_REAL_WS_STAGE_1000="+JSON.stringify(ten));
+  console.log("EDGE_REAL_WS_STAGE_"+MAX+"="+JSON.stringify(ten));
   console.log("EDGE_REAL_WS_TEST_PASS="+JSON.stringify({
-   localWebSocketConnectionsEstablished:1100,maxSimultaneousLocal:1000,
+   localWebSocketConnectionsEstablished:100+MAX,maxSimultaneousLocal:MAX,
    realCloudflareConnections:0,realNeonAnswerWrites:0,
    networkScope:"localhost Miniflare/workerd",fanoutP95Ms:ten.fanout.p95,
    certifiedOneMillion:false,certifiedTwoSecondGameOperations:false
