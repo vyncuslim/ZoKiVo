@@ -31,6 +31,9 @@ const store={
   }
   if(q.includes("WITH room AS("))return [{
    players:expectedPlayers,
+   room:{pin:"123456",status:finished?"finished":"playing",current_index:1,
+    deadline:open?fixedOpenDeadline:fixedClosedDeadline,server_time:new Date().toISOString(),
+    round_open:open,game_mode:"quiz_party",mute_sounds:false,score_goal:null},
    total:2,submitted,
    question:{question:"Which?",choices:["A","B","C","D"],correct_index:1,
     image_url:"",audio_url:"",formula_text:""},
@@ -44,7 +47,8 @@ const store={
 };
 const snapshot=load("src/lib/quiz-party-snapshot.ts",{"@/lib/store":store});
 const api=load("src/app/api/rooms/[pin]/route.ts",{
- "@/lib/store":store,"@/lib/quiz-party-snapshot":snapshot
+ "@/lib/store":store,"@/lib/quiz-party-snapshot":snapshot,
+ "@/lib/room-read-token":{verifyRoomReadToken:(pin,value)=>pin==="123456"&&value==="signed-proof"?"p1":null}
 });
 const fetchRoom=async(headers={})=>{
  const r=await api.GET(new Request("https://qa.example/api/rooms/123456",{headers}),
@@ -66,6 +70,11 @@ const fetchRoom=async(headers={})=>{
  ok(!Object.hasOwn(first.question,"correct_index"),"No correct index leaked in public question");
  ok(!Object.hasOwn(first,"hostResults"),"No host-only grading leaked");
  ok(first.viewer.result===null,"Current-round grading withheld");
+ const signedBefore=sqlCalls;
+ const fastSigned=await Promise.all(Array.from({length:60},()=>
+  fetchRoom({"x-player-read-token":"signed-proof"})));
+ ok(fastSigned.every(x=>x.status===200),"60 signed-read status requests authorized without legacy token");
+ ok(sqlCalls-signedBefore<=1,"Signed readers share one SQL snapshot without per-player Neon auth queries");
  const host=await fetchRoom({"x-host-token":"host-token"});
  ok(host.status===200&&host.json.hostResults===null,"Host grading hidden before question closes");
  open=false;
