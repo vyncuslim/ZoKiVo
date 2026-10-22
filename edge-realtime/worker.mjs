@@ -94,7 +94,7 @@ export class RoomHub {
    const expiry=Number(req.headers.get("X-Room-Expiry"));
    if(!subject||!Number.isInteger(expiry)||expiry<Math.floor(Date.now()/1000))
     return json({error:"Expired"},401);
-   if(this.ctx.getWebSockets().length>=100)return json({error:"Room capacity reached"},429);
+   if(this.ctx.getWebSockets().length>=128)return json({error:"Room socket safety cap reached"},429);
    const pair=new WebSocketPair(),[client,server]=Object.values(pair);
    this.ctx.acceptWebSocket(server);
    server.serializeAttachment({subject,expiry});
