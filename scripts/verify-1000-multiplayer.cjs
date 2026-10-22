@@ -55,7 +55,8 @@ const deps={
  "@/lib/store":store,
  "@/lib/mother-auth":{findUser:async()=>({user:null})},
  "@/lib/avatars":{avatarId:()=>"spark",avatarInfo:()=>({id:"spark",price:0})},
- "@/lib/realtime":{emitRoomRefresh:async()=>{events++;return true}}
+ "@/lib/realtime":{emitRoomRefresh:async()=>{events++;return true}},
+ "@/lib/room-read-token":{issueRoomReadToken:()=>"signed-test-read"}
 };
 const join=load("src/app/api/rooms/[pin]/join/route.ts",deps);
 const answer=load("src/app/api/rooms/[pin]/answer/route.ts",deps);
