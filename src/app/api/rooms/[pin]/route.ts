@@ -1,6 +1,7 @@
 import {db,hash,same,bad} from "@/lib/store";
 import {quizPartySnapshot,type QuizPartySnapshot,type QuizRoomMeta} from "@/lib/quiz-party-snapshot";
 import {verifyRoomReadToken} from "@/lib/room-read-token";
+import {quizPartySignedPlayerResponse} from "@/lib/room-response-fast";
 type VerifiedViewer={id:string;answered?:boolean;is_correct?:boolean;points?:number};
 function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolean,me:VerifiedViewer[]){
    const {players,submitted,answers}=snapshot;
@@ -53,12 +54,9 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   if(readIdentity&&process.env.ZOKIVO_ROOM_FAST_PATH_ENABLED!=="false"){
    const fast=await quizPartySnapshot(pin,"signed-player");
    if(fast.room.game_mode==="quiz_party"){
-    const exists=fast.players.some(p=>p.id===readIdentity);
-    if(!exists)return bad("Unauthorized",401);
-    const own=fast.answers.find(a=>a.player_id===readIdentity);
-    return quizPartyResponse(fast.room,fast,false,[{
-     id:readIdentity,answered:!!own,is_correct:own?.is_correct,points:own?.points
-    }]);
+    const response=quizPartySignedPlayerResponse(fast,readIdentity);
+    if(!response)return bad("Unauthorized",401);
+    return response;
    }
   }
   const sql=db();
