@@ -1,4 +1,5 @@
-import {createHmac} from "node:crypto";
+import {createHmac,randomUUID} from "node:crypto";
+import {edgeRealtimeUrl,signEdgeNotify} from "@/lib/edge-realtime-auth";
 
 export type RoomKind="quiz"|"paper";
 export function isRoomPin(pin:string){return /^\d{6}$/.test(pin)}
@@ -22,7 +23,29 @@ export function realtimeConfig(){
   return {origin:u.origin,publishable,secret};
  }catch{return null}
 }
+async function notifyEdge(kind:RoomKind,pin:string){
+ const edge=edgeRealtimeUrl();
+ if(!edge||kind!=="quiz")return false;
+ try{
+  const body=JSON.stringify({kind,pin,nonce:randomUUID()});
+  const timestamp=String(Date.now());
+  const signature=signEdgeNotify(timestamp,body);
+  const response=await fetch(edge.origin+"/notify",{
+   method:"POST",headers:{"Content-Type":"application/json",
+    "X-ZoKivo-Timestamp":timestamp,"X-ZoKivo-Signature":signature},
+   body,cache:"no-store",signal:AbortSignal.timeout(1400)
+  });
+  return response.status===202;
+ }catch(e){
+  console.warn("ZoKivo edge realtime unavailable",e instanceof Error?e.name:"error");
+  return false;
+ }
+}
 export async function emitRoomRefresh(kind:RoomKind,pin:string){
+ if(!isRoomPin(pin))return false;
+ // In the optional edge canary, notify room DO first; fall back to existing
+ // Supabase path if notification cannot be queued. HTTP polling still runs.
+ if(await notifyEdge(kind,pin))return true;
  const conf=realtimeConfig();
  if(!conf||!isRoomPin(pin))return false;
  try{
