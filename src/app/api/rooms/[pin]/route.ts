@@ -32,7 +32,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    // not from the shared cache. Results remain hidden while a round is open.
    const myResult=canShowResult&&playerAnswer?.answered
     ?{is_correct:playerAnswer.is_correct,points:playerAnswer.points}:null;
-   const allowedQuestion=snapshot.question?{
+   const allowedQuestion=r.status==="playing"&&snapshot.question?{
     question:snapshot.question.question,choices:snapshot.question.choices,
     image_url:snapshot.question.image_url,audio_url:snapshot.question.audio_url,
     formula_text:snapshot.question.formula_text
