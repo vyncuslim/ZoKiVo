@@ -1,7 +1,7 @@
 import {NextRequest} from "next/server";
 import {db,hash,same} from "@/lib/store";
 import {isRoomPin} from "@/lib/realtime";
-import {edgeRealtimeUrl,issueEdgeRoomCapability} from "@/lib/edge-realtime-auth";
+import {edgeRealtimeUrl,edgeCanaryRoom,issueEdgeRoomCapability} from "@/lib/edge-realtime-auth";
 import {noCache} from "@/lib/mother-auth";
 export const runtime="nodejs";
 
@@ -10,7 +10,7 @@ export async function GET(req:NextRequest){
  const pin=req.nextUrl.searchParams.get("pin")||"";
  if(!isRoomPin(pin))return noCache({error:"Invalid PIN"},400);
  const edge=edgeRealtimeUrl();
- if(!edge)return noCache({enabled:false},200);
+ if(!edge||!edgeCanaryRoom(pin))return noCache({enabled:false},200);
  try{
   const hostKey=req.headers.get("x-host-token");
   const playerKey=req.headers.get("x-player-token");
