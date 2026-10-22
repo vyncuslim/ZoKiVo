@@ -91,7 +91,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    const key=[r.status,r.current_index,r.round_open?"open":"closed",
     r.deadline?new Date(r.deadline).getTime():0].join(":");
    const snapshot=await quizPartySnapshot(pin,key);
-   return quizPartyResponse(r,snapshot,host,me);
+   return quizPartyResponse(r as unknown as QuizRoomMeta,snapshot,host,me);
   }
   // Identical score policy for host and player. Do not leak correct answers via current-round score changes.
   // Aggregate answer points and mode-event totals ONCE per room, rather
