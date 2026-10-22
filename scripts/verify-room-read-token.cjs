@@ -1,0 +1,27 @@
+const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
+const source=fs.readFileSync("src/lib/room-read-token.ts","utf8");
+const js=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const m={exports:{}};
+new Function("require","module","exports",js)(require,m,m.exports);
+let checks=0;function ok(condition,name){assert.ok(condition,name);checks++}
+const original=process.env.ZOKIVO_SESSION_SECRET;
+process.env.ZOKIVO_SESSION_SECRET="qa-test-signature-secret-with-32-plus-characters-only";
+const id="a1b2c3d4-1a2b-4c5d-8e9f-a1b2c3d4e5f6";
+const pin="123456";
+const t=m.exports.issueRoomReadToken(pin,id);
+ok(t.startsWith("zr1.")&&t.split(".").length===3,"Issues room scoped signed token");
+ok(m.exports.verifyRoomReadToken(pin,t)===id,"Verified signature returns player identity");
+ok(m.exports.verifyRoomReadToken("654321",t)===null,"Cannot reuse in a different room");
+ok(m.exports.verifyRoomReadToken(pin,t+"A")===null,"Reject appended or modified MAC");
+ok(m.exports.verifyRoomReadToken(pin,"zr1.bad.bad")===null,"Reject malformed token");
+ok(m.exports.verifyRoomReadToken(pin,null)===null,"Reject missing proof");
+ok(m.exports.verifyRoomReadToken(pin,"zr1."+"a".repeat(400)+".a")===null,"Reject oversized token");
+process.env.ZOKIVO_SESSION_SECRET="another-qa-rotated-secret-with-32-plus-characters";
+ok(m.exports.verifyRoomReadToken(pin,t)===null,"Secret rotation invalidates old token");
+process.env.ZOKIVO_SESSION_SECRET=original;
+const api=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
+const answer=fs.readFileSync("src/app/api/rooms/[pin]/answer/route.ts","utf8");
+ok(api.includes('snapshot.players.some(p=>p.id===readIdentity)'),"Signed identity rechecked against current room membership");
+ok(api.includes('"x-player-read-token"')&&api.includes("verifyRoomReadToken"),"GET verifies read capability");
+ok(answer.includes("x-player-token")&&!answer.includes("x-player-read-token"),"Read token cannot write answers");
+console.log("ROOM_READ_TOKEN_TEST_PASS: "+checks+" security assertions");
