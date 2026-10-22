@@ -67,7 +67,7 @@ async function openStage(total){
  await Promise.all(Array.from({length:lanes},async()=>{
   while(next<total){
    const i=next++;
-   const room=String(850000+Math.floor(i/PER_ROOM));
+   const room=String((total===100?860000:850000)+Math.floor(i/PER_ROOM));
    const entry=await openOne(room,i);
    clients.push(entry);
   }
@@ -91,7 +91,6 @@ async function broadcastStage(clients){
     const started=outstanding.get(client.pin);
     if(started===undefined)return;
     received.push({pin:client.pin,latency:performance.now()-started});
-    outstanding.delete(client.pin+":"+client.n);
     completed++;
    }catch(e){if(failures.length<8)failures.push(String(e))}
   };
@@ -116,7 +115,7 @@ async function main(){
  assert.equal(process.env.ZOKIVO_TEST_TARGET||"LOCAL","LOCAL","External target forbidden");
  assert.equal(process.env.ZOKIVO_TEST_CONNECTIONS||"100","100","Only fixed safe stage allowed");
  const mf=new Miniflare({
-  modules:true,scriptPath:"edge-realtime/worker.mjs",compatibilityDate:"2026-10-22",
+  modules:true,scriptPath:"edge-realtime/worker.mjs",compatibilityDate:"2026-08-06",
   durableObjects:{ROOM_HUBS:"RoomHub"},
   bindings:{EDGE_REALTIME_SECRET:KEY,ALLOWED_ORIGINS:"https://zokivo.xyz"},
   port:PORT,host:"127.0.0.1",cf:false
