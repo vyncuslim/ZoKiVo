@@ -22,7 +22,7 @@ const sql=async(strings,...vars)=>{
 };
 const store={db:()=>sql,hash:s=>s,same:(a,b)=>a===b,bad:(msg,status=400)=>Response.json({error:msg},{status})};
 const mod={exports:{}};
-new Function("require","module","exports",js)((n)=>n==="@/lib/store"?store:n==="@/lib/quiz-party-snapshot"?{quizPartySnapshot:async()=>{throw Error("Fast path disabled in legacy test")}}:require(n),mod,mod.exports);
+new Function("require","module","exports",js)((n)=>n==="@/lib/store"?store:n==="@/lib/quiz-party-snapshot"?{quizPartySnapshot:async()=>{throw Error("Fast path disabled in legacy test")}}:n==="@/lib/room-read-token"?{verifyRoomReadToken:()=>null}:require(n),mod,mod.exports);
 const handler=mod.exports.GET;let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};
 async function get(headers){const response=await handler(new Request("https://zokivo.example/api/rooms/123456",{headers}),{params:Promise.resolve({pin:"123456"})});return {status:response.status,json:await response.json()} }
 (async()=>{
