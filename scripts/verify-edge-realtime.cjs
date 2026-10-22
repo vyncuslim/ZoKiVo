@@ -76,6 +76,23 @@ ok(node.edgeCanaryRoom("123456"),"100% enablement selects room predictably");
  ok(revision===1&&socket.sent.length===1&&JSON.parse(socket.sent[0]).type==="refresh",
   "Burst emits one room-only refresh, no score or answer disclosure");
  ok(!JSON.stringify(socket.sent).includes("player:")&&!JSON.stringify(socket.sent).includes("choice"),"Fanout never includes student identity or answers");
+ const peerHash="a".repeat(64);
+ const duplicateCtx={
+  getWebSockets:()=>Array.from({length:2},()=>({deserializeAttachment:()=>({sub:peerHash})}))
+ };
+ const duplicateHub=new worker.RoomHub(duplicateCtx,{});
+ const duplicateResult=await duplicateHub.fetch(new Request("https://room.internal/connect",{
+  headers:{"Upgrade":"websocket","X-Room-Subject-Hash":peerHash,
+   "X-Room-Expiry":String(now+60)}
+ }));
+ ok(duplicateResult.status===429,"Stolen capability cannot fill one room with unlimited duplicate sockets");
+ const capacityCtx={getWebSockets:()=>Array.from({length:128},()=>({deserializeAttachment:()=>({sub:"b".repeat(64)})}))};
+ const capacityHub=new worker.RoomHub(capacityCtx,{});
+ const tooMany=await capacityHub.fetch(new Request("https://room.internal/connect",{
+  headers:{"Upgrade":"websocket","X-Room-Subject-Hash":peerHash,
+   "X-Room-Expiry":String(now+60)}
+ }));
+ ok(tooMany.status===429,"Per-room cap rejects excessive sockets before allocation");
  const client=fs.readFileSync("src/lib/use-room-realtime.ts","utf8");
  ok(client.includes('candidate==="edge"?await connectEdge()')&&client.includes('"auth."+meta.capability'),"WebSocket primary and fallback protocol wired");
  const plan=fs.readFileSync("src/app/api/realtime/plan/route.ts","utf8");
