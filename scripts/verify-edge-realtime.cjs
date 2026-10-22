@@ -10,6 +10,15 @@ const secret="test-only-zokivo-edge-key-must-never-be-used-in-production-123456"
 process.env.ZOKIVO_EDGE_REALTIME_SECRET=secret;
 process.env.ZOKIVO_EDGE_REALTIME_ENABLED="true";
 process.env.ZOKIVO_EDGE_REALTIME_URL="https://pilot.zokivo.example";
+ok(node.edgeRealtimeUrl()===null,"0% rollout leaves edge completely disabled");
+process.env.ZOKIVO_EDGE_REALTIME_PERCENT="1";
+ok(node.edgeRealtimeUrl()?.origin==="https://pilot.zokivo.example","Controlled rollout enables configured endpoint");
+const canaryCount=Array.from({length:10000},(_,i)=>node.edgeCanaryRoom(String(100000+i)))
+ .filter(Boolean).length;
+ok(canaryCount>50&&canaryCount<150,"Canary selects about 1% of rooms, not each player individually");
+process.env.ZOKIVO_EDGE_REALTIME_PERCENT="100";
+ok(node.edgeCanaryRoom("123456"),"100% enablement selects room predictably");
+
 (async()=>{
  const worker=await import(pathToFileURL(path.resolve("edge-realtime/worker.mjs")).href);
  const now=Math.floor(Date.now()/1000);
