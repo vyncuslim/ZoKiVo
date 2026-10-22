@@ -15,7 +15,11 @@ export default function Game(){
  const {pin}=useParams<{pin:string}>();const host=useSearchParams().get("host")==="1";
  const requestSequence=useRef(0);const inFlight=useRef<Promise<void>|null>(null);const [clockOffset,setClockOffset]=useState(0);const [state,setState]=useState<State|null>(null);
  const [lastReview,setLastReview]=useState<{index:number;question:string;choices:string[];results:NonNullable<State["hostResults"]>}|null>(null);const[error,setError]=useState("");const[busy,setBusy]=useState(false);const[clock,setClock]=useState(Date.now());const[feedback,setFeedback]=useState(""),[bonusReceipt,setBonusReceipt]=useState(""),[joinQr,setJoinQr]=useState(""),[downloading,setDownloading]=useState(false);
- const headers=useCallback(()=>({[host?"x-host-token":"x-player-token"]:sessionStorage.getItem((host?"host:":"player:")+pin)||""}),[host,pin]);
+ const headers=useCallback(():Record<string,string>=>{
+  if(host)return {"x-host-token":sessionStorage.getItem("host:"+pin)||""};
+  return {"x-player-token":sessionStorage.getItem("player:"+pin)||"",
+   "x-player-read-token":sessionStorage.getItem("read:"+pin)||""};
+ },[host,pin]);
  const reload=useCallback(async(force=false)=>{
   if(!force&&inFlight.current)return inFlight.current;
   const request=++requestSequence.current;
