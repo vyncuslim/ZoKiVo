@@ -1,5 +1,6 @@
 "use client";
 import {useRoomRealtime} from "@/lib/use-room-realtime";
+import {roomJitterMs} from "@/lib/room-sync-jitter";
 import {useState,useEffect,useCallback,useRef} from "react";import {useParams,useSearchParams} from "next/navigation";
 import {BrandMark} from "@/components/brand";
 import QRCode from "qrcode";
@@ -56,7 +57,21 @@ export default function Game(){
    finally{setDownloading(false)}
  }
  const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
- useEffect(()=>{if(state?.status==="finished")return;void reload();const a=setInterval(()=>void reload(),host?(realtimeConnected?1800:1700):(realtimeConnected?5000:3000));const b=setInterval(()=>setClock(Date.now()),250);return()=>{clearInterval(a);clearInterval(b)}},[reload,realtimeConnected,host,state?.status]);
+ useEffect(()=>{
+  if(state?.status==="finished")return;
+  void reload(); // Always load the initial room state immediately.
+  const period=host?(realtimeConnected?1800:1700):(realtimeConnected?5000:3000);
+  const identity=host?pin:(headers()["x-player-read-token"]||headers()["x-player-token"]||pin);
+  const stagger=host?0:roomJitterMs(identity,1500);
+  let pollTimer:ReturnType<typeof setInterval>|null=null;
+  const startTimer=setTimeout(()=>{pollTimer=setInterval(()=>void reload(),period)},stagger);
+  const clockTimer=setInterval(()=>setClock(Date.now()),250);
+  return()=>{
+   clearTimeout(startTimer);
+   if(pollTimer)clearInterval(pollTimer);
+   clearInterval(clockTimer);
+  };
+ },[reload,realtimeConnected,host,state?.status,headers,pin]);
  useEffect(()=>{setFeedback("");setBonusReceipt("")},[state?.index]);
  useEffect(()=>{
   if(host&&state?.hostResults&&state.question){
