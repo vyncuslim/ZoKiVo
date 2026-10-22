@@ -46,8 +46,10 @@ const store={
  bad:(message,status=400)=>Response.json({error:message},{status})
 };
 const snapshot=load("src/lib/quiz-party-snapshot.ts",{"@/lib/store":store});
+const responseFast=load("src/lib/room-response-fast.ts",{});
 const api=load("src/app/api/rooms/[pin]/route.ts",{
  "@/lib/store":store,"@/lib/quiz-party-snapshot":snapshot,
+ "@/lib/room-response-fast":responseFast,
  "@/lib/room-read-token":{verifyRoomReadToken:(pin,value)=>pin==="123456"&&value==="signed-proof"?"p1":null}
 });
 const fetchRoom=async(headers={})=>{
