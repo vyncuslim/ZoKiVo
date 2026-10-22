@@ -26,8 +26,7 @@
     "test:reports": "node scripts/verify-reports.cjs",
     "test:advanced-host": "node scripts/verify-advanced-host.cjs",
     "qa:realtime": "node scripts/stress-room.mjs",
-    "test:e2e-handlers": "node scripts/verify-e2e-handlers.cjs",
-    "postbuild": "node qa/run-preview-capacity.cjs"
+    "test:e2e-handlers": "node scripts/verify-e2e-handlers.cjs"
   },
   "dependencies": {
     "next": "15.5.28",
