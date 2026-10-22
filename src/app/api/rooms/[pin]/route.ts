@@ -7,15 +7,28 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
  if(!/^\d{6}$/.test(pin))return bad("Invalid PIN");
  try{
   const sql=db();
-  const found=await sql`SELECT pin,quiz_set_id,status,current_index,deadline,host_token_hash,game_mode,question_order,mute_sounds,score_goal,now() AS server_time,
-   (status='playing' AND deadline>now()) AS round_open FROM rooms WHERE pin=${pin}`;
+  // One round trip validates the player's session and loads their own
+  // answer. Authentication never depends on a cached shared snapshot.
+  const hostKey=req.headers.get("x-host-token"),playerKey=req.headers.get("x-player-token");
+  const playerHash=playerKey?hash(playerKey):"0".repeat(64);
+  const found=await sql`SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.host_token_hash,
+   r.game_mode,r.question_order,r.mute_sounds,r.score_goal,now() AS server_time,
+   (r.status='playing' AND r.deadline>now()) AS round_open,
+   p.id AS player_id,(a.id IS NOT NULL) AS answered,a.is_correct AS player_is_correct,a.points AS player_points
+   FROM rooms r
+   LEFT JOIN LATERAL (
+    SELECT id FROM players WHERE room_pin=r.pin AND token_hash=${playerHash} LIMIT 1
+   ) p ON true
+   LEFT JOIN LATERAL (
+    SELECT id,is_correct,points FROM answers
+    WHERE player_id=p.id AND room_pin=r.pin AND question_index=r.current_index LIMIT 1
+   ) a ON true
+   WHERE r.pin=${pin}`;
   if(!found.length)return bad("Room not found",404);
-  const r=found[0],hostKey=req.headers.get("x-host-token"),playerKey=req.headers.get("x-player-token");
+  const r=found[0];
   const host=!!hostKey&&same(r.host_token_hash,hash(hostKey));
-  const me=playerKey?await sql`SELECT p.id,a.is_correct,a.points,(a.id IS NOT NULL) AS answered
-   FROM players p JOIN rooms r ON r.pin=p.room_pin
-   LEFT JOIN answers a ON a.player_id=p.id AND a.room_pin=p.room_pin AND a.question_index=r.current_index
-   WHERE p.room_pin=${pin} AND p.token_hash=${hash(playerKey)} LIMIT 1`:[];
+  const me=r.player_id?[{id:r.player_id,answered:r.answered,
+   is_correct:r.player_is_correct,points:r.player_points}]:[];
   if(!host&&!me.length)return bad("Unauthorized",401);
   // Fast path: Quiz Party is the majority of student traffic. Authenticate
   // BEFORE consulting a shared cache; no tokens or answer keys are cached.
