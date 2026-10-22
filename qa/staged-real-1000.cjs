@@ -7,8 +7,8 @@ const {performance}=require("node:perf_hooks");
 const secret=process.env.ZOKIVO_SESSION_SECRET,dburl=process.env.DATABASE_URL;
 if(process.env.ZOKIVO_QA_CONFIRM!=="BRANCH_ONLY_1000"||!dburl||!secret||secret.length<32)throw Error("QA guard env is missing");
 const sql=neon(dburl),agent=new http.Agent({keepAlive:true,maxSockets:1024});
-const m={join:[],state:[],answer:[],settled:[],reconnect:[],burst100:[],burst250:[],burst500:[],burst1000:[],stagger1000:[]};
-const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0],burst100:[0,0],burst250:[0,0],burst500:[0,0],burst1000:[0,0],stagger1000:[0,0]};
+const m={join:[],state:[],answer:[],settled:[],reconnect:[],burst100:[],burst250:[],burst500:[],burst1000:[],stagger1000:[],transport1000:[]};
+const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0],burst100:[0,0],burst250:[0,0],burst500:[0,0],burst1000:[0,0],stagger1000:[0,0],transport1000:[0,0]};
 const failures=[],statusCodes={},roundOk=[];
 const hash=t=>createHmac("sha256",secret).update(t).digest("hex");
 function p95(a,p){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);return Math.round(s[Math.min(s.length-1,Math.ceil(s.length*p)-1)])}
@@ -158,6 +158,16 @@ async function main(){
  console.log("QA_JOIN",JSON.stringify({players,metrics:stats(m.join),errors:counts.join}));
  if(players!==1000)throw Error("Joined "+players+"/1000: stage aborted");
  await readBurst(fixture);
+ // Same 1,000 concurrent connections, tiny handler with no DB or auth work.
+ // This checks whether the single-host transport itself can meet 1s p95.
+ const transportStart=performance.now();
+ const transport=await Promise.all(Array.from({length:1000},()=>
+  httpCall("/api/qa/transport-ping",{timeout:15000})));
+ transport.forEach(result=>track("transport1000",result));
+ console.log("QA_TRANSPORT_1000",JSON.stringify({
+  requests:transport.length,wallClockMs:Math.round(performance.now()-transportStart),
+  metrics:stats(m.transport1000),ok:counts.transport1000[0],fail:counts.transport1000[1]
+ }));
  await readStaggered1000(fixture);
  for(let round=0;round<2;round++)await playRound(fixture,round);
  const report={at:new Date().toISOString(),durationSec:Math.round((Date.now()-started)/1000),
