@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: "Explicitly allow isolated QA load: type RUN_1000_QA_ONLY"
+        description: "Explicitly allow isolated QA: RUN_CLASSROOM_20_100_QA_ONLY or RUN_1000_QA_ONLY"
         required: true
         type: string
 permissions:
@@ -87,5 +87,64 @@ jobs:
         with:
           name: zokivo-isolated-real-http-1000-evidence
           path: /tmp/zokivo-1000-qa-summary.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  classroom-20-100:
+    if: ${{ inputs.confirm == 'RUN_CLASSROOM_20_100_QA_ONLY' }}
+    environment: zokivo-loadtest-qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      DATABASE_URL: ${{ secrets.ZOKIVO_QA_DATABASE_URL }}
+      ZOKIVO_SESSION_SECRET: ${{ secrets.ZOKIVO_QA_SESSION_SECRET }}
+      ZOKIVO_QA_CONFIRM: BRANCH_ONLY_CLASSROOM_20_100
+      ZOKIVO_REALTIME_ENABLED: "false"
+      ZOKIVO_NEON_REALTIME_ENABLED: "false"
+      ZOKIVO_EDGE_REALTIME_ENABLED: "false"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate guards and QA harness
+        run: |
+          node --check qa/staged-classroom-20-100.cjs
+          node - <<'NODE'
+          const assert=require("node:assert/strict");
+          const url=process.env.DATABASE_URL||"",secret=process.env.ZOKIVO_SESSION_SECRET||"";
+          let parsed;try{parsed=new URL(url)}catch{throw Error("QA Neon database URL required")}
+          assert(["postgres:","postgresql:"].includes(parsed.protocol)&&parsed.hostname.endsWith(".neon.tech"));
+          assert(secret.length>=32,"Dedicated QA secret required");
+          assert(process.env.ZOKIVO_QA_CONFIRM==="BRANCH_ONLY_CLASSROOM_20_100");
+          console.log("QA environment guards validated without exposing credentials");
+          NODE
+      - name: Build isolated application
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund --silent
+          npm run build
+      - name: Start localhost-only QA server
+        run: |
+          nohup npm run start -- -p 3000 >/tmp/zokivo-classroom-server.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl --max-time 3 --silent --fail http://127.0.0.1:3000/ >/dev/null; then
+              echo "Isolated localhost QA server ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::error::Isolated server unavailable"
+          exit 1
+      - name: Run real 20 and 100 session localhost HTTP QA
+        run: node qa/staged-classroom-20-100.cjs
+      - name: Upload bounded, sanitized QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-real-localhost-20-100
+          path: /tmp/zokivo-classroom-20-100-summary.json
           if-no-files-found: warn
           retention-days: 7
