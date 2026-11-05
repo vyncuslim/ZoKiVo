@@ -102,9 +102,10 @@ async function main(){
  const b=await Promise.all(Array.from({length:12},()=>reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0},{"x-player-token":"student-token"}),params).then(r=>r.status)));
  ok(b.filter(x=>x===200).length===1&&b.filter(x=>x===409).length===11,"12 simultaneous reward claims award once");
  let done=false;
+ let finishOwner="qa-teacher";
  const finishDb=()=>async(strings,...vars)=>{
   const s=strings.join("?");
-  if(s.includes("SELECT host_token_hash"))return [{host_token_hash:"synthetic-hash",owner_user_id:"qa-teacher",status:done?"finished":"playing"}];
+  if(s.includes("SELECT host_token_hash"))return [{host_token_hash:"synthetic-hash",owner_user_id:finishOwner,status:done?"finished":"playing"}];
   if(s.includes("UPDATE rooms SET status='finished'")){if(done)return [];done=true;return [{pin:"123456"}]}
   throw Error("Unexpected finish query "+s);
  };
@@ -114,6 +115,9 @@ async function main(){
  ok((await finish.POST(req("/api/rooms/123456/finish",{},{"x-host-token":"teacher-token"}),params)).status===409,"Finishing twice cannot change results");
  principal={id:"imposter",email_confirmed_at:"verified"};
  ok((await finish.POST(req("/api/rooms/123456/finish",{},{"x-host-token":"teacher-token"}),params)).status===403,"A different teacher cannot end the room");
+ principal={id:"qa-teacher",email_confirmed_at:"verified"};finishOwner=null;
+ ok((await finish.POST(req("/api/rooms/123456/finish",{},{"x-host-token":"teacher-token"}),params)).status===403,"Unowned legacy room fails closed even with valid host token");
+ finishOwner="qa-teacher";
  // Paper Mode accepts two brands sharing card #1; rejects duplicate within one brand or 121 cards.
  principal={id:"qa-teacher",email_confirmed_at:"verified"};
  const paperDb=()=>async(strings,...vars)=>{
