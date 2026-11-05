@@ -1,7 +1,18 @@
 import {db,hash,same,bad} from "@/lib/store";
+import {NextRequest,NextResponse} from "next/server";
+import {findUser,setTokens,type Tokens} from "@/lib/mother-auth";
 import {quizPartySnapshot,type QuizPartySnapshot,type QuizRoomMeta} from "@/lib/quiz-party-snapshot";
 import {verifyRoomReadToken} from "@/lib/room-read-token";
 type VerifiedViewer={id:string;answered?:boolean;is_correct?:boolean;points?:number};
+/** Preserve refreshed host auth cookies on GETs; a rotated refresh token must
+ * reach the browser instead of being silently discarded during room polling.
+ */
+function withHostRenew(response:Response,req:NextRequest,renew?:Tokens):Response{
+ if(!renew)return response;
+ const next=new NextResponse(response.body,{status:response.status,headers:response.headers});
+ setTokens(next,req,renew);
+ return next;
+}
 function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolean,me:VerifiedViewer[]){
    const {players,submitted,answers}=snapshot;
    const allAnswered=r.status==="playing"&&players.length>0&&submitted>=players.length;
@@ -42,7 +53,7 @@ function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolea
 
 export const runtime="nodejs";
 /** All viewers see one authoritative score snapshot. Current-round points stay hidden until timeout. */
-export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
+export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
  const {pin}=await params;
  if(!/^\d{6}$/.test(pin))return bad("Invalid PIN");
  try{
@@ -66,7 +77,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   // answer. Authentication never depends on a cached shared snapshot.
   const hostKey=req.headers.get("x-host-token"),playerKey=req.headers.get("x-player-token");
   const playerHash=playerKey?hash(playerKey):"0".repeat(64);
-  const found=await sql`SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.host_token_hash,
+  const found=await sql`SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.host_token_hash,r.owner_user_id,
    r.game_mode,r.question_order,r.mute_sounds,r.score_goal,now() AS server_time,
    (r.status='playing' AND r.deadline>now()) AS round_open,
    p.id AS player_id,(a.id IS NOT NULL) AS answered,a.is_correct AS player_is_correct,a.points AS player_points
@@ -81,7 +92,12 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    WHERE r.pin=${pin}`;
   if(!found.length)return bad("Room not found",404);
   const r=found[0];
-  const host=!!hostKey&&same(r.host_token_hash,hash(hostKey));
+  // A host token is a second factor, not an independent authorization grant.
+  // Read-only host grading must obey the same owner boundary as start/finish/report.
+  const validHostToken=!!hostKey&&same(r.host_token_hash,hash(hostKey));
+  const session=validHostToken?await findUser(req):null;
+  const host=!!(validHostToken&&session?.user?.id&&r.owner_user_id&&r.owner_user_id===session.user.id);
+  if(validHostToken&&!host&&!r.player_id)return bad("Original host account required",403);
   const me=r.player_id?[{id:r.player_id,answered:r.answered,
    is_correct:r.player_is_correct,points:r.player_points}]:[];
   if(!host&&!me.length)return bad("Unauthorized",401);
@@ -91,7 +107,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    const key=[r.status,r.current_index,r.round_open?"open":"closed",
     r.deadline?new Date(r.deadline).getTime():0].join(":");
    const snapshot=await quizPartySnapshot(pin,key);
-   return quizPartyResponse(r as unknown as QuizRoomMeta,snapshot,host,me);
+   return withHostRenew(quizPartyResponse(r as unknown as QuizRoomMeta,snapshot,host,me),req,session?.renew);
   }
   // Identical score policy for host and player. Do not leak correct answers via current-round score changes.
   // Aggregate answer points and mode-event totals ONCE per room, rather
@@ -173,13 +189,13 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    choiceCounts:[0,1,2,3].map(index=>answers.filter(a=>Number(a.chosen_index)===index).length),
    playerResults:answers.map(a=>({id:a.player_id,correct:a.is_correct===true}))
   }:null;
-  return Response.json({
+  return withHostRenew(Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
    serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:submitted,
    answeredIds:host?answers.map(a=>a.player_id):(answerSummary[0]?.mine?[me[0].id]:[]),
    ...(host?{hostResults}:{}),
    viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null,result:myResult[0]||null}
-  },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}});
+  },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}}),req,session?.renew);
  }catch(e){console.error("Game status unavailable",e);return bad("Game unavailable",503)}
 }

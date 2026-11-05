@@ -7,7 +7,7 @@ type Assignment={id:string;title:string;quiz_title:string;due_at:string|null;cre
 export default function TeacherWorkspace(){
  const [member,setMember]=useState<Member|null>(null),[loading,setLoading]=useState(true),[quizzes,setQuizzes]=useState<Quiz[]>([]);
  const [assignments,setAssignments]=useState<Assignment[]>([]),[selected,setSelected]=useState(""),[title,setTitle]=useState(""),[due,setDue]=useState("");
- const [working,setWorking]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState("");
+ const [working,setWorking]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState(""),[copiedId,setCopiedId]=useState("");
  const refresh=async()=>{const r=await fetch("/api/assignments",{cache:"no-store"});if(r.ok){const j=await r.json();setAssignments(j.assignments||[])}};
  useEffect(()=>{let mounted=true;void (async()=>{try{
   const r=await fetch("/api/auth/me",{cache:"no-store"}),j=await r.json();
@@ -20,6 +20,12 @@ export default function TeacherWorkspace(){
   await refresh();
  }catch(e){if(mounted)setError(e instanceof Error?e.message:"Unable to load workspace")}
  finally{if(mounted)setLoading(false)}})();return()=>{mounted=false}},[]);
+ async function copyAssignmentLink(id:string){
+  try{
+   await navigator.clipboard.writeText(new URL("/assignment/"+encodeURIComponent(id),window.location.origin).href);
+   setCopiedId(id);setError("");
+  }catch{setError("Clipboard unavailable. Open the assignment link and copy its browser address.")}
+ }
  async function assign(e:React.FormEvent<HTMLFormElement>){
   e.preventDefault();setError("");setNotice("");setWorking(true);
   try{
@@ -52,13 +58,14 @@ export default function TeacherWorkspace(){
      <label>Due date (optional)<input type="datetime-local" value={due} onChange={e=>setDue(e.target.value)}/></label>
      <button type="submit" className="button button-yellow" disabled={working||!selected||title.trim().length<3}>{working?"Creating…":"Create assignment link →"}</button>
     </form>
-    {!quizzes.length&&<p>No published quizzes yet. Drafts must be reviewed and published by a verified educator.</p>}
+    {!quizzes.length&&<p>No published quizzes yet. Teacher mode allows you to publish your own reviewed drafts; educator identity verification is separate.</p>}
     {notice&&<p role="status" className="quiz-success">{notice}</p>}
    </section>
    <section className="quiz-library-section"><h2>My assigned practice</h2>
     {assignments.length?assignments.map(a=><article className="quiz-library-card" key={a.id}>
      <strong>{a.title}</strong><p>{a.quiz_title}</p><p>Due: {a.due_at?new Date(a.due_at).toLocaleString():"No deadline"}</p>
      <a href={"/assignment/"+a.id}>Student assignment link ↗</a>
+     <button type="button" className="button button-outline" onClick={()=>void copyAssignmentLink(a.id)}>{copiedId===a.id?"✓ Link copied":"Copy assignment link"}</button>
     </article>):<p>Assignments you create will appear here.</p>}
    </section>
   </>}

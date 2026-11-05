@@ -19,8 +19,19 @@ export default function Play() {
   return()=>{alive=false};
  },[pin]);
  async function join(e:FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);setError("");try{
-  const r=await fetch("/api/rooms/"+pin+"/join",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nickname,avatar:avatarId(avatar)})});const j=await r.json();
-  if(!r.ok)throw Error(j.error || "Couldn't join this game");
+  const r=await fetch("/api/rooms/"+pin+"/join",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nickname,avatar:avatarId(avatar)})});const j=await r.json().catch(()=>({}));
+  if(!r.ok){
+   if(r.status===429){
+    const retry=r.headers.get("retry-after");
+    const delay=retry&&/^\d{1,4}$/.test(retry)?" Try again in "+retry+" seconds.":" Please retry shortly.";
+    throw Error("Too many join requests (HTTP 429)."+delay);
+   }
+   if(r.status===403&&!j.error){
+    const ray=r.headers.get("cf-ray");
+    throw Error("Access verification blocked the join (HTTP 403)."+(ray?" Cloudflare Ray ID: "+ray+".":"")+" Contact support if this persists.");
+   }
+   throw Error(typeof j.error==="string"?j.error:"Couldn't join this game (HTTP "+r.status+").");
+  }
   sessionStorage.setItem("player:"+pin,j.token);
   if(typeof j.readToken==="string")sessionStorage.setItem("read:"+pin,j.readToken);
   else sessionStorage.removeItem("read:"+pin);

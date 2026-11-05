@@ -21,6 +21,7 @@ const auth={findUser:async()=>({user:principal}),checkOrigin:()=>{},noCache,auth
 const mockStore={token:()=>"synthetic-test-token",hash:()=>"synthetic-hash",same:(a,b)=>a===b,bad};
 const quizzes={isId:x=>typeof x==="string"&&/^[0-9a-f-]{36}$/.test(x),authUser:async()=>({user:principal})};
 const realtime={emitRoomRefresh:async()=>true};
+const limitedJson=load("src/lib/limited-json.ts",{});
 const params={params:Promise.resolve({pin:"123456"})};
 function req(path,body,headers={}){
  return new Request("https://zokivo.example"+path,{method:"POST",headers:{"origin":"https://zokivo.example","content-type":"application/json",...headers},body:JSON.stringify(body)});
@@ -41,7 +42,7 @@ async function main(){
   }
   throw Error("Unexpected room creation query "+sql);
  };
- const hostRoute=load("src/app/api/rooms/route.ts",{"@/lib/store":{...mockStore,db:createDb},"@/lib/mother-auth":auth,"@/lib/quizzes":quizzes,"@/lib/realtime":realtime});
+ const hostRoute=load("src/app/api/rooms/route.ts",{"@/lib/store":{...mockStore,db:createDb},"@/lib/mother-auth":auth,"@/lib/quizzes":quizzes,"@/lib/realtime":realtime,"@/lib/limited-json":limitedJson});
  principal=null;
  ok((await json(await hostRoute.POST(req("/api/rooms",{})))).status===401,"Anonymous users cannot create rooms");
  principal={id:"qa-teacher",email_confirmed_at:null};
@@ -52,6 +53,9 @@ async function main(){
  const rooms=await Promise.all(Array.from({length:18},()=>hostRoute.POST(req("/api/rooms",body))));
  ok(rooms.every(r=>r.status===200),"18 concurrent simulated teacher host creations succeed");
  ok((await json(await hostRoute.POST(req("/api/rooms",{...body,scoreGoal:"1000"})))).status===400,"Untrusted score goal rejected");
+ ok((await hostRoute.POST(req("/api/rooms",{...body,padding:"x".repeat(3000)}))).status===413,"Oversized room creation stopped before SQL");
+ ok((await hostRoute.POST(req("/api/rooms",body,{"content-type":"text/plain"}))).status===415,"Non-JSON room creation rejected");
+
  // 120 independent concurrent players try to enter a 100-player room. A simulated DB procedure enforces capacity.
  const joined=new Map();
  const avatars=load("src/lib/avatars.ts",{});
@@ -74,6 +78,9 @@ async function main(){
  ok(joined.size===100,"No overflow or duplicate player identities");
  const duplicate=await join.POST(req("/api/rooms/123456/join",{nickname:"QA-000",avatar:"spark"}),params);
  ok(duplicate.status===409,"Duplicated nickname is rejected");
+ ok((await join.POST(req("/api/rooms/123456/join",{nickname:"Evil",avatar:"spark"},{origin:"https://attacker.invalid"}),params)).status===403,"Cross-site player join rejected before DB");
+ ok((await join.POST(req("/api/rooms/123456/join",{nickname:"Huge",avatar:"spark",padding:"x".repeat(6000)}),params)).status===413,"Oversized join payload rejected before DB");
+ ok((await join.POST(req("/api/rooms/123456/join",{nickname:"Plain",avatar:"spark"},{"content-type":"text/plain"}),params)).status===415,"Non-JSON join rejected before DB");
  // Concurrent duplicate answer attempts: the unique answer constraint is modelled in the persistence mock.
  const player={id:"p-001"};let answers=0;
  const answerDb=()=>async(strings,...vars)=>{
@@ -88,6 +95,9 @@ async function main(){
  const answer=load("src/app/api/rooms/[pin]/answer/route.ts",{"@/lib/store":{...mockStore,db:answerDb},"@/lib/realtime":realtime});
  const a=await Promise.all(Array.from({length:16},()=>answer.POST(req("/api/rooms/123456/answer",{choice:1},{"x-player-token":"student-token"}),params).then(r=>r.status)));
  ok(a.filter(x=>x===200).length===1&&a.filter(x=>x===409).length===15,"16 simultaneous repeated answers yield exactly one accepted attempt");
+ ok((await answer.POST(req("/api/rooms/123456/answer",{choice:1},{"x-player-token":"student-token",origin:"https://attacker.invalid"}),params)).status===403,"Cross-site answer rejected before DB");
+ ok((await answer.POST(req("/api/rooms/123456/answer",{choice:1,padding:"x".repeat(6000)},{"x-player-token":"student-token"}),params)).status===413,"Oversized answer rejected before DB");
+ ok((await answer.POST(req("/api/rooms/123456/answer",{choice:1},{"x-player-token":"student-token","content-type":"text/plain"}),params)).status===415,"Non-JSON answer rejected before DB");
  let rewarded=false;
  const rewardDb=()=>async(strings,...vars)=>{
   const s=strings.join("?");
@@ -98,13 +108,17 @@ async function main(){
   }
   throw Error("Unexpected reward query "+s);
  };
- const reward=load("src/app/api/rooms/[pin]/reward/route.ts",{"@/lib/store":{...mockStore,db:rewardDb},"@/lib/mother-auth":auth,"@/lib/realtime":realtime});
+ const reward=load("src/app/api/rooms/[pin]/reward/route.ts",{"@/lib/store":{...mockStore,db:rewardDb},"@/lib/mother-auth":auth,"@/lib/realtime":realtime,"@/lib/limited-json":limitedJson});
  const b=await Promise.all(Array.from({length:12},()=>reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0},{"x-player-token":"student-token"}),params).then(r=>r.status)));
  ok(b.filter(x=>x===200).length===1&&b.filter(x=>x===409).length===11,"12 simultaneous reward claims award once");
+ ok((await reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0,padding:"x".repeat(3000)},{"x-player-token":"student-token"}),params)).status===413,"Oversized reward request stopped before SQL");
+ ok((await reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0},{"x-player-token":"student-token","content-type":"text/plain"}),params)).status===415,"Non-JSON reward rejected before SQL");
+
  let done=false;
+ let finishOwner="qa-teacher";
  const finishDb=()=>async(strings,...vars)=>{
   const s=strings.join("?");
-  if(s.includes("SELECT host_token_hash"))return [{host_token_hash:"synthetic-hash",owner_user_id:"qa-teacher",status:done?"finished":"playing"}];
+  if(s.includes("SELECT host_token_hash"))return [{host_token_hash:"synthetic-hash",owner_user_id:finishOwner,status:done?"finished":"playing"}];
   if(s.includes("UPDATE rooms SET status='finished'")){if(done)return [];done=true;return [{pin:"123456"}]}
   throw Error("Unexpected finish query "+s);
  };
@@ -114,6 +128,9 @@ async function main(){
  ok((await finish.POST(req("/api/rooms/123456/finish",{},{"x-host-token":"teacher-token"}),params)).status===409,"Finishing twice cannot change results");
  principal={id:"imposter",email_confirmed_at:"verified"};
  ok((await finish.POST(req("/api/rooms/123456/finish",{},{"x-host-token":"teacher-token"}),params)).status===403,"A different teacher cannot end the room");
+ principal={id:"qa-teacher",email_confirmed_at:"verified"};finishOwner=null;
+ ok((await finish.POST(req("/api/rooms/123456/finish",{},{"x-host-token":"teacher-token"}),params)).status===403,"Unowned legacy room fails closed even with valid host token");
+ finishOwner="qa-teacher";
  // Paper Mode accepts two brands sharing card #1; rejects duplicate within one brand or 121 cards.
  principal={id:"qa-teacher",email_confirmed_at:"verified"};
  const paperDb=()=>async(strings,...vars)=>{

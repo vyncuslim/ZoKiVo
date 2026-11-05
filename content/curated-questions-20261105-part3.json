@@ -1,0 +1,465 @@
+{
+  "schema": "zokivo-curated-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000009",
+      "title": "Computing, Coding & AI Thinking",
+      "subject": "Computing",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 original questions about algorithms, coding concepts, data and thoughtful AI use.",
+      "questions": [
+        {
+          "question": "In computer science, what is an algorithm?",
+          "options": [
+            "A sequence of steps to solve a problem",
+            "A computer's screen colour",
+            "A type of battery",
+            "A keyboard layout"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Algorithms describe ordered steps for completing a task."
+        },
+        {
+          "question": "What does a loop do in a program?",
+          "options": [
+            "Deletes every file",
+            "Changes the screen size",
+            "Always stops the computer",
+            "Repeats instructions"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A loop executes a block multiple times."
+        },
+        {
+          "question": "What does a variable store?",
+          "options": [
+            "Only pictures",
+            "A physical keyboard",
+            "A value that may change",
+            "A permanent computer case"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Variables hold data used by a program."
+        },
+        {
+          "question": "Which symbol is often used for an assignment in many programming languages?",
+          "options": [
+            "@",
+            "=",
+            "?",
+            "#"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Many languages use an equals sign to assign a value, though syntax varies."
+        },
+        {
+          "question": "What is a boolean value?",
+          "options": [
+            "True or false",
+            "Only positive numbers",
+            "A drawing format",
+            "A web address"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Boolean logic represents two truth values."
+        },
+        {
+          "question": "When developing software, what does debugging mean?",
+          "options": [
+            "Deleting a user's account",
+            "Making the keyboard louder",
+            "Purchasing software",
+            "Finding and fixing program errors"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Debugging investigates why code behaves incorrectly."
+        },
+        {
+          "question": "Which data type best represents a person's age in whole years?",
+          "options": [
+            "Audio file",
+            "Colour gradient",
+            "Integer",
+            "Image"
+          ],
+          "correct_option_index": 2,
+          "explanation": "An integer represents a whole number."
+        },
+        {
+          "question": "What is a conditional statement?",
+          "options": [
+            "A special mouse",
+            "Code that chooses an action based on a condition",
+            "A list of unrelated emojis",
+            "A permanent hardware component"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Conditionals allow different paths based on true or false checks."
+        },
+        {
+          "question": "What is a function in programming?",
+          "options": [
+            "A reusable block of instructions",
+            "A kind of electricity bill",
+            "A computer brand",
+            "A printed receipt"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Functions group instructions for reuse."
+        },
+        {
+          "question": "What is the purpose of testing software?",
+          "options": [
+            "To guarantee zero future problems",
+            "To avoid understanding the design",
+            "To remove all users",
+            "To check expected and unexpected behaviour"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Tests find regressions and unexpected behaviour before release."
+        },
+        {
+          "question": "What is training data used for in machine learning?",
+          "options": [
+            "Replacing the operating system",
+            "Building a keyboard",
+            "Helping a model learn patterns",
+            "Powering a monitor"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Training algorithms learn statistical patterns from examples."
+        },
+        {
+          "question": "Why should an AI answer be checked?",
+          "options": [
+            "Every AI answer is a legal document",
+            "AI can confidently produce incorrect information",
+            "AI never makes mistakes",
+            "AI responses are always official"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Model outputs can be inaccurate or fabricated."
+        },
+        {
+          "question": "What is an example of personal data?",
+          "options": [
+            "A student's full home address",
+            "A generic multiplication table",
+            "A fictional planet name",
+            "A random colour palette"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A home address can identify or locate someone."
+        },
+        {
+          "question": "What does encryption help protect?",
+          "options": [
+            "The weight of a laptop",
+            "Screen brightness",
+            "The length of a lesson",
+            "Information from unauthorized reading"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Encryption makes data unreadable without the appropriate key."
+        },
+        {
+          "question": "Which approach makes a program easier to maintain?",
+          "options": [
+            "Remove all tests",
+            "Repeat identical code everywhere",
+            "Use clear names and small functions",
+            "Keep every variable named x"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Readable modules make software easier to understand and revise."
+        },
+        {
+          "question": "What is a database?",
+          "options": [
+            "A plastic computer case",
+            "A structured system for storing and retrieving data",
+            "A type of USB cable",
+            "A screen resolution"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Databases organise and query stored information."
+        },
+        {
+          "question": "What is an API?",
+          "options": [
+            "An interface through which software components communicate",
+            "A replacement for every password",
+            "A computer monitor size",
+            "A school timetable"
+          ],
+          "correct_option_index": 0,
+          "explanation": "An API defines ways programs request and exchange information."
+        },
+        {
+          "question": "Why is input validation important?",
+          "options": [
+            "It makes all inputs trusted automatically",
+            "It turns photos into text",
+            "It replaces backups",
+            "It checks whether supplied values meet expected rules"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Validation rejects malformed or unacceptable data."
+        },
+        {
+          "question": "What is rate limiting intended to do?",
+          "options": [
+            "Generate every question automatically",
+            "Disable all students",
+            "Restrict excessive requests to a service",
+            "Make every password shorter"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Rate limiting reduces overload and some forms of abuse."
+        },
+        {
+          "question": "Which is a good way to build safer classroom software?",
+          "options": [
+            "Disable error handling",
+            "Test permissions using accounts with different roles",
+            "Trust any button click as authorization",
+            "Store secret keys in HTML"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Role-separated testing checks that unauthorized users cannot gain access."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000010",
+      "title": "Real-World Maths: Data & Decisions",
+      "subject": "Mathematics",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 reasoning-focused word problems about money, charts, measurement and percentage.",
+      "questions": [
+        {
+          "question": "A notebook costs RM8. You buy three. What is the total cost?",
+          "options": [
+            "RM11",
+            "RM16",
+            "RM32",
+            "RM24"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Three notebooks cost 3 × RM8 = RM24."
+        },
+        {
+          "question": "A bus has 42 passengers. 15 get off. How many remain?",
+          "options": [
+            "25",
+            "37",
+            "27",
+            "57"
+          ],
+          "correct_option_index": 2,
+          "explanation": "42 − 15 = 27 passengers."
+        },
+        {
+          "question": "A class of 30 students has 18 girls. What fraction of the class is girls in simplest form?",
+          "options": [
+            "5/3",
+            "3/5",
+            "18/5",
+            "2/5"
+          ],
+          "correct_option_index": 1,
+          "explanation": "18/30 simplifies to 3/5."
+        },
+        {
+          "question": "A shop reduces RM50 by 10%. What is the new price?",
+          "options": [
+            "RM45",
+            "RM40",
+            "RM55",
+            "RM49"
+          ],
+          "correct_option_index": 0,
+          "explanation": "10% of RM50 is RM5; RM50 − RM5 = RM45."
+        },
+        {
+          "question": "A rectangle is 8 cm long and 5 cm wide. What is its area?",
+          "options": [
+            "26 cm²",
+            "13 cm²",
+            "80 cm²",
+            "40 cm²"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Area equals length × width = 8 × 5 = 40 cm²."
+        },
+        {
+          "question": "A 2-litre bottle is shared equally into four cups. How much is in each cup?",
+          "options": [
+            "750 mL",
+            "200 mL",
+            "500 mL",
+            "250 mL"
+          ],
+          "correct_option_index": 2,
+          "explanation": "2 L = 2000 mL; 2000 ÷ 4 = 500 mL."
+        },
+        {
+          "question": "Six test scores are 5, 6, 7, 8, 9, 10. What is their mean?",
+          "options": [
+            "9",
+            "7.5",
+            "7",
+            "8"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The sum is 45; the mean is 45 ÷ 6 = 7.5."
+        },
+        {
+          "question": "A cyclist rides 12 km in one hour at a steady speed. How far in 3 hours?",
+          "options": [
+            "36 km",
+            "24 km",
+            "15 km",
+            "48 km"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Distance is 12 × 3 = 36 km."
+        },
+        {
+          "question": "What is 0.75 as a fraction in simplest form?",
+          "options": [
+            "7/5",
+            "1/4",
+            "4/3",
+            "3/4"
+          ],
+          "correct_option_index": 3,
+          "explanation": "0.75 equals 75/100, which simplifies to 3/4."
+        },
+        {
+          "question": "A bag contains 4 red and 6 blue marbles. What is the probability of picking red?",
+          "options": [
+            "3/5",
+            "1/4",
+            "2/5",
+            "4/6"
+          ],
+          "correct_option_index": 2,
+          "explanation": "4 out of 10 marbles are red, so 4/10 = 2/5."
+        },
+        {
+          "question": "What is the perimeter of a square with side 7 cm?",
+          "options": [
+            "21 cm",
+            "28 cm",
+            "49 cm",
+            "14 cm"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Four sides of 7 cm give 4 × 7 = 28 cm."
+        },
+        {
+          "question": "A recipe uses 200 g of flour for 4 muffins. How much flour for 10 muffins at the same rate?",
+          "options": [
+            "500 g",
+            "400 g",
+            "600 g",
+            "800 g"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Each muffin needs 50 g; 10 need 500 g."
+        },
+        {
+          "question": "What is the next number in 4, 9, 14, 19, ...?",
+          "options": [
+            "23",
+            "25",
+            "29",
+            "24"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Each term increases by 5."
+        },
+        {
+          "question": "A train leaves at 14:20 and arrives at 15:05. How long is the journey?",
+          "options": [
+            "55 minutes",
+            "75 minutes",
+            "45 minutes",
+            "35 minutes"
+          ],
+          "correct_option_index": 2,
+          "explanation": "From 14:20 to 15:00 is 40 min, plus 5 min."
+        },
+        {
+          "question": "If 25% of a class is absent and the class has 32 students, how many are absent?",
+          "options": [
+            "16",
+            "8",
+            "6",
+            "12"
+          ],
+          "correct_option_index": 1,
+          "explanation": "25% is one quarter; 32 ÷ 4 = 8."
+        },
+        {
+          "question": "A box holds 12 pencils. How many boxes are needed for 70 pencils?",
+          "options": [
+            "6",
+            "5",
+            "7",
+            "8"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Five boxes hold only 60; six hold 72."
+        },
+        {
+          "question": "What is 3/8 + 2/8?",
+          "options": [
+            "5/16",
+            "1/8",
+            "6/8",
+            "5/8"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Add numerators when denominators match: 3/8 + 2/8 = 5/8."
+        },
+        {
+          "question": "A tank has 18 L, and 2.5 L is used. How much remains?",
+          "options": [
+            "14.5 L",
+            "20.5 L",
+            "15.5 L",
+            "16.5 L"
+          ],
+          "correct_option_index": 2,
+          "explanation": "18 − 2.5 = 15.5 L."
+        },
+        {
+          "question": "A map uses 1 cm to represent 5 km. How far is 4 cm on the map?",
+          "options": [
+            "25 km",
+            "20 km",
+            "9 km",
+            "15 km"
+          ],
+          "correct_option_index": 1,
+          "explanation": "4 × 5 km = 20 km."
+        },
+        {
+          "question": "The prices RM7, RM9, RM11, RM13, RM15 are recorded. What is their median?",
+          "options": [
+            "RM11",
+            "RM9",
+            "RM13",
+            "RM10"
+          ],
+          "correct_option_index": 0,
+          "explanation": "The middle value of the five sorted prices is RM11."
+        }
+      ]
+    }
+  ]
+}

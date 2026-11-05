@@ -1,15 +1,49 @@
-name: ZoKivo official-domain rate-limit diagnostics
+name: ZoKivo Cloudflare / OAuth low-volume diagnostics
 on:
   push:
     branches: [main]
     paths:
       - ".github/workflows/qa-rate-limit-diagnostics.yml"
+      - "scripts/qa-auth-edge-smoke.mjs"
       - "scripts/qa-rate-limit-diagnostics.mjs"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Read-only 9-request smoke by default. 225-request wave requires explicit opt-in."
+        type: choice
+        required: true
+        default: SAFE_SINGLE_PASS
+        options:
+          - SAFE_SINGLE_PASS
+          - RUN_BOUNDED_225_READS
 permissions:
   contents: read
+concurrency:
+  group: zokivo-cloudflare-diagnostics
+  cancel-in-progress: false
 jobs:
+  edge-auth-single-pass:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.mode == 'SAFE_SINGLE_PASS' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax check safe public GET probe
+        run: node --check scripts/qa-auth-edge-smoke.mjs
+      - name: Run 9 maximum read-only HTTP checks; stop on 403 or 429
+        run: node scripts/qa-auth-edge-smoke.mjs
+      - name: Save sanitized diagnostic and Cloudflare Ray IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zokivo-edge-oauth-safe-smoke
+          path: zokivo-edge-oauth-smoke.json
+          if-no-files-found: warn
   read-only-limit-check:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'RUN_BOUNDED_225_READS' }}
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:

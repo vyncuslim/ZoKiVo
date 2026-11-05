@@ -33,12 +33,17 @@ export function validateQuiz(raw:unknown):QuizInput{
  if(title.length<3||subject.length<2)throw new AuthError("Enter a title and subject.");
  const language=obj.language;if(language!=="en"&&language!=="zh"&&language!=="ms")throw new AuthError("Choose a supported language.");
  if(!Array.isArray(obj.questions)||obj.questions.length<1||obj.questions.length>40)throw new AuthError("Quiz must contain between 1 and 40 questions.");
+ const seenQuestions=new Set<string>();
  const questions:QuizItem[]=obj.questions.map((item,i)=>{
   if(!item||typeof item!=="object")throw new AuthError("Invalid question "+(i+1));
   const q=item as Record<string,unknown>,question=stringField(q.question??q.question_text,750),opts=q.options??q.choices;
   if(question.length<4||!Array.isArray(opts)||opts.length!==4)throw new AuthError("Question "+(i+1)+" requires exactly four choices.");
+  // Prevent repeated quiz questions disguised by Unicode width or whitespace.
+  const normalizedQuestion=question.normalize("NFKC").toLowerCase().replace(/\s+/g," ").trim();
+  if(seenQuestions.has(normalizedQuestion))throw new AuthError("Question "+(i+1)+" repeats an earlier question.");
+  seenQuestions.add(normalizedQuestion);
   const answers=opts.map(x=>stringField(x,250));
-  if(answers.some(x=>x.length===0)||new Set(answers.map(x=>x.toLowerCase())).size!==4)throw new AuthError("Question "+(i+1)+" requires four unique choices.");
+  if(answers.some(x=>x.length===0)||new Set(answers.map(x=>x.normalize("NFKC").toLowerCase())).size!==4)throw new AuthError("Question "+(i+1)+" requires four unique choices.");
   const answer=q.correct_option_index??q.correct_index;
   if(typeof answer!=="number"||!Number.isInteger(answer)||answer<0||answer>3)throw new AuthError("Question "+(i+1)+" needs a correct answer.");
   const formula=stringField(q.formula_text,240);

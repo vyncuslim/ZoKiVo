@@ -9,6 +9,7 @@ const load=(path,mocks={})=>{
  return mod.exports;
 };
 const auth=load("src/lib/mother-auth.ts");
+const limitedJson=load("src/lib/limited-json.ts");
 const uuid="b91f4600-1000-4000-8000-000000000001";
 const owner="self-teacher-owner";
 let actor=null,ownsQuiz=true,draft=true,mutationCount=0;
@@ -27,7 +28,7 @@ const db=()=>async(strings,...values)=>{
 };
 const route=load("src/app/api/quizzes/[id]/publish/route.ts",{
  "@/lib/store":{db},"@/lib/quizzes":{authUser:quiz.authUser,isId:quiz.isId},
- "@/lib/mother-auth":auth
+ "@/lib/mother-auth":auth,"@/lib/limited-json":limitedJson
 });
 const teachers=[
  {id:owner,email_confirmed_at:"2026-01-01T00:00:00Z",user_metadata:{zokivo_view_role:"teacher"}},
@@ -67,6 +68,13 @@ async function test(label,user,expected,{confirm=true,origin="https://zokivo.ver
  await test("teacher cannot republish existing quiz",teachers[0],409,{isDraft:false});
  await test("teacher must explicitly confirm",teachers[0],400,{confirm:false});
  await test("teacher cross-site POST blocked",teachers[0],403,{origin:"https://evil.example"});
+ actor=teachers[0];mutationCount=0;
+ const huge=new NextRequest("https://zokivo.vercel.app/api/quizzes/"+uuid+"/publish",{method:"POST",
+  headers:{"content-type":"application/json",origin:"https://zokivo.vercel.app"},
+  body:JSON.stringify({confirm:true,padding:"x".repeat(3000)})});
+ assert.equal((await route.POST(huge,{params:Promise.resolve({id:uuid})})).status,413,"Oversized publish request rejected before SQL");checks++;
+ assert.equal(mutationCount,0,"Oversized publish request must not access database");checks++;
+
  await test("invalid UUID blocked",teachers[0],400,{quizId:"not-an-id"});
  console.log("SELF_SERVICE_TEACHER_PUBLISH_TEST_PASS="+JSON.stringify({checks}));
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});

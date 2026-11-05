@@ -9,7 +9,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
   const session=await findUser(req);if(!session.user)return noCache({error:"Sign in as host"},401);
   const sql=db(),room=await sql`SELECT status,quiz_set_id,owner_user_id,host_token_hash FROM rooms WHERE pin=${pin}`;
   if(!room.length||!same(room[0].host_token_hash,hash(key)))return noCache({error:"Not authorized"},403);
-  if(room[0].owner_user_id&&room[0].owner_user_id!==session.user.id)return noCache({error:"Only the original host can export results"},403);
+  if(!room[0].owner_user_id||room[0].owner_user_id!==session.user.id)return noCache({error:"Only the original host can export results"},403);
   if(room[0].status!=="finished")return noCache({error:"Report available only after the game finishes"},409);
   const players=await sql`SELECT p.nickname,p.score,COUNT(a.id)::integer AS answered,COUNT(a.id) FILTER(WHERE a.is_correct)::integer AS correct FROM players p LEFT JOIN answers a ON a.player_id=p.id AND a.room_pin=${pin} WHERE p.room_pin=${pin} GROUP BY p.id,p.nickname,p.score,p.created_at ORDER BY p.score DESC,p.created_at`;
   const questions=await sql`SELECT q.position,q.question,q.correct_index,q.choices,COUNT(a.id)::integer AS submissions,COUNT(a.id) FILTER(WHERE a.is_correct)::integer AS correct FROM questions q JOIN rooms r ON r.pin=${pin} LEFT JOIN answers a ON a.room_pin=${pin} AND q.position=COALESCE((r.question_order->>a.question_index)::integer,a.question_index) WHERE q.quiz_set_id=${room[0].quiz_set_id} GROUP BY q.id,q.position,q.question,q.correct_index,q.choices ORDER BY q.position`;

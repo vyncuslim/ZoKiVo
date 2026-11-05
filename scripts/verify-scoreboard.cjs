@@ -3,11 +3,11 @@ const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert
 process.env.ZOKIVO_ROOM_FAST_PATH_ENABLED="false";
 const routeText=fs.readFileSync("src/app/api/rooms/[pin]/route.ts","utf8");
 const js=ts.transpileModule(routeText,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-let called=0,answeredBoth=false,finished=false,gradeQueries=0;
+let called=0,answeredBoth=false,finished=false,gradeQueries=0,ownerId="qa-teacher",currentUser="qa-teacher",renewHost=false;
 const sql=async(strings,...vars)=>{
  const q=strings.join("?");
  called++;
- if(q.includes("LEFT JOIN LATERAL"))return [{pin:"123456",status:finished?"finished":"playing",game_mode:"quiz_party",quiz_set_id:"quiz",host_token_hash:"good-host",deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString(),player_id:vars[0]==="good-player"?"p1":null,answered:true,player_is_correct:true,player_points:100}];
+ if(q.includes("LEFT JOIN LATERAL"))return [{pin:"123456",status:finished?"finished":"playing",game_mode:"quiz_party",quiz_set_id:"quiz",host_token_hash:"good-host",owner_user_id:ownerId,deadline:new Date(Date.now()+8000).toISOString(),round_open:true,current_index:1,server_time:new Date().toISOString(),player_id:vars[0]==="good-player"?"p1":null,answered:true,player_is_correct:true,player_points:100}];
  if(q.includes("FROM players p JOIN rooms r"))return [{id:"p1",answered:true,is_correct:true,points:100}];
  if(q.includes("CASE WHEN r.status="))return [{id:"p1",nickname:"Player One",score:100},{id:"p2",nickname:"Player Two",score:0}];
  if(q.includes("SELECT question,choices"))return [{question:"Public quiz question",choices:["A","B","C","D"]}];
@@ -22,9 +22,9 @@ const sql=async(strings,...vars)=>{
 };
 const store={db:()=>sql,hash:s=>s,same:(a,b)=>a===b,bad:(msg,status=400)=>Response.json({error:msg},{status})};
 const mod={exports:{}};
-new Function("require","module","exports",js)((n)=>n==="@/lib/store"?store:n==="@/lib/quiz-party-snapshot"?{quizPartySnapshot:async()=>{throw Error("Fast path disabled in legacy test")}}:n==="@/lib/room-read-token"?{verifyRoomReadToken:()=>null}:require(n),mod,mod.exports);
+new Function("require","module","exports",js)((n)=>n==="@/lib/store"?store:n==="@/lib/quiz-party-snapshot"?{quizPartySnapshot:async()=>{throw Error("Fast path disabled in legacy test")}}:n==="@/lib/room-read-token"?{verifyRoomReadToken:()=>null}:n==="@/lib/mother-auth"?{findUser:async()=>({user:currentUser?{id:currentUser}:null,renew:renewHost?{access_token:"qa-access",refresh_token:"qa-refresh",expires_in:3600}:undefined}),setTokens:res=>res.headers.set("x-qa-token-renewed","yes")}:require(n),mod,mod.exports);
 const handler=mod.exports.GET;let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};
-async function get(headers){const response=await handler(new Request("https://zokivo.example/api/rooms/123456",{headers}),{params:Promise.resolve({pin:"123456"})});return {status:response.status,json:await response.json()} }
+async function get(headers){const response=await handler(new Request("https://zokivo.example/api/rooms/123456",{headers}),{params:Promise.resolve({pin:"123456"})});return {status:response.status,json:await response.json(),renewed:response.headers.get("x-qa-token-renewed")==="yes"} }
 (async()=>{
  const h=await get({"x-host-token":"good-host"}),p=await get({"x-player-token":"good-player"});
  ok(h.status===200&&p.status===200,"Host and player both authorized");
@@ -52,6 +52,17 @@ async function get(headers){const response=await handler(new Request("https://zo
  ok(finalHost.json.hostResults?.correctAnswer==="B","Final screen can show the last correct answer after game ends");
  ok(!Object.hasOwn(finalPlayer.json,"hostResults"),"Finished player response never exposes host-only results");
  finished=false;
+ renewHost=true;
+ const refreshed=await get({"x-host-token":"good-host"});
+ ok(refreshed.status===200&&refreshed.renewed,"Host GET preserves new cookies after refresh token rotation");
+ renewHost=false;
+ currentUser="wrong-teacher";
+ const imposter=await get({"x-host-token":"good-host"});
+ ok(imposter.status===403,"Stolen host key cannot reveal private grading from another account");
+ currentUser="qa-teacher";ownerId=null;
+ const unowned=await get({"x-host-token":"good-host"});
+ ok(unowned.status===403,"Host-only grading denies legacy rooms without an owner");
+ ownerId="qa-teacher";
  const unauth=await get({});
  ok(unauth.status===401,"Unknown client rejected");
  ok(routeText.includes("a.question_index<r.current_index"),"In-flight question points excluded from EVERY viewer");

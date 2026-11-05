@@ -20,6 +20,8 @@ throws(()=>q.validateQuiz({...good,questions:[]}),"Empty quiz rejected");
 throws(()=>q.validateQuiz({...good,questions:Array.from({length:41},()=>good.questions[0])}),"41 questions rejected");
 throws(()=>q.validateQuiz({...good,questions:[{...good.questions[0],options:["A","B","C"]}]}),"Less than 4 choices rejected");
 throws(()=>q.validateQuiz({...good,questions:[{...good.questions[0],options:["A","a","B","C"]}]}),"Duplicate choices rejected");
+throws(()=>q.validateQuiz({...good,questions:[good.questions[0],{...good.questions[0],question:"  WHAT ANIMAL LIVES IN ANTARCTICA?  "}]}),"Duplicate question text rejected regardless of case and spaces");
+throws(()=>q.validateQuiz({...good,questions:[{...good.questions[0],options:["A","Ａ","B","C"]}]}),"Unicode full-width equivalent choices rejected");
 throws(()=>q.validateQuiz({...good,questions:[{...good.questions[0],correct_option_index:4}]}),"Invalid answer index rejected");
 throws(()=>q.validateQuiz({...good,language:"unknown"}),"Unsupported language rejected");
 ok(q.isId("b91f4600-1000-4000-8000-000000000001"),"Valid UUID accepted");

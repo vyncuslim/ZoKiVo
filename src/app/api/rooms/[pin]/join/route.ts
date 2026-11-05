@@ -7,12 +7,44 @@ import {db,token,hash,bad} from "@/lib/store";
 import {issueRoomReadToken} from "@/lib/room-read-token";
 export const runtime="nodejs";
 const choices=["Comet","Panda","Star","Otter","Rocket","Fox","Pixel","Quokka"];
+function rejectCrossSite(req:Request){
+ const origin=req.headers.get("origin");
+ return (origin!==null&&origin!==new URL(req.url).origin)||req.headers.get("sec-fetch-site")==="cross-site";
+}
+async function smallJson(req:Request,maxBytes=4096):Promise<{ok:true;value:Record<string,unknown>}|{ok:false;error:string;status:number}>{
+ if(!/^application\/json(?:\s*;|\s*$)/i.test(req.headers.get("content-type")||""))return {ok:false,error:"JSON content type required",status:415};
+ const length=req.headers.get("content-length");
+ if(length&&(!/^\d+$/.test(length)||Number(length)>maxBytes))return {ok:false,error:"Request body too large",status:413};
+ // Enforce the cap while reading, not after buffering an arbitrary stream.
+ if(!req.body)return {ok:false,error:"Invalid JSON",status:400};
+ const reader=req.body.getReader(),decoder=new TextDecoder("utf-8",{fatal:true});
+ let body="",bytes=0;
+ try{
+  while(true){
+   const {done,value}=await reader.read();
+   if(done)break;
+   bytes+=value.byteLength;
+   if(bytes>maxBytes){
+    await reader.cancel().catch(()=>{});
+    return {ok:false,error:"Request body too large",status:413};
+   }
+   body+=decoder.decode(value,{stream:true});
+  }
+  body+=decoder.decode();
+  const parsed:unknown=JSON.parse(body);
+  if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))return {ok:false,error:"Invalid JSON object",status:400};
+  return {ok:true,value:parsed as Record<string,unknown>};
+ }catch{return {ok:false,error:"Invalid JSON",status:400}}
+}
+
 export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
  const {pin}=await params;
  if(!/^\d{6}$/.test(pin))return bad("Invalid PIN");
+ if(rejectCrossSite(req))return bad("Cross-site room joins are not allowed.",403);
+ const parsed=await smallJson(req);
+ if(!parsed.ok)return bad(parsed.error,parsed.status);
  try{
-  const body=await req.json().catch(()=>null);
-  if(!body||typeof body!=="object")return bad("Invalid join information");
+  const body=parsed.value;
   const desired=typeof body.nickname==="string"?body.nickname.trim().replace(/[<>\x00-\x1f]/g,"").slice(0,24):"";
   const sql=db();
   const config=await sql`SELECT status,allow_late_joining,random_player_names FROM rooms WHERE pin=${pin}`;

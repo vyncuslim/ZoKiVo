@@ -1,5 +1,6 @@
 import {NextRequest} from "next/server";
 import {db} from "@/lib/store";
+import {readBoundedJson} from "@/lib/limited-json";
 import {authUser,isId} from "@/lib/quizzes";
 import {checkOrigin,AuthError,noCache,authError,applyRenew,canPublishQuizzes} from "@/lib/mother-auth";
 export const runtime="nodejs";
@@ -9,8 +10,9 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>
   const {id}=await params;if(!isId(id))throw new AuthError("Invalid quiz ID.");
   const {user,renew}=await authUser(req);
   if(!canPublishQuizzes(user!))return noCache({error:"Switch to Teacher Account to publish your quizzes."},403);
-  const data=await req.json().catch(()=>null);
-  if(data?.confirm!==true)throw new AuthError("Confirm quiz publication explicitly.");
+  const parsed=await readBoundedJson(req,2048);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  if(parsed.value.confirm!==true)throw new AuthError("Confirm quiz publication explicitly.");
   const sql=db();
   const published=await sql`UPDATE quiz_sets SET status='published',updated_at=now()
    WHERE id=${id} AND owner_user_id=${user!.id} AND status='draft'
