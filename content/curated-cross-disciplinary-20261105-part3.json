@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-curated-cross-disciplinary-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000009",
+      "title": "Food, Cooking & Everyday Nutrition",
+      "subject": "Food & Nutrition",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 questions on food safety, cooking skills, balanced meals and nutrition basics.",
+      "questions": [
+        {
+          "question": "Why should hands be washed before preparing food?",
+          "options": [
+            "To reduce the spread of microbes to food",
+            "To change the food's flavour",
+            "To increase the water content of fruit",
+            "To make knives sharper"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Clean hands lower the chance of transferring harmful microbes."
+        },
+        {
+          "question": "What is a balanced meal?",
+          "options": [
+            "Only sweets and drinks",
+            "The largest possible meal",
+            "A plate containing one food only",
+            "A meal including varied food groups in suitable proportions"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Variety helps provide different nutrients."
+        },
+        {
+          "question": "Which nutrient is an important source of energy?",
+          "options": [
+            "Sand",
+            "Glass",
+            "Carbohydrates",
+            "Plastic"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Carbohydrates are one source of energy for the body."
+        },
+        {
+          "question": "What is protein useful for?",
+          "options": [
+            "Making bones invisible",
+            "Growth and repair of body tissues",
+            "Replacing the need for water",
+            "Preventing all diseases"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Protein supplies amino acids used to build and repair tissues."
+        },
+        {
+          "question": "What do dietary fibres help support?",
+          "options": [
+            "Normal digestion and bowel function",
+            "Instant muscle growth",
+            "Screen vision only",
+            "Replacing sleep"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Fibre supports digestive health."
+        },
+        {
+          "question": "Why is clean drinking water important?",
+          "options": [
+            "It has no role in digestion",
+            "It replaces every food nutrient",
+            "It makes people never tired",
+            "It helps the body stay hydrated"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Water is essential for many normal body processes."
+        },
+        {
+          "question": "Which method best lowers the risk of cross-contamination?",
+          "options": [
+            "Touch cooked food after handling raw meat without washing",
+            "Store raw chicken above fresh salad",
+            "Use separate tools or clean them between raw meat and ready-to-eat food",
+            "Use one dirty board for all ingredients"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Separation and cleaning reduce transfer of harmful microorganisms."
+        },
+        {
+          "question": "Why should raw poultry be cooked thoroughly?",
+          "options": [
+            "To make storage unnecessary",
+            "To reduce foodborne infection risk",
+            "To make it weigh exactly twice as much",
+            "To remove all vitamins"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Adequate cooking destroys many dangerous microorganisms."
+        },
+        {
+          "question": "Why should foods be stored at appropriate temperatures?",
+          "options": [
+            "To slow harmful microbial growth and spoilage",
+            "To change every food into ice",
+            "To remove the need to wash produce",
+            "To make expiry dates irrelevant"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Temperature control is a key part of food safety."
+        },
+        {
+          "question": "What does a food ingredient list show?",
+          "options": [
+            "The name of every customer",
+            "Only the company's advertising slogan",
+            "The future weather forecast",
+            "Ingredients used to make a packaged product"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Ingredient lists help consumers understand what is in a product."
+        },
+        {
+          "question": "Which is a healthy approach to eating?",
+          "options": [
+            "Eat the same snack for every meal",
+            "Avoid drinking water",
+            "Choose varied foods and listen to hunger and fullness cues",
+            "Skip all meals to study longer"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Balanced eating and routine habits support health."
+        },
+        {
+          "question": "Why can home cooking be a useful skill?",
+          "options": [
+            "It replaces safe knife practices",
+            "It helps people plan ingredients, hygiene and portion choices",
+            "It guarantees all meals are perfect",
+            "It eliminates all grocery costs"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Cooking skills support informed food preparation."
+        },
+        {
+          "question": "What are legumes?",
+          "options": [
+            "Plants such as beans, peas and lentils",
+            "Only kinds of fish",
+            "Types of kitchen knives",
+            "A form of bottled water"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Legumes are edible seeds from plants in the legume family."
+        },
+        {
+          "question": "Which food group commonly provides calcium?",
+          "options": [
+            "Cooking oil alone",
+            "White sugar alone",
+            "Plain table salt",
+            "Milk, yoghurt or fortified alternatives"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Dairy and some fortified alternatives can contribute calcium."
+        },
+        {
+          "question": "What is a recipe's ingredient quantity for?",
+          "options": [
+            "Showing only cooking temperature",
+            "Advertising the kitchen",
+            "Measuring what is needed to prepare a dish",
+            "Determining the cook's age"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Correct quantities improve consistency and reduce waste."
+        },
+        {
+          "question": "A recipe serves four people. For eight people, what should you usually do to ingredient amounts?",
+          "options": [
+            "Keep every ingredient unchanged",
+            "Double the ingredients",
+            "Halve the ingredients",
+            "Use no ingredients"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Doubling servings generally doubles ingredient quantities."
+        },
+        {
+          "question": "Why should vegetables be washed before eating?",
+          "options": [
+            "To remove some dirt and surface contamination",
+            "To turn them into fruit",
+            "To eliminate the need for safe storage",
+            "To add protein to every vegetable"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Washing can remove soil and some contaminants."
+        },
+        {
+          "question": "What is food waste?",
+          "options": [
+            "Only empty packaging",
+            "Every compost pile",
+            "Only food in restaurants",
+            "Food intended for consumption that is discarded"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Wasted food uses resources without being eaten."
+        },
+        {
+          "question": "Which method helps reduce food waste at home?",
+          "options": [
+            "Discard food before checking it",
+            "Ignore storage instructions",
+            "Plan portions and safely use leftovers",
+            "Buy more than you can store"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Planning and proper storage reduce unnecessary waste."
+        },
+        {
+          "question": "Why is the nutrition information panel useful?",
+          "options": [
+            "It tells you who bought the food",
+            "It helps compare energy and nutrient amounts across foods",
+            "It proves every product is healthy",
+            "It replaces medical advice"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Nutrition panels provide standardised information for comparison."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000010",
+      "title": "Weather Watchers & Climate Patterns",
+      "subject": "Weather",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 questions on clouds, rainfall, forecasts and safe weather awareness.",
+      "questions": [
+        {
+          "question": "What instrument measures rainfall amount?",
+          "options": [
+            "Compass",
+            "Stopwatch",
+            "Balance scale",
+            "Rain gauge"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A rain gauge collects rainfall to measure its depth."
+        },
+        {
+          "question": "What is air pressure?",
+          "options": [
+            "The number of clouds only",
+            "The size of a mountain",
+            "The force of air acting over an area",
+            "The colour of a rainbow"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Air has mass and exerts pressure."
+        },
+        {
+          "question": "What does an anemometer measure?",
+          "options": [
+            "Water depth",
+            "Wind speed",
+            "Soil acidity",
+            "Earthquake magnitude"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Anemometers are used to measure wind speed."
+        },
+        {
+          "question": "How do many clouds form?",
+          "options": [
+            "Water vapour cools and condenses into droplets or ice crystals",
+            "The ocean turns into smoke",
+            "Mountains release cotton",
+            "Sunlight becomes sand"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Condensation produces droplets and crystals suspended in air."
+        },
+        {
+          "question": "What is humidity?",
+          "options": [
+            "The number of birds in a tree",
+            "The strength of a compass",
+            "The colour of soil",
+            "The amount of water vapour in the air"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Humidity describes atmospheric water vapour."
+        },
+        {
+          "question": "What is the main difference between weather and climate?",
+          "options": [
+            "They are identical terms",
+            "Climate describes only today's rain",
+            "Weather is short-term conditions; climate is long-term patterns",
+            "Weather lasts centuries; climate lasts one minute"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Climate is described using longer-term statistics of weather."
+        },
+        {
+          "question": "What causes a rainbow?",
+          "options": [
+            "Only lightning",
+            "Sunlight refracting, reflecting and dispersing in water droplets",
+            "Clouds producing coloured paint",
+            "Air becoming solid"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Light interacts with droplets to create a spectrum."
+        },
+        {
+          "question": "What is a thunderstorm?",
+          "options": [
+            "A storm with lightning and thunder",
+            "Any quiet sunny day",
+            "A type of ocean current",
+            "An eclipse of the Moon"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Electrical activity in storm clouds causes lightning."
+        },
+        {
+          "question": "During nearby lightning, what is the safest general place to be?",
+          "options": [
+            "Under a lone tall tree",
+            "On an open sports field",
+            "Swimming in a lake",
+            "Inside a substantial building"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Indoor shelter is safer during lightning."
+        },
+        {
+          "question": "Why can steep slopes be dangerous after heavy rain?",
+          "options": [
+            "Gravity stops acting",
+            "The soil becomes weightless",
+            "Water may destabilise soil and contribute to landslides",
+            "Rain always makes mountains taller"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Saturated ground can increase slope failure risk."
+        },
+        {
+          "question": "What does a weather forecast estimate?",
+          "options": [
+            "Which song will be popular tomorrow",
+            "Likely atmospheric conditions over a period",
+            "Exact weather with perfect certainty",
+            "The age of every tree"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Forecasts use observations and models to estimate future conditions."
+        },
+        {
+          "question": "Which measurement describes temperature?",
+          "options": [
+            "Degrees Celsius",
+            "Kilograms per second",
+            "Metres per litre",
+            "Newtons per minute"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Temperature is commonly measured in Celsius."
+        },
+        {
+          "question": "What is the monsoon?",
+          "options": [
+            "A type of insect",
+            "A daily ocean tide",
+            "A bright star",
+            "A seasonal pattern of winds associated with rainfall changes"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Monsoon circulations influence seasonal rainfall in many regions."
+        },
+        {
+          "question": "Why do meteorologists use weather satellites?",
+          "options": [
+            "To create sunlight",
+            "To replace all ground measurements",
+            "To observe cloud patterns and atmospheric features",
+            "To directly change every storm"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Satellite data supplements surface observations."
+        },
+        {
+          "question": "Why are storm drains important in cities?",
+          "options": [
+            "They turn rivers into roads",
+            "They carry away excess surface water when functioning properly",
+            "They make rainfall stop",
+            "They increase every flood risk automatically"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Drainage systems manage runoff, within design limits."
+        },
+        {
+          "question": "What is evaporation in the water cycle?",
+          "options": [
+            "Liquid water becoming vapour",
+            "Clouds freezing into rock",
+            "Rain becoming electricity",
+            "Wind turning into water"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Evaporation moves water from surfaces into the air."
+        },
+        {
+          "question": "What is a drought?",
+          "options": [
+            "One short rain shower",
+            "A period of excess flooding everywhere",
+            "Any day with clouds",
+            "A prolonged period of unusually low water availability"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Drought reflects extended water shortages."
+        },
+        {
+          "question": "Why are heat warnings useful?",
+          "options": [
+            "They replace drinking water",
+            "They guarantee cool weather",
+            "They help people plan hydration, shade and reduced heat exposure",
+            "They prevent every hot day"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Heat advisories communicate elevated heat risk."
+        },
+        {
+          "question": "What makes a sea breeze more likely during daytime near the coast?",
+          "options": [
+            "All winds suddenly disappearing",
+            "Land heating more quickly than nearby sea water",
+            "The sea completely stopping waves",
+            "The Moon becoming brighter"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Uneven heating can create local air circulation."
+        },
+        {
+          "question": "Why should a school have a weather emergency plan?",
+          "options": [
+            "To guide safe shelter, communications and activities",
+            "To ensure there will never be storms",
+            "To stop teachers using maps",
+            "To replace normal lessons permanently"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Prepared procedures help people respond effectively."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000011",
+      "title": "Wildlife, Habitats & Biodiversity",
+      "subject": "Animals & Nature",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 questions about animal adaptations, habitats, conservation and ecosystems.",
+      "questions": [
+        {
+          "question": "What is biodiversity?",
+          "options": [
+            "Only one tree species",
+            "A type of electrical circuit",
+            "The variety of living organisms and ecological systems",
+            "The number of buildings in a city"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Biodiversity includes species, genetic and ecosystem diversity."
+        },
+        {
+          "question": "What is a habitat?",
+          "options": [
+            "A laboratory temperature scale",
+            "The natural place where an organism lives",
+            "Only a type of zoo ticket",
+            "A single television programme"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Habitats provide resources and conditions for organisms."
+        },
+        {
+          "question": "Why do birds have different beak shapes?",
+          "options": [
+            "They are adapted for different foods and ways of feeding",
+            "All birds eat the same seeds",
+            "Beaks never change across species",
+            "Beaks measure rainfall"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Beak form is linked to diet and ecological role."
+        },
+        {
+          "question": "What is camouflage?",
+          "options": [
+            "A type of artificial intelligence model",
+            "A form of musical notation",
+            "A replacement for breathing",
+            "Features that help an organism blend with surroundings"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Camouflage can make animals harder to detect."
+        },
+        {
+          "question": "What is a nocturnal animal?",
+          "options": [
+            "A plant that floats",
+            "A fish that never swims",
+            "An animal active mainly at night",
+            "An animal with no bones"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Nocturnal species are primarily active after dark."
+        },
+        {
+          "question": "What is migration in animals?",
+          "options": [
+            "A kind of photosynthesis",
+            "Seasonal movement between regions",
+            "Changing a computer password",
+            "Every movement within one cage"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Migration can follow seasonal food and breeding opportunities."
+        },
+        {
+          "question": "Which animal is an amphibian?",
+          "options": [
+            "Frog",
+            "Eagle",
+            "Butterfly",
+            "Earthworm"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Frogs are amphibians with life stages linked to water and land."
+        },
+        {
+          "question": "What is an invertebrate?",
+          "options": [
+            "An animal with feathers only",
+            "A plant with roots",
+            "A large mammal only",
+            "An animal without a backbone"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Invertebrates include insects, molluscs and many other groups."
+        },
+        {
+          "question": "Why are wetlands valuable?",
+          "options": [
+            "They prevent every drought",
+            "They are always dry",
+            "They provide habitat, filter some pollutants and store water",
+            "They contain no living organisms"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Wetlands support biodiversity and water regulation."
+        },
+        {
+          "question": "What can happen if an important pollinator declines?",
+          "options": [
+            "No flowering plant can reproduce at all",
+            "Some plants may produce fewer fruits or seeds",
+            "All crops instantly stop growing",
+            "Every fish disappears"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Many plants benefit from animal pollination."
+        },
+        {
+          "question": "What is an endangered species?",
+          "options": [
+            "A species facing a high risk of extinction",
+            "A species that is always common",
+            "Any pet that is sleepy",
+            "A newly planted flower"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Endangered classifications reflect elevated extinction risk."
+        },
+        {
+          "question": "What does a conservation programme try to do?",
+          "options": [
+            "Replace every wild animal with a robot",
+            "Remove all native plants",
+            "Make all forests identical",
+            "Protect species, habitats or natural resources"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Conservation aims to sustain ecosystems and species."
+        },
+        {
+          "question": "Why should wild animals not be fed unfamiliar human foods?",
+          "options": [
+            "It guarantees more biodiversity",
+            "All human food is suitable for wildlife",
+            "It may harm their health and natural behaviour",
+            "It always makes them immortal"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Feeding wildlife can introduce poor diets and dependence."
+        },
+        {
+          "question": "What is a keystone species?",
+          "options": [
+            "Any tree older than ten years",
+            "A species whose influence on its ecosystem is unusually large",
+            "Only the largest animal in a zoo",
+            "An organism living only in caves"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Some species strongly shape ecosystem interactions."
+        },
+        {
+          "question": "Why are connected wildlife corridors useful?",
+          "options": [
+            "They help animals move between fragmented habitats",
+            "They block every migration route",
+            "They create new oceans",
+            "They replace all protected forests"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Corridors can maintain movement and genetic exchange."
+        },
+        {
+          "question": "What is a food chain?",
+          "options": [
+            "A metal chain used in farming",
+            "A plan for cooking lessons",
+            "A list of weather stations",
+            "A simple sequence showing who eats whom"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Food chains represent the transfer of energy through feeding."
+        },
+        {
+          "question": "What is an invasive species?",
+          "options": [
+            "A species found in its original home",
+            "A plant that always produces flowers",
+            "A non-native organism that spreads and causes ecological harm",
+            "Any animal in a nature reserve"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Some introduced species can damage native ecosystems."
+        },
+        {
+          "question": "Why do some animals have thick fur in cold environments?",
+          "options": [
+            "It generates all sunlight",
+            "It can help reduce heat loss",
+            "It makes them weightless",
+            "It prevents the need for food"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Insulating fur helps maintain body temperature."
+        },
+        {
+          "question": "What is an example of symbiosis?",
+          "options": [
+            "Two different species living in close ecological association",
+            "A thunderstorm moving across a city",
+            "A robot charging a battery",
+            "A single rock breaking apart"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Symbiosis refers to close interactions between distinct species."
+        },
+        {
+          "question": "Which activity helps protect local wildlife?",
+          "options": [
+            "Collect every wild egg",
+            "Release unwanted pets into forests",
+            "Leave fishing lines in rivers",
+            "Respect habitats and avoid disturbing nests"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Reducing disturbance protects animals and habitat."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000012",
+      "title": "Critical Thinking & Smart Decisions",
+      "subject": "Critical Thinking",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 scenarios about reasoning, evaluating evidence, probability and thoughtful choices.",
+      "questions": [
+        {
+          "question": "A friend says 'everyone likes this game'. What should you ask?",
+          "options": [
+            "Can the game have more colours?",
+            "What evidence supports 'everyone'?",
+            "How loud can the claim be repeated?",
+            "Who has the biggest phone?"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Broad claims need evidence about the relevant group."
+        },
+        {
+          "question": "What is a logical conclusion?",
+          "options": [
+            "A claim that follows from evidence and reasoning",
+            "A random guess stated confidently",
+            "Any rumour with a picture",
+            "A sentence with many emojis"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Sound conclusions are supported by relevant reasons."
+        },
+        {
+          "question": "A study shows two events happen together. What does that prove by itself?",
+          "options": [
+            "One must cause the other",
+            "Both are always accidental",
+            "The study is automatically false",
+            "They are associated, not necessarily that one causes the other"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Correlation alone does not establish causation."
+        },
+        {
+          "question": "Which is the best question when solving a problem?",
+          "options": [
+            "Can we skip collecting information?",
+            "How can we make the problem sound bigger?",
+            "What exactly is the problem we need to solve?",
+            "Who should we blame first?"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Clear problem definitions guide solutions."
+        },
+        {
+          "question": "You hear two conflicting claims. What is a good next step?",
+          "options": [
+            "Share both as certain facts",
+            "Check evidence and the reliability of each source",
+            "Choose the louder speaker",
+            "Accept whichever seems more exciting"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Evidence quality matters more than confidence."
+        },
+        {
+          "question": "Which is an example of a testable prediction?",
+          "options": [
+            "If plants receive less water, their growth may change",
+            "This plant is the prettiest ever",
+            "Everyone must enjoy gardening",
+            "The colour green is always best"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A prediction is testable when observations can support or challenge it."
+        },
+        {
+          "question": "What is an assumption?",
+          "options": [
+            "A measured temperature",
+            "A verified receipt",
+            "A recorded observation only",
+            "An idea accepted without being directly established in the argument"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Assumptions can influence reasoning and should be examined."
+        },
+        {
+          "question": "Why is it useful to consider an alternative explanation?",
+          "options": [
+            "It removes the need for testing",
+            "It makes all explanations identical",
+            "It can reveal whether the first explanation is sufficient",
+            "It guarantees the first idea is wrong"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Competing hypotheses help test reasoning."
+        },
+        {
+          "question": "A claim uses only one success story to promise results for everyone. What is the weakness?",
+          "options": [
+            "No examples can be useful",
+            "One example may not represent a wider group",
+            "All personal stories are false",
+            "Success is impossible to measure"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Anecdotes do not establish general outcomes."
+        },
+        {
+          "question": "What is a fair comparison in an experiment?",
+          "options": [
+            "Change one main variable while controlling other relevant conditions",
+            "Change every variable at once",
+            "Hide the control group",
+            "Report only favourite results"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Controlling conditions helps isolate effects."
+        },
+        {
+          "question": "Why use a checklist for a complex task?",
+          "options": [
+            "It automatically completes the task",
+            "It removes all uncertainty",
+            "It guarantees no item will ever change",
+            "It helps avoid forgetting important steps"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Checklists support consistency and memory."
+        },
+        {
+          "question": "A shop offers 'buy two, get one free'. What should you check?",
+          "options": [
+            "The background music",
+            "The number of stars in the logo",
+            "Whether you need three items and the total cost",
+            "Only the word 'free'"
+          ],
+          "correct_option_index": 2,
+          "explanation": "An offer is useful only if it fits real needs and budget."
+        },
+        {
+          "question": "What is a decision criterion?",
+          "options": [
+            "An unrelated slogan",
+            "A standard used to compare possible choices",
+            "A random preference not recorded",
+            "A secret password"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Criteria clarify what matters for a choice."
+        },
+        {
+          "question": "Why do scientists report limitations of a study?",
+          "options": [
+            "To explain uncertainty and where results may not apply",
+            "To invalidate every result automatically",
+            "To avoid peer review",
+            "To make the title longer"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Limitations help readers interpret results appropriately."
+        },
+        {
+          "question": "What is an example of circular reasoning?",
+          "options": [
+            "The measured length is 5 cm",
+            "The receipt lists three items",
+            "The plant grew 2 cm",
+            "This claim is true because it is correct"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Circular reasoning assumes what it claims to prove."
+        },
+        {
+          "question": "What is a counterexample?",
+          "options": [
+            "A type of questionnaire",
+            "A random nickname",
+            "An instance that challenges a general claim",
+            "An example supporting every rule"
+          ],
+          "correct_option_index": 2,
+          "explanation": "One valid counterexample can disprove a universal statement."
+        },
+        {
+          "question": "A forecast says a 30% chance of rain. What does it communicate?",
+          "options": [
+            "There is no uncertainty",
+            "Rain is possible but not certain in the forecast conditions",
+            "Rain must happen for 30 minutes",
+            "Rain will cover exactly 30% of each road"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Probability estimates likelihood, not guaranteed outcomes."
+        },
+        {
+          "question": "Why should a group identify constraints before designing a solution?",
+          "options": [
+            "Time, budget and safety limits affect what is feasible",
+            "Constraints never affect choices",
+            "Planning can ignore materials",
+            "Every idea costs the same"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Constraints shape realistic options."
+        },
+        {
+          "question": "When an unexpected result appears, what is a responsible response?",
+          "options": [
+            "Delete it without explanation",
+            "Change the data to match your theory",
+            "Assume all instruments are broken",
+            "Check measurements and investigate possible causes"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Unexpected evidence deserves careful analysis."
+        },
+        {
+          "question": "Which approach helps a team make a balanced decision?",
+          "options": [
+            "Ignore future effects",
+            "Count only positive comments",
+            "Compare benefits, risks and evidence before choosing",
+            "Ask only one person to decide secretly"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Balanced decisions consider multiple relevant factors."
+        }
+      ]
+    }
+  ]
+}
