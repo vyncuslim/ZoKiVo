@@ -52,7 +52,7 @@ export default function TeacherWorkspace(){
      <label>Due date (optional)<input type="datetime-local" value={due} onChange={e=>setDue(e.target.value)}/></label>
      <button type="submit" className="button button-yellow" disabled={working||!selected||title.trim().length<3}>{working?"Creating…":"Create assignment link →"}</button>
     </form>
-    {!quizzes.length&&<p>No published quizzes yet. Drafts must be reviewed and published by a verified educator.</p>}
+    {!quizzes.length&&<p>No published quizzes yet. Teacher mode allows you to publish your own reviewed drafts; educator identity verification is separate.</p>}
     {notice&&<p role="status" className="quiz-success">{notice}</p>}
    </section>
    <section className="quiz-library-section"><h2>My assigned practice</h2>
