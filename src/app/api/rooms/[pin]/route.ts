@@ -1,4 +1,6 @@
 import {db,hash,same,bad} from "@/lib/store";
+import {NextRequest} from "next/server";
+import {findUser} from "@/lib/mother-auth";
 import {quizPartySnapshot,type QuizPartySnapshot,type QuizRoomMeta} from "@/lib/quiz-party-snapshot";
 import {verifyRoomReadToken} from "@/lib/room-read-token";
 type VerifiedViewer={id:string;answered?:boolean;is_correct?:boolean;points?:number};
@@ -42,7 +44,7 @@ function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolea
 
 export const runtime="nodejs";
 /** All viewers see one authoritative score snapshot. Current-round points stay hidden until timeout. */
-export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
+export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
  const {pin}=await params;
  if(!/^\d{6}$/.test(pin))return bad("Invalid PIN");
  try{
@@ -66,7 +68,7 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
   // answer. Authentication never depends on a cached shared snapshot.
   const hostKey=req.headers.get("x-host-token"),playerKey=req.headers.get("x-player-token");
   const playerHash=playerKey?hash(playerKey):"0".repeat(64);
-  const found=await sql`SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.host_token_hash,
+  const found=await sql`SELECT r.pin,r.quiz_set_id,r.status,r.current_index,r.deadline,r.host_token_hash,r.owner_user_id,
    r.game_mode,r.question_order,r.mute_sounds,r.score_goal,now() AS server_time,
    (r.status='playing' AND r.deadline>now()) AS round_open,
    p.id AS player_id,(a.id IS NOT NULL) AS answered,a.is_correct AS player_is_correct,a.points AS player_points
@@ -81,7 +83,12 @@ export async function GET(req:Request,{params}:{params:Promise<{pin:string}>}){
    WHERE r.pin=${pin}`;
   if(!found.length)return bad("Room not found",404);
   const r=found[0];
-  const host=!!hostKey&&same(r.host_token_hash,hash(hostKey));
+  // A host token is a second factor, not an independent authorization grant.
+  // Read-only host grading must obey the same owner boundary as start/finish/report.
+  const validHostToken=!!hostKey&&same(r.host_token_hash,hash(hostKey));
+  const session=validHostToken?await findUser(req):null;
+  const host=!!(validHostToken&&session?.user?.id&&r.owner_user_id&&r.owner_user_id===session.user.id);
+  if(validHostToken&&!host&&!r.player_id)return bad("Original host account required",403);
   const me=r.player_id?[{id:r.player_id,answered:r.answered,
    is_correct:r.player_is_correct,points:r.player_points}]:[];
   if(!host&&!me.length)return bad("Unauthorized",401);
