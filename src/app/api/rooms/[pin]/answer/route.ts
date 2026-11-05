@@ -5,17 +5,17 @@ function rejectCrossSite(req:Request){
  const origin=req.headers.get("origin");
  return (origin!==null&&origin!==new URL(req.url).origin)||req.headers.get("sec-fetch-site")==="cross-site";
 }
-async function smallJson(req:Request,maxBytes=4096){
- if(!/^application\/json(?:\s*;|\s*$)/i.test(req.headers.get("content-type")||""))return {error:"JSON content type required",status:415} as const;
+async function smallJson(req:Request,maxBytes=4096):Promise<{ok:true;value:Record<string,unknown>}|{ok:false;error:string;status:number}>{
+ if(!/^application\/json(?:\s*;|\s*$)/i.test(req.headers.get("content-type")||""))return {ok:false,error:"JSON content type required",status:415};
  const length=req.headers.get("content-length");
- if(length&&(!/^\d+$/.test(length)||Number(length)>maxBytes))return {error:"Request body too large",status:413} as const;
+ if(length&&(!/^\d+$/.test(length)||Number(length)>maxBytes))return {ok:false,error:"Request body too large",status:413};
  const body=await req.text();
- if(Buffer.byteLength(body,"utf8")>maxBytes)return {error:"Request body too large",status:413} as const;
+ if(Buffer.byteLength(body,"utf8")>maxBytes)return {ok:false,error:"Request body too large",status:413};
  try{
   const parsed:unknown=JSON.parse(body);
-  if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))return {error:"Invalid JSON object",status:400} as const;
-  return {value:parsed as Record<string,unknown>} as const;
- }catch{return {error:"Invalid JSON",status:400} as const}
+  if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))return {ok:false,error:"Invalid JSON object",status:400};
+  return {ok:true,value:parsed as Record<string,unknown>};
+ }catch{return {ok:false,error:"Invalid JSON",status:400}}
 }
 
 
@@ -24,7 +24,7 @@ export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
  if(!t||!/^\d{6}$/.test(pin))return bad("Invalid player",401);
  if(rejectCrossSite(req))return bad("Cross-site answers are not allowed.",403);
  const parsed=await smallJson(req);
- if("error" in parsed)return bad(parsed.error,parsed.status);
+ if(!parsed.ok)return bad(parsed.error,parsed.status);
  try{
   const body=parsed.value;
   if(!Number.isInteger(body.choice)||typeof body.choice!=="number"||body.choice<0||body.choice>3)return bad("Invalid choice");
