@@ -76,7 +76,7 @@
           "explanation": "A home address can expose your physical location."
         },
         {
-          "question": "What is phishing?",
+          "question": "In a suspicious email pretending to be from school, what is phishing?",
           "options": [
             "An official school lesson",
             "A computer screen setting",
@@ -284,7 +284,7 @@
           "explanation": "Grass makes its own food using sunlight."
         },
         {
-          "question": "What is evaporation?",
+          "question": "In the water cycle, what is evaporation?",
           "options": [
             "Ice turning into water",
             "Rain falling from clouds",
@@ -350,7 +350,7 @@
           "explanation": "The difference is mainly heat transfer, not necessarily temperature."
         },
         {
-          "question": "What is a food web?",
+          "question": "In an ecosystem, what is a food web?",
           "options": [
             "A list of plant names",
             "A network of connected food chains",
@@ -470,7 +470,7 @@
       "description": "20 practical English punctuation, vocabulary, sentence and comprehension questions.",
       "questions": [
         {
-          "question": "Choose the correct sentence.",
+          "question": "Choose the correct present-simple sentence about a daily routine.",
           "options": [
             "She going school every day.",
             "She gone to school every day.",
@@ -865,7 +865,7 @@
           "explanation": "Differences in heating create pressure and airflow patterns."
         },
         {
-          "question": "What causes day and night on Earth?",
+          "question": "What causes the regular cycle of day and night on Earth?",
           "options": [
             "Earth's distance changing each hour",
             "Seasonal rainfall",
