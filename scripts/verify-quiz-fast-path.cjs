@@ -8,7 +8,7 @@ function load(path,mocks){
  new Function("require","module","exports",js)(name=>name in mocks?mocks[name]:require(name),m,m.exports);
  return m.exports;
 }
-let sqlCalls=0,submitted=1,open=true,finished=false;
+let sqlCalls=0,submitted=1,open=true,finished=false,ownerId="qa-teacher",currentUser="qa-teacher";
 const fixedOpenDeadline=new Date(Date.now()+20000).toISOString();
 const fixedClosedDeadline=new Date(Date.now()-20000).toISOString();
 const expectedPlayers=[{id:"p1",nickname:"One",avatar_id:"spark",score:0,mode_score:0},{id:"p2",nickname:"Two",avatar_id:"spark",score:0,mode_score:0}];
@@ -19,7 +19,7 @@ const store={
   const q=strings.join("?");
   if(q.includes("LEFT JOIN LATERAL"))return [{
    pin:"123456",quiz_set_id:"q1",status:finished?"finished":"playing",
-   current_index:1,host_token_hash:"host-token",game_mode:"quiz_party",
+   current_index:1,host_token_hash:"host-token",owner_user_id:ownerId,game_mode:"quiz_party",
    mute_sounds:false,score_goal:null,round_open:open,
    deadline:open?fixedOpenDeadline:fixedClosedDeadline,
    server_time:new Date().toISOString(),player_id:vars[0]==="player-token"?"p1":null,
@@ -48,7 +48,8 @@ const store={
 const snapshot=load("src/lib/quiz-party-snapshot.ts",{"@/lib/store":store});
 const api=load("src/app/api/rooms/[pin]/route.ts",{
  "@/lib/store":store,"@/lib/quiz-party-snapshot":snapshot,
- "@/lib/room-read-token":{verifyRoomReadToken:(pin,value)=>pin==="123456"&&value==="signed-proof"?"p1":null}
+ "@/lib/room-read-token":{verifyRoomReadToken:(pin,value)=>pin==="123456"&&value==="signed-proof"?"p1":null},
+ "@/lib/mother-auth":{findUser:async()=>({user:currentUser?{id:currentUser}:null})}
 });
 const fetchRoom=async(headers={})=>{
  const r=await api.GET(new Request("https://qa.example/api/rooms/123456",{headers}),
@@ -87,6 +88,13 @@ const fetchRoom=async(headers={})=>{
  const final=await fetchRoom({"x-host-token":"host-token"});
  ok(final.json.hostResults?.correctAnswer==="B","Host final-round grading remains available");
  ok(final.json.question===null,"Finished room does not send question to gameplay UI");
+ currentUser="imposter";
+ const impersonated=await fetchRoom({"x-host-token":"host-token"});
+ ok(impersonated.status===403,"Host read rejects account mismatch even with valid host token");
+ currentUser="qa-teacher";ownerId=null;
+ const unowned=await fetchRoom({"x-host-token":"host-token"});
+ ok(unowned.status===403,"Legacy unowned room does not expose teacher-only grading");
+ ownerId="qa-teacher";
  ok(after-before>0,"Mock executed real fast route integration logic");
  console.log("QUIZ_FAST_PATH_TEST_PASS: "+n+" checks, "+(after-before)+" SQL operations for 80 simultaneous player reads");
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
