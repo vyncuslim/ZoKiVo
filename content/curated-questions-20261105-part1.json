@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-curated-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000001",
+      "title": "华文成语与表达大师",
+      "subject": "中文",
+      "grade_level": "Year 6",
+      "language": "zh",
+      "description": "20 道原创华文成语、修辞及表达题，适合小学高年级复习。",
+      "questions": [
+        {
+          "question": "“画蛇添足”最接近哪种意思？",
+          "options": [
+            "做多余的事反而坏事",
+            "认真完成工作",
+            "及时帮助别人",
+            "认真计划未来"
+          ],
+          "correct_option_index": 0,
+          "explanation": "画好蛇后再添脚，反而破坏原有成果。"
+        },
+        {
+          "question": "“守株待兔”提醒我们什么？",
+          "options": [
+            "要多种树",
+            "兔子跑得快",
+            "耐心总能成功",
+            "不能只凭侥幸等待收获"
+          ],
+          "correct_option_index": 3,
+          "explanation": "寓言强调不主动努力而只等好运并不可取。"
+        },
+        {
+          "question": "“井底之蛙”形容怎样的人？",
+          "options": [
+            "喜欢读书的人",
+            "乐于旅行的人",
+            "见识狭窄的人",
+            "善于游泳的人"
+          ],
+          "correct_option_index": 2,
+          "explanation": "井底的青蛙看到的天空很小，表示眼界有限。"
+        },
+        {
+          "question": "“雪中送炭”强调什么？",
+          "options": [
+            "事后表扬别人",
+            "在困难时给予及时帮助",
+            "在冬天卖木炭",
+            "雪地里玩耍"
+          ],
+          "correct_option_index": 1,
+          "explanation": "最有价值的帮助往往发生在对方急需时。"
+        },
+        {
+          "question": "“亡羊补牢”表达什么道理？",
+          "options": [
+            "发现错误后及时改正仍有意义",
+            "丢羊后不能补救",
+            "养羊必须建高墙",
+            "任何问题都要放弃"
+          ],
+          "correct_option_index": 0,
+          "explanation": "寓言告诉我们发现漏洞后仍应及时补救。"
+        },
+        {
+          "question": "“自相矛盾”指什么？",
+          "options": [
+            "两个意见都正确",
+            "做事特别迅速",
+            "表达十分清楚",
+            "说法前后互相冲突"
+          ],
+          "correct_option_index": 3,
+          "explanation": "互相矛盾的主张不能同时成立。"
+        },
+        {
+          "question": "“掩耳盗铃”比喻什么？",
+          "options": [
+            "沉着冷静",
+            "互相合作",
+            "自欺欺人",
+            "勤奋学习"
+          ],
+          "correct_option_index": 2,
+          "explanation": "捂住耳朵不代表别人听不到铃声。"
+        },
+        {
+          "question": "“刻舟求剑”讽刺哪种做法？",
+          "options": [
+            "保护重要物品",
+            "情况变了却仍用旧办法",
+            "计划周全",
+            "记录航行路线"
+          ],
+          "correct_option_index": 1,
+          "explanation": "船在前进，落剑的位置不会跟着船上的记号走。"
+        },
+        {
+          "question": "“一举两得”是什么意思？",
+          "options": [
+            "一次行动获得两种好处",
+            "只做一件事",
+            "两人一起行动",
+            "先失败再成功"
+          ],
+          "correct_option_index": 0,
+          "explanation": "一个行动同时取得两个积极结果。"
+        },
+        {
+          "question": "“心不在焉”的意思是？",
+          "options": [
+            "心情愉快",
+            "身体强壮",
+            "态度友善",
+            "注意力不集中"
+          ],
+          "correct_option_index": 3,
+          "explanation": "心思没有放在正在做的事情上。"
+        },
+        {
+          "question": "“废寝忘食”形容什么？",
+          "options": [
+            "睡眠充足",
+            "生活很规律",
+            "专心投入而忘记休息吃饭",
+            "讨厌所有食物"
+          ],
+          "correct_option_index": 2,
+          "explanation": "通常用来形容对某件事投入程度很高。"
+        },
+        {
+          "question": "“百折不挠”体现哪种品质？",
+          "options": [
+            "从不尝试新事物",
+            "遇到挫折仍坚持",
+            "随意更换目标",
+            "遇难马上逃避"
+          ],
+          "correct_option_index": 1,
+          "explanation": "“不挠”表示遭遇困难也不轻易屈服。"
+        },
+        {
+          "question": "“滥竽充数”形容什么？",
+          "options": [
+            "没有本领却混在行家中",
+            "乐于学习音乐",
+            "团队演奏出色",
+            "谦虚请教别人"
+          ],
+          "correct_option_index": 0,
+          "explanation": "故事中的人不会吹竽，却假装加入乐队。"
+        },
+        {
+          "question": "“胸有成竹”表示什么？",
+          "options": [
+            "胸前真的有竹子",
+            "喜欢画动物",
+            "做事全凭运气",
+            "做事前已有成熟计划"
+          ],
+          "correct_option_index": 3,
+          "explanation": "原指画竹前心中已有竹子的形象。"
+        },
+        {
+          "question": "“举一反三”指什么能力？",
+          "options": [
+            "同时做四件事",
+            "改变原来的答案",
+            "由一个例子推知相似情形",
+            "反复记一个答案"
+          ],
+          "correct_option_index": 2,
+          "explanation": "理解规律后能迁移运用到类似问题。"
+        },
+        {
+          "question": "“半途而废”的意思是？",
+          "options": [
+            "一边走路一边学习",
+            "事情进行到一半就放弃",
+            "提前完成工作",
+            "顺利到达终点"
+          ],
+          "correct_option_index": 1,
+          "explanation": "强调未完成目标就中途停止。"
+        },
+        {
+          "question": "“聚精会神”形容什么？",
+          "options": [
+            "注意力非常集中",
+            "精神疲倦",
+            "四处张望",
+            "感到害怕"
+          ],
+          "correct_option_index": 0,
+          "explanation": "“聚”与“会”都加强专注的意思。"
+        },
+        {
+          "question": "“耳濡目染”强调哪种影响？",
+          "options": [
+            "只靠听力学习",
+            "视力得到改善",
+            "一次听课就精通",
+            "长期接触而受到潜移默化的影响"
+          ],
+          "correct_option_index": 3,
+          "explanation": "经常听到、看到某事会逐渐受其影响。"
+        },
+        {
+          "question": "“循序渐进”的学习方法是？",
+          "options": [
+            "每天更换全部教材",
+            "只背答案不理解",
+            "按照次序逐步提高",
+            "跳过基础直接挑战最难题"
+          ],
+          "correct_option_index": 2,
+          "explanation": "循序渐进强调从基础到复杂、逐步学习。"
+        },
+        {
+          "question": "“同舟共济”适合描述什么场景？",
+          "options": [
+            "不愿分享信息",
+            "大家合作面对困难",
+            "每人独自解决所有问题",
+            "在船上争吵"
+          ],
+          "correct_option_index": 1,
+          "explanation": "同乘一船渡河，比喻齐心协力。"
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000002",
+      "title": "华文语文与阅读思考",
+      "subject": "中文",
+      "grade_level": "Year 6",
+      "language": "zh",
+      "description": "20 道标点、句型、词义及阅读理解基础题。",
+      "questions": [
+        {
+          "question": "“天空像一块蓝色的画布。”用了什么修辞手法？",
+          "options": [
+            "反问",
+            "设问",
+            "排比",
+            "比喻"
+          ],
+          "correct_option_index": 3,
+          "explanation": "“像”把天空比作蓝色画布，是比喻。"
+        },
+        {
+          "question": "“风轻轻地抚摸着树叶。”用了什么修辞手法？",
+          "options": [
+            "反问",
+            "引用",
+            "拟人",
+            "夸张"
+          ],
+          "correct_option_index": 2,
+          "explanation": "让风做出人的动作“抚摸”，属于拟人。"
+        },
+        {
+          "question": "哪个句子使用了疑问句？",
+          "options": [
+            "今天下雨了。",
+            "你今天带雨伞了吗？",
+            "请带雨伞。",
+            "天气真好！"
+          ],
+          "correct_option_index": 1,
+          "explanation": "疑问句用来提出问题，常以问号结尾。"
+        },
+        {
+          "question": "哪个词语与“勤奋”意思最接近？",
+          "options": [
+            "努力",
+            "懒散",
+            "犹豫",
+            "粗心"
+          ],
+          "correct_option_index": 0,
+          "explanation": "勤奋强调认真努力地学习或工作。"
+        },
+        {
+          "question": "“宽阔”的反义词是什么？",
+          "options": [
+            "辽阔",
+            "广大",
+            "平坦",
+            "狭窄"
+          ],
+          "correct_option_index": 3,
+          "explanation": "宽阔与狭窄描述空间大小的相反特征。"
+        },
+        {
+          "question": "“因为下雨，所以比赛延期了。”表示什么关系？",
+          "options": [
+            "假设关系",
+            "转折关系",
+            "因果关系",
+            "并列关系"
+          ],
+          "correct_option_index": 2,
+          "explanation": "“因为……所以……”连接原因与结果。"
+        },
+        {
+          "question": "“虽然很累，但她仍坚持练习。”表达什么关系？",
+          "options": [
+            "选择关系",
+            "转折关系",
+            "因果关系",
+            "递进关系"
+          ],
+          "correct_option_index": 1,
+          "explanation": "“虽然……但……”前后语义有转折。"
+        },
+        {
+          "question": "哪个标点符号用来表示直接问句结束？",
+          "options": [
+            "问号（？）",
+            "句号（。）",
+            "逗号（，）",
+            "顿号（、）"
+          ],
+          "correct_option_index": 0,
+          "explanation": "完整的直接疑问句通常用问号。"
+        },
+        {
+          "question": "下列哪组词语是近义词？",
+          "options": [
+            "高兴—难过",
+            "宽阔—狭窄",
+            "开始—结束",
+            "迅速—快速"
+          ],
+          "correct_option_index": 3,
+          "explanation": "迅速和快速都表示速度快。"
+        },
+        {
+          "question": "下列哪组词语是反义词？",
+          "options": [
+            "美丽—漂亮",
+            "勇敢—英勇",
+            "明亮—昏暗",
+            "安静—宁静"
+          ],
+          "correct_option_index": 2,
+          "explanation": "明亮与昏暗表示光线的相反状态。"
+        },
+        {
+          "question": "“书是知识的钥匙。”中的“钥匙”是什么用法？",
+          "options": [
+            "拟声词",
+            "比喻性的说法",
+            "真实开门工具",
+            "量词"
+          ],
+          "correct_option_index": 1,
+          "explanation": "这里把书比作打开知识大门的工具。"
+        },
+        {
+          "question": "“他小心翼翼地放下玻璃杯。”哪个词形容动作态度？",
+          "options": [
+            "小心翼翼",
+            "玻璃杯",
+            "放下",
+            "他"
+          ],
+          "correct_option_index": 0,
+          "explanation": "“小心翼翼”描述动作非常谨慎。"
+        },
+        {
+          "question": "写观察日记时最重要的是什么？",
+          "options": [
+            "编造有趣的结果",
+            "只写标题",
+            "省略时间和地点",
+            "如实记录观察到的现象"
+          ],
+          "correct_option_index": 3,
+          "explanation": "观察日记应以真实观察为基础。"
+        },
+        {
+          "question": "阅读说明文时，想快速找日期应先做什么？",
+          "options": [
+            "只读最后一句",
+            "忽略所有数字",
+            "寻找与日期有关的关键词",
+            "逐字背诵全文"
+          ],
+          "correct_option_index": 2,
+          "explanation": "扫读并抓关键词可以更快定位信息。"
+        },
+        {
+          "question": "“如果明天晴天，我们就去郊游。”是什么关系？",
+          "options": [
+            "转折关系",
+            "条件关系",
+            "因果关系",
+            "并列关系"
+          ],
+          "correct_option_index": 1,
+          "explanation": "“如果……就……”说明满足条件才会发生的事情。"
+        },
+        {
+          "question": "下列哪个句子更适合作为正式邀请？",
+          "options": [
+            "诚邀您参加本周五的交流活动。",
+            "快点过来啦！",
+            "你必须出现哦！",
+            "来嘛，不来不行！"
+          ],
+          "correct_option_index": 0,
+          "explanation": "正式邀请应礼貌、清晰并说明活动。"
+        },
+        {
+          "question": "写故事时“人物、时间、地点”主要帮助读者了解什么？",
+          "options": [
+            "答案选项",
+            "拼音声调",
+            "广告价格",
+            "故事背景"
+          ],
+          "correct_option_index": 3,
+          "explanation": "这三项交代故事发生的基本背景。"
+        },
+        {
+          "question": "“他把一杯水递给口渴的同学。”可以推断他怎么样？",
+          "options": [
+            "只关心自己",
+            "不喜欢水",
+            "乐于帮助别人",
+            "不愿与人合作"
+          ],
+          "correct_option_index": 2,
+          "explanation": "主动给口渴的同学水体现关心。"
+        },
+        {
+          "question": "哪一个是正确的量词搭配？",
+          "options": [
+            "一把天空",
+            "一条河",
+            "一只书",
+            "一本马"
+          ],
+          "correct_option_index": 1,
+          "explanation": "“河”常用量词“条”。"
+        },
+        {
+          "question": "要判断一篇文章的中心思想，最适合怎么做？",
+          "options": [
+            "归纳全文反复强调的主要意思",
+            "只看第一个生字",
+            "计算标点总数",
+            "只读标题的最后一个字"
+          ],
+          "correct_option_index": 0,
+          "explanation": "中心思想需要结合全文内容综合判断。"
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000003",
+      "title": "Bahasa Melayu: Perbendaharaan Kata",
+      "subject": "Bahasa Melayu",
+      "grade_level": "Tahun 6",
+      "language": "ms",
+      "description": "20 soalan kosa kata dan makna perkataan dengan penerangan ringkas.",
+      "questions": [
+        {
+          "question": "Apakah kata seerti bagi “gembira”?",
+          "options": [
+            "marah",
+            "penat",
+            "riang",
+            "sedih"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Gembira dan riang membawa maksud perasaan suka."
+        },
+        {
+          "question": "Apakah kata lawan bagi “tinggi”?",
+          "options": [
+            "kuat",
+            "rendah",
+            "panjang",
+            "besar"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Tinggi dan rendah menunjukkan ukuran ketinggian yang bertentangan."
+        },
+        {
+          "question": "Apakah maksud “rajin”?",
+          "options": [
+            "tekun melakukan kerja",
+            "suka bertangguh",
+            "mudah lupa",
+            "tidak mengambil peduli"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Rajin bermaksud bersungguh-sungguh menjalankan tugas."
+        },
+        {
+          "question": "Apakah kata seerti bagi “cepat”?",
+          "options": [
+            "lambat",
+            "senyap",
+            "berat",
+            "pantas"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Cepat dan pantas merujuk kepada kelajuan tinggi."
+        },
+        {
+          "question": "Apakah kata lawan bagi “bersih”?",
+          "options": [
+            "cantik",
+            "wangi",
+            "kotor",
+            "kemas"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Bersih bertentangan dengan kotor."
+        },
+        {
+          "question": "Apakah maksud “berjimat”?",
+          "options": [
+            "berbelanja tanpa had",
+            "menggunakan wang dengan cermat",
+            "membeli semua barang",
+            "membuang makanan"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Berjimat bermaksud tidak membazir sumber atau wang."
+        },
+        {
+          "question": "Apakah kata seerti bagi “bijak”?",
+          "options": [
+            "pandai",
+            "cuai",
+            "malas",
+            "lemah"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Bijak dan pandai menggambarkan keupayaan berfikir dengan baik."
+        },
+        {
+          "question": "Apakah kata lawan bagi “gelap”?",
+          "options": [
+            "suram",
+            "malam",
+            "kelam",
+            "terang"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Gelap dan terang bertentangan dari segi cahaya."
+        },
+        {
+          "question": "Apakah maksud “berhemah”?",
+          "options": [
+            "bertindak melulu",
+            "suka membazir",
+            "berkelakuan sopan",
+            "bercakap kasar"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Berhemah menunjukkan tingkah laku yang tertib dan sopan."
+        },
+        {
+          "question": "Apakah kata seerti bagi “damai”?",
+          "options": [
+            "marah",
+            "aman",
+            "bising",
+            "cemas"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Damai dan aman merujuk kepada keadaan tenteram."
+        },
+        {
+          "question": "Apakah kata lawan bagi “sempit”?",
+          "options": [
+            "luas",
+            "kecil",
+            "pendek",
+            "nipis"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Sempit dan luas menggambarkan keluasan yang berlawanan."
+        },
+        {
+          "question": "Apakah maksud “prihatin”?",
+          "options": [
+            "tidak peduli",
+            "suka bermegah",
+            "cepat berputus asa",
+            "mengambil berat tentang orang lain"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Prihatin bermaksud peka dan mengambil berat."
+        },
+        {
+          "question": "Apakah kata seerti bagi “tabah”?",
+          "options": [
+            "gementar",
+            "lalai",
+            "cekalkan hati",
+            "mudah menyerah"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Tabah bermaksud tetap kuat menghadapi kesukaran."
+        },
+        {
+          "question": "Apakah kata lawan bagi “berani”?",
+          "options": [
+            "gagah",
+            "takut",
+            "yakin",
+            "tegas"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Takut ialah keadaan yang bertentangan dengan berani."
+        },
+        {
+          "question": "Apakah maksud “amanah”?",
+          "options": [
+            "boleh dipercayai",
+            "mudah lupa",
+            "suka bertengkar",
+            "enggan membantu"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Orang amanah boleh dipercayai melaksanakan tanggungjawab."
+        },
+        {
+          "question": "Apakah kata seerti bagi “indah”?",
+          "options": [
+            "kusam",
+            "hodoh",
+            "suram",
+            "cantik"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Indah dan cantik menggambarkan sesuatu yang menarik dipandang."
+        },
+        {
+          "question": "Apakah maksud “tolong-menolong”?",
+          "options": [
+            "berebut hadiah",
+            "bekerja bersendirian",
+            "saling membantu",
+            "saling menyalahkan"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Tolong-menolong ialah perbuatan membantu antara satu sama lain."
+        },
+        {
+          "question": "Apakah kata lawan bagi “murah”?",
+          "options": [
+            "ringan",
+            "mahal",
+            "rendah",
+            "kecil"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Murah dan mahal merujuk kepada perbezaan harga."
+        },
+        {
+          "question": "Apakah maksud “cermat”?",
+          "options": [
+            "teliti dan berhati-hati",
+            "tergesa-gesa",
+            "cuai",
+            "sambil lewa"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Cermat menunjukkan ketelitian dan sikap berhati-hati."
+        },
+        {
+          "question": "Apakah kata seerti bagi “gigih”?",
+          "options": [
+            "sambil lewa",
+            "malas",
+            "ragu-ragu",
+            "bersungguh-sungguh"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Gigih bermaksud berusaha dengan kuat dan berterusan."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000004",
+      "title": "Bahasa Melayu: Tatabahasa Praktikal",
+      "subject": "Bahasa Melayu",
+      "grade_level": "Tahun 6",
+      "language": "ms",
+      "description": "20 soalan kata sendi, imbuhan, ayat dan simpulan bahasa.",
+      "questions": [
+        {
+          "question": "Pilih kata sendi nama yang betul: “Ali pergi ___ sekolah.”",
+          "options": [
+            "daripada",
+            "ke",
+            "di",
+            "dari"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Kata sendi ke menunjukkan arah atau destinasi."
+        },
+        {
+          "question": "Pilih ayat yang betul.",
+          "options": [
+            "Mereka sedang membaca buku.",
+            "Mereka sedang dibaca buku.",
+            "Mereka sedang membaca-bacaan buku.",
+            "Mereka sedang pembaca buku."
+          ],
+          "correct_option_index": 0,
+          "explanation": "Kata kerja membaca sesuai digunakan selepas sedang."
+        },
+        {
+          "question": "Pilih penjodoh bilangan: “Se___ pisang.”",
+          "options": [
+            "ekor",
+            "batang",
+            "helai",
+            "sikat"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Pisang yang tersusun dalam satu kumpulan kecil disebut sesikat."
+        },
+        {
+          "question": "Pilih kata sendi nama: “Hadiah itu ___ ibu.”",
+          "options": [
+            "di",
+            "kepada",
+            "daripada",
+            "ke"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Daripada boleh menunjukkan sumber atau pemberi."
+        },
+        {
+          "question": "Apakah jenis kata bagi “cantik”?",
+          "options": [
+            "kata hubung",
+            "kata adjektif",
+            "kata kerja",
+            "kata sendi"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Cantik menerangkan sifat sesuatu."
+        },
+        {
+          "question": "Pilih imbuhan yang betul: “Dia sedang ___ surat.”",
+          "options": [
+            "menulis",
+            "tertulis",
+            "penulis",
+            "tulisan"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Menulis ialah kata kerja aktif."
+        },
+        {
+          "question": "Pilih kata hubung yang sesuai: “Saya belajar ___ adik bermain.”",
+          "options": [
+            "kerana",
+            "supaya",
+            "sehingga",
+            "manakala"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Manakala menghubungkan dua keadaan berbeza yang berlaku serentak."
+        },
+        {
+          "question": "Pilih perkataan yang betul: “Buku ini ___ meja.”",
+          "options": [
+            "dari atas",
+            "kepada atas",
+            "di atas",
+            "ke atas"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Di atas menunjukkan kedudukan."
+        },
+        {
+          "question": "Apakah maksud simpulan bahasa “ringan tulang”?",
+          "options": [
+            "kuat makan",
+            "rajin membantu",
+            "sangat kurus",
+            "cepat berlari"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Ringan tulang menggambarkan orang yang suka bekerja atau membantu."
+        },
+        {
+          "question": "Apakah maksud “buah tangan”?",
+          "options": [
+            "hadiah yang dibawa ketika melawat",
+            "buah yang baru dipetik",
+            "hasil peperiksaan",
+            "peralatan sukan"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Buah tangan ialah hadiah yang dibawa untuk seseorang."
+        },
+        {
+          "question": "Pilih kata bilangan yang sesuai: “___ murid hadir.”",
+          "options": [
+            "Hanya sekali",
+            "Kelmarin",
+            "Sangat",
+            "Semua"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Semua merujuk kepada keseluruhan murid."
+        },
+        {
+          "question": "Pilih kata tanya: “___ nama guru kamu?”",
+          "options": [
+            "Di manakah",
+            "Mengapakah",
+            "Siapakah",
+            "Bilakah"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Siapakah digunakan untuk bertanya tentang orang."
+        },
+        {
+          "question": "Pilih kata tanya: “___ kamu tiba?”",
+          "options": [
+            "Berapa",
+            "Bilakah",
+            "Siapakah",
+            "Apakah"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Bilakah digunakan untuk bertanya masa."
+        },
+        {
+          "question": "Pilih ayat perintah.",
+          "options": [
+            "Sila tutup pintu itu.",
+            "Pintu itu berwarna biru.",
+            "Adakah pintu itu terbuka?",
+            "Alangkah cantiknya pintu itu!"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Sila ialah penanda arahan yang sopan."
+        },
+        {
+          "question": "Pilih kata ganda yang betul.",
+          "options": [
+            "murid muridan",
+            "bermurid-muridkan",
+            "kemuridan",
+            "murid-murid"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Murid-murid menunjukkan bilangan ramai."
+        },
+        {
+          "question": "Pilih penjodoh bilangan: “Se___ pensel.”",
+          "options": [
+            "helai",
+            "utas",
+            "batang",
+            "ekor"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Pensel lazimnya menggunakan penjodoh bilangan batang."
+        },
+        {
+          "question": "Pilih kata hubung sebab: “Dia tidak hadir ___ demam.”",
+          "options": [
+            "sementara",
+            "kerana",
+            "walaupun",
+            "tetapi"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Kerana menyatakan sebab."
+        },
+        {
+          "question": "Pilih kata sendi: “Kami menunggu ___ perhentian bas.”",
+          "options": [
+            "di",
+            "ke",
+            "daripada",
+            "kepada"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Di menunjukkan lokasi."
+        },
+        {
+          "question": "Pilih ayat tanya yang betul.",
+          "options": [
+            "Sila kamu lewat.",
+            "Kamu lewat sangat!",
+            "Saya lewat hari ini.",
+            "Mengapakah kamu lewat?"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Mengapakah digunakan untuk menanyakan sebab."
+        },
+        {
+          "question": "Apakah maksud “besar hati”?",
+          "options": [
+            "marah pada orang lain",
+            "berjalan dengan cepat",
+            "berasa gembira atau bangga",
+            "mempunyai organ yang besar"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Besar hati bermaksud berasa gembira, bangga atau sukacita."
+        }
+      ]
+    }
+  ]
+}
