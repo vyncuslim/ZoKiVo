@@ -32,6 +32,9 @@ ok(game.includes('disabled={host||answered||seconds===0||busy}'),"No invalid rou
 ok(game.includes('act("answer",i)'),"Server-authorized answer submission preserved");
 ok(game.includes("state.viewer.mode?.reward_ready")&&game.includes("<ModeRewards"),"Reward security gate preserved");
 ok(game.includes('state?.scoreboardPhase==="previous-round"'),"Current-round points not revealed early");
+ok(game.includes('zk-board-me'),"Current player row can be identified");
+ok(game.includes('aria-label="Your player"'),"Current player is announced accessibly");
+ok(css.includes('.board-player.zk-board-me{display:flex}'),"Own row remains visible outside top three");
 ok(rewards.includes('data-mode={mode} aria-busy={loading}'),"Mode-aware feedback and busy status");
 ok(rewards.includes('Processing your move…'),"Long reward request has progress status");
 ok(rewards.includes('"x-player-token":token'),"Rewards still use player token");
