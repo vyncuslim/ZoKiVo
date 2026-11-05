@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-curated-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000005",
+      "title": "Digital Citizenship & Online Safety",
+      "subject": "Internet Safety",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 scenario-based questions on privacy, passwords, scams and responsible technology use.",
+      "questions": [
+        {
+          "question": "A classmate sends a suspicious shortened link. What should you do first?",
+          "options": [
+            "Check its source before opening",
+            "Open it immediately",
+            "Forward it to everyone",
+            "Enter your password"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Links from unknown sources should be verified before opening."
+        },
+        {
+          "question": "Which password is hardest to guess?",
+          "options": [
+            "12345678",
+            "Your first name",
+            "password123",
+            "A long unique passphrase"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Long, unique passphrases resist common guessing attacks."
+        },
+        {
+          "question": "A website asks for your one-time login code. What is safest?",
+          "options": [
+            "Send it to a stranger",
+            "Put it on social media",
+            "Do not share the code with anyone",
+            "Post it on a group chat"
+          ],
+          "correct_option_index": 2,
+          "explanation": "One-time codes are security credentials meant for your own login."
+        },
+        {
+          "question": "What does multi-factor authentication add?",
+          "options": [
+            "A faster Wi-Fi connection",
+            "An extra verification step",
+            "A public password list",
+            "An automatic virus"
+          ],
+          "correct_option_index": 1,
+          "explanation": "MFA requires more than one proof of identity."
+        },
+        {
+          "question": "A game account offers free prizes for your password. What should you do?",
+          "options": [
+            "Refuse and report the request",
+            "Share it just once",
+            "Try a friend's password",
+            "Disable account alerts"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Legitimate prize offers do not require revealing your password."
+        },
+        {
+          "question": "Which personal detail should not be posted publicly?",
+          "options": [
+            "Your favorite colour",
+            "A book genre you enjoy",
+            "Your favorite subject",
+            "Your home address"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A home address can expose your physical location."
+        },
+        {
+          "question": "What is phishing?",
+          "options": [
+            "An official school lesson",
+            "A computer screen setting",
+            "A trick to steal information using fake messages",
+            "A type of safe backup"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Phishing messages impersonate trusted sources to obtain secrets."
+        },
+        {
+          "question": "A message claims “Act in two minutes or lose your account.” What is a warning sign?",
+          "options": [
+            "An informative subject",
+            "Pressure to act urgently",
+            "Correct punctuation",
+            "A clear sender address"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Scammers often manufacture urgency to reduce careful checking."
+        },
+        {
+          "question": "Which action protects a shared classroom tablet?",
+          "options": [
+            "Sign out after using your account",
+            "Leave the account open",
+            "Save passwords for everyone",
+            "Disable the lock screen"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Signing out limits later access to your account."
+        },
+        {
+          "question": "What is the safest response to online bullying?",
+          "options": [
+            "Reply with insults",
+            "Share the abuse widely",
+            "Reveal the bully's address",
+            "Save evidence and tell a trusted adult"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Reporting and seeking help is safer than escalation or retaliation."
+        },
+        {
+          "question": "Which data practice is safest for a student quiz?",
+          "options": [
+            "Publish student passwords",
+            "Record private messages",
+            "Collect only information needed for participation",
+            "Require home addresses for everyone"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Data minimization reduces privacy risk."
+        },
+        {
+          "question": "Why should a school app use HTTPS?",
+          "options": [
+            "It prevents every website bug",
+            "It encrypts data while travelling over the network",
+            "It removes all online threats",
+            "It makes passwords unnecessary"
+          ],
+          "correct_option_index": 1,
+          "explanation": "HTTPS protects data in transit, but does not fix every security issue."
+        },
+        {
+          "question": "A browser warns that a certificate is invalid. What should you do?",
+          "options": [
+            "Avoid entering personal information",
+            "Ignore the warning",
+            "Enter payment details anyway",
+            "Install an unknown extension"
+          ],
+          "correct_option_index": 0,
+          "explanation": "An invalid certificate can indicate an unsafe connection."
+        },
+        {
+          "question": "Why is updating software important?",
+          "options": [
+            "Updates always delete all viruses",
+            "Old software never works",
+            "Updates share your password",
+            "Updates often fix security weaknesses"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Security patches can close known vulnerabilities."
+        },
+        {
+          "question": "Which permission is unnecessary for a basic maths quiz?",
+          "options": [
+            "Reading your typed answers",
+            "Saving your current score",
+            "Access to all your contacts",
+            "Displaying quiz questions"
+          ],
+          "correct_option_index": 2,
+          "explanation": "A basic quiz usually does not need access to your contacts."
+        },
+        {
+          "question": "A stranger online asks where you are studying today. What is safest?",
+          "options": [
+            "Share a classroom photo with location",
+            "Do not reveal your live location",
+            "Send GPS coordinates",
+            "Post your school schedule"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Live location information can put privacy and safety at risk."
+        },
+        {
+          "question": "What does a privacy setting control?",
+          "options": [
+            "Who can access certain account information",
+            "How fast a CPU runs",
+            "Your screen brightness",
+            "The length of a school holiday"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Privacy settings manage visibility and data sharing."
+        },
+        {
+          "question": "A friend has shared a password with you. What is appropriate?",
+          "options": [
+            "Post it to test security",
+            "Use it without permission",
+            "Send it to more people",
+            "Encourage them to change it and keep it private"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Credentials should not be reused or distributed."
+        },
+        {
+          "question": "Why should files be backed up?",
+          "options": [
+            "To increase screen glare",
+            "To stop every hardware problem",
+            "To recover important work after loss or damage",
+            "To make passwords public"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Backups support recovery when files are lost or damaged."
+        },
+        {
+          "question": "Which rule helps identify an AI-generated claim?",
+          "options": [
+            "Assume every image is authentic",
+            "Check reliable sources before believing it",
+            "Accept it because it sounds confident",
+            "Share it without reading"
+          ],
+          "correct_option_index": 1,
+          "explanation": "AI can make mistakes, so important claims need independent verification."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000006",
+      "title": "Science: Plants, Energy & Ecosystems",
+      "subject": "Science",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 science questions about living systems, food webs, materials and everyday energy.",
+      "questions": [
+        {
+          "question": "Which part of a plant absorbs most water from soil?",
+          "options": [
+            "Petals",
+            "Fruit",
+            "Flowers",
+            "Roots"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Roots take up water and dissolved minerals."
+        },
+        {
+          "question": "What gas do plants mainly take in during photosynthesis?",
+          "options": [
+            "Hydrogen",
+            "Helium",
+            "Carbon dioxide",
+            "Oxygen"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Photosynthesis uses carbon dioxide and water to make sugars."
+        },
+        {
+          "question": "What do we call an animal that eats only plants?",
+          "options": [
+            "Decomposer",
+            "Herbivore",
+            "Carnivore",
+            "Omnivore"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Herbivores feed on plants."
+        },
+        {
+          "question": "Which organism is a producer in a food chain?",
+          "options": [
+            "Grass",
+            "Rabbit",
+            "Fox",
+            "Frog"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Grass makes its own food using sunlight."
+        },
+        {
+          "question": "What is evaporation?",
+          "options": [
+            "Ice turning into water",
+            "Rain falling from clouds",
+            "Water freezing",
+            "Liquid water changing into water vapour"
+          ],
+          "correct_option_index": 3,
+          "explanation": "During evaporation liquid particles escape into the gas phase."
+        },
+        {
+          "question": "Which process forms water droplets on a cold glass?",
+          "options": [
+            "Boiling",
+            "Sublimation",
+            "Condensation",
+            "Melting"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Water vapour cools and condenses into droplets."
+        },
+        {
+          "question": "Which energy source is renewable?",
+          "options": [
+            "Natural gas",
+            "Sunlight",
+            "Coal",
+            "Crude oil"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Sunlight is replenished naturally and is renewable."
+        },
+        {
+          "question": "What happens when a torch battery runs out of usable energy?",
+          "options": [
+            "The light eventually stops shining",
+            "The bulb becomes heavier",
+            "Gravity disappears",
+            "The torch makes more batteries"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A torch needs an energy source to keep producing light."
+        },
+        {
+          "question": "Which material usually conducts electricity well?",
+          "options": [
+            "Dry rubber",
+            "Plastic",
+            "Glass",
+            "Copper"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Copper has mobile electrons that support electrical conduction."
+        },
+        {
+          "question": "Why does a metal spoon feel cooler than a wooden spoon in the same room?",
+          "options": [
+            "Wood is always hotter than air",
+            "Metal creates cold energy",
+            "Metal conducts heat away from the hand faster",
+            "Metal has no heat"
+          ],
+          "correct_option_index": 2,
+          "explanation": "The difference is mainly heat transfer, not necessarily temperature."
+        },
+        {
+          "question": "What is a food web?",
+          "options": [
+            "A list of plant names",
+            "A network of connected food chains",
+            "Only one animal's meal",
+            "A drawing of spider silk"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Food webs represent multiple feeding relationships."
+        },
+        {
+          "question": "Why are decomposers important?",
+          "options": [
+            "They recycle nutrients from dead material",
+            "They create all sunlight",
+            "They stop all rainfall",
+            "They eat only rocks"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Decomposers break down remains and return nutrients to ecosystems."
+        },
+        {
+          "question": "Which organ helps humans exchange oxygen and carbon dioxide?",
+          "options": [
+            "Stomach",
+            "Liver",
+            "Kidneys",
+            "Lungs"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Gas exchange occurs in the lungs."
+        },
+        {
+          "question": "What is a simple example of a chemical change?",
+          "options": [
+            "Paper folding",
+            "Glass breaking",
+            "Iron rusting",
+            "Ice melting"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Rusting forms new substances."
+        },
+        {
+          "question": "Which force pulls a dropped ball toward Earth?",
+          "options": [
+            "Air resistance alone",
+            "Gravity",
+            "Magnetism alone",
+            "Friction alone"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Earth's gravity attracts masses toward its centre."
+        },
+        {
+          "question": "When a shadow becomes shorter at midday, what mainly changed?",
+          "options": [
+            "The Sun's apparent position in the sky",
+            "The object's mass",
+            "The speed of sound",
+            "The air's oxygen level"
+          ],
+          "correct_option_index": 0,
+          "explanation": "The sunlight angle changes the length of a shadow."
+        },
+        {
+          "question": "Which change could harm a pond ecosystem?",
+          "options": [
+            "Removing litter safely",
+            "Protecting native plants",
+            "Reducing pollution",
+            "Dumping waste into the water"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Waste pollution can damage organisms and water quality."
+        },
+        {
+          "question": "Which structure protects a plant cell and helps it keep shape?",
+          "options": [
+            "Skeleton",
+            "Feather",
+            "Cell wall",
+            "Wing"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Plant cell walls provide support outside the cell membrane."
+        },
+        {
+          "question": "Which tool measures air temperature?",
+          "options": [
+            "Stopwatch",
+            "Thermometer",
+            "Ruler",
+            "Compass"
+          ],
+          "correct_option_index": 1,
+          "explanation": "A thermometer measures temperature."
+        },
+        {
+          "question": "Why do scientists repeat experiments?",
+          "options": [
+            "To check whether results are reliable",
+            "To guarantee the desired answer",
+            "To change all variables randomly",
+            "To avoid measuring anything"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Repeating trials helps identify variability and reliability."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000007",
+      "title": "English: Grammar in Real Life",
+      "subject": "English",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 practical English punctuation, vocabulary, sentence and comprehension questions.",
+      "questions": [
+        {
+          "question": "Choose the correct sentence.",
+          "options": [
+            "She going school every day.",
+            "She gone to school every day.",
+            "She goes to school every day.",
+            "She go to school every day."
+          ],
+          "correct_option_index": 2,
+          "explanation": "The third-person singular present tense uses goes."
+        },
+        {
+          "question": "Choose the correct past-tense sentence.",
+          "options": [
+            "They visits the museum yesterday.",
+            "They visited the museum yesterday.",
+            "They visit the museum yesterday.",
+            "They visiting the museum yesterday."
+          ],
+          "correct_option_index": 1,
+          "explanation": "Visited is the regular past tense of visit."
+        },
+        {
+          "question": "Which word is an adverb in “He spoke quietly”?",
+          "options": [
+            "quietly",
+            "He",
+            "spoke",
+            "none"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Quietly describes how he spoke."
+        },
+        {
+          "question": "Choose the correct article: “I saw ___ elephant.”",
+          "options": [
+            "a",
+            "thee",
+            "no article",
+            "an"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Elephant begins with a vowel sound, so an is appropriate."
+        },
+        {
+          "question": "Choose the correct plural of “child.”",
+          "options": [
+            "childes",
+            "childrens",
+            "children",
+            "childs"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Children is an irregular plural."
+        },
+        {
+          "question": "Choose the correct possessive form meaning the bag belongs to one girl.",
+          "options": [
+            "the girl bag",
+            "the girl's bag",
+            "the girls bag",
+            "the girls' bag"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The apostrophe before s marks one girl's possession."
+        },
+        {
+          "question": "Which sentence is a question?",
+          "options": [
+            "Where did you put the keys?",
+            "Close the door.",
+            "The keys are here.",
+            "What a lovely day!"
+          ],
+          "correct_option_index": 0,
+          "explanation": "It directly asks for information."
+        },
+        {
+          "question": "Choose the correct conjunction: “I stayed home ___ it was raining.”",
+          "options": [
+            "unless",
+            "although",
+            "while",
+            "because"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Because explains the reason for staying home."
+        },
+        {
+          "question": "What is an antonym of “generous”?",
+          "options": [
+            "giving",
+            "helpful",
+            "selfish",
+            "kind"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Selfish contrasts with being willing to give."
+        },
+        {
+          "question": "What is a synonym of “enormous”?",
+          "options": [
+            "short",
+            "huge",
+            "tiny",
+            "narrow"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Enormous and huge both mean very large."
+        },
+        {
+          "question": "Choose the correct contraction for “do not.”",
+          "options": [
+            "don't",
+            "doesn't",
+            "didn't",
+            "won't"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Don't is the contraction of do not."
+        },
+        {
+          "question": "Which word is an adjective in “The bright moon shone”?",
+          "options": [
+            "moon",
+            "shone",
+            "The",
+            "bright"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Bright describes the moon."
+        },
+        {
+          "question": "Choose the correct preposition: “The book is ___ the table.”",
+          "options": [
+            "does",
+            "quick",
+            "on",
+            "bying"
+          ],
+          "correct_option_index": 2,
+          "explanation": "On describes the book's position on the table."
+        },
+        {
+          "question": "Which punctuation ends an exclamation?",
+          "options": [
+            ":",
+            "!",
+            "?",
+            ","
+          ],
+          "correct_option_index": 1,
+          "explanation": "An exclamation mark expresses strong feeling or surprise."
+        },
+        {
+          "question": "Choose the correct conditional: “If it rains, we ___ indoors.”",
+          "options": [
+            "will stay",
+            "stayed yesterday",
+            "staying",
+            "was stay"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Will stay describes a possible future result."
+        },
+        {
+          "question": "What is the main purpose of a topic sentence?",
+          "options": [
+            "To replace every supporting detail",
+            "To list page numbers",
+            "To end with random facts",
+            "To introduce the paragraph's main idea"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A topic sentence helps readers understand a paragraph's focus."
+        },
+        {
+          "question": "Which sentence uses quotation marks correctly?",
+          "options": [
+            "“Please be quiet, said Mia.",
+            "Please be quiet,” said Mia.",
+            "“Please be quiet,” said Mia.",
+            "Please be quiet, said “Mia.”"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Quotation marks enclose the exact words spoken."
+        },
+        {
+          "question": "Choose the correct comparative form of “good.”",
+          "options": [
+            "most good",
+            "better",
+            "gooder",
+            "bestest"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Better is the irregular comparative form of good."
+        },
+        {
+          "question": "What is a reliable way to support a factual claim in a report?",
+          "options": [
+            "Use a relevant, trustworthy source",
+            "Repeat an unverified rumour",
+            "Invent a quotation",
+            "Change the data to fit"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Evidence from trustworthy sources supports factual writing."
+        },
+        {
+          "question": "What is the difference between a fact and an opinion?",
+          "options": [
+            "An opinion is always false",
+            "Facts cannot be verified",
+            "Every sentence is a fact",
+            "A fact can be checked against evidence"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A factual statement is testable; an opinion expresses a judgement or preference."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05a0-4a9b-9f00-000000000008",
+      "title": "Malaysia & World Geography Explorer",
+      "subject": "Geography",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 geography questions focused on Malaysia, maps, weather and world regions.",
+      "questions": [
+        {
+          "question": "What is the capital city of Malaysia?",
+          "options": [
+            "Kuching",
+            "Kuala Lumpur",
+            "George Town",
+            "Johor Bahru"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Kuala Lumpur is Malaysia's national capital; Putrajaya is the federal administrative centre."
+        },
+        {
+          "question": "Which island is Penang Island connected to by the Penang Bridge?",
+          "options": [
+            "Peninsular Malaysia",
+            "Borneo",
+            "Langkawi",
+            "Tioman"
+          ],
+          "correct_option_index": 0,
+          "explanation": "The bridge connects Penang Island to the mainland of Peninsular Malaysia."
+        },
+        {
+          "question": "What is the state capital of Penang?",
+          "options": [
+            "Butterworth",
+            "Alor Setar",
+            "Ipoh",
+            "George Town"
+          ],
+          "correct_option_index": 3,
+          "explanation": "George Town is the capital of the state of Penang."
+        },
+        {
+          "question": "Which Malaysian state is located on the island of Borneo?",
+          "options": [
+            "Melaka",
+            "Negeri Sembilan",
+            "Sabah",
+            "Perlis"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Sabah and Sarawak are Malaysian states on Borneo."
+        },
+        {
+          "question": "Which strait lies between Peninsular Malaysia and Sumatra?",
+          "options": [
+            "Bass Strait",
+            "Strait of Malacca",
+            "Bering Strait",
+            "Strait of Gibraltar"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The Strait of Malacca lies between the Malay Peninsula and Sumatra."
+        },
+        {
+          "question": "What do lines of latitude measure?",
+          "options": [
+            "Distance north or south of the Equator",
+            "Elevation above sea level",
+            "Distance from the coast",
+            "The age of a mountain"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Latitude is an angular position north or south of the Equator."
+        },
+        {
+          "question": "What do lines of longitude measure?",
+          "options": [
+            "Distance below ground",
+            "The speed of wind",
+            "Ocean water depth",
+            "Position east or west of the Prime Meridian"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Longitude describes east-west position."
+        },
+        {
+          "question": "Which direction does a compass needle generally indicate?",
+          "options": [
+            "Always west",
+            "Downward",
+            "North",
+            "South-east only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "A compass needle aligns approximately with Earth's magnetic field."
+        },
+        {
+          "question": "Which map feature explains symbols used on a map?",
+          "options": [
+            "Title alone",
+            "Legend or key",
+            "Scale only",
+            "Border only"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The legend gives the meanings of map symbols."
+        },
+        {
+          "question": "Which map feature helps estimate real-world distances?",
+          "options": [
+            "Scale",
+            "Colour alone",
+            "Title",
+            "Compass needle only"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A map scale links map distances to ground distances."
+        },
+        {
+          "question": "What type of climate is common in much of Malaysia?",
+          "options": [
+            "Polar",
+            "Tundra",
+            "Mediterranean dry-summer",
+            "Tropical"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Malaysia lies near the Equator and generally has a tropical climate."
+        },
+        {
+          "question": "Which ocean borders the western coast of the Americas?",
+          "options": [
+            "Indian Ocean",
+            "Arctic Ocean",
+            "Pacific Ocean",
+            "Atlantic Ocean"
+          ],
+          "correct_option_index": 2,
+          "explanation": "The Pacific lies west of North and South America."
+        },
+        {
+          "question": "Which continent contains the Sahara Desert?",
+          "options": [
+            "Australia",
+            "Africa",
+            "Europe",
+            "South America"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The Sahara spans much of North Africa."
+        },
+        {
+          "question": "What is an archipelago?",
+          "options": [
+            "A group of islands",
+            "A single mountain",
+            "A type of desert",
+            "A wide river"
+          ],
+          "correct_option_index": 0,
+          "explanation": "An archipelago consists of multiple islands."
+        },
+        {
+          "question": "Why do coastal regions often experience sea breezes during the day?",
+          "options": [
+            "The sea stops Earth's rotation",
+            "Clouds always move south",
+            "Mountains create all wind",
+            "Land heats faster than the sea"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Differences in heating create pressure and airflow patterns."
+        },
+        {
+          "question": "What causes day and night on Earth?",
+          "options": [
+            "Earth's distance changing each hour",
+            "Seasonal rainfall",
+            "Earth's rotation",
+            "The Moon covering the Sun daily"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Earth rotates on its axis, turning places toward and away from the Sun."
+        },
+        {
+          "question": "Which geographic feature is formed where a river deposits sediment near its mouth?",
+          "options": [
+            "Canyon",
+            "Delta",
+            "Glacier",
+            "Volcano"
+          ],
+          "correct_option_index": 1,
+          "explanation": "River sediment can build a delta near the river mouth."
+        },
+        {
+          "question": "Which renewable resource is strongly linked to windy coastal sites?",
+          "options": [
+            "Wind energy",
+            "Coal mining",
+            "Crude oil extraction",
+            "Peat burning"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Coastal winds can drive wind turbines where suitable."
+        },
+        {
+          "question": "What is the main purpose of contour lines on a map?",
+          "options": [
+            "Show internet speed",
+            "Mark languages spoken",
+            "List historical events",
+            "Show elevation and terrain shape"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Contour lines join points of equal elevation."
+        },
+        {
+          "question": "Why are mangroves valuable along tropical coasts?",
+          "options": [
+            "They create mountain peaks",
+            "They eliminate every storm",
+            "They help protect shorelines and support habitats",
+            "They remove all tides"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Mangroves can reduce erosion and provide wildlife habitat."
+        }
+      ]
+    }
+  ]
+}
