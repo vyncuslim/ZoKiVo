@@ -13,7 +13,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
   const body=parsed.value;
   const action=body.action,option=body.option??0,target=body.target??null;
-  if(!["chest","mine","hack","fish","serve"].includes(action)||!Number.isInteger(option)||option<0||option>2||
+  if(typeof action!=="string"||!["chest","mine","hack","fish","serve"].includes(action)||
+    typeof option!=="number"||!Number.isInteger(option)||option<0||option>2||
     (target!==null&&(typeof target!=="string"||!/^[0-9a-f]{8}-[0-9a-f-]{27,36}$/i.test(target))))
     return noCache({error:"Invalid reward choice"},400);
   const sql=db();const player=await sql`SELECT id FROM players WHERE room_pin=${pin} AND token_hash=${hash(key)} LIMIT 1`;
