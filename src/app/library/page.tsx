@@ -2,7 +2,7 @@
 import Link from "next/link";
 import {useEffect,useState,type FormEvent} from "react";
 type Quiz={id:string;title:string;subject:string;grade_level:string;language:string;description:string;status:string;question_count:number;publisher_name?:string};
-const subjects=["All subjects","Mathematics","Science","English","Geography","History","Computing","Logic","Robotics","General Knowledge","Bahasa Melayu","中文","Environment","Space","Sports","Art","Music","Health","AI Basics","Internet Safety","Physics","Chemistry"];
+const subjects=["All subjects","Mathematics","Science","English","Geography","History","Computing","Logic","Robotics","General Knowledge","Bahasa Melayu","中文","Environment","Space","Sports","Art","Music","Health","AI Basics","Internet Safety","Physics","Chemistry","生活理财","Entrepreneurship","Media Literacy","Agriculture","Ocean Science","Engineering","World Cultures","Civics","Food & Nutrition","Weather","Animals & Nature","Critical Thinking"];
 const palettes:Record<string,{icon:string;color:string}>={
  "Mathematics":{icon:"∑",color:"math"},"Science":{icon:"⚗",color:"science"},
  "English":{icon:"Aa",color:"english"},"Geography":{icon:"🌍",color:"geography"},
@@ -10,7 +10,13 @@ const palettes:Record<string,{icon:string;color:string}>={
  "Logic":{icon:"🧩",color:"logic"},"Robotics":{icon:"⚙",color:"robotics"},
  "General Knowledge":{icon:"✦",color:"general"},"Bahasa Melayu":{icon:"BM",color:"bm"},
  "中文":{icon:"文",color:"chinese"},"Environment":{icon:"🌱",color:"environment"},
- "Space":{icon:"☄",color:"space"},"Sports":{icon:"🏅",color:"sports"},"Art":{icon:"✎",color:"art"},"Music":{icon:"♫",color:"music"},"Health":{icon:"♡",color:"health"},"AI Basics":{icon:"AI",color:"ai"},"Internet Safety":{icon:"🔒",color:"internet"},"Physics":{icon:"⚡",color:"physics"},"Chemistry":{icon:"⚛",color:"chemistry"}
+ "Space":{icon:"☄",color:"space"},"Sports":{icon:"🏅",color:"sports"},"Art":{icon:"✎",color:"art"},"Music":{icon:"♫",color:"music"},"Health":{icon:"♡",color:"health"},"AI Basics":{icon:"AI",color:"ai"},"Internet Safety":{icon:"🔒",color:"internet"},"Physics":{icon:"⚡",color:"physics"},"Chemistry":{icon:"⚛",color:"chemistry"},
+ "生活理财":{icon:"¥",color:"math"},"Entrepreneurship":{icon:"🚀",color:"computing"},
+ "Media Literacy":{icon:"📰",color:"internet"},"Agriculture":{icon:"🌾",color:"environment"},
+ "Ocean Science":{icon:"🌊",color:"science"},"Engineering":{icon:"⚙",color:"robotics"},
+ "World Cultures":{icon:"🌏",color:"geography"},"Civics":{icon:"🏛",color:"history"},
+ "Food & Nutrition":{icon:"🥗",color:"health"},"Weather":{icon:"☁",color:"science"},
+ "Animals & Nature":{icon:"🦋",color:"environment"},"Critical Thinking":{icon:"🧠",color:"logic"}
 };
 function cover(subject:string){return palettes[subject]||{icon:"✦",color:"general"}}
 export default function Library(){
@@ -56,7 +62,7 @@ export default function Library(){
     <button type="submit">Search</button>
    </form>
    <nav className="zk-popular-subjects" aria-label="Popular subjects">
-    {["Mathematics","Science","English","Logic","Robotics","中文","Music","Art"].map(s=><button type="button" key={s}
+    {["Mathematics","Science","English","Logic","Robotics","中文","Music","Art","生活理财","Ocean Science","Media Literacy","Critical Thinking"].map(s=><button type="button" key={s}
       className={subject===s?"selected":""} aria-pressed={subject===s}
       onClick={()=>{setSubject(s);setPage(1)}}>{s==="Mathematics"?"Maths":s==="Logic"?"IQ & Logic":s}</button>)}
    </nav>
