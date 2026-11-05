@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-weird-wonder-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000009",
+      "title": "Detective Duck: Tiny Mysteries with Clues",
+      "subject": "Funny Mysteries",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 playful mini-detective mysteries where all clues are given and there is only one correct deduction.",
+      "questions": [
+        {
+          "question": "Three pets are a cat, a dog and a rabbit. The rabbit is in the blue room, the dog is in the green room. Who is in the red room?",
+          "options": [
+            "The cat",
+            "The dog",
+            "The rabbit",
+            "No pet"
+          ],
+          "correct_option_index": 0,
+          "explanation": "With each pet assigned a different room, the remaining cat is in red."
+        },
+        {
+          "question": "Mira, Leo and Nia own red, green and blue umbrellas. Mira has red, Leo does not have blue. Which colour does Nia have?",
+          "options": [
+            "Green",
+            "Red",
+            "Yellow",
+            "Blue"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Leo must have green; Nia gets blue."
+        },
+        {
+          "question": "A thief left muddy footprints, but the floor had been dry and locked all day before a rainstorm. Which event most likely happened after rain began?",
+          "options": [
+            "The rain fell indoors without an opening",
+            "The prints are magnetic",
+            "Someone walked inside with wet shoes",
+            "The floor cleaned itself"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Wet muddy prints suggest someone entered after becoming muddy outside."
+        },
+        {
+          "question": "Only one of three boxes contains a coin. Box A is empty and box C is empty. Where is the coin?",
+          "options": [
+            "No box",
+            "Box B",
+            "Box A",
+            "Box C"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Only B remains as the possible location."
+        },
+        {
+          "question": "A note says \"the secret is the first letter of CAT\". Which letter is the secret?",
+          "options": [
+            "C",
+            "A",
+            "T",
+            "D"
+          ],
+          "correct_option_index": 0,
+          "explanation": "The first letter of CAT is C."
+        },
+        {
+          "question": "A detective's watch stopped at 14:10. It has not moved since. What does its display show at 18:00?",
+          "options": [
+            "18:00",
+            "14:18",
+            "00:00",
+            "14:10"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A stopped watch does not change its display."
+        },
+        {
+          "question": "A robot leaves a room at 09:15 and returns 20 minutes later. When does it return?",
+          "options": [
+            "09:45",
+            "10:15",
+            "09:35",
+            "09:25"
+          ],
+          "correct_option_index": 2,
+          "explanation": "15 minutes past 9 plus 20 minutes is 35 minutes past 9."
+        },
+        {
+          "question": "The suspect's gloves are dry, but a wet glove is found outside. Can you identify the suspect from this fact alone?",
+          "options": [
+            "Yes; the tallest person",
+            "No; more evidence is needed",
+            "Yes; definitely the person with a blue shirt",
+            "Yes; any person nearby"
+          ],
+          "correct_option_index": 1,
+          "explanation": "A single glove observation cannot identify its owner conclusively."
+        },
+        {
+          "question": "Three suspects have badges 11, 12 and 13. The clue says the badge number is even. Which badge matches?",
+          "options": [
+            "12",
+            "11",
+            "13",
+            "All three"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Only 12 is divisible by two."
+        },
+        {
+          "question": "A museum has four doors. Only the north door was opened in the event log. Which door should investigators examine first for recorded entry?",
+          "options": [
+            "South door",
+            "West door",
+            "East door",
+            "North door"
+          ],
+          "correct_option_index": 3,
+          "explanation": "The entry log points to the north door; other evidence may still matter."
+        },
+        {
+          "question": "A parrot repeats exactly the last word it hears. You say \"yellow banana\". What does it repeat?",
+          "options": [
+            "yellow banana",
+            "parrot",
+            "banana",
+            "yellow"
+          ],
+          "correct_option_index": 2,
+          "explanation": "By the given rule it repeats only the final word."
+        },
+        {
+          "question": "The code is the number of letters in MOON plus the number in STAR. What is the code?",
+          "options": [
+            "16",
+            "8",
+            "7",
+            "9"
+          ],
+          "correct_option_index": 1,
+          "explanation": "MOON has four letters and STAR has four, giving eight."
+        },
+        {
+          "question": "All five biscuits are in a locked tin. Someone takes out two and does not replace them. How many remain in the tin?",
+          "options": [
+            "3",
+            "2",
+            "5",
+            "7"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Five minus two leaves three."
+        },
+        {
+          "question": "A detective needs to visit rooms A, B and C once each. She has visited A and B. Which room remains?",
+          "options": [
+            "A",
+            "B",
+            "D",
+            "C"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Only room C is unvisited."
+        },
+        {
+          "question": "A password clue says \"a 3-digit code starting 42 and ending 7\". What code fits?",
+          "options": [
+            "247",
+            "4270",
+            "427",
+            "472"
+          ],
+          "correct_option_index": 2,
+          "explanation": "The first two digits are 42 and the last is 7."
+        },
+        {
+          "question": "A message was sent at 11:00 and received at 11:02. Assuming clocks are synchronised, how long did delivery take?",
+          "options": [
+            "20 minutes",
+            "2 minutes",
+            "1 minute",
+            "12 minutes"
+          ],
+          "correct_option_index": 1,
+          "explanation": "11:02 minus 11:00 is two minutes."
+        },
+        {
+          "question": "If only red cards trigger the alarm, and a blue card was scanned, should the alarm trigger under this rule?",
+          "options": [
+            "No",
+            "Yes",
+            "Only on weekends",
+            "Only with two blue cards"
+          ],
+          "correct_option_index": 0,
+          "explanation": "The stated rule triggers on red cards only."
+        },
+        {
+          "question": "A detective compares two identical-sized bottles: one is full and one is half-full. Which contains more liquid?",
+          "options": [
+            "The half-full bottle",
+            "They contain equal liquid",
+            "Neither contains liquid",
+            "The full bottle"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Equal capacity with one full means the full one holds more."
+        },
+        {
+          "question": "The laboratory door opens only if both lights are green. One light is green, the other red. What happens?",
+          "options": [
+            "It disappears",
+            "It turns into a window",
+            "It stays locked",
+            "It opens"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Both-green condition is not met."
+        },
+        {
+          "question": "A security camera recorded three visitors entering and two exiting, with no other entrances or exits. How many of those visitors remain inside?",
+          "options": [
+            "5",
+            "1",
+            "2",
+            "3"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Three entered and two left, leaving one of the recorded visitors."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000010",
+      "title": "Everyday Things That Are Surprisingly Weird",
+      "subject": "Weird Everyday Science",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 quirky household phenomena with solid explanations: static hair, soap bubbles, popcorn and more.",
+      "questions": [
+        {
+          "question": "Why does popcorn suddenly pop when heated?",
+          "options": [
+            "The kernel is magnetic",
+            "Salt makes it explode by itself",
+            "The corn turns into metal",
+            "Water inside the kernel becomes pressurised steam"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Steam pressure builds until the kernel ruptures."
+        },
+        {
+          "question": "Why can a rubbed balloon stick to a wall?",
+          "options": [
+            "The wall becomes a magnet",
+            "Air stops having gravity",
+            "Static electric attraction",
+            "The balloon creates permanent glue"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Transferred electric charge can produce attraction."
+        },
+        {
+          "question": "Why do soap bubbles often look rainbow-coloured?",
+          "options": [
+            "Soap is naturally made of tiny rainbows",
+            "Thin-film interference separates reflected light colours",
+            "Bubbles contain rainbow paint",
+            "Water creates LEDs"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Light reflecting from a thin film interferes at different wavelengths."
+        },
+        {
+          "question": "Why can wet fingers make a glass surface seem slippery?",
+          "options": [
+            "A water film changes friction at the contact surface",
+            "Water eliminates all forces",
+            "Glass becomes soft like butter",
+            "The fingers stop having skin"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Lubrication alters friction between surfaces."
+        },
+        {
+          "question": "Why do onions sometimes make eyes water when cut?",
+          "options": [
+            "They produce salty tears directly",
+            "Onions are radioactive",
+            "Their colour blocks vision",
+            "They release irritating volatile chemicals"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Cutting onions releases compounds that irritate the eyes."
+        },
+        {
+          "question": "Why can a metal spoon feel colder than a wooden one in the same room?",
+          "options": [
+            "Wood creates sunlight",
+            "Metal is always below freezing",
+            "Metal transfers heat away from skin more quickly",
+            "Metal has no temperature"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Thermal conductivity affects how rapidly skin loses heat."
+        },
+        {
+          "question": "Why does a straw make liquid rise when you sip?",
+          "options": [
+            "The glass pushes liquid using electricity",
+            "Lower pressure inside the straw lets surrounding pressure push liquid up",
+            "The straw attracts water magnetically",
+            "Your mouth creates gravity"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Pressure differences drive the liquid upward."
+        },
+        {
+          "question": "Why does a fan often make sweaty skin feel cooler?",
+          "options": [
+            "It increases evaporation and heat transfer",
+            "It turns air into ice",
+            "It switches off body heat",
+            "It changes Earth's orbit"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Moving air speeds evaporation and convection."
+        },
+        {
+          "question": "Why can you see your breath on a chilly morning?",
+          "options": [
+            "Your lungs make smoke",
+            "Oxygen turns into visible metal",
+            "Air becomes solid everywhere",
+            "Moist breath forms tiny liquid droplets in cool air"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Cooling water vapour can form a visible mist."
+        },
+        {
+          "question": "Why does an unopened cold soda sometimes fizz when opened?",
+          "options": [
+            "Sugar turns into fire",
+            "The bottle becomes magnetic",
+            "Dissolved carbon dioxide escapes as pressure falls",
+            "Oxygen always burns the drink"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Lower pressure allows dissolved gas to form bubbles."
+        },
+        {
+          "question": "Why can ice make a drink float with cubes on top?",
+          "options": [
+            "Ice is made of air only",
+            "Ice is less dense than liquid water",
+            "Ice has no mass",
+            "The glass pushes it upward magnetically"
+          ],
+          "correct_option_index": 1,
+          "explanation": "A lower-density solid floats in a denser liquid."
+        },
+        {
+          "question": "Why does cut apple flesh often brown after exposure to air?",
+          "options": [
+            "Enzymatic reactions involving oxygen",
+            "The apple absorbs sunlight as paint",
+            "Its sugar turns into iron",
+            "The peel changes to metal"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Polyphenol oxidase contributes to browning reactions."
+        },
+        {
+          "question": "Why do shadows grow longer when a low Sun shines near the horizon?",
+          "options": [
+            "Objects become taller at sunset",
+            "Gravity gets stronger each evening",
+            "The ground tilts suddenly",
+            "The light arrives at a shallow angle"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Low-angle sunlight stretches the shadow."
+        },
+        {
+          "question": "Why can a lid on a jar be easier to open after warming it slightly?",
+          "options": [
+            "The jar turns into rubber",
+            "The lid loses all friction",
+            "Heating may expand the lid enough to loosen it",
+            "Warm water removes gravity"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Different thermal expansion can help loosen the fit."
+        },
+        {
+          "question": "Why does water form rounded drops on some waxy leaves?",
+          "options": [
+            "The leaf becomes magnetic",
+            "Surface tension and poor wetting of the leaf surface",
+            "Leaves generate marbles",
+            "Water stops being a liquid"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Cohesive forces and surface chemistry shape droplets."
+        },
+        {
+          "question": "Why can sugar seem to disappear when stirred into water?",
+          "options": [
+            "It dissolves and disperses among water molecules",
+            "It leaves the universe",
+            "It transforms into air automatically",
+            "The spoon absorbs all sugar"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Dissolved sugar remains in the solution."
+        },
+        {
+          "question": "What makes a rubber ball bounce?",
+          "options": [
+            "It contains a gravity switch",
+            "Air always pushes it upward forever",
+            "It has a hidden motor in every case",
+            "Elastic deformation stores and returns some energy"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Material elasticity returns some stored energy after impact."
+        },
+        {
+          "question": "Why do mirrors show a reversed-looking image without producing a second person?",
+          "options": [
+            "They make time flow backward",
+            "They project your body behind the wall",
+            "They redirect incoming light into a virtual image",
+            "They duplicate human bodies"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Mirror reflections create virtual images from redirected light."
+        },
+        {
+          "question": "Why is a rainbow often seen with the Sun behind the observer?",
+          "options": [
+            "Rainwater contains coloured dust by default",
+            "Water droplets bend, reflect and disperse sunlight toward the viewer",
+            "Clouds grow coloured wires",
+            "The Sun becomes a laser screen"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The viewing geometry of sunlight and droplets creates a rainbow."
+        },
+        {
+          "question": "Why does bread dough with yeast often rise?",
+          "options": [
+            "Yeast produces carbon dioxide that forms bubbles in dough",
+            "Flour becomes magnetic",
+            "Water transforms into stone",
+            "Air pressure vanishes"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Fermentation can release gas trapped by the dough's structure."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000011",
+      "title": "Teka-Teki Pelik Tapi Logik",
+      "subject": "Teka-Teki Pelik",
+      "grade_level": "Tahun 6",
+      "language": "ms",
+      "description": "20 teka-teki lucu dengan satu jawapan yang jelas dan penerangan Bahasa Melayu.",
+      "questions": [
+        {
+          "question": "Dalam setahun ada 12 bulan. Berapa bulan mempunyai sekurang-kurangnya 28 hari?",
+          "options": [
+            "2",
+            "6",
+            "12",
+            "1"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Semua bulan mempunyai sekurang-kurangnya 28 hari."
+        },
+        {
+          "question": "Ada 5 biji epal di meja. Kamu ambil 3. Berapa biji epal yang ada di tangan kamu?",
+          "options": [
+            "8",
+            "3",
+            "2",
+            "5"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Soalan bertanya epal yang diambil, bukan yang masih di atas meja."
+        },
+        {
+          "question": "Yang manakah lebih berat, 1 kg kapas atau 1 kg besi?",
+          "options": [
+            "Sama berat",
+            "Kapas",
+            "Besi",
+            "Tidak boleh dibandingkan"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Kedua-duanya berjisim satu kilogram."
+        },
+        {
+          "question": "Seekor robot mempunyai 4 roda. Tiga robot sama mempunyai berapa roda?",
+          "options": [
+            "7",
+            "8",
+            "16",
+            "12"
+          ],
+          "correct_option_index": 3,
+          "explanation": "3 darab 4 bersamaan 12 roda."
+        },
+        {
+          "question": "Kamu memotong sebiji piza kepada 4 bahagian sama besar. Berapa bahagian semuanya?",
+          "options": [
+            "8",
+            "1",
+            "4",
+            "2"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Bilangan kepingan yang dinyatakan ialah empat."
+        },
+        {
+          "question": "Terdapat 10 ekor ikan di dalam akuarium. Dua mati tetapi tidak dikeluarkan. Berapa ekor masih di dalam akuarium?",
+          "options": [
+            "12",
+            "10",
+            "8",
+            "2"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Ikan mati tetap berada dalam akuarium jika tidak dikeluarkan."
+        },
+        {
+          "question": "Jam digital menunjukkan 10:00. Selepas 45 minit, apakah waktunya?",
+          "options": [
+            "10:45",
+            "10:30",
+            "11:45",
+            "09:45"
+          ],
+          "correct_option_index": 0,
+          "explanation": "45 minit selepas pukul sepuluh ialah 10:45."
+        },
+        {
+          "question": "Tiga raksasa masing-masing mempunyai dua mata. Jumlah semua mata mereka?",
+          "options": [
+            "3",
+            "9",
+            "12",
+            "6"
+          ],
+          "correct_option_index": 3,
+          "explanation": "3 raksasa darab 2 mata bersamaan 6."
+        },
+        {
+          "question": "Jika hari ini hari Isnin, tiga hari kemudian hari apa?",
+          "options": [
+            "Jumaat",
+            "Ahad",
+            "Khamis",
+            "Rabu"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Selasa hari pertama, Rabu kedua, Khamis ketiga."
+        },
+        {
+          "question": "Ada 6 pensel. Dua diberi kepada kawan dan satu hilang. Berapa pensel tinggal?",
+          "options": [
+            "5",
+            "3",
+            "4",
+            "2"
+          ],
+          "correct_option_index": 1,
+          "explanation": "6 tolak 2 tolak 1 bersamaan 3."
+        },
+        {
+          "question": "Sebuah UFO membawa 7 makhluk asing. Dua turun dan tiga naik. Berapa penumpang sekarang?",
+          "options": [
+            "8",
+            "6",
+            "10",
+            "12"
+          ],
+          "correct_option_index": 0,
+          "explanation": "7−2+3=8."
+        },
+        {
+          "question": "Ada 4 pasang kasut. Berapa kasut individu semuanya?",
+          "options": [
+            "4",
+            "6",
+            "12",
+            "8"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Setiap pasang mempunyai dua kasut."
+        },
+        {
+          "question": "Sebuah buku mempunyai 20 halaman. Kamu baca 5 halaman. Berapa halaman belum dibaca?",
+          "options": [
+            "10",
+            "5",
+            "15",
+            "25"
+          ],
+          "correct_option_index": 2,
+          "explanation": "20 tolak 5 sama dengan 15."
+        },
+        {
+          "question": "Dua ekor kucing masing-masing makan 3 biskut. Berapa biskut dimakan?",
+          "options": [
+            "9",
+            "6",
+            "5",
+            "3"
+          ],
+          "correct_option_index": 1,
+          "explanation": "2 darab 3 bersamaan 6."
+        },
+        {
+          "question": "Kereta elektrik tanpa enjin pembakaran bergerak. Adakah ia mengeluarkan asap ekzos pembakaran seperti kereta petrol?",
+          "options": [
+            "Tidak",
+            "Ya, sentiasa",
+            "Hanya pada waktu malam",
+            "Hanya ketika hujan"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Kereta elektrik tanpa sumber pembakaran tidak menghasilkan asap ekzos enjin petrol."
+        },
+        {
+          "question": "Kamu berada di tempat kedua dalam perlumbaan dan memintas peserta pertama. Kamu kini nombor berapa?",
+          "options": [
+            "Kedua",
+            "Ketiga",
+            "Terakhir",
+            "Pertama"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Memintas orang pertama menjadikan kamu peserta pertama."
+        },
+        {
+          "question": "Sebiji tembikai dibahagi kepada 8 potongan sama besar. Empat potongan dimakan. Berapa potongan tinggal?",
+          "options": [
+            "2",
+            "6",
+            "4",
+            "8"
+          ],
+          "correct_option_index": 2,
+          "explanation": "8−4=4."
+        },
+        {
+          "question": "Lampu berkelip sekali setiap 2 saat. Dalam 10 saat, jika ia berkelip pada saat 2,4,6,8,10, berapa kali?",
+          "options": [
+            "10",
+            "5",
+            "4",
+            "6"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Lima waktu yang disenaraikan menghasilkan lima kelipan."
+        },
+        {
+          "question": "Ada 9 kerusi. Tujuh kerusi diduduki satu orang setiap satu. Berapa kerusi kosong?",
+          "options": [
+            "2",
+            "3",
+            "7",
+            "9"
+          ],
+          "correct_option_index": 0,
+          "explanation": "9−7=2 kerusi kosong."
+        },
+        {
+          "question": "Mesin menghasilkan 5 pelekat setiap minit. Berapa pelekat dalam 4 minit?",
+          "options": [
+            "9",
+            "15",
+            "25",
+            "20"
+          ],
+          "correct_option_index": 3,
+          "explanation": "5 pelekat seminit darab 4 minit bersamaan 20."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000012",
+      "title": "Sains Pelik: Betul atau Mengarut?",
+      "subject": "Sains Pelik",
+      "grade_level": "Tahun 7",
+      "language": "ms",
+      "description": "20 soalan sains yang pelik tetapi berdasarkan fenomena sebenar dan logik eksperimen.",
+      "questions": [
+        {
+          "question": "Mengapakah sudu logam terasa lebih sejuk daripada sudu kayu pada suhu bilik yang sama?",
+          "options": [
+            "Logam menghasilkan ais",
+            "Logam memindahkan haba daripada tangan lebih cepat",
+            "Logam tidak mempunyai suhu",
+            "Kayu selalu lebih panas"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Kekonduksian haba logam lebih tinggi."
+        },
+        {
+          "question": "Mengapa ais biasanya terapung di dalam air?",
+          "options": [
+            "Ais kurang tumpat daripada air cecair",
+            "Ais tidak mempunyai jisim",
+            "Ais diperbuat daripada udara",
+            "Air ialah magnet"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Ketumpatan ais lebih rendah berbanding air cecair."
+        },
+        {
+          "question": "Dalam ruang vakum, bolehkah bunyi loceng bergerak terus melalui ruang kosong?",
+          "options": [
+            "Ya, lebih kuat",
+            "Ya, tanpa had",
+            "Hanya jika loceng merah",
+            "Tidak"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Gelombang bunyi biasa memerlukan medium untuk merambat."
+        },
+        {
+          "question": "Mengapa pensel dalam gelas air kelihatan bengkok?",
+          "options": [
+            "Air menukar pensel menjadi getah",
+            "Gelas menghasilkan bayang hitam",
+            "Pembiasan cahaya",
+            "Pensel patah apabila disentuh air"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Cahaya berubah arah apabila merentasi air dan udara."
+        },
+        {
+          "question": "Apakah yang menyebabkan pelangi terbentuk?",
+          "options": [
+            "Petir melukis warna",
+            "Cahaya matahari dibiaskan, dipantulkan dan diuraikan oleh titisan air",
+            "Awan menghasilkan cat",
+            "Udara menjadi logam"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Cahaya berinteraksi dengan titisan air untuk menghasilkan spektrum."
+        },
+        {
+          "question": "Mengapakah belon yang digosok boleh melekat pada dinding?",
+          "options": [
+            "Tarikan elektrostatik",
+            "Belon menghasilkan gam kekal",
+            "Dinding menjadi besi",
+            "Udara kehilangan graviti"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Cas elektrik boleh menghasilkan daya tarikan."
+        },
+        {
+          "question": "Mengapa bayang-bayang menjadi panjang apabila matahari rendah?",
+          "options": [
+            "Objek menjadi semakin tinggi",
+            "Graviti bertambah setiap petang",
+            "Tanah memanjang",
+            "Sudut cahaya matahari lebih rendah"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Sudut cahaya mempengaruhi panjang bayang."
+        },
+        {
+          "question": "Tumbuhan hijau memerlukan gas manakah untuk fotosintesis?",
+          "options": [
+            "Nitrogen sahaja",
+            "Hidrogen tulen",
+            "Karbon dioksida",
+            "Helium"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Tumbuhan mengambil karbon dioksida untuk menghasilkan gula."
+        },
+        {
+          "question": "Apakah fungsi utama akar tumbuhan?",
+          "options": [
+            "Mencipta cahaya matahari",
+            "Menyerap air dan mineral serta membantu menyokong tumbuhan",
+            "Menghasilkan bunyi muzik",
+            "Membina awan"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Akar menyerap bahan dari tanah dan memberi sokongan."
+        },
+        {
+          "question": "Mengapakah kita dapat melihat Bulan bersinar?",
+          "options": [
+            "Bulan memantulkan cahaya matahari",
+            "Bulan mempunyai lampu elektrik",
+            "Bulan diperbuat daripada api",
+            "Bulan menghasilkan semua cahaya sendiri"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Cahaya Bulan yang kelihatan kebanyakannya ialah pantulan cahaya matahari."
+        },
+        {
+          "question": "Planet manakah mengambil masa putaran paksi lebih lama daripada tempoh orbitnya mengelilingi Matahari?",
+          "options": [
+            "Bumi",
+            "Marikh",
+            "Musytari",
+            "Zuhrah"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Zuhrah berputar dalam kira-kira 243 hari Bumi dan mengorbit dalam kira-kira 225 hari."
+        },
+        {
+          "question": "Planet manakah kelihatan berputar mengiring kerana kecondongan paksinya yang sangat besar?",
+          "options": [
+            "Bumi",
+            "Marikh",
+            "Uranus",
+            "Utarid"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Paksi Uranus condong hampir 90 darjah."
+        },
+        {
+          "question": "Sotong kurita biasanya mempunyai berapa jantung?",
+          "options": [
+            "Lapan",
+            "Tiga",
+            "Satu",
+            "Lima"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Dua jantung mengepam darah ke insang dan satu ke seluruh badan."
+        },
+        {
+          "question": "Mengapa darah sotong kurita boleh kelihatan biru?",
+          "options": [
+            "Protein hemocyanin mengandungi kuprum",
+            "Ia meminum air berwarna biru",
+            "Ia tidak mempunyai darah",
+            "Insangnya mengeluarkan cat"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Hemocyanin menggunakan kuprum untuk membawa oksigen."
+        },
+        {
+          "question": "Mengapakah air mendidih pada suhu lebih rendah di gunung tinggi?",
+          "options": [
+            "Air menjadi unsur lain",
+            "Gunung menarik haba keluar sepenuhnya",
+            "Air kehilangan molekul",
+            "Tekanan udara lebih rendah"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Tekanan rendah menurunkan suhu didih air."
+        },
+        {
+          "question": "Mengapa udara bergerak daripada kipas sering menyejukkan kulit berpeluh?",
+          "options": [
+            "Ia menghentikan haba badan",
+            "Kipas mengubah orbit Bumi",
+            "Ia mempercepat penyejatan dan pemindahan haba",
+            "Ia membuat ketulan ais dalam udara"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Pengaliran udara meningkatkan penyejatan peluh."
+        },
+        {
+          "question": "Apakah yang menyebabkan jagung bertih meletup ketika dipanaskan?",
+          "options": [
+            "Biji jagung menerima arus elektrik",
+            "Tekanan wap air meningkat di dalam biji jagung",
+            "Jagung menjadi magnet",
+            "Gula bertukar menjadi logam"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Wap air yang terperangkap meningkatkan tekanan sehingga kulit pecah."
+        },
+        {
+          "question": "Mengapa air gula boleh menjadi jernih selepas dikacau?",
+          "options": [
+            "Gula larut dan tersebar di dalam air",
+            "Gula hilang dari alam semesta",
+            "Gula menjadi batu",
+            "Sudu menyerap semua gula"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Molekul gula masih berada dalam larutan."
+        },
+        {
+          "question": "Mengapakah kita dapat melihat wap seperti kabus daripada nafas pada pagi sejuk?",
+          "options": [
+            "Paru-paru menghasilkan asap kebakaran",
+            "Oksigen menjadi besi",
+            "Udara menjadi pejal",
+            "Wap air dalam nafas terkondensasi menjadi titisan kecil"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Udara sejuk membolehkan titisan kecil terbentuk."
+        },
+        {
+          "question": "Apakah yang berlaku kepada jisim 2 kg kapas apabila dibandingkan dengan 2 kg batu menggunakan neraca tepat?",
+          "options": [
+            "Batu lebih berat",
+            "Jisimnya menjadi sifar",
+            "Kedua-duanya mempunyai jisim yang sama",
+            "Kapas lebih berat"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Kedua-duanya ialah dua kilogram walaupun isipadunya berbeza."
+        }
+      ]
+    }
+  ]
+}
