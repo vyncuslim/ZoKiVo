@@ -39,7 +39,7 @@ export function validateQuiz(raw:unknown):QuizInput{
   const q=item as Record<string,unknown>,question=stringField(q.question??q.question_text,750),opts=q.options??q.choices;
   if(question.length<4||!Array.isArray(opts)||opts.length!==4)throw new AuthError("Question "+(i+1)+" requires exactly four choices.");
   // Prevent repeated quiz questions disguised by Unicode width or whitespace.
-  const normalizedQuestion=question.normalize("NFKC").toLowerCase().replace(/\\s+/g," ").trim();
+  const normalizedQuestion=question.normalize("NFKC").toLowerCase().replace(/\s+/g," ").trim();
   if(seenQuestions.has(normalizedQuestion))throw new AuthError("Question "+(i+1)+" repeats an earlier question.");
   seenQuestions.add(normalizedQuestion);
   const answers=opts.map(x=>stringField(x,250));
