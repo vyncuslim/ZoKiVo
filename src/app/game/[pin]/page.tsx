@@ -15,6 +15,8 @@ const letters=["A","B","C","D"];
 export default function Game(){
  const {pin}=useParams<{pin:string}>();const host=useSearchParams().get("host")==="1";
  const requestSequence=useRef(0);const inFlight=useRef<Promise<void>|null>(null);const [clockOffset,setClockOffset]=useState(0);const [state,setState]=useState<State|null>(null);
+ const questionHeadingRef=useRef<HTMLHeadingElement|null>(null);
+ const [copiedPin,setCopiedPin]=useState(false);
  const [lastReview,setLastReview]=useState<{index:number;question:string;choices:string[];results:NonNullable<State["hostResults"]>}|null>(null);const[error,setError]=useState("");const[busy,setBusy]=useState(false);const[clock,setClock]=useState(Date.now());const[feedback,setFeedback]=useState(""),[bonusReceipt,setBonusReceipt]=useState(""),[joinQr,setJoinQr]=useState(""),[downloading,setDownloading]=useState(false);
  const headers=useCallback(():Record<string,string>=>{
   if(host)return {"x-host-token":sessionStorage.getItem("host:"+pin)||""};
@@ -57,6 +59,8 @@ export default function Game(){
    finally{setDownloading(false)}
  }
  const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
+ useEffect(()=>{if(!copiedPin)return;const timer=window.setTimeout(()=>setCopiedPin(false),2200);return()=>window.clearTimeout(timer)},[copiedPin]);
+ async function copyPin(){try{if(!navigator.clipboard?.writeText)throw new Error("Clipboard unavailable");await navigator.clipboard.writeText(pin);setCopiedPin(true)}catch{setError("Could not copy the PIN. You can select the six digits to share them instead.")}}
  useEffect(()=>{
   if(state?.status==="finished")return;
   void reload(); // Always load the initial room state immediately.
@@ -106,6 +110,7 @@ export default function Game(){
   return()=>window.clearTimeout(timer);
  },[host,state?.roundReady,state?.index,state?.deadline,state?.status,headers,pin,reload]);
  const seconds=Math.max(0,Math.ceil((new Date(state?.deadline||0).getTime()-(clock+clockOffset))/1000));const answered=!!(state?.viewer.playerId&&state.answeredIds.includes(state.viewer.playerId));const canPlay=state?.status==="playing";const roundResults=host?state?.hostResults:null;
+ useEffect(()=>{if(!host&&state?.status==="playing"&&!answered&&state.question){questionHeadingRef.current?.focus({preventScroll:true})}},[host,state?.index,state?.status,answered,!!state?.question]);
  const priorReview=host&&!roundResults&&state?.status==="playing"&&lastReview?.index===state.index-1?lastReview:null;
  const displayResults=roundResults||priorReview?.results;
  const gradeByPlayer=new Map(displayResults?.playerResults.map(result=>[result.id,result.correct] as const)||[]);
@@ -113,7 +118,8 @@ export default function Game(){
   {error&&<p role="alert" className="form-error">{error}</p>}
   <FinishedResults pin={pin} host={host} state={state} getHeaders={headers} onDownload={()=>void downloadReport()} downloading={downloading}/>
  </main>;
- return <main className="game-page zk-game-screen wrap" data-role={host?"host":"player"}><div className="game-head"><div><span className="eyebrow eyebrow--mini">{host?"TEACHER SCREEN":"YOUR GAME"}</span><h1>{state?.status==="lobby"?"Ready, players?":String(state?.status)==="finished"?"Game finished!":"Play & learn!"}</h1></div><div className="game-pin-box"><span>GAME PIN · COPY</span><button type="button" title="Copy game PIN" onClick={()=>{void navigator.clipboard?.writeText(pin)}}>{pin} <span aria-hidden="true">⧉</span></button></div></div>
+ return <main className="game-page zk-game-screen wrap" data-role={host?"host":"player"}><div className="game-head"><div><span className="eyebrow eyebrow--mini">{host?"TEACHER SCREEN":"YOUR GAME"}</span><h1>{state?.status==="lobby"?"Ready, players?":String(state?.status)==="finished"?"Game finished!":"Play & learn!"}</h1></div><div className="game-pin-box"><span>GAME PIN</span><button type="button" title="Copy game PIN" aria-label={"Copy game PIN "+pin} onClick={()=>void copyPin()}>{pin} <span aria-hidden="true">{copiedPin?"✓":"⧉"}</span></button><small className="zk-copy-status" role="status">{copiedPin?"PIN copied ✓":""}</small></div></div>
+ <div className="zk-session-strip" aria-label="Live game overview"><span className="zk-session-mode">🎮 {gameModeName(state?.gameMode)}</span><span className="zk-session-connection"><i aria-hidden="true"/>{state?realtimeConnected?"Live updates":"Auto refreshing":"Connecting"}</span><span className="zk-session-players">👥 {state?.players.length??0} players</span>{state?.status==="playing"&&<span className="zk-session-answered">✓ {state.answeredCount??0} answered</span>}</div>
  {error&&<p className="form-error" role="alert">{error}</p>}
  <div className="game-layout zk-play-layout"><section className="game-main">
  {!state?<div className="waiting-card"><div className="waiting-mascot"><BrandMark size={150}/></div><h2>Connecting to the game...</h2><p>Checking your room.</p></div>:state.status==="lobby"?<div className="waiting-card"><div className="waiting-mascot"><BrandMark size={150}/></div><span className="waiting-eyebrow">EVERYONE GET READY</span><h2>It's almost game time!</h2><p>{host?"Share the PIN or QR code. Start once everyone joins.":"You’re in! Pick your character and wait for your teacher."}</p><div className="lobby-pin">{pin}</div>{host&&joinQr&&<div><img src={joinQr} alt="Scan to join this game" width={132} height={132}/><p><a href={"/play?pin="+pin}>Join link ↗</a></p></div>}<div className="zokivo-lobby-players" aria-label="Players ready"><strong>PLAYERS READY · {state.players.length}</strong><div>{state.players.map(p=><span className="zokivo-lobby-player" key={p.id}><i aria-hidden="true">{avatarSymbol(p.avatar_id)}</i>{p.nickname}</span>)}</div></div>{host?<button className="button button-dark" disabled={busy||state.players.length===0} onClick={()=>act("start")}>{busy?"Starting...":"Start game  ↗"}</button>:<span className="lobby-hint">WAITING FOR THE HOST TO START...</span>}</div>:String(state.status)==="finished"?<div className="waiting-card finish-card"><div className="winner-star">★</div><span className="waiting-eyebrow">GAME COMPLETE</span><h2>🏆 Final standings</h2><p>Thanks for playing! Here are your top ZoKivo players.</p>
@@ -129,7 +135,7 @@ export default function Game(){
   <div className={"zk-podium-player zk-podium-"+(i+1)} key={p.id}><span className="zk-podium-place">{["🥇","🥈","🥉"][i]}</span>
    <span className="zk-podium-avatar" aria-hidden="true">{avatarSymbol(p.avatar_id)}</span><strong>{p.nickname}</strong>
    <span>{state.gameMode&&state.gameMode!=="quiz_party"?(p.mode_score??0)+" ✦":p.score+" points"}</span></div>)}
- </div><a className="button button-dark" href="/play">Join another game →</a>{host&&<button className="button button-outline" type="button" disabled={downloading} onClick={()=>void downloadReport()}>{downloading?"Preparing report…":"Download results CSV ↓"}</button>}</div>:<div className="question-card zk-question-stage"><div className="round-meta"><span>QUESTION {String(state.index+1).padStart(2,"0")} / {String(state.total).padStart(2,"0")}</span><span className={"timer-badge "+(seconds<=5?"timer-badge--low":"")}>{state.allAnswered?"✓ ALL ANSWERED":seconds+"s TO ANSWER"}</span></div><div className="round-progress" aria-label={"Question "+(state.index+1)+" of "+state.total}><span style={{width:Math.min(100,(state.index+1)/Math.max(1,state.total)*100)+"%"}}/></div>
+ </div><a className="button button-dark" href="/play">Join another game →</a>{host&&<button className="button button-outline" type="button" disabled={downloading} onClick={()=>void downloadReport()}>{downloading?"Preparing report…":"Download results CSV ↓"}</button>}</div>:<div className="question-card zk-question-stage"><div className="round-meta"><span>QUESTION {String(state.index+1).padStart(2,"0")} / {String(state.total).padStart(2,"0")}</span><span className={"timer-badge "+(seconds<=5?"timer-badge--low":"")} role="timer" aria-live="off">{state.allAnswered?"✓ ALL ANSWERED":seconds+"s TO ANSWER"}</span></div><div className="round-progress" role="progressbar" aria-label="Game question progress" aria-valuemin={0} aria-valuemax={state.total} aria-valuenow={Math.min(state.total,state.index+1)} aria-valuetext={"Question "+(state.index+1)+" of "+state.total}><span style={{width:Math.min(100,(state.index+1)/Math.max(1,state.total)*100)+"%"}}/></div>
  {host&&displayResults&&<div className="zk-host-answer-summary" role="status" aria-label="Host round results">
   <strong>{priorReview?"PREVIOUS ROUND":"ANSWER REVIEW"} · ROUND {priorReview?priorReview.index+1:state.index+1}</strong>
   <span className="zk-host-summary-correct">✓ {displayResults.correctCount} Correct</span>
@@ -146,18 +152,19 @@ export default function Game(){
   <h2>{bonusReceipt?"Bonus collected! 🎉":state.viewer.result?.is_correct?"Correct! ✨":state.viewer.result?"Good try! 💜":"Answer sent!"}</h2><p>{bonusReceipt?"You earned: "+bonusReceipt:state.viewer.result?.is_correct?"Great thinking! You earned "+state.viewer.result.points+" points.":state.viewer.result?"You can try the next one. Keep learning!":"Your answer is locked in. Waiting for the others."}</p>
   <p className="zk-wait-counter">{state.allAnswered?(state.rewardsPending?"Waiting for bonus choices…":"Everyone answered! Next question starting…"):seconds>0?"Waiting for classmates · "+state.answeredCount+"/"+state.players.length+" answered · "+seconds+"s max":"Time is up. Next question starting…"}</p>
  </div>
- :<div className="zk-quiz-play"><h2>{state.question?.question}</h2>
+ :<div className="zk-quiz-play"><span className="zk-answer-prompt">YOUR CHALLENGE · PICK ONE ANSWER</span><h2 ref={questionHeadingRef} tabIndex={-1}>{state.question?.question}</h2>
   <QuestionMedia imageUrl={state.question?.image_url} audioUrl={state.question?.audio_url} formula={state.question?.formula_text}/>
   {host&&<p className="game-host-instructions">Host view · Students answer on their devices · {gameModeName(state.gameMode)}{state.scoreGoal?" · Goal "+state.scoreGoal+" points":""}</p>}
   <div className="answer-grid zk-answer-pads" aria-label="Choose one answer">
    {(state.question?.choices||[]).map((label,i)=><button key={i} type="button"
     className={"game-choice game-choice-"+i+" zk-answer-pad"+(roundResults?(i===roundResults.correctIndex?" zk-host-choice-correct":" zk-host-choice-wrong"):"")} aria-label={"Answer "+letters[i]+": "+label}
     disabled={host||answered||seconds===0||busy} onClick={()=>act("answer",i)}>
-    <span className="answer-letter" aria-hidden="true">{["✦","●","◆","▲"][i]}</span>
+    <span className="answer-letter" aria-hidden="true">{["✦","●","◆","▲"][i]}</span><span className="zk-choice-key" aria-hidden="true">{letters[i]}</span>
     <span className="zk-answer-label">{label}</span>
      {roundResults&&<span className="zk-host-choice-result">{i===roundResults.correctIndex?"✓ CORRECT":"✕ WRONG"} · {roundResults.choiceCounts[i]??0} chose this</span>}</button>)}
   </div>
-  {host&&<p className="zk-small-hint">{roundResults?"Round closed · correct answers and response counts are now visible to the host.":"Students see these four choices on their own screens. Answers are revealed once the round closes."}</p>}
+  {!host&&!answered&&seconds>0&&<p className="zk-round-tip">Tap one answer to lock it in. Choose carefully!</p>}
+   {host&&<p className="zk-small-hint">{roundResults?"Round closed · correct answers and response counts are now visible to the host.":"Students see these four choices on their own screens. Answers are revealed once the round closes."}</p>}
   {feedback&&<p className="answer-feedback" role="status">{feedback}</p>}
   {!host&&!answered&&seconds===0&&<p className="answer-feedback">Time's up! Waiting for the next question.</p>}
  </div>}
