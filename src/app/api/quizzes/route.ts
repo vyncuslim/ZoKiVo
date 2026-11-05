@@ -1,5 +1,6 @@
 import {NextRequest} from "next/server";
 import {db} from "@/lib/store";
+import {readBoundedJson} from "@/lib/limited-json";
 import {authUser,validateQuiz,questionRows} from "@/lib/quizzes";
 import {checkOrigin,noCache,authError,applyRenew} from "@/lib/mother-auth";
 export const runtime="nodejs";
@@ -44,7 +45,9 @@ export async function POST(req:NextRequest){
  try{
   checkOrigin(req);
   const {user,renew}=await authUser(req);
-  const quiz=validateQuiz(await req.json().catch(()=>null)),sql=db();
+  const payload=await readBoundedJson(req,192*1024);
+  if(!payload.ok)return noCache({error:payload.error},payload.status);
+  const quiz=validateQuiz(payload.value),sql=db();
   const counts=await sql`SELECT count(*)::integer AS total FROM quiz_sets WHERE owner_user_id=${user!.id}`;
   if(counts[0].total>=100)return noCache({error:"Maximum 100 quizzes per account."},429);
   const json=questionRows(quiz);
