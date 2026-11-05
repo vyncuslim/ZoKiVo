@@ -128,3 +128,20 @@
 @media(prefers-reduced-motion:reduce){
  .zk-teacher-progress>span,.zk-game-screen .zk-rewards-focus .zk-reward-tile{transition:none!important}
 }
+
+/* Help learners find their own score even when they are outside the top three. */
+.zk-game-screen .zk-compact-board .board-player.zk-board-me{border:2px solid #8f6ace;background:#ebe1ff}
+.zk-game-screen .zk-compact-board .zk-board-you{display:inline-flex;flex:none;border:1px solid #ad91dd;border-radius:6px;padding:4px 5px;font-size:9px;letter-spacing:.04em;line-height:1;color:#503379;background:#fff;font-weight:1000}
+.zk-game-screen[data-role="player"] .zk-play-layout:has(.zk-quiz-play) .zk-compact-board .board-player.zk-board-me{display:flex}
+/* Lobby gives the teacher room's join and start actions an unmistakable focal point. */
+.zk-game-screen .waiting-card{background:linear-gradient(155deg,#fffefa,#f8f3ff);border-color:#d5c4ee}
+.zk-game-screen .waiting-card .waiting-mascot{max-width:min(175px,40vw);max-height:min(175px,40vw)}
+.zk-game-screen .waiting-card .lobby-pin{font-variant-numeric:tabular-nums;letter-spacing:.12em}
+.zk-game-screen .waiting-card .button{min-height:48px}
+.zk-game-screen .zokivo-lobby-players{max-width:100%}
+.zk-game-screen .zokivo-lobby-players>div{max-height:220px;overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:600px){
+ .zk-game-screen .waiting-card{min-height:320px}
+ .zk-game-screen .waiting-card .waiting-mascot{max-width:120px;max-height:120px}
+ .zk-game-screen .zk-compact-board .zk-board-you{font-size:9px}
+}
