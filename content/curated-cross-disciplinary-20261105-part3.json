@@ -470,7 +470,7 @@
       "description": "20 questions about animal adaptations, habitats, conservation and ecosystems.",
       "questions": [
         {
-          "question": "What is biodiversity?",
+          "question": "In conservation science, what does biodiversity describe?",
           "options": [
             "Only one tree species",
             "A type of electrical circuit",
@@ -481,7 +481,7 @@
           "explanation": "Biodiversity includes species, genetic and ecosystem diversity."
         },
         {
-          "question": "What is a habitat?",
+          "question": "In wildlife ecology, what does the term habitat mean?",
           "options": [
             "A laboratory temperature scale",
             "The natural place where an organism lives",
@@ -635,7 +635,7 @@
           "explanation": "Corridors can maintain movement and genetic exchange."
         },
         {
-          "question": "What is a food chain?",
+          "question": "When studying an ecosystem, what does a food chain show?",
           "options": [
             "A metal chain used in farming",
             "A plan for cooking lessons",
