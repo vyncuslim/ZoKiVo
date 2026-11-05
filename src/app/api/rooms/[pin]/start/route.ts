@@ -12,7 +12,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const sql=db(),rows=await sql`SELECT quiz_set_id,status,current_index,deadline,host_token_hash,owner_user_id,question_seconds,question_order,score_goal,game_mode FROM rooms WHERE pin=${pin}`;
   if(!rows.length||!same(rows[0].host_token_hash,hash(hostToken)))return noCache({error:"Not authorized."},403);
   const r=rows[0];
-  if(r.owner_user_id&&r.owner_user_id!==auth.user.id)return noCache({error:"Only the original host account may control this room."},403);
+  if(!r.owner_user_id||r.owner_user_id!==auth.user.id)return noCache({error:"Only the original host account may control this room."},403);
   if(r.status==="finished")return noCache({error:"Game already finished."},409);
   // All connected participants may finish early. Correctly answered reward rounds
   // must wait for their bonus claims, even when every answer has been submitted.
