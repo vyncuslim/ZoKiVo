@@ -21,6 +21,7 @@ const auth={findUser:async()=>({user:principal}),checkOrigin:()=>{},noCache,auth
 const mockStore={token:()=>"synthetic-test-token",hash:()=>"synthetic-hash",same:(a,b)=>a===b,bad};
 const quizzes={isId:x=>typeof x==="string"&&/^[0-9a-f-]{36}$/.test(x),authUser:async()=>({user:principal})};
 const realtime={emitRoomRefresh:async()=>true};
+const limitedJson=load("src/lib/limited-json.ts",{});
 const params={params:Promise.resolve({pin:"123456"})};
 function req(path,body,headers={}){
  return new Request("https://zokivo.example"+path,{method:"POST",headers:{"origin":"https://zokivo.example","content-type":"application/json",...headers},body:JSON.stringify(body)});
@@ -41,7 +42,7 @@ async function main(){
   }
   throw Error("Unexpected room creation query "+sql);
  };
- const hostRoute=load("src/app/api/rooms/route.ts",{"@/lib/store":{...mockStore,db:createDb},"@/lib/mother-auth":auth,"@/lib/quizzes":quizzes,"@/lib/realtime":realtime});
+ const hostRoute=load("src/app/api/rooms/route.ts",{"@/lib/store":{...mockStore,db:createDb},"@/lib/mother-auth":auth,"@/lib/quizzes":quizzes,"@/lib/realtime":realtime,"@/lib/limited-json":limitedJson});
  principal=null;
  ok((await json(await hostRoute.POST(req("/api/rooms",{})))).status===401,"Anonymous users cannot create rooms");
  principal={id:"qa-teacher",email_confirmed_at:null};
@@ -52,6 +53,9 @@ async function main(){
  const rooms=await Promise.all(Array.from({length:18},()=>hostRoute.POST(req("/api/rooms",body))));
  ok(rooms.every(r=>r.status===200),"18 concurrent simulated teacher host creations succeed");
  ok((await json(await hostRoute.POST(req("/api/rooms",{...body,scoreGoal:"1000"})))).status===400,"Untrusted score goal rejected");
+ ok((await hostRoute.POST(req("/api/rooms",{...body,padding:"x".repeat(3000)}))).status===413,"Oversized room creation stopped before SQL");
+ ok((await hostRoute.POST(req("/api/rooms",body,{"content-type":"text/plain"}))).status===415,"Non-JSON room creation rejected");
+
  // 120 independent concurrent players try to enter a 100-player room. A simulated DB procedure enforces capacity.
  const joined=new Map();
  const avatars=load("src/lib/avatars.ts",{});
@@ -104,9 +108,12 @@ async function main(){
   }
   throw Error("Unexpected reward query "+s);
  };
- const reward=load("src/app/api/rooms/[pin]/reward/route.ts",{"@/lib/store":{...mockStore,db:rewardDb},"@/lib/mother-auth":auth,"@/lib/realtime":realtime});
+ const reward=load("src/app/api/rooms/[pin]/reward/route.ts",{"@/lib/store":{...mockStore,db:rewardDb},"@/lib/mother-auth":auth,"@/lib/realtime":realtime,"@/lib/limited-json":limitedJson});
  const b=await Promise.all(Array.from({length:12},()=>reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0},{"x-player-token":"student-token"}),params).then(r=>r.status)));
  ok(b.filter(x=>x===200).length===1&&b.filter(x=>x===409).length===11,"12 simultaneous reward claims award once");
+ ok((await reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0,padding:"x".repeat(3000)},{"x-player-token":"student-token"}),params)).status===413,"Oversized reward request stopped before SQL");
+ ok((await reward.POST(req("/api/rooms/123456/reward",{action:"chest",option:0},{"x-player-token":"student-token","content-type":"text/plain"}),params)).status===415,"Non-JSON reward rejected before SQL");
+
  let done=false;
  let finishOwner="qa-teacher";
  const finishDb=()=>async(strings,...vars)=>{
