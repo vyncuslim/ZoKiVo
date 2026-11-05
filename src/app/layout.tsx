@@ -17,6 +17,7 @@ import "./easy-play.css";
 import "./finished-results.css";
 import "./discover-library.css";
 import "./simple-games.css";
+import "./gameplay-polish.css";
 import {AuthNav} from "@/components/auth-nav";
 import type { Metadata } from "next";
 import Link from "next/link";
