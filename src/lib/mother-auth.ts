@@ -11,9 +11,30 @@ export function config(){
  if(url.protocol!=="https:"||url.username||url.password||url.search||url.hash)throw new AuthError("Mother Supabase URL must use HTTPS.",503);
  return {base:url.origin,apikey:key};
 }
+/** OAuth PKCE cookies are host-only. The callback MUST stay on the same
+ * trusted origin that created them (not an unrelated canonical alias).
+ * Custom preview hosts require an explicit, exact allowlist entry.
+ */
 export function publicOrigin(req:NextRequest){
- if(process.env.ZOKIVO_PUBLIC_URL){const u=new URL(process.env.ZOKIVO_PUBLIC_URL);if(u.protocol!=="https:")throw new AuthError("Invalid ZOKIVO_PUBLIC_URL",503);return u.origin}
- return req.nextUrl.origin;
+ const origin=req.nextUrl.origin,u=req.nextUrl;
+ const approved=new Set(["https://zokivo.xyz","https://www.zokivo.xyz",
+  "https://zokivo.vynalthai.com","https://zokivo.vercel.app"]);
+ const add=(input:string,label:string)=>{
+  let parsed:URL;
+  try{parsed=new URL(input)}catch{throw new AuthError("Invalid "+label,503)}
+  if(parsed.protocol!=="https:"||parsed.username||parsed.password||parsed.search||
+   parsed.hash||parsed.pathname!=="/"||parsed.port)
+   throw new AuthError("Invalid "+label,503);
+  approved.add(parsed.origin);
+ };
+ if(process.env.ZOKIVO_PUBLIC_URL)add(process.env.ZOKIVO_PUBLIC_URL,"ZOKIVO_PUBLIC_URL");
+ const extras=process.env.ZOKIVO_AUTH_ALLOWED_ORIGINS||"";
+ if(extras.length>2000||extras.split(",").length>8)throw new AuthError("Invalid ZOKIVO_AUTH_ALLOWED_ORIGINS",503);
+ for(const value of extras.split(",").map(x=>x.trim()).filter(Boolean))add(value,"ZOKIVO_AUTH_ALLOWED_ORIGINS");
+ const local=process.env.NODE_ENV!=="production"&&
+  (u.hostname==="localhost"||u.hostname==="127.0.0.1");
+ if(!approved.has(origin)&&!local)throw new AuthError("Authentication is not enabled on this website hostname.",403);
+ return origin;
 }
 export function nextPath(next:string|null){
  if(!next||!next.startsWith("/")||next.startsWith("//")||next.includes("\\")||/[%\r\n]/.test(next)||next.startsWith("/api/"))return "/account";
