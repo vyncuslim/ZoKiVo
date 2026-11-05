@@ -40,3 +40,14 @@ Record operating system/browser/mobile carrier, school NAT, join success, duplic
 
 ## E. Change control
 Keep PR #32 in Draft until A–D have dated evidence and a reviewer approves. An isolated localhost pass never establishes Cloudflare or real device capacity. After owner approval, merge, confirm Production deployment commit, perform low-volume post-deploy login and guest smoke, and retain both Vercel and WAF rollback plans. Do not claim 1M real Cloudflare sessions from 10k local sockets.
+
+## F. Additive curated classroom content — READY IN PR PREVIEW ONLY
+
+The independent Preview Neon branch `preview/fix/p0-classroom-security-20261105` now has **50 public sets / 939 published questions**. The source Production Neon branch remains **40 public sets / 739 questions**; no production seed was run.
+
+- New code-authored originals: 10 sets × 20 questions = **200 additional**. Chinese 40, Bahasa Melayu 40; English, Geography, Mathematics, Science, Computing and Internet Safety 20 each.
+- Source files: `content/curated-questions-20261105-part{1,2,3}.json`; additive migration: `migrations/020_curated_multilingual_question_bank.sql`.
+- The SQL is **manual, NOT auto-run by Next.js or Vercel**. Apply to the intended database only after review and after a verified backup. This migration uses fixed UUIDs, avoids overwriting existing quizzes and includes a per-set 20-question integrity check. Replaying the migration against already-seeded data is designed to be idempotent.
+- Preview Neon evidence: 10 new sets, 200 new questions, 0 invalid answer indices/choice arrays, exactly 50 correct options each at A/B/C/D, 0 duplicated question stems overlapping existing published questions after contextual editing.
+- Security additions: bounded streaming JSON requests (192 KiB for quiz create/edit; 2 KiB for room creation, reward claim and quiz publish), strict content type and UTF-8 decoding, and Unicode-normalized repeated-question/option checks. Existing tests cover 16 parser cases and 81 classroom handler assertions; all are simulated, not live abuse tests.
+- **Production gate:** review newly drafted educational answers, approve the release window and manually execute the SQL migration on Production after PR merge; verify 50/939 counts afterwards. Do not claim production contains the new questions until a subsequent production Neon read confirms it.
