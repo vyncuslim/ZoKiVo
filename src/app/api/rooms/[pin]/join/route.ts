@@ -15,9 +15,22 @@ async function smallJson(req:Request,maxBytes=4096):Promise<{ok:true;value:Recor
  if(!/^application\/json(?:\s*;|\s*$)/i.test(req.headers.get("content-type")||""))return {ok:false,error:"JSON content type required",status:415};
  const length=req.headers.get("content-length");
  if(length&&(!/^\d+$/.test(length)||Number(length)>maxBytes))return {ok:false,error:"Request body too large",status:413};
- const body=await req.text();
- if(Buffer.byteLength(body,"utf8")>maxBytes)return {ok:false,error:"Request body too large",status:413};
+ // Enforce the cap while reading, not after buffering an arbitrary stream.
+ if(!req.body)return {ok:false,error:"Invalid JSON",status:400};
+ const reader=req.body.getReader(),decoder=new TextDecoder("utf-8",{fatal:true});
+ let body="",bytes=0;
  try{
+  while(true){
+   const {done,value}=await reader.read();
+   if(done)break;
+   bytes+=value.byteLength;
+   if(bytes>maxBytes){
+    await reader.cancel().catch(()=>{});
+    return {ok:false,error:"Request body too large",status:413};
+   }
+   body+=decoder.decode(value,{stream:true});
+  }
+  body+=decoder.decode();
   const parsed:unknown=JSON.parse(body);
   if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))return {ok:false,error:"Invalid JSON object",status:400};
   return {ok:true,value:parsed as Record<string,unknown>};
