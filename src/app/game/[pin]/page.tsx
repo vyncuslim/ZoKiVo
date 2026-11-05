@@ -109,8 +109,8 @@ export default function Game(){
   },250); // Advance promptly; keep the last host-only review visible across rounds.
   return()=>window.clearTimeout(timer);
  },[host,state?.roundReady,state?.index,state?.deadline,state?.status,headers,pin,reload]);
- const seconds=Math.max(0,Math.ceil((new Date(state?.deadline||0).getTime()-(clock+clockOffset))/1000));const answered=!!(state?.viewer.playerId&&state.answeredIds.includes(state.viewer.playerId));const canPlay=state?.status==="playing";const roundResults=host?state?.hostResults:null;
- useEffect(()=>{if(!host&&state?.status==="playing"&&!answered&&state.question){questionHeadingRef.current?.focus({preventScroll:true})}},[host,state?.index,state?.status,answered,!!state?.question]);
+ const seconds=Math.max(0,Math.ceil((new Date(state?.deadline||0).getTime()-(clock+clockOffset))/1000));const answered=!!(state?.viewer.playerId&&state.answeredIds.includes(state.viewer.playerId));const hasQuestion=Boolean(state?.question);const roundResults=host?state?.hostResults:null;
+ useEffect(()=>{if(!host&&state?.status==="playing"&&!answered&&hasQuestion){questionHeadingRef.current?.focus({preventScroll:true})}},[host,state?.index,state?.status,answered,hasQuestion]);
  const priorReview=host&&!roundResults&&state?.status==="playing"&&lastReview?.index===state.index-1?lastReview:null;
  const displayResults=roundResults||priorReview?.results;
  const gradeByPlayer=new Map(displayResults?.playerResults.map(result=>[result.id,result.correct] as const)||[]);
