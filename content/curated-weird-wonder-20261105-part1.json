@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-weird-wonder-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000001",
+      "title": "脑洞急转弯：认真想就输了？",
+      "subject": "脑洞谜题",
+      "grade_level": "Year 6",
+      "language": "zh",
+      "description": "20 道古怪又有标准答案的逻辑谜题，挑战直觉与阅读细节。",
+      "questions": [
+        {
+          "question": "一年十二个月中，有几个月至少有28天？",
+          "options": [
+            "12个月",
+            "1个月",
+            "2个月",
+            "只有闰年才有"
+          ],
+          "correct_option_index": 0,
+          "explanation": "每个月都至少有28天，不只是二月。"
+        },
+        {
+          "question": "桌上有3个苹果，你拿走2个，现在你手中有几个？",
+          "options": [
+            "1个",
+            "3个",
+            "0个",
+            "2个"
+          ],
+          "correct_option_index": 3,
+          "explanation": "题目问手中，不是桌上剩下的数量。"
+        },
+        {
+          "question": "1千克棉花与1千克铁块，哪个质量更大？",
+          "options": [
+            "铁块",
+            "无法比较",
+            "一样大",
+            "棉花"
+          ],
+          "correct_option_index": 2,
+          "explanation": "两者都明确标为1千克。"
+        },
+        {
+          "question": "鱼缸里有10条鱼，其中3条死了，但没有被取走。缸里还有几条鱼？",
+          "options": [
+            "13条",
+            "10条",
+            "7条",
+            "3条"
+          ],
+          "correct_option_index": 1,
+          "explanation": "死亡不会让鱼凭空消失。"
+        },
+        {
+          "question": "一列完全使用电力的火车正在行驶，没有其他燃烧设备。烟会往哪个方向飘？",
+          "options": [
+            "不会产生燃烧烟雾",
+            "车头方向",
+            "车尾方向",
+            "必定向北"
+          ],
+          "correct_option_index": 0,
+          "explanation": "题目排除了任何会制造燃烧烟雾的来源。"
+        },
+        {
+          "question": "你在比赛中超过原来的第二名，现在通常排第几？",
+          "options": [
+            "第一名",
+            "第三名",
+            "最后一名",
+            "第二名"
+          ],
+          "correct_option_index": 3,
+          "explanation": "超过第二名只是占据第二的位置，并没有超过第一名。"
+        },
+        {
+          "question": "一个房间有4个角，每个角坐1只猫，房里一共有多少只猫？",
+          "options": [
+            "12只",
+            "16只",
+            "4只",
+            "8只"
+          ],
+          "correct_option_index": 2,
+          "explanation": "每个角各一只，合计4只。"
+        },
+        {
+          "question": "3只猫在3分钟内各抓到1只老鼠，假设速度不变，6只猫各抓1只需要多久？",
+          "options": [
+            "9分钟",
+            "3分钟",
+            "6分钟",
+            "1分钟"
+          ],
+          "correct_option_index": 1,
+          "explanation": "猫同时独立抓鼠，每只仍花3分钟。"
+        },
+        {
+          "question": "有5个人，每两个人只握手一次，一共有多少次握手？",
+          "options": [
+            "10次",
+            "5次",
+            "20次",
+            "25次"
+          ],
+          "correct_option_index": 0,
+          "explanation": "不同两人组合为5×4÷2=10。"
+        },
+        {
+          "question": "星期一再过10整天，会是星期几？",
+          "options": [
+            "星期三",
+            "星期五",
+            "星期日",
+            "星期四"
+          ],
+          "correct_option_index": 3,
+          "explanation": "10天相当于1周加3天，星期一后3天是星期四。"
+        },
+        {
+          "question": "时钟刚好显示12:00，分针与时针的夹角是多少？",
+          "options": [
+            "180度",
+            "30度",
+            "0度",
+            "90度"
+          ],
+          "correct_option_index": 2,
+          "explanation": "两针在12点正好重叠。"
+        },
+        {
+          "question": "小盒子放入一面镜子，镜子照出两颗糖。若原来盒里只有两颗糖，糖果实体有多少颗？",
+          "options": [
+            "0颗",
+            "2颗",
+            "4颗",
+            "6颗"
+          ],
+          "correct_option_index": 1,
+          "explanation": "镜像不会增加真实物体数量。"
+        },
+        {
+          "question": "一条路有6个路灯，相邻两灯距离5米。第一盏到最后一盏有多远？",
+          "options": [
+            "25米",
+            "30米",
+            "20米",
+            "35米"
+          ],
+          "correct_option_index": 0,
+          "explanation": "6盏灯之间只有5段间隔。"
+        },
+        {
+          "question": "10本书从左到右排成一排，拿走最左边1本，剩下多少本？",
+          "options": [
+            "10本",
+            "8本",
+            "11本",
+            "9本"
+          ],
+          "correct_option_index": 3,
+          "explanation": "直接从10本减去拿走的1本。"
+        },
+        {
+          "question": "一架无人机垂直上升，机上没有指南针。它向上移动是否等于向北移动？",
+          "options": [
+            "只在晚上是",
+            "只在海上是",
+            "不是",
+            "一定是"
+          ],
+          "correct_option_index": 2,
+          "explanation": "上下与南北是不同方向。"
+        },
+        {
+          "question": "一个袋子装有红球和蓝球各1个，不看地拿出2个球，会拿到什么组合？",
+          "options": [
+            "什么也没有",
+            "1红1蓝",
+            "2红",
+            "2蓝"
+          ],
+          "correct_option_index": 1,
+          "explanation": "袋子总共只有两个不同颜色的球。"
+        },
+        {
+          "question": "两只相同的钟同时走时，其中一只快了3分钟。快钟显示9:03时慢钟显示几点？",
+          "options": [
+            "9:00",
+            "9:06",
+            "8:57",
+            "9:30"
+          ],
+          "correct_option_index": 0,
+          "explanation": "两只相差固定3分钟。"
+        },
+        {
+          "question": "书本从第1页到第10页全部按顺序编号，共有多少个页码数字？",
+          "options": [
+            "10个",
+            "20个",
+            "9个",
+            "11个"
+          ],
+          "correct_option_index": 3,
+          "explanation": "1至9各1位共9位，10有2位，总11位。"
+        },
+        {
+          "question": "一台机器每秒打印1张纸，三台相同机器同时工作5秒共打印几张？",
+          "options": [
+            "8张",
+            "30张",
+            "15张",
+            "5张"
+          ],
+          "correct_option_index": 2,
+          "explanation": "3台×每台每秒1张×5秒=15张。"
+        },
+        {
+          "question": "你有两把完全相同的钥匙，其中只有一把能开门。最坏情况下最多试几把就能确定？",
+          "options": [
+            "无法确定",
+            "2把",
+            "1把",
+            "3把"
+          ],
+          "correct_option_index": 1,
+          "explanation": "试第一把不成功，再试第二把即可。"
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000002",
+      "title": "科学怎么这么怪：反常识挑战",
+      "subject": "反常识科学",
+      "grade_level": "Year 7",
+      "language": "zh",
+      "description": "20 道有趣的基础科学反常识题，把想当然变成可验证的知识。",
+      "questions": [
+        {
+          "question": "在太空真空中，没有空气传播时，你能直接听到远处爆炸的声音吗？",
+          "options": [
+            "能而且更响",
+            "只能听到回声",
+            "声音会加速",
+            "不能"
+          ],
+          "correct_option_index": 3,
+          "explanation": "普通声波需要物质介质才能传播。"
+        },
+        {
+          "question": "把一杯冰水放在温暖室内，杯壁外侧的小水珠主要来自哪里？",
+          "options": [
+            "冰直接变成雨",
+            "杯子制造水",
+            "空气中的水蒸气凝结",
+            "杯里的水穿过玻璃"
+          ],
+          "correct_option_index": 2,
+          "explanation": "空气中水蒸气遇冷表面会凝结。"
+        },
+        {
+          "question": "阳光照在一面普通平面镜上，光会怎样？",
+          "options": [
+            "必定变成声音",
+            "大部分按反射规律改变方向",
+            "全部被镜子吃掉",
+            "完全停止运动"
+          ],
+          "correct_option_index": 1,
+          "explanation": "平面镜主要反射光线。"
+        },
+        {
+          "question": "戴黑色太阳镜后太阳光是否真的变弱了？",
+          "options": [
+            "到眼睛的光通常减少",
+            "太阳本身突然变暗",
+            "地球离太阳更远",
+            "太阳被镜片关掉"
+          ],
+          "correct_option_index": 0,
+          "explanation": "镜片改变进入眼睛的光量，不改变太阳。"
+        },
+        {
+          "question": "两颗质量不同的球在真空里从同一高度同时自由落下，会怎样？",
+          "options": [
+            "重球必定先落地",
+            "轻球必定先落地",
+            "都不会动",
+            "同时落地"
+          ],
+          "correct_option_index": 3,
+          "explanation": "忽略其他因素时，自由落体加速度相同。"
+        },
+        {
+          "question": "水在山顶通常比海平面更容易在较低温度沸腾，主要因为？",
+          "options": [
+            "海拔改变水的元素",
+            "山上有更多盐",
+            "气压较低",
+            "山上水分子变小"
+          ],
+          "correct_option_index": 2,
+          "explanation": "压力降低使水的沸点下降。"
+        },
+        {
+          "question": "宇航员看起来飘浮，代表他们完全不受地球引力吗？",
+          "options": [
+            "只因为飞船有风扇",
+            "不是，他们与飞船一起持续自由落体",
+            "是，引力消失了",
+            "是，质量变成零"
+          ],
+          "correct_option_index": 1,
+          "explanation": "轨道上的失重状态主要与持续自由落体有关。"
+        },
+        {
+          "question": "把一块磁铁切成两小块，通常会出现什么？",
+          "options": [
+            "两块各有南北磁极",
+            "单独一个纯北极",
+            "完全没有磁性",
+            "只剩电池"
+          ],
+          "correct_option_index": 0,
+          "explanation": "普通磁体分开后每块仍会有两个磁极。"
+        },
+        {
+          "question": "把冰块放入装满水的杯子后，冰融化会让水面必定大幅升高吗？",
+          "options": [
+            "必定升高十倍",
+            "水变成固体",
+            "水全部蒸发",
+            "不会，漂浮冰融化通常不改变水面高度"
+          ],
+          "correct_option_index": 3,
+          "explanation": "漂浮冰排开的水重与融化后的水相等。"
+        },
+        {
+          "question": "如果将盐加入纯水，盐完全溶解后会发生什么？",
+          "options": [
+            "水变成金属",
+            "盐一定沉到底部",
+            "形成均匀盐水混合物",
+            "盐原子消失"
+          ],
+          "correct_option_index": 2,
+          "explanation": "盐溶解后以离子形式分散在水中。"
+        },
+        {
+          "question": "热气球能够上升，最直接的原因是？",
+          "options": [
+            "云朵牵引",
+            "球内热空气整体密度比外面空气低",
+            "空气变得没有重力",
+            "地面磁铁推着球"
+          ],
+          "correct_option_index": 1,
+          "explanation": "温差造成的密度差产生净浮力。"
+        },
+        {
+          "question": "普通玻璃杯里的铅笔浸在水中看起来折弯了，主要原因？",
+          "options": [
+            "光的折射",
+            "铅笔真的折断",
+            "杯子发出电磁波",
+            "空气停止流动"
+          ],
+          "correct_option_index": 0,
+          "explanation": "光在空气与水交界面改变传播方向。"
+        },
+        {
+          "question": "当月亮呈现满月，是否意味着它自己发出可见光？",
+          "options": [
+            "是，像灯泡发电",
+            "是，火山持续发光",
+            "月亮完全透明",
+            "不是，主要反射太阳光"
+          ],
+          "correct_option_index": 3,
+          "explanation": "满月亮光主要是太阳光反射。"
+        },
+        {
+          "question": "红色衣服在白光下呈红色，主要由于它？",
+          "options": [
+            "吸收全部红光",
+            "把蓝光变成水",
+            "反射较多红色波段的光",
+            "创造红色光子"
+          ],
+          "correct_option_index": 2,
+          "explanation": "物体颜色与吸收和反射的光谱有关。"
+        },
+        {
+          "question": "你把金属勺与木勺放在同一室温一晚后摸起来金属更凉，为什么？",
+          "options": [
+            "金属没有温度",
+            "金属传热更快",
+            "金属必定温度更低",
+            "木勺会自己发热"
+          ],
+          "correct_option_index": 1,
+          "explanation": "触感受热传导速率影响很大。"
+        },
+        {
+          "question": "想看清细胞内的细节，哪种工具通常比肉眼更合适？",
+          "options": [
+            "显微镜",
+            "指南针",
+            "听诊器",
+            "温度计"
+          ],
+          "correct_option_index": 0,
+          "explanation": "显微镜能放大微小结构。"
+        },
+        {
+          "question": "同样的声音在空气和真空中传播，正确的说法是？",
+          "options": [
+            "真空中传播更快",
+            "真空中回声更响",
+            "空气让声音消失",
+            "真空中不能靠普通声波传播"
+          ],
+          "correct_option_index": 3,
+          "explanation": "声波需要介质，真空不支持普通声音传播。"
+        },
+        {
+          "question": "一台风扇朝你吹风，为什么常会觉得更凉？",
+          "options": [
+            "空气没有质量",
+            "风扇让体温自动归零",
+            "空气流动加速皮肤散热及汗液蒸发",
+            "风扇直接制造冷量"
+          ],
+          "correct_option_index": 2,
+          "explanation": "气流增强对流和蒸发散热。"
+        },
+        {
+          "question": "把一张纸揉成团再放开，纸团的总质量在没有碎屑丢失时怎样？",
+          "options": [
+            "必定变成两倍",
+            "基本不变",
+            "突然变成零",
+            "必定增加十倍"
+          ],
+          "correct_option_index": 1,
+          "explanation": "改变形状并不会创造或消灭纸的物质。"
+        },
+        {
+          "question": "如果让手电筒光照射墙壁，再用手挡在中间，为什么墙上出现影子？",
+          "options": [
+            "部分光被手遮挡",
+            "手把光染成黑色",
+            "墙壁吸收所有空气",
+            "手掌产生黑光"
+          ],
+          "correct_option_index": 0,
+          "explanation": "不透明物体阻挡光传播会形成阴影。"
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000003",
+      "title": "怪兽数学餐厅：荒诞但算得清",
+      "subject": "搞怪数学",
+      "grade_level": "Year 6",
+      "language": "zh",
+      "description": "20 道幽默情境的准确数学题：怪兽、飞碟、披萨与魔法商店。",
+      "questions": [
+        {
+          "question": "三头怪兽每头戴4顶帽子，总共有几顶帽子？",
+          "options": [
+            "9顶",
+            "16顶",
+            "12顶",
+            "7顶"
+          ],
+          "correct_option_index": 2,
+          "explanation": "3×4=12。"
+        },
+        {
+          "question": "外星人买6杯月球奶茶，每杯RM5，需要付多少钱？",
+          "options": [
+            "RM36",
+            "RM30",
+            "RM11",
+            "RM25"
+          ],
+          "correct_option_index": 1,
+          "explanation": "6×5=30。"
+        },
+        {
+          "question": "一条龙有18颗糖，平均分给3只小恐龙，每只几颗？",
+          "options": [
+            "6颗",
+            "9颗",
+            "3颗",
+            "15颗"
+          ],
+          "correct_option_index": 0,
+          "explanation": "18÷3=6。"
+        },
+        {
+          "question": "飞碟每秒移动7米，5秒移动多少米？",
+          "options": [
+            "12米",
+            "42米",
+            "28米",
+            "35米"
+          ],
+          "correct_option_index": 3,
+          "explanation": "7×5=35。"
+        },
+        {
+          "question": "魔法商店有48支羽毛笔，卖出19支，还剩多少支？",
+          "options": [
+            "27支",
+            "39支",
+            "29支",
+            "31支"
+          ],
+          "correct_option_index": 2,
+          "explanation": "48−19=29。"
+        },
+        {
+          "question": "机器人用2分钟叠8件衣服，同样速度10分钟叠几件？",
+          "options": [
+            "20件",
+            "40件",
+            "16件",
+            "80件"
+          ],
+          "correct_option_index": 1,
+          "explanation": "每分钟4件，10分钟40件。"
+        },
+        {
+          "question": "吸血鬼买一块RM80的披风，打75折（付原价75%），应付多少？",
+          "options": [
+            "RM60",
+            "RM20",
+            "RM75",
+            "RM65"
+          ],
+          "correct_option_index": 0,
+          "explanation": "80×0.75=60。"
+        },
+        {
+          "question": "史莱姆一开始重4千克，分裂成两个相同质量的小史莱姆，每个重多少？",
+          "options": [
+            "4千克",
+            "8千克",
+            "1千克",
+            "2千克"
+          ],
+          "correct_option_index": 3,
+          "explanation": "假设没有质量流失，平均分为两份。"
+        },
+        {
+          "question": "幽灵电影院有7排座椅，每排12个座位，总座位数？",
+          "options": [
+            "72个",
+            "96个",
+            "84个",
+            "19个"
+          ],
+          "correct_option_index": 2,
+          "explanation": "7×12=84。"
+        },
+        {
+          "question": "小怪兽有100枚金币，买了3件每件17枚金币的衣服，还剩多少？",
+          "options": [
+            "39枚",
+            "49枚",
+            "51枚",
+            "47枚"
+          ],
+          "correct_option_index": 1,
+          "explanation": "总花费51枚，100−51=49。"
+        },
+        {
+          "question": "魔法火锅里有36颗丸子，6个锅平均分，每锅几颗？",
+          "options": [
+            "6颗",
+            "8颗",
+            "5颗",
+            "12颗"
+          ],
+          "correct_option_index": 0,
+          "explanation": "36÷6=6。"
+        },
+        {
+          "question": "一架UFO绕操场飞4圈，每圈400米，总路程？",
+          "options": [
+            "1000米",
+            "800米",
+            "2000米",
+            "1600米"
+          ],
+          "correct_option_index": 3,
+          "explanation": "4×400=1600。"
+        },
+        {
+          "question": "忍者猫每3分钟吃1块饼干，连续吃15分钟共吃几块？",
+          "options": [
+            "6块",
+            "15块",
+            "5块",
+            "3块"
+          ],
+          "correct_option_index": 2,
+          "explanation": "在每满3分钟吃1块的设定下，15÷3=5。"
+        },
+        {
+          "question": "神秘盒每个装9颗星星贴纸，11个盒子共有多少颗？",
+          "options": [
+            "89颗",
+            "99颗",
+            "90颗",
+            "101颗"
+          ],
+          "correct_option_index": 1,
+          "explanation": "9×11=99。"
+        },
+        {
+          "question": "魔法师的长袍价格RM120，优惠20%，节省多少钱？",
+          "options": [
+            "RM24",
+            "RM20",
+            "RM96",
+            "RM30"
+          ],
+          "correct_option_index": 0,
+          "explanation": "120×20%=24。"
+        },
+        {
+          "question": "章鱼画家有8只腕，每只拿1支画笔，共拿几支？",
+          "options": [
+            "16支",
+            "4支",
+            "12支",
+            "8支"
+          ],
+          "correct_option_index": 3,
+          "explanation": "每只腕1支，一共8支。"
+        },
+        {
+          "question": "幽灵电梯从2楼上升5层，抵达哪一楼？",
+          "options": [
+            "6楼",
+            "10楼",
+            "7楼",
+            "5楼"
+          ],
+          "correct_option_index": 2,
+          "explanation": "2+5=7。"
+        },
+        {
+          "question": "两只机器人各造15个积木，合并后拿走8个，剩多少？",
+          "options": [
+            "38个",
+            "22个",
+            "30个",
+            "15个"
+          ],
+          "correct_option_index": 1,
+          "explanation": "2×15−8=22。"
+        },
+        {
+          "question": "独角兽绕圆形草地走一圈，若直径是10米，取圆周率3.14，约走多远？",
+          "options": [
+            "31.4米",
+            "20米",
+            "15.7米",
+            "314米"
+          ],
+          "correct_option_index": 0,
+          "explanation": "周长=圆周率×直径=31.4米。"
+        },
+        {
+          "question": "外星汉堡店每份卖RM12，进货成本RM7，卖出10份的毛利是多少（不计其他成本）？",
+          "options": [
+            "RM70",
+            "RM120",
+            "RM190",
+            "RM50"
+          ],
+          "correct_option_index": 3,
+          "explanation": "每份毛利RM5，10份共RM50。"
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000004",
+      "title": "外星人密码本：怪逻辑训练",
+      "subject": "外星逻辑",
+      "grade_level": "Year 7",
+      "language": "zh",
+      "description": "20 道有明确定义规则的外星密码题，训练规律、条件和演绎。",
+      "questions": [
+        {
+          "question": "火星规则：每个数字都加3。地球数字5变成什么？",
+          "options": [
+            "53",
+            "8",
+            "2",
+            "15"
+          ],
+          "correct_option_index": 1,
+          "explanation": "按规则5+3=8。"
+        },
+        {
+          "question": "水星规则：每个数乘2再减1。输入4，输出多少？",
+          "options": [
+            "7",
+            "8",
+            "6",
+            "9"
+          ],
+          "correct_option_index": 0,
+          "explanation": "4×2−1=7。"
+        },
+        {
+          "question": "月球密码把字母A变B、B变C，C会变成哪个字母？",
+          "options": [
+            "B",
+            "E",
+            "A",
+            "D"
+          ],
+          "correct_option_index": 3,
+          "explanation": "每个字母向后移动一个位置。"
+        },
+        {
+          "question": "机器人说“噜”代表红色，“啦”代表蓝色。它说“啦”，颜色是什么？",
+          "options": [
+            "绿色",
+            "黄色",
+            "蓝色",
+            "红色"
+          ],
+          "correct_option_index": 2,
+          "explanation": "题目已明确定义“啦”的意思。"
+        },
+        {
+          "question": "外星门的密码必须是偶数，以下哪个符合？",
+          "options": [
+            "49",
+            "24",
+            "17",
+            "35"
+          ],
+          "correct_option_index": 1,
+          "explanation": "24可被2整除。"
+        },
+        {
+          "question": "飞船楼层编号依次为2、4、8、16，下一个按每次乘2是多少？",
+          "options": [
+            "32",
+            "20",
+            "24",
+            "18"
+          ],
+          "correct_option_index": 0,
+          "explanation": "每个数是前一个的两倍。"
+        },
+        {
+          "question": "如果火星语“ZOR”代表3，“MIP”代表5，那么“ZOR+MIP”代表的数值和是？",
+          "options": [
+            "15",
+            "2",
+            "35",
+            "8"
+          ],
+          "correct_option_index": 3,
+          "explanation": "3+5=8。"
+        },
+        {
+          "question": "密码由前三位数字1、2、3按顺序组成，下一位每次加1，应是？",
+          "options": [
+            "6",
+            "0",
+            "4",
+            "1"
+          ],
+          "correct_option_index": 2,
+          "explanation": "按连续整数规律，3之后是4。"
+        },
+        {
+          "question": "外星电梯只停3的倍数楼层，下面哪个可以停？",
+          "options": [
+            "25楼",
+            "21楼",
+            "20楼",
+            "22楼"
+          ],
+          "correct_option_index": 1,
+          "explanation": "21÷3=7，为整数。"
+        },
+        {
+          "question": "规则“圆圈=2分，三角形=3分”，两个圆圈和一个三角形共几分？",
+          "options": [
+            "7分",
+            "5分",
+            "8分",
+            "9分"
+          ],
+          "correct_option_index": 0,
+          "explanation": "2×2+3=7。"
+        },
+        {
+          "question": "某机器把输入数字减2再平方。输入5，结果是？",
+          "options": [
+            "23",
+            "25",
+            "7",
+            "9"
+          ],
+          "correct_option_index": 3,
+          "explanation": "(5−2)²=9。"
+        },
+        {
+          "question": "外星日历一周只有5天，从第一天再过7天（以第一天为0），是第几天？",
+          "options": [
+            "第4天",
+            "第5天",
+            "第3天",
+            "第2天"
+          ],
+          "correct_option_index": 2,
+          "explanation": "7除以5余2，所以第一天向后移两天是第三天。"
+        },
+        {
+          "question": "机器人只会在两个按钮都亮时开门。按钮A亮、B不亮，会怎样？",
+          "options": [
+            "永远损坏",
+            "不开门",
+            "开门",
+            "随机爆炸"
+          ],
+          "correct_option_index": 1,
+          "explanation": "AND条件要求A与B同时为真。"
+        },
+        {
+          "question": "机器人在任一按钮亮时开门。A不亮、B亮，会怎样？",
+          "options": [
+            "开门",
+            "不开门",
+            "只亮灯",
+            "无法判断"
+          ],
+          "correct_option_index": 0,
+          "explanation": "OR条件只需至少一个为真。"
+        },
+        {
+          "question": "飞船名字按字母顺序A、C、E、G排列，下一个应是？",
+          "options": [
+            "H",
+            "J",
+            "K",
+            "I"
+          ],
+          "correct_option_index": 3,
+          "explanation": "每次向后跳过一个英文字母。"
+        },
+        {
+          "question": "密码检查器规定长度恰好为4的字符串才通过。哪个能通过？",
+          "options": [
+            "SPACE",
+            "STARSHIP",
+            "MOON",
+            "SUN"
+          ],
+          "correct_option_index": 2,
+          "explanation": "MOON有4个字母。"
+        },
+        {
+          "question": "三个星球按大小排序：A比B大，B比C大。最大的是？",
+          "options": [
+            "三者一样",
+            "A",
+            "B",
+            "C"
+          ],
+          "correct_option_index": 1,
+          "explanation": "由传递关系A>B>C。"
+        },
+        {
+          "question": "机器人将“猫”编码为7、“狗”编码为9。这两个编码相加是多少？",
+          "options": [
+            "16",
+            "79",
+            "2",
+            "63"
+          ],
+          "correct_option_index": 0,
+          "explanation": "7+9=16，题目只要求数值相加。"
+        },
+        {
+          "question": "一颗星星标记代表4点，两个星星标记再加1点是多少？",
+          "options": [
+            "8点",
+            "10点",
+            "5点",
+            "9点"
+          ],
+          "correct_option_index": 3,
+          "explanation": "4+4+1=9。"
+        },
+        {
+          "question": "两台机器只在信号相同时显示OK。信号分别为0和1，结果是？",
+          "options": [
+            "显示两个OK",
+            "随机选择",
+            "不显示OK",
+            "显示OK"
+          ],
+          "correct_option_index": 2,
+          "explanation": "两个信号不同，不符合相同条件。"
+        }
+      ]
+    }
+  ]
+}
