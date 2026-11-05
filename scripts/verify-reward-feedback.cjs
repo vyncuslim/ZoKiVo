@@ -4,7 +4,7 @@ const r=fs.readFileSync("src/components/mode-rewards.tsx","utf8");
 const checks=[
  [g.includes('const[feedback,setFeedback]=useState("")')&&g.includes("bonusReceipt,setBonusReceipt"),"Parent stores bonus receipt across server refresh"],
  [g.includes('setFeedback("");setBonusReceipt("")},[state?.index]'),"New question clears previous round receipt"],
- [g.includes('bonusReceipt?"Bonus collected! 🎉":"Answer sent!"'),"Player sees earned bonus instead of generic sent"],
+ [g.includes('bonusReceipt?"Bonus collected! 🎉":')&&g.includes('bonusReceipt?"You earned: "+bonusReceipt:'),"Player sees earned bonus heading and receipt instead of generic feedback"],
  [g.includes('onClaim={async receipt=>{setBonusReceipt(receipt||"");await reload()}}'),"Receipt is retained before authenticated status refresh"],
  [r.includes('onClaim:(receipt?:string)=>Promise<void>'),"ModeRewards can report receipt to parent"],
  [r.includes('if(!r.ok)throw Error('),"Failed reward claim does not emit a receipt"],

@@ -1,0 +1,147 @@
+/* ZoKivo gameplay UI polish — scoped to live sessions, no server/gameplay mechanics changed. */
+.zk-game-screen{--zk-game-ink:#26213b;--zk-game-purple:#6f50ca;--zk-game-lavender:#f2edff;color:var(--zk-game-ink)}
+.zk-game-screen .game-head{margin-bottom:12px;flex-wrap:wrap;gap:12px}
+.zk-game-screen .game-head .eyebrow{color:#6849a5;font-weight:950;letter-spacing:.13em}
+.zk-game-screen .game-head h1{font-size:clamp(25px,3vw,36px);line-height:1.15}
+.zk-game-screen .game-pin-box{position:relative;align-items:flex-end;min-width:145px}
+.zk-game-screen .game-pin-box>span{color:#665276;font-size:11px;font-weight:950}
+.zk-game-screen .game-pin-box button{min-height:48px;border:2px solid #7558ad;background:#fff1c6;color:#2d2350;border-radius:14px;padding:9px 15px;font-size:clamp(17px,2vw,23px);box-shadow:0 3px 0 #d4c5ec}
+.zk-game-screen .game-pin-box button:hover{background:#ffe7a3}
+.zk-game-screen .game-pin-box button:focus-visible{outline:3px solid #412475;outline-offset:3px}
+.zk-copy-status{display:block;min-height:16px;font-size:11px;line-height:16px;color:#235c48;font-weight:850}
+.zk-session-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:10px 12px;border:1px solid #e3d9f4;border-radius:17px;background:linear-gradient(105deg,#f5efff,#fdfaff);font-size:12px;font-weight:850;color:#514367}
+.zk-session-strip>span{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:5px 10px;border-radius:10px;background:#fff;border:1px solid #e8e0f6;white-space:nowrap;font-variant-numeric:tabular-nums}
+.zk-session-strip .zk-session-mode{background:#6f50ca;color:#fff;border-color:#6f50ca;font-weight:950}
+.zk-session-connection i{width:8px;height:8px;display:block;flex:none;background:#24956a;border-radius:100%;box-shadow:0 0 0 3px #dff7ed}
+.zk-game-screen .zk-play-layout{align-items:start;gap:18px}
+.zk-game-screen .zk-question-stage{background:linear-gradient(155deg,#fffefa 0%,#fffefa 65%,#f7f2ff 100%);border:2px solid #cfbee9;box-shadow:0 7px 0 #eee6fa;border-radius:25px}
+.zk-question-stage .round-meta{font-size:12px;letter-spacing:.04em;color:#674d97;gap:12px;flex-wrap:wrap}
+.zk-question-stage .round-meta>span:first-child{display:inline-flex;align-items:center;padding:8px 11px;border-radius:10px;background:#f2eaff;color:#513579;font-weight:950}
+.zk-question-stage .timer-badge{border:2px solid #b9a2d9;background:#f5ebff;color:#4b2975;min-height:39px;padding:8px 13px;font-weight:1000;font-variant-numeric:tabular-nums;box-shadow:0 2px 0 #e3d8f3}
+.zk-question-stage .timer-badge--low{border-color:#b64163;background:#ffdfeb;color:#8e1e43;box-shadow:0 2px 0 #ffbbcf}
+.zk-question-stage .round-progress{height:9px;border-radius:999px;background:#ebe2f7;margin:13px 0 6px;overflow:hidden}
+.zk-question-stage .round-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6b4fc5,#ac86fa);transition:width .22s ease}
+.zk-answer-prompt{display:table;margin:20px auto 0;color:#7750bb;font-weight:950;font-size:11px;letter-spacing:.09em;text-align:center}
+.zk-game-screen .zk-quiz-play h2{margin:16px auto 17px;max-width:850px;font-size:clamp(23px,3.3vw,42px);line-height:1.25;letter-spacing:-.025em;text-wrap:balance;overflow-wrap:anywhere}
+.zk-game-screen .zk-quiz-play h2:focus{outline:none}
+.zk-game-screen .zk-quiz-play h2:focus-visible{outline:3px solid #ac91eb;outline-offset:8px;border-radius:5px}
+.zk-answer-pads.answer-grid{gap:13px;margin:22px 0 12px}
+.zk-answer-pads .zk-answer-pad{position:relative;min-width:0;min-height:clamp(108px,15vh,155px);border:2px solid transparent;box-shadow:0 5px 0 #33274924;border-radius:19px;padding:21px 54px 21px 17px;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;isolation:isolate}
+.zk-answer-pads .zk-answer-pad:not(:disabled):hover{transform:translateY(-3px);box-shadow:0 8px 13px #3520552b}
+.zk-answer-pads .zk-answer-pad:not(:disabled):active{transform:translateY(2px);box-shadow:0 2px 0 #33274924}
+.zk-answer-pads .zk-answer-pad:focus-visible{outline:4px solid #32175d;outline-offset:4px}
+.zk-answer-pads .zk-answer-pad .answer-letter{width:50px;height:50px;flex:none;border:2px solid #ffffff90;border-radius:16px;background:#ffffff30;font-size:26px}
+.zk-answer-pads .zk-answer-pad .zk-answer-label{font-size:clamp(16px,1.8vw,22px);line-height:1.32;font-weight:950;overflow-wrap:anywhere}
+.zk-answer-pads .zk-answer-pad .zk-choice-key{position:absolute;right:14px;top:14px;width:30px;height:30px;display:grid;place-items:center;border:1px solid #2b234142;border-radius:9px;background:#ffffffa9;color:#262039;font-size:15px;font-weight:1000;line-height:1}
+.zk-answer-pads .game-choice-0{background:#6f4ec4;color:#fff;border-color:#583b9c}
+.zk-answer-pads .game-choice-1{background:#ffe3a0;color:#31243a;border-color:#ddc07f}
+.zk-answer-pads .game-choice-2{background:#b8ebe4;color:#243d3c;border-color:#8acac0}
+.zk-answer-pads .game-choice-3{background:#ffd0df;color:#522b3c;border-color:#e9abc1}
+.zk-answer-pads .game-choice-0 .zk-choice-key{background:#fff1d7;color:#4b357c;border-color:transparent}
+.zk-round-tip{margin:11px auto 0;text-align:center;color:#685577;font-size:13px;font-weight:800;line-height:1.5}
+.zk-game-screen .zk-answer-done{padding:clamp(24px,4vw,45px) 12px}
+.zk-game-screen .zk-answer-done .zk-status-icon{box-shadow:0 7px 0 #bee9d7}
+.zk-game-screen .zk-answer-done .zk-wait-counter{max-width:100%;white-space:normal;font-variant-numeric:tabular-nums}
+.zk-game-screen .zk-compact-board{overflow:hidden;border:2px solid #d8c9ef;box-shadow:0 5px 0 #eee5fa}
+.zk-game-screen[data-role="host"] .zk-compact-board{position:sticky;top:16px;display:flex;flex-direction:column;max-height:calc(100dvh - 32px)}
+.zk-game-screen[data-role="host"] .zk-compact-board .board-players{overflow-y:auto;min-height:0;overscroll-behavior:contain}
+.zk-game-screen .zk-compact-board .board-title{flex:none;background:#f0e8ff}
+.zk-game-screen .zk-compact-board .board-player{gap:9px;border-radius:11px;min-width:0}
+.zk-game-screen .zk-compact-board .board-player strong{font-variant-numeric:tabular-nums;white-space:nowrap}
+.zk-game-screen .zk-compact-board .player-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zk-game-screen .zk-compact-board .board-footer{flex:none;line-height:1.5}
+.zk-game-screen .next-control{display:flex;gap:11px;justify-content:flex-end}
+.zk-game-screen .next-control p{margin-right:auto}
+.zk-game-screen .next-control button{min-height:46px}
+@media(max-width:850px){
+ .zk-game-screen[data-role="host"] .zk-compact-board{position:static;max-height:360px}
+ .zk-game-screen[data-role="host"] .zk-compact-board .board-players{max-height:270px}
+}
+@media(max-width:600px){
+ .zk-game-screen{width:calc(100% - 20px);padding-top:12px}
+ .zk-game-screen .game-head h1{font-size:24px}
+ .zk-game-screen .game-pin-box{min-width:126px}
+ .zk-game-screen .game-pin-box button{font-size:18px;min-height:44px}
+ .zk-session-strip{padding:8px;gap:6px;border-radius:13px;margin-bottom:13px}
+ .zk-session-strip>span{padding:5px 8px;font-size:11px;min-height:29px}
+ .zk-game-screen .zk-question-stage{padding:15px 12px;border-radius:19px}
+ .zk-answer-prompt{margin-top:16px;font-size:10px}
+ .zk-game-screen .zk-quiz-play h2{font-size:clamp(22px,5.5vw,30px);margin:14px auto 18px}
+ .zk-answer-pads.answer-grid{gap:9px;margin-top:16px}
+ .zk-answer-pads .zk-answer-pad{min-height:115px;padding:35px 10px 13px;flex-direction:column;justify-content:center;text-align:center;gap:6px;border-radius:15px}
+ .zk-answer-pads .zk-answer-pad .answer-letter{width:34px;height:34px;border-radius:11px;font-size:19px}
+ .zk-answer-pads .zk-answer-pad .zk-choice-key{width:23px;height:23px;font-size:11px;right:7px;top:7px;border-radius:7px}
+ .zk-answer-pads .zk-answer-pad .zk-answer-label{font-size:clamp(14px,3.6vw,18px)}
+ .zk-game-screen .next-control{justify-content:stretch}
+ .zk-game-screen .next-control p{flex-basis:100%;margin:0}
+ .zk-game-screen .next-control button{flex:1;min-width:0;padding:11px}
+}
+@media(max-width:365px){
+ .zk-game-screen .game-head{align-items:flex-start}
+ .zk-game-screen .game-pin-box{align-items:flex-start}
+ .zk-answer-pads .zk-answer-pad{padding:30px 8px 11px;min-height:106px}
+ .zk-answer-pads .zk-answer-pad .zk-answer-label{font-size:14px}
+ .zk-session-strip .zk-session-answered{display:none}
+}
+@media(max-height:650px) and (min-width:680px){
+ .zk-answer-pads .zk-answer-pad{min-height:90px}
+ .zk-game-screen .zk-quiz-play h2{margin:13px auto;font-size:clamp(23px,3vw,32px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .zk-question-stage .round-progress>span,.zk-answer-pads .zk-answer-pad{transition:none!important}
+}
+
+/* Real-error recovery and host-only participation; refreshing state never replays submissions. */
+.zk-game-alert{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;border-radius:14px;padding:12px 15px;margin-bottom:13px;line-height:1.4}
+.zk-game-alert span{min-width:0;flex:1 1 240px;overflow-wrap:anywhere}
+.zk-game-alert button{border:2px solid #7c3f5b;color:#7c254a;background:#fff;border-radius:10px;font-weight:900;font-size:12px;min-height:43px;padding:9px 13px}
+.zk-game-alert button:focus-visible{outline:3px solid #452582;outline-offset:3px}
+.zk-teacher-participation{display:grid;gap:9px;margin:-3px 0 16px;padding:14px 17px;border-radius:15px;border:1px solid #e5d9f2;background:#fffefa}
+.zk-teacher-participation>div:first-child{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.zk-teacher-participation strong{font-size:13px;color:#48376e}
+.zk-teacher-participation>div:first-child span{font-size:13px;color:#664e86;font-weight:850;font-variant-numeric:tabular-nums}
+.zk-teacher-progress{height:9px;background:#f0e8fa;border-radius:999px;overflow:hidden}
+.zk-teacher-progress>span{height:100%;display:block;background:linear-gradient(90deg,#7b56d6,#5dcbb9);border-radius:inherit;transition:width .22s ease}
+
+/* Distinct moods for the four live reward games, using the ZoKivo palette. */
+.zk-game-screen .zk-rewards-focus{border:1px solid #dfd4f1;background:linear-gradient(145deg,#f5edff,#fffbff);padding:clamp(15px,2.5vw,23px)}
+.zk-game-screen .zk-rewards-focus[data-mode="gold_quest"]{background:linear-gradient(130deg,#fff3cd,#fff9e9 54%,#f5ecff);border-color:#e5cf89}
+.zk-game-screen .zk-rewards-focus[data-mode="crypto_hack"]{background:linear-gradient(130deg,#efe8ff,#f8f4ff);border-color:#d4c0fa}
+.zk-game-screen .zk-rewards-focus[data-mode="fishing_frenzy"]{background:linear-gradient(130deg,#e3f5ff,#f0fffd);border-color:#b5dae9}
+.zk-game-screen .zk-rewards-focus[data-mode="cafe"]{background:linear-gradient(130deg,#ffe6ec,#fff7e7);border-color:#f0c7d2}
+.zk-game-screen .zk-rewards-focus .mode-reward-heading h3{font-size:clamp(23px,3vw,34px)}
+.zk-game-screen .zk-rewards-focus .zk-reward-tile{min-height:145px;border:2px solid #d2c1e7;border-radius:18px;box-shadow:0 4px 0 #b2a0cc42;padding:17px 12px;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.zk-game-screen .zk-rewards-focus .zk-reward-tile:not(:disabled):hover{border-color:#7656ba;transform:translateY(-2px);box-shadow:0 6px 10px #49336c22}
+.zk-game-screen .zk-rewards-focus .zk-reward-tile:not(:disabled):active{transform:translateY(2px);box-shadow:0 2px 0 #b2a0cc42}
+.zk-game-screen .zk-rewards-focus .zk-reward-tile:focus-visible{outline:4px solid #3f236c;outline-offset:3px}
+.zk-reward-progress{margin:14px auto 0;text-align:center;color:#493879;background:#fff;border:1px solid #e0d4f0;border-radius:12px;padding:12px;font-weight:850;font-size:13px}
+@media(max-width:600px){
+ .zk-game-alert{align-items:stretch}
+ .zk-game-alert button{width:100%}
+ .zk-teacher-participation{padding:12px}
+ .zk-game-screen .zk-rewards-focus .mode-reward-buttons{gap:9px;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .zk-game-screen .zk-rewards-focus .zk-reward-tile{min-height:130px;padding:13px 9px}
+}
+@media(max-width:360px){
+ .zk-game-screen .zk-rewards-focus .mode-reward-buttons{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+ .zk-teacher-progress>span,.zk-game-screen .zk-rewards-focus .zk-reward-tile{transition:none!important}
+}
+
+/* Help learners find their own score even when they are outside the top three. */
+.zk-game-screen .zk-compact-board .board-player.zk-board-me{border:2px solid #8f6ace;background:#ebe1ff}
+.zk-game-screen .zk-compact-board .zk-board-you{display:inline-flex;flex:none;border:1px solid #ad91dd;border-radius:6px;padding:4px 5px;font-size:9px;letter-spacing:.04em;line-height:1;color:#503379;background:#fff;font-weight:1000}
+.zk-game-screen[data-role="player"] .zk-play-layout:has(.zk-quiz-play) .zk-compact-board .board-player.zk-board-me{display:flex}
+/* Lobby gives the teacher room's join and start actions an unmistakable focal point. */
+.zk-game-screen .waiting-card{background:linear-gradient(155deg,#fffefa,#f8f3ff);border-color:#d5c4ee}
+.zk-game-screen .waiting-card .waiting-mascot{max-width:min(175px,40vw);max-height:min(175px,40vw)}
+.zk-game-screen .waiting-card .lobby-pin{font-variant-numeric:tabular-nums;letter-spacing:.12em}
+.zk-game-screen .waiting-card .button{min-height:48px}
+.zk-game-screen .zokivo-lobby-players{max-width:100%}
+.zk-game-screen .zokivo-lobby-players>div{max-height:220px;overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:600px){
+ .zk-game-screen .waiting-card{min-height:320px}
+ .zk-game-screen .waiting-card .waiting-mascot{max-width:120px;max-height:120px}
+ .zk-game-screen .zk-compact-board .zk-board-you{font-size:9px}
+}

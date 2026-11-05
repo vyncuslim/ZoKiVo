@@ -38,7 +38,7 @@ export function ModeRewards({mode,pin,token,playerId,players,wallet,onClaim}:Pro
    <span className="zk-reward-tile-icon" aria-hidden="true">{icon}</span>
    <strong>{title}</strong><small>{hint}</small>
   </button>;
- return <section className="mode-rewards zk-rewards-focus" aria-label={gameModeName(mode)+" reward"}>
+ return <section className="mode-rewards zk-rewards-focus" data-mode={mode} aria-busy={loading} aria-label={gameModeName(mode)+" reward"}>
   <div className="mode-reward-heading">
    <span>ZOKIVO MINI-GAME · YOUR TURN</span>
    <h3>{gameModeName(mode)}</h3>
@@ -86,6 +86,7 @@ export function ModeRewards({mode,pin,token,playerId,players,wallet,onClaim}:Pro
     </details>}
    </>}
   </div>:<p className="mode-reward-wait">Next question is coming…</p>}
+  {loading&&<p className="zk-reward-progress" role="status">Processing your move…</p>}
   {result&&<p className="mode-reward-success" role="status">{result}</p>}
   {error&&<p role="alert" className="form-error">{error}</p>}
  </section>;
