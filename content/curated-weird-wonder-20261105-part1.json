@@ -478,7 +478,7 @@
             "7顶"
           ],
           "correct_option_index": 2,
-          "explanation": "3×4=12。"
+          "explanation": "按题意列式计算，3×4=12。"
         },
         {
           "question": "外星人买6杯月球奶茶，每杯RM5，需要付多少钱？",
@@ -489,7 +489,7 @@
             "RM25"
           ],
           "correct_option_index": 1,
-          "explanation": "6×5=30。"
+          "explanation": "按题意列式计算，6×5=30。"
         },
         {
           "question": "一条龙有18颗糖，平均分给3只小恐龙，每只几颗？",
@@ -500,7 +500,7 @@
             "15颗"
           ],
           "correct_option_index": 0,
-          "explanation": "18÷3=6。"
+          "explanation": "按题意列式计算，18÷3=6。"
         },
         {
           "question": "飞碟每秒移动7米，5秒移动多少米？",
@@ -511,7 +511,7 @@
             "35米"
           ],
           "correct_option_index": 3,
-          "explanation": "7×5=35。"
+          "explanation": "按题意列式计算，7×5=35。"
         },
         {
           "question": "魔法商店有48支羽毛笔，卖出19支，还剩多少支？",
@@ -522,7 +522,7 @@
             "31支"
           ],
           "correct_option_index": 2,
-          "explanation": "48−19=29。"
+          "explanation": "按题意列式计算，48−19=29。"
         },
         {
           "question": "机器人用2分钟叠8件衣服，同样速度10分钟叠几件？",
@@ -566,7 +566,7 @@
             "19个"
           ],
           "correct_option_index": 2,
-          "explanation": "7×12=84。"
+          "explanation": "按题意列式计算，7×12=84。"
         },
         {
           "question": "小怪兽有100枚金币，买了3件每件17枚金币的衣服，还剩多少？",
@@ -588,7 +588,7 @@
             "12颗"
           ],
           "correct_option_index": 0,
-          "explanation": "36÷6=6。"
+          "explanation": "按题意列式计算，36÷6=6。"
         },
         {
           "question": "一架UFO绕操场飞4圈，每圈400米，总路程？",
@@ -621,7 +621,7 @@
             "101颗"
           ],
           "correct_option_index": 1,
-          "explanation": "9×11=99。"
+          "explanation": "按题意列式计算，9×11=99。"
         },
         {
           "question": "魔法师的长袍价格RM120，优惠20%，节省多少钱？",
@@ -654,7 +654,7 @@
             "5楼"
           ],
           "correct_option_index": 2,
-          "explanation": "2+5=7。"
+          "explanation": "按题意列式计算，2+5=7。"
         },
         {
           "question": "两只机器人各造15个积木，合并后拿走8个，剩多少？",
@@ -708,7 +708,7 @@
             "15"
           ],
           "correct_option_index": 1,
-          "explanation": "按规则5+3=8。"
+          "explanation": "按题意列式计算，按规则5+3=8。"
         },
         {
           "question": "水星规则：每个数乘2再减1。输入4，输出多少？",
@@ -719,7 +719,7 @@
             "9"
           ],
           "correct_option_index": 0,
-          "explanation": "4×2−1=7。"
+          "explanation": "按题意列式计算，4×2−1=7。"
         },
         {
           "question": "月球密码把字母A变B、B变C，C会变成哪个字母？",
@@ -752,7 +752,7 @@
             "35"
           ],
           "correct_option_index": 1,
-          "explanation": "24可被2整除。"
+          "explanation": "按题意列式计算，24可被2整除。"
         },
         {
           "question": "飞船楼层编号依次为2、4、8、16，下一个按每次乘2是多少？",
@@ -774,7 +774,7 @@
             "8"
           ],
           "correct_option_index": 3,
-          "explanation": "3+5=8。"
+          "explanation": "按题意列式计算，3+5=8。"
         },
         {
           "question": "密码由前三位数字1、2、3按顺序组成，下一位每次加1，应是？",
@@ -807,7 +807,7 @@
             "9分"
           ],
           "correct_option_index": 0,
-          "explanation": "2×2+3=7。"
+          "explanation": "按题意列式计算，2×2+3=7。"
         },
         {
           "question": "某机器把输入数字减2再平方。输入5，结果是？",
@@ -818,7 +818,7 @@
             "9"
           ],
           "correct_option_index": 3,
-          "explanation": "(5−2)²=9。"
+          "explanation": "按题意列式计算，(5−2)²=9。"
         },
         {
           "question": "外星日历一周只有5天，从第一天再过7天（以第一天为0），是第几天？",
@@ -906,7 +906,7 @@
             "9点"
           ],
           "correct_option_index": 3,
-          "explanation": "4+4+1=9。"
+          "explanation": "按题意列式计算，4+4+1=9。"
         },
         {
           "question": "两台机器只在信号相同时显示OK。信号分别为0和1，结果是？",
