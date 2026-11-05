@@ -17,7 +17,7 @@ for(const p of packs){
   assert.equal(new Set(q.options.map(x=>x.normalize("NFKC").trim().toLowerCase())).size,4,"Ambiguous answer options");
   assert(Number.isInteger(q.correct_option_index)&&q.correct_option_index>=0&&q.correct_option_index<=3);
   assert(typeof q.explanation==="string"&&q.explanation.length>=12&&q.explanation.length<=800);
-  const normalized=q.question.normalize("NFKC").toLowerCase().replace(/\\s+/g," ").trim();
+  const normalized=q.question.normalize("NFKC").toLowerCase().replace(/\s+/g," ").trim();
   assert(!all.has(normalized),"Repeated question across packs: "+q.question);all.add(normalized);
  }
 }
