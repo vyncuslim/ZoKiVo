@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-curated-cross-disciplinary-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000005",
+      "title": "Ocean Explorers: Life Beneath the Waves",
+      "subject": "Ocean Science",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 original ocean questions on tides, reefs, marine life and science.",
+      "questions": [
+        {
+          "question": "What covers most of Earth's surface?",
+          "options": [
+            "Oceans and seas",
+            "Desert dunes",
+            "Permanent ice sheets",
+            "Rainforests"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Ocean water covers about seventy-one percent of Earth's surface."
+        },
+        {
+          "question": "What causes most regular ocean tides?",
+          "options": [
+            "Wind direction only",
+            "Volcanic heat only",
+            "Rainfall in one city",
+            "The gravitational pull of the Moon, with a contribution from the Sun"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Lunar gravity dominates most tidal patterns."
+        },
+        {
+          "question": "Why are coral reefs valuable?",
+          "options": [
+            "They prevent every tsunami",
+            "They replace ocean currents",
+            "They provide habitat for many marine species",
+            "They make all ocean water fresh"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Complex reefs shelter and support diverse organisms."
+        },
+        {
+          "question": "What is a plankton organism?",
+          "options": [
+            "A submarine component",
+            "A drifting organism carried by water movement",
+            "Only a fully grown shark",
+            "A permanent rock"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Plankton includes small plants and animals that drift in water."
+        },
+        {
+          "question": "What is phytoplankton's role in marine food webs?",
+          "options": [
+            "It produces organic matter using light",
+            "It always eats whales",
+            "It destroys all oxygen",
+            "It is made of plastic"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Many phytoplankton species perform photosynthesis."
+        },
+        {
+          "question": "Which zone of the ocean receives the most sunlight?",
+          "options": [
+            "The deepest trenches",
+            "The seabed everywhere",
+            "Under volcanic rocks only",
+            "Surface waters"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Light generally decreases as water depth increases."
+        },
+        {
+          "question": "Why does ocean water taste salty?",
+          "options": [
+            "It has no minerals",
+            "It is mixed with sand only",
+            "It contains dissolved mineral salts",
+            "It is mostly sugar"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Weathering and other processes supply dissolved salts to the ocean."
+        },
+        {
+          "question": "Which marine animal is a mammal?",
+          "options": [
+            "Sea star",
+            "Dolphin",
+            "Tuna",
+            "Octopus"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Dolphins breathe air and nurse their young."
+        },
+        {
+          "question": "How do many fish obtain dissolved oxygen?",
+          "options": [
+            "Using gills",
+            "By growing leaves",
+            "Through wheels",
+            "By collecting sunlight in fur"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Fish gills exchange gases with surrounding water."
+        },
+        {
+          "question": "What does a marine protected area try to do?",
+          "options": [
+            "Ban every research project",
+            "Turn seawater into fresh water",
+            "Remove all fishing boats worldwide",
+            "Conserve ocean habitats and species"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Protection rules can help preserve marine ecosystems."
+        },
+        {
+          "question": "How can plastic litter affect sea turtles?",
+          "options": [
+            "Turtles have metal shells",
+            "Plastic makes water less salty",
+            "Turtles may mistake plastic for food or become entangled",
+            "Plastic always turns into food"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Ingestion and entanglement are serious risks."
+        },
+        {
+          "question": "What is an estuary?",
+          "options": [
+            "An inland volcano",
+            "A place where river water mixes with seawater",
+            "A high mountain summit",
+            "A desert plateau"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Estuaries contain a changing mixture of fresh and salt water."
+        },
+        {
+          "question": "Why do mangrove forests help young fish?",
+          "options": [
+            "Their roots create sheltered nursery habitats",
+            "Their roots produce unlimited salt",
+            "They stop all ocean waves",
+            "They are made only of coral"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Many juvenile fish use sheltered mangrove waters."
+        },
+        {
+          "question": "What is sonar commonly used for?",
+          "options": [
+            "Measuring only sunlight",
+            "Changing seawater colour",
+            "Producing freshwater rain",
+            "Using sound waves to detect objects underwater"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Sound travels well underwater and can reveal submerged objects."
+        },
+        {
+          "question": "What is the deep ocean usually like?",
+          "options": [
+            "Filled with sunlight at all depths",
+            "Completely free of life",
+            "Cold, dark and under high pressure",
+            "Bright and hot everywhere"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Deep water has little light and can have high pressure."
+        },
+        {
+          "question": "What are ocean currents?",
+          "options": [
+            "Kinds of marine plants",
+            "Large-scale movements of seawater",
+            "Only surface bubbles",
+            "Underwater mountain ranges"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Currents transport water, heat and nutrients."
+        },
+        {
+          "question": "What is a sustainable seafood choice concerned with?",
+          "options": [
+            "Avoiding unnecessary harm to fish populations and habitats",
+            "Buying only the biggest fish",
+            "Ignoring fishing methods",
+            "Catching every juvenile fish"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Fishing practices affect marine ecosystems and future stocks."
+        },
+        {
+          "question": "Why can fertiliser runoff damage coastal water?",
+          "options": [
+            "Nutrients always remove algae",
+            "It makes all water drinkable",
+            "It stops tides",
+            "Excess nutrients may trigger harmful algal blooms"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Too many nutrients can cause blooms and oxygen problems."
+        },
+        {
+          "question": "What is a scientific use of an underwater robot?",
+          "options": [
+            "Make waves disappear",
+            "Change the Earth's gravity",
+            "Explore places difficult or dangerous for divers",
+            "Replace every marine animal"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Remotely operated vehicles collect images and measurements."
+        },
+        {
+          "question": "How can students help protect nearby beaches?",
+          "options": [
+            "Damage coastal plants",
+            "Take litter home and join safe clean-up efforts",
+            "Leave fishing lines in the sand",
+            "Release plastic packaging into the sea"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Reducing litter helps protect coastal habitats."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000006",
+      "title": "Engineering Workshop: Build & Test",
+      "subject": "Engineering",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 engineering design and physics questions about structures, testing and inventions.",
+      "questions": [
+        {
+          "question": "What is the first useful step in an engineering project?",
+          "options": [
+            "Buy random materials",
+            "Paint the final model",
+            "Skip all safety planning",
+            "Define the problem and requirements"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Clear requirements guide a practical design."
+        },
+        {
+          "question": "Why do engineers build models?",
+          "options": [
+            "To avoid understanding forces",
+            "To replace every measurement",
+            "To test ideas before constructing full-size designs",
+            "To guarantee no mistakes"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Models help reveal strengths and weaknesses."
+        },
+        {
+          "question": "Why are triangles common in bridge trusses?",
+          "options": [
+            "They cannot ever bend",
+            "They can form rigid structures that distribute loads",
+            "They remove the need for materials",
+            "They produce electricity automatically"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Triangular geometry can improve structural stability."
+        },
+        {
+          "question": "What is a load in structural engineering?",
+          "options": [
+            "A force or weight acting on a structure",
+            "Only a paint colour",
+            "The length of a website",
+            "The price of a ticket"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A load is something a structure must support."
+        },
+        {
+          "question": "What does a lever help a person do?",
+          "options": [
+            "Create energy from nothing",
+            "Remove all friction",
+            "Make every object weightless",
+            "Change the effort or direction needed to move a load"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Levers provide mechanical advantage in suitable arrangements."
+        },
+        {
+          "question": "Why is a safety factor used in design?",
+          "options": [
+            "To make every structure heavier without purpose",
+            "To guarantee that nothing can fail",
+            "To account for uncertainty and unexpected stresses",
+            "To avoid following building rules"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Safety factors allow margins beyond expected loads."
+        },
+        {
+          "question": "What is friction?",
+          "options": [
+            "A battery's colour",
+            "A force resisting relative motion between surfaces",
+            "A type of sunlight",
+            "The absence of gravity"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Friction acts against sliding or attempted sliding."
+        },
+        {
+          "question": "Which material is commonly used for electrical insulation?",
+          "options": [
+            "Rubber",
+            "Copper",
+            "Silver",
+            "Aluminium"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Rubber generally resists electrical current."
+        },
+        {
+          "question": "Why does a bicycle need brakes?",
+          "options": [
+            "To accelerate endlessly",
+            "To turn into an aircraft",
+            "To eliminate gravity",
+            "To slow and stop through controlled friction"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Brakes dissipate motion energy, often as heat."
+        },
+        {
+          "question": "What is a renewable energy engineering challenge?",
+          "options": [
+            "Removing the need for wiring",
+            "Creating power from nothing",
+            "Storing electricity when the wind is not blowing",
+            "Making sunlight permanently disappear"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Energy storage helps balance variable renewable generation."
+        },
+        {
+          "question": "A bridge prototype bends too far in a test. What should the team do?",
+          "options": [
+            "Assume the model is perfect",
+            "Review the load path and revise its design",
+            "Hide the test results",
+            "Increase the weight without analysis"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Tests should inform design changes."
+        },
+        {
+          "question": "What is the role of a gear?",
+          "options": [
+            "Transmit rotation and change speed or torque",
+            "Store only sound",
+            "Produce light without electricity",
+            "Remove the need for bearings"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Gears transfer turning motion between shafts."
+        },
+        {
+          "question": "What does an engineer mean by an iteration?",
+          "options": [
+            "A design that can never change",
+            "A laboratory chemical",
+            "A list of unrelated parts",
+            "A revised version after learning from a test"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Iteration improves a design through repeated cycles."
+        },
+        {
+          "question": "Why must drinking-water systems be carefully designed?",
+          "options": [
+            "To remove all pressure",
+            "To use only glass everywhere",
+            "To deliver water safely and reduce contamination risk",
+            "To maximise colour in the pipes"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Public water systems need safe treatment and distribution."
+        },
+        {
+          "question": "What is a sensor in a robot?",
+          "options": [
+            "A software advertisement",
+            "A device that measures conditions or detects changes",
+            "Only a wheel",
+            "The robot's logo"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Sensors supply information to a control system."
+        },
+        {
+          "question": "Why is accessibility important in building design?",
+          "options": [
+            "People with different mobility and sensory needs should be able to use spaces",
+            "Only one body size should be considered",
+            "Doors should always be narrow",
+            "Stairs can replace every entrance"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Inclusive design aims to remove barriers."
+        },
+        {
+          "question": "What does a pulley system do?",
+          "options": [
+            "Turn water into fuel",
+            "Measure only temperature",
+            "Remove every load",
+            "Change the direction of a force and sometimes reduce effort"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Pulleys can offer mechanical advantage."
+        },
+        {
+          "question": "Why do engineers record measurements during tests?",
+          "options": [
+            "To avoid using evidence",
+            "To hide incorrect results",
+            "To compare actual performance with requirements",
+            "To make documentation longer only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Recorded data supports evidence-based decisions."
+        },
+        {
+          "question": "What is a trade-off in design?",
+          "options": [
+            "Safety can always be ignored",
+            "Improving one feature may require sacrificing another",
+            "Every solution is perfect",
+            "Cost never matters"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Designs must balance several competing requirements."
+        },
+        {
+          "question": "Which action shows good workshop safety?",
+          "options": [
+            "Wear suitable eye protection and follow tool instructions",
+            "Use damaged wires without checking",
+            "Touch moving gears deliberately",
+            "Leave sharp tools on the floor"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Protective equipment and safe procedures reduce risk."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000007",
+      "title": "World Cultures & Traditions",
+      "subject": "World Cultures",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 cross-cultural questions on languages, traditions, food and respectful exchange.",
+      "questions": [
+        {
+          "question": "Why is it useful to learn greetings in another language?",
+          "options": [
+            "It guarantees perfect pronunciation",
+            "It replaces all listening skills",
+            "It can help show respect and start conversations",
+            "It makes every person speak English"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Trying another language can build connection and respect."
+        },
+        {
+          "question": "What does cultural diversity mean?",
+          "options": [
+            "All communities celebrating identical holidays",
+            "Different cultural practices and experiences existing together",
+            "Everyone having exactly the same traditions",
+            "Only one language being allowed"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Diversity describes variation among communities."
+        },
+        {
+          "question": "Which Malaysian festival is widely associated with decorative kolam designs?",
+          "options": [
+            "Deepavali",
+            "Christmas",
+            "Hari Gawai",
+            "Chap Goh Mei"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Kolam patterns are often displayed for Deepavali celebrations."
+        },
+        {
+          "question": "What is a common element of Chinese New Year celebrations?",
+          "options": [
+            "A compulsory beach race",
+            "Only eating bread",
+            "Always celebrating in July",
+            "Family reunions and visits"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Reunion meals and visits are important for many families."
+        },
+        {
+          "question": "Which celebration marks the end of Ramadan for Muslims?",
+          "options": [
+            "Vesak Day",
+            "Christmas",
+            "Hari Raya Aidilfitri",
+            "Deepavali"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Aidilfitri follows the Ramadan fasting month."
+        },
+        {
+          "question": "What does the term 'heritage' often include?",
+          "options": [
+            "A single type of uniform",
+            "Traditions, objects and knowledge passed between generations",
+            "Only newly invented apps",
+            "Items that nobody remembers"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Cultural heritage can be tangible or intangible."
+        },
+        {
+          "question": "Why should visitors ask before photographing a cultural ceremony?",
+          "options": [
+            "Some people or activities require permission and respect",
+            "Cameras always take better photos at night",
+            "Tourists own every image",
+            "All ceremonies are public property"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Asking helps respect privacy and local customs."
+        },
+        {
+          "question": "What is an oral tradition?",
+          "options": [
+            "Only written laws",
+            "A type of computer storage",
+            "A machine that makes fabric",
+            "Stories or knowledge shared through speaking"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Communities can pass knowledge verbally."
+        },
+        {
+          "question": "Which instrument is associated with the Malaysian gamelan tradition?",
+          "options": [
+            "Tuba only",
+            "Electric guitar only",
+            "Gong",
+            "Bagpipe only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Gamelan ensembles use instruments including gongs and metallophones."
+        },
+        {
+          "question": "What does a traditional recipe often teach about a place?",
+          "options": [
+            "The length of all rivers",
+            "Local ingredients, history and customs",
+            "The exact weather next year",
+            "Every person's favourite sport"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Food reflects resources, migration and community practices."
+        },
+        {
+          "question": "Why is respectful disagreement important in intercultural discussions?",
+          "options": [
+            "People may have different beliefs and experiences",
+            "Every tradition must be identical",
+            "Disagreement is always unsafe",
+            "Listening has no value"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Respectful dialogue allows different perspectives."
+        },
+        {
+          "question": "What is an example of intangible cultural heritage?",
+          "options": [
+            "A concrete bridge only",
+            "A single office printer",
+            "A plastic chair alone",
+            "A traditional dance performed across generations"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Performances and skills can be intangible heritage."
+        },
+        {
+          "question": "What is a 'dialect' in language?",
+          "options": [
+            "A type of musical key",
+            "A brand of keyboard",
+            "A regional or social variety of a language",
+            "A language that cannot be spoken"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Dialects vary in pronunciation, vocabulary or grammar."
+        },
+        {
+          "question": "Which festival is celebrated in parts of Sabah by Kadazan-Dusun communities?",
+          "options": [
+            "Hanami",
+            "Kaamatan",
+            "Oktoberfest",
+            "Mardi Gras"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Kaamatan is associated with harvest celebrations in Sabah."
+        },
+        {
+          "question": "What is a cultural stereotype?",
+          "options": [
+            "An oversimplified belief about a whole group",
+            "A reliable description of every individual",
+            "A recipe instruction",
+            "A verified historical date"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Stereotypes ignore differences between individuals."
+        },
+        {
+          "question": "Why should museums describe where artefacts came from?",
+          "options": [
+            "Objects have no histories",
+            "Exhibits never need explanations",
+            "Labels always replace research",
+            "Provenance provides historical and ethical context"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Provenance helps explain origins and ownership."
+        },
+        {
+          "question": "What does bilingual mean?",
+          "options": [
+            "Speaking without listening",
+            "Never learning a native language",
+            "Able to use two languages",
+            "Knowing only two words"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Bilingual people use two languages to varying degrees."
+        },
+        {
+          "question": "What can music across cultures reveal?",
+          "options": [
+            "That songs contain no history",
+            "Different rhythms, instruments and social functions",
+            "That every song has the same beat",
+            "That culture never changes"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Music expresses creativity and community traditions."
+        },
+        {
+          "question": "Which practice supports cultural exchange?",
+          "options": [
+            "Listening, asking respectful questions and sharing knowledge",
+            "Mocking unfamiliar customs",
+            "Assuming one culture is superior",
+            "Refusing translation help"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Exchange works better with curiosity and mutual respect."
+        },
+        {
+          "question": "Why might a traditional craft be taught to younger people?",
+          "options": [
+            "To prevent all modern design",
+            "To stop people learning other crafts",
+            "To remove its cultural meaning",
+            "To preserve skills and allow creative adaptation"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Transmission can sustain heritage while allowing change."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000008",
+      "title": "Communities, Citizenship & Public Services",
+      "subject": "Civics",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 non-partisan questions about communities, public services, shared rules and responsibility.",
+      "questions": [
+        {
+          "question": "What is the purpose of a public library?",
+          "options": [
+            "Replace every school",
+            "Provide access to books, information and learning resources",
+            "Sell only luxury goods",
+            "Keep all books private"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Libraries support education and community access."
+        },
+        {
+          "question": "Why do communities have traffic rules?",
+          "options": [
+            "To reduce crashes and coordinate road use",
+            "To make journeys randomly longer",
+            "To prevent all walking",
+            "To ban every bicycle"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Shared rules improve predictability and safety."
+        },
+        {
+          "question": "What does 'public service' commonly refer to?",
+          "options": [
+            "Only a private birthday party",
+            "A personal game account",
+            "A fictional business name",
+            "Services intended to benefit the community"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Public services support shared needs."
+        },
+        {
+          "question": "Why should school rules be clear and accessible?",
+          "options": [
+            "Only teachers need to know them",
+            "Clarity is not important",
+            "Students can understand expectations and apply them fairly",
+            "Rules should be secret"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Clear rules help people act consistently."
+        },
+        {
+          "question": "What is volunteering?",
+          "options": [
+            "Secretly sharing passwords",
+            "Giving time or effort to help others without expecting wages",
+            "Borrowing money at high interest",
+            "Only buying products"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Volunteers support community activities."
+        },
+        {
+          "question": "Why are emergency exits clearly marked?",
+          "options": [
+            "People need a route to safety during an emergency",
+            "To advertise nearby shops",
+            "To make corridors darker",
+            "To replace building maps for all uses"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Visible exit signs assist evacuation."
+        },
+        {
+          "question": "What is a community consultation?",
+          "options": [
+            "A replacement for all laws",
+            "A private password exchange",
+            "A fixed school examination",
+            "An opportunity for residents to share views on a proposal"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Consultations collect perspectives on decisions."
+        },
+        {
+          "question": "How should a disagreement about a shared playground be handled?",
+          "options": [
+            "Threaten other children",
+            "Ignore every concern",
+            "Discuss needs and seek a fair practical solution",
+            "Damage the playground"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Listening and compromise can resolve shared-space disputes."
+        },
+        {
+          "question": "Why do towns collect household waste?",
+          "options": [
+            "To replace recycling with dumping everywhere",
+            "To maintain sanitation and manage materials safely",
+            "To increase litter",
+            "To block public roads"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Waste services reduce public health and environmental risks."
+        },
+        {
+          "question": "What is a pedestrian crossing for?",
+          "options": [
+            "Helping people cross roads in a designated place",
+            "Marking a racing track",
+            "Parking vehicles permanently",
+            "Storing bicycles"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Crossings organise vehicle and pedestrian movement."
+        },
+        {
+          "question": "Which practice shows responsible digital citizenship?",
+          "options": [
+            "Publish private messages for attention",
+            "Create false accounts to harass classmates",
+            "Spread unverified rumours",
+            "Respect others and avoid sharing private information without permission"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Good digital citizenship combines respect and privacy."
+        },
+        {
+          "question": "Why are local parks important?",
+          "options": [
+            "They produce all drinking water",
+            "They replace every forest",
+            "They can offer recreation and support urban nature",
+            "They guarantee every city has identical weather"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Parks provide opportunities for play and green space."
+        },
+        {
+          "question": "What does fairness in a classroom involve?",
+          "options": [
+            "Ignoring everyone with disabilities",
+            "Applying rules consistently while considering relevant needs",
+            "Giving prizes only to friends",
+            "Changing rules secretly"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Fair decisions need consistency and reasonable accommodation."
+        },
+        {
+          "question": "What is a useful way to report a broken streetlight?",
+          "options": [
+            "Notify the appropriate local service with its location",
+            "Damage more lights",
+            "Post a classmate's password",
+            "Invent an emergency"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Accurate reports help services identify the problem."
+        },
+        {
+          "question": "What is a local community group?",
+          "options": [
+            "A single isolated machine",
+            "Only a national government",
+            "An online advertisement alone",
+            "People cooperating around a shared neighbourhood or interest"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Groups coordinate activities and mutual support."
+        },
+        {
+          "question": "Why should public information be written clearly?",
+          "options": [
+            "Only experts use public facilities",
+            "Translation is never useful",
+            "Residents need to understand services and instructions",
+            "Confusing words improve safety"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Accessible language helps more people use information."
+        },
+        {
+          "question": "What should someone do if they find a lost wallet at school?",
+          "options": [
+            "Hide it in a locker",
+            "Give it to a trusted staff member",
+            "Keep the cash",
+            "Publish identifying details online"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Staff can handle lost property safely."
+        },
+        {
+          "question": "Why is listening important in group decisions?",
+          "options": [
+            "It helps reveal needs and concerns that others may have",
+            "It always guarantees agreement",
+            "It makes evidence irrelevant",
+            "It removes all rules"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Listening can lead to more informed decisions."
+        },
+        {
+          "question": "What is a shared community resource?",
+          "options": [
+            "Only an individual password",
+            "A locked private diary",
+            "Someone else's bank card",
+            "Something residents use or benefit from together"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Libraries, parks and pathways are examples of shared resources."
+        },
+        {
+          "question": "Which action demonstrates care for public facilities?",
+          "options": [
+            "Leave taps running unnecessarily",
+            "Break safety signs",
+            "Use equipment responsibly and report damage",
+            "Carve names into school desks"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Responsible use helps facilities remain available to others."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-curated-cross-disciplinary-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000001",
+      "title": "生活理财：从零花钱到预算",
+      "subject": "生活理财",
+      "grade_level": "Year 6",
+      "language": "zh",
+      "description": "20 道原创生活理财题，学习预算、储蓄、消费者权益与消费判断。",
+      "questions": [
+        {
+          "question": "小明每周有 RM20 零花钱，花 RM12 后还剩多少？",
+          "options": [
+            "RM8",
+            "RM6",
+            "RM10",
+            "RM12"
+          ],
+          "correct_option_index": 0,
+          "explanation": "RM20 减去 RM12，剩下 RM8。"
+        },
+        {
+          "question": "“预算”最主要的用途是什么？",
+          "options": [
+            "保证每次购物打折",
+            "让钱自动增加",
+            "避免记录花费",
+            "提前规划收入与支出"
+          ],
+          "correct_option_index": 3,
+          "explanation": "预算帮助安排有限资金的用途。"
+        },
+        {
+          "question": "你有 RM50，想买 RM35 的书和 RM20 的玩具，最合理的做法是？",
+          "options": [
+            "向陌生人借钱",
+            "不看价格直接付款",
+            "先按需要选择并核算总价",
+            "两件都买不用计算"
+          ],
+          "correct_option_index": 2,
+          "explanation": "两件共 RM55，超出预算 RM5。"
+        },
+        {
+          "question": "哪一种行为属于“储蓄”？",
+          "options": [
+            "不记得钱放在哪里",
+            "把部分零花钱留作日后使用",
+            "把全部钱当天花完",
+            "借钱买不需要的东西"
+          ],
+          "correct_option_index": 1,
+          "explanation": "储蓄是把当前资源保留给未来。"
+        },
+        {
+          "question": "“需要”和“想要”有什么区别？",
+          "options": [
+            "需要是基本必要，想要是额外愿望",
+            "两者完全一样",
+            "想要永远更重要",
+            "需要只指玩具"
+          ],
+          "correct_option_index": 0,
+          "explanation": "区分必要支出和可选消费能改善预算。"
+        },
+        {
+          "question": "商品标价 RM24，折扣 RM4，实付多少？",
+          "options": [
+            "RM28",
+            "RM22",
+            "RM16",
+            "RM20"
+          ],
+          "correct_option_index": 3,
+          "explanation": "实付价格为原价减优惠额。"
+        },
+        {
+          "question": "两家商店同款笔分别卖 RM3 和 RM5，哪家更便宜？",
+          "options": [
+            "两家一样",
+            "不能比较",
+            "RM3 的商店",
+            "RM5 的商店"
+          ],
+          "correct_option_index": 2,
+          "explanation": "在质量和条件相同时，RM3 比 RM5 便宜。"
+        },
+        {
+          "question": "“收据”一般可以帮助你做什么？",
+          "options": [
+            "让商品永远不损坏",
+            "核对付款记录与购买凭证",
+            "自动增加银行余额",
+            "代替所有身份证明"
+          ],
+          "correct_option_index": 1,
+          "explanation": "收据是交易记录，退换货时也可能有用。"
+        },
+        {
+          "question": "看到“限时五分钟立刻付款”的广告，你应该先怎样做？",
+          "options": [
+            "比较价格并确认是否真的需要",
+            "立即付款不考虑",
+            "把密码交给卖家",
+            "相信所有倒计时"
+          ],
+          "correct_option_index": 0,
+          "explanation": "倒计时可能制造冲动消费压力。"
+        },
+        {
+          "question": "什么是“利息”？",
+          "options": [
+            "商品包装颜色",
+            "一张购物清单",
+            "固定不变的折扣",
+            "借贷或存款可能涉及的资金使用成本或回报"
+          ],
+          "correct_option_index": 3,
+          "explanation": "利息通常按本金、利率和时间计算。"
+        },
+        {
+          "question": "想存 RM60，每周存 RM10，大约需要几周？",
+          "options": [
+            "7 周",
+            "10 周",
+            "6 周",
+            "5 周"
+          ],
+          "correct_option_index": 2,
+          "explanation": "RM60 ÷ RM10 = 6 周。"
+        },
+        {
+          "question": "为什么不应随意分享银行卡密码？",
+          "options": [
+            "有助于获得免费礼物",
+            "可能让别人未经许可使用账户",
+            "会让银行卡变轻",
+            "能增加存款利息"
+          ],
+          "correct_option_index": 1,
+          "explanation": "银行卡密码属于敏感的金融验证信息。"
+        },
+        {
+          "question": "现金付款和电子付款有什么共同点？",
+          "options": [
+            "都应该核对实际支付金额",
+            "都不需要保护隐私",
+            "都不会发生错误",
+            "都可以无限支付"
+          ],
+          "correct_option_index": 0,
+          "explanation": "无论支付方式，都需要确认金额与收款对象。"
+        },
+        {
+          "question": "如果商品出现质量问题，最实用的第一步是什么？",
+          "options": [
+            "立即公开所有个人资料",
+            "丢弃所有收据",
+            "随意转账给陌生客服",
+            "保存凭证并联系合法销售渠道"
+          ],
+          "correct_option_index": 3,
+          "explanation": "保留证据有助于与商家沟通。"
+        },
+        {
+          "question": "“单价”可以帮助你比较什么？",
+          "options": [
+            "商店音乐好不好听",
+            "广告字体大小",
+            "不同包装的单位成本",
+            "商品颜色是否好看"
+          ],
+          "correct_option_index": 2,
+          "explanation": "单位价格可以比较每克或每件的成本。"
+        },
+        {
+          "question": "同样的饮料，250 mL 售 RM2，500 mL 售 RM3，哪个每毫升更划算？",
+          "options": [
+            "无法判断",
+            "500 mL 售 RM3",
+            "250 mL 售 RM2",
+            "两者单位价格一样"
+          ],
+          "correct_option_index": 1,
+          "explanation": "每毫升分别为 RM0.008 和 RM0.006。"
+        },
+        {
+          "question": "什么是“紧急备用金”？",
+          "options": [
+            "留给意外必要支出的储蓄",
+            "专门买玩具的钱",
+            "每天必须花完的钱",
+            "任何人的共享密码"
+          ],
+          "correct_option_index": 0,
+          "explanation": "备用金可以帮助应付突发的合理开支。"
+        },
+        {
+          "question": "购买数字游戏道具前，为什么要先确认费用？",
+          "options": [
+            "数字商品永远免费",
+            "所有付费道具都能退款",
+            "付款不需要监护人知道",
+            "虚拟购买也可能产生真实支出"
+          ],
+          "correct_option_index": 3,
+          "explanation": "游戏内购买也会消耗真实资金。"
+        },
+        {
+          "question": "朋友向你推荐“稳赚不赔”的投资，哪种判断更审慎？",
+          "options": [
+            "公开账户密码",
+            "邀请同学一起冲动投资",
+            "怀疑保证回报的说法并向可信成年人求证",
+            "马上投入全部存款"
+          ],
+          "correct_option_index": 2,
+          "explanation": "任何投资都有风险，保证高回报的说法值得警惕。"
+        },
+        {
+          "question": "每月记录自己的花费，最大的价值是什么？",
+          "options": [
+            "确保未来没有意外",
+            "发现消费习惯并改进安排",
+            "让价格自动下降",
+            "避免学习数学"
+          ],
+          "correct_option_index": 1,
+          "explanation": "记录支出能帮助识别不必要的花费。"
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000002",
+      "title": "Young Entrepreneurs: Ideas & Customers",
+      "subject": "Entrepreneurship",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 realistic questions about business ideas, customer needs, feedback and simple costs.",
+      "questions": [
+        {
+          "question": "What is a business customer?",
+          "options": [
+            "Only the shop owner",
+            "A machine in a factory",
+            "An online password",
+            "Someone who buys or uses a product or service"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Customers are people or organisations served by a business."
+        },
+        {
+          "question": "A team wants to sell reusable bottles. What should it learn first?",
+          "options": [
+            "How to skip safety rules",
+            "How to copy every rival logo",
+            "Whether customers need and want the bottles",
+            "The colour of the founder's shoes"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Understanding customer needs helps define a useful product."
+        },
+        {
+          "question": "What does a prototype help a team do?",
+          "options": [
+            "Remove every design risk",
+            "Test an early version of an idea",
+            "Guarantee a billion sales",
+            "Avoid customer feedback"
+          ],
+          "correct_option_index": 1,
+          "explanation": "A prototype lets people try and evaluate a concept."
+        },
+        {
+          "question": "What is revenue?",
+          "options": [
+            "Money received from selling goods or services",
+            "Only the money left after expenses",
+            "The number of shop chairs",
+            "A company's logo colours"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Revenue is sales income before subtracting expenses."
+        },
+        {
+          "question": "What is a cost to a small bakery?",
+          "options": [
+            "A customer compliment",
+            "A social media follower",
+            "A product review",
+            "Ingredients used to make bread"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Ingredients are resources the bakery pays for."
+        },
+        {
+          "question": "A school stall sells ten bookmarks for RM3 each. What is total sales revenue?",
+          "options": [
+            "RM7",
+            "RM33",
+            "RM30",
+            "RM13"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Ten multiplied by RM3 equals RM30 in revenue."
+        },
+        {
+          "question": "If revenue is RM30 and total expenses are RM18, what is the simple profit?",
+          "options": [
+            "RM30",
+            "RM12",
+            "RM48",
+            "RM18"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Profit is revenue minus expenses, here RM12."
+        },
+        {
+          "question": "Why should a startup ask users for feedback?",
+          "options": [
+            "To learn what actually works and what needs improvement",
+            "To prove its first idea is always perfect",
+            "To collect unnecessary passwords",
+            "To avoid future changes"
+          ],
+          "correct_option_index": 0,
+          "explanation": "User feedback helps identify problems and improvements."
+        },
+        {
+          "question": "What is a value proposition?",
+          "options": [
+            "An automatic bank transfer",
+            "A list of all employee birthdays",
+            "A random slogan without meaning",
+            "A clear explanation of how a product helps customers"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A value proposition states the benefit a customer can expect."
+        },
+        {
+          "question": "Which is an ethical way to promote a product?",
+          "options": [
+            "Hide important charges",
+            "Claim untested medical benefits",
+            "Describe its real features accurately",
+            "Invent positive reviews"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Accurate claims support customer trust."
+        },
+        {
+          "question": "A competitor offers a similar product. What should a founder do?",
+          "options": [
+            "Copy their private customer list",
+            "Understand differences and improve their own offer",
+            "Steal their accounts",
+            "Publish false rumours"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Fair competition focuses on genuine customer value."
+        },
+        {
+          "question": "What does a break-even point describe?",
+          "options": [
+            "The level where revenue covers costs",
+            "A moment when no product can be sold",
+            "A fixed discount of 50 percent",
+            "When a shop closes every day"
+          ],
+          "correct_option_index": 0,
+          "explanation": "At break-even, total revenue equals total costs."
+        },
+        {
+          "question": "Why does accessibility matter for a student app?",
+          "options": [
+            "It always increases the price",
+            "It prevents all bugs",
+            "It replaces customer support",
+            "More people can use it despite different abilities"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Accessible design reduces unnecessary barriers."
+        },
+        {
+          "question": "What is a recurring customer?",
+          "options": [
+            "A supplier of electricity",
+            "An imaginary user",
+            "A customer who returns to buy or use a service again",
+            "A person visiting once"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Returning users can indicate continuing usefulness."
+        },
+        {
+          "question": "What should a team do with a failed prototype?",
+          "options": [
+            "Ignore the evidence",
+            "Identify the cause and revise the design",
+            "Pretend the test never happened",
+            "Immediately blame users"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Failure information supports iteration."
+        },
+        {
+          "question": "What is a partnership in a project?",
+          "options": [
+            "Two parties cooperating toward agreed goals",
+            "One person secretly using another's brand",
+            "A promise of guaranteed profit",
+            "An automatic legal registration"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A partnership is cooperation based on an agreed purpose."
+        },
+        {
+          "question": "Why track simple business metrics?",
+          "options": [
+            "To make graphs look impressive only",
+            "To replace product quality",
+            "To avoid talking to customers",
+            "To observe progress against a goal"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Useful metrics help identify changes over time."
+        },
+        {
+          "question": "A customer reports a real problem. Which response is best?",
+          "options": [
+            "Mock the customer publicly",
+            "Invent a technical excuse",
+            "Listen, investigate and communicate a resolution",
+            "Delete the message without reading"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Respectful support and investigation can resolve issues."
+        },
+        {
+          "question": "Why should product prices be transparent?",
+          "options": [
+            "Only the seller should know the cost",
+            "Customers need to understand what they will pay",
+            "Hidden charges build trust",
+            "Prices have no effect on decisions"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Clear pricing supports informed choices."
+        },
+        {
+          "question": "A business idea collects students' personal data. What should the team prioritize?",
+          "options": [
+            "Collect only necessary data and protect it",
+            "Publish every student's address",
+            "Sell private data without permission",
+            "Use the same password for all staff"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Privacy should be built into the product from the beginning."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000003",
+      "title": "Media Detectives: Facts & Misinformation",
+      "subject": "Media Literacy",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 media literacy scenarios about sources, misleading posts, social networks and verification.",
+      "questions": [
+        {
+          "question": "A viral post has no named source. What is a sensible first step?",
+          "options": [
+            "Assume popularity proves truth",
+            "Edit it to sound more dramatic",
+            "Find an independent trustworthy source",
+            "Forward it immediately"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Popularity is not evidence that a claim is correct."
+        },
+        {
+          "question": "What is a primary source for a speech?",
+          "options": [
+            "An advertisement for the event",
+            "A recording or transcript of the original speech",
+            "A stranger's summary",
+            "An unrelated opinion article"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Primary sources provide direct evidence."
+        },
+        {
+          "question": "What is a headline's main purpose?",
+          "options": [
+            "Introduce the subject and attract a reader",
+            "Replace the entire article",
+            "Guarantee every statement is true",
+            "Identify every source automatically"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A headline summarises or promotes content but cannot replace verification."
+        },
+        {
+          "question": "A photo from 2019 is shared as today's flood. What is the problem?",
+          "options": [
+            "Older photos cannot be useful",
+            "Photos never show real events",
+            "All floods are identical",
+            "The image is presented with misleading timing"
+          ],
+          "correct_option_index": 3,
+          "explanation": "An authentic image can mislead when placed in false context."
+        },
+        {
+          "question": "How can you check whether a photograph is reused elsewhere?",
+          "options": [
+            "Ask the poster to use more emojis",
+            "Assume its caption is accurate",
+            "Search for earlier appearances of the image",
+            "Count its pixels only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Earlier appearances may reveal the photo's original context."
+        },
+        {
+          "question": "What is an opinion?",
+          "options": [
+            "An official receipt",
+            "A personal judgement that may differ between people",
+            "A measurement guaranteed to be exact",
+            "A statement always false"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Opinions express preferences or judgements."
+        },
+        {
+          "question": "Which statement is directly verifiable?",
+          "options": [
+            "The event begins at 9:00 AM on Saturday",
+            "This is the best event ever",
+            "The music is wonderful",
+            "That poster looks ugly"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A published schedule can verify a stated starting time."
+        },
+        {
+          "question": "A sponsored post promotes a product. What should viewers recognise?",
+          "options": [
+            "Advertising makes every claim true",
+            "Sponsored content is always illegal",
+            "No sponsorship disclosure is ever needed",
+            "The creator may have a commercial incentive"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Sponsorship can affect the motivation behind a message."
+        },
+        {
+          "question": "What is confirmation bias?",
+          "options": [
+            "Measuring weather accurately",
+            "Reading multiple viewpoints fairly",
+            "Preferring information that supports existing beliefs",
+            "Changing the topic of a report"
+          ],
+          "correct_option_index": 2,
+          "explanation": "People may selectively notice evidence supporting their views."
+        },
+        {
+          "question": "Why compare reports from multiple independent sources?",
+          "options": [
+            "It replaces direct observation in every case",
+            "It can reveal mistakes and missing context",
+            "It guarantees everyone agrees",
+            "It removes the need for evidence"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Independent reporting can improve confidence."
+        },
+        {
+          "question": "What is a deepfake?",
+          "options": [
+            "Synthetic media made to imitate a real person or event",
+            "A very old newspaper",
+            "A type of safe backup",
+            "A computer cooling system"
+          ],
+          "correct_option_index": 0,
+          "explanation": "AI-generated video or audio can simulate appearances or voices."
+        },
+        {
+          "question": "A convincing AI voice note asks for money. What is safest?",
+          "options": [
+            "Pay immediately",
+            "Share your banking PIN",
+            "Assume the voice cannot be forged",
+            "Verify identity through a separate trusted channel"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Voice recordings can be imitated, so verification matters."
+        },
+        {
+          "question": "What does a citation help readers do?",
+          "options": [
+            "Hide the original author",
+            "Replace all critical thinking",
+            "Locate the evidence supporting a claim",
+            "Make an article automatically correct"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Citations let others inspect the source material."
+        },
+        {
+          "question": "Why can a cropped chart be misleading?",
+          "options": [
+            "Only the colours matter",
+            "It may hide important axis values or comparison context",
+            "Cropping always improves accuracy",
+            "Charts never use numbers"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Missing scales can exaggerate or minimise differences."
+        },
+        {
+          "question": "An online claim cites 'experts' but no names or studies. What is missing?",
+          "options": [
+            "Identifiable evidence that can be checked",
+            "An exciting background song",
+            "A larger font",
+            "More reaction emojis"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Unspecified authorities are difficult to verify."
+        },
+        {
+          "question": "Which question is useful when reading a news article?",
+          "options": [
+            "How many colourful icons appear?",
+            "Can it make me angry quickly?",
+            "Does it have many capital letters?",
+            "Who produced it and what evidence supports it?"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Assessing source and evidence helps evaluate accuracy."
+        },
+        {
+          "question": "What is clickbait?",
+          "options": [
+            "A verified scientific reference",
+            "A school attendance register",
+            "A sensational heading designed to attract clicks",
+            "Any careful investigative report"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Clickbait often prioritises clicks over clear context."
+        },
+        {
+          "question": "Which is a responsible way to correct a mistaken post?",
+          "options": [
+            "Invent a new rumour",
+            "Explain the correction and provide reliable evidence",
+            "Insult anyone who believed it",
+            "Delete every opposing opinion"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Evidence-based corrections help others update beliefs."
+        },
+        {
+          "question": "Why distinguish a simulation from real footage?",
+          "options": [
+            "Viewers deserve to know what actually happened",
+            "All visual media must be forbidden",
+            "Simulations are always useless",
+            "Reality can be determined by video quality alone"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Labels prevent fictional reconstructions from being mistaken for records."
+        },
+        {
+          "question": "A study cited online has only ten participants. What should you consider?",
+          "options": [
+            "That the conclusion must be universal",
+            "That statistics can be ignored",
+            "That every small study is fraudulent",
+            "Whether the sample size and design support the claim"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Study design and sample size affect how findings can be interpreted."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05b0-4a9b-9f00-000000000004",
+      "title": "Farms, Food Systems & Agriculture",
+      "subject": "Agriculture",
+      "grade_level": "Year 6",
+      "language": "en",
+      "description": "20 questions on crops, soil, sustainable farming, pollination and food supply chains.",
+      "questions": [
+        {
+          "question": "Why do farmers rotate different crops across seasons?",
+          "options": [
+            "To avoid harvesting food",
+            "To help maintain soil health and manage pests",
+            "To make every plant look identical",
+            "To prevent all rainfall"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Crop rotation can reduce some pests and improve nutrient balance."
+        },
+        {
+          "question": "Which plant part usually develops into a fruit after fertilisation?",
+          "options": [
+            "The flower's ovary",
+            "The root tip",
+            "The bark",
+            "The stem hair"
+          ],
+          "correct_option_index": 0,
+          "explanation": "In flowering plants, the ovary commonly develops into a fruit."
+        },
+        {
+          "question": "What is compost?",
+          "options": [
+            "A type of plastic fertiliser bottle",
+            "Only pure sand",
+            "An insecticide spray",
+            "Decomposed organic material used to enrich soil"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Compost returns organic matter and nutrients to soil."
+        },
+        {
+          "question": "Why are bees important to many crops?",
+          "options": [
+            "They replace soil nutrients",
+            "They make every plant grow instantly",
+            "They move pollen between flowers",
+            "They create all rainfall"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Pollinators enable fertilisation for many flowering plants."
+        },
+        {
+          "question": "Which practice helps conserve irrigation water?",
+          "options": [
+            "Removing all soil cover",
+            "Drip irrigation near plant roots",
+            "Leaving hoses running all day",
+            "Watering paved roads"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Drip systems can deliver water efficiently to roots."
+        },
+        {
+          "question": "What does a seed need to germinate in most common crops?",
+          "options": [
+            "Suitable water, oxygen and temperature",
+            "Only bright paint",
+            "A metal container",
+            "A television signal"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Seeds typically germinate when conditions are suitable."
+        },
+        {
+          "question": "How do earthworms often help gardens?",
+          "options": [
+            "They turn soil into plastic",
+            "They stop all microbes",
+            "They prevent all plant diseases",
+            "They improve soil structure as they move and feed"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Earthworm activity can support soil aeration and nutrient cycling."
+        },
+        {
+          "question": "What is a greenhouse used for?",
+          "options": [
+            "Blocking all sunlight permanently",
+            "Replacing every farm worker",
+            "Managing growing conditions for plants",
+            "Storing fuel only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Greenhouses let growers adjust aspects of the environment."
+        },
+        {
+          "question": "Why should farmers check soil moisture?",
+          "options": [
+            "To choose the colour of baskets",
+            "To decide when plants need watering",
+            "To predict the next year's prices exactly",
+            "To measure a tractor's speed"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Soil moisture can guide irrigation decisions."
+        },
+        {
+          "question": "What is an invasive pest?",
+          "options": [
+            "An organism that can harm crops outside its native balance",
+            "Every insect on a farm",
+            "A plant that gives fruit",
+            "A tool for harvesting rice"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Some introduced organisms cause damage when populations spread."
+        },
+        {
+          "question": "Which crop is especially important as a staple food in Malaysia?",
+          "options": [
+            "Cocoa butter alone",
+            "Olives only",
+            "Rye bread alone",
+            "Rice"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Rice is a major staple food in Malaysia."
+        },
+        {
+          "question": "What is a food supply chain?",
+          "options": [
+            "Only the final supermarket shelf",
+            "A type of cooking recipe",
+            "The stages from growing food to delivering it to consumers",
+            "A metal chain around a field"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Supply chains involve production, processing, transport and sales."
+        },
+        {
+          "question": "What can happen when harvested vegetables are stored too warm?",
+          "options": [
+            "They become immune to bacteria",
+            "They may spoil more quickly",
+            "They become permanently sterile",
+            "Their mass always doubles"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Temperature control helps preserve freshness."
+        },
+        {
+          "question": "What is hydroponics?",
+          "options": [
+            "Growing plants with nutrient solutions without conventional soil",
+            "Growing plants only in snow",
+            "Storing seeds in oil",
+            "A method of fishing"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Hydroponics supplies nutrients through water-based growing systems."
+        },
+        {
+          "question": "Why might farmers use mulch around plants?",
+          "options": [
+            "To remove all oxygen from the air",
+            "To grow rocks",
+            "To stop sunlight reaching leaves",
+            "To reduce evaporation and suppress some weeds"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Mulch can protect soil moisture and moderate temperature."
+        },
+        {
+          "question": "What is sustainable farming aiming to balance?",
+          "options": [
+            "Only the colour of fields",
+            "Maximum pesticide use always",
+            "Food production with long-term environmental and resource care",
+            "Harvest size at any environmental cost"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Sustainable methods aim to protect resources while producing food."
+        },
+        {
+          "question": "Why can monoculture create risk for farms?",
+          "options": [
+            "It removes all costs",
+            "A single crop may be vulnerable to the same pest or disease",
+            "It always produces ten crops at once",
+            "It prevents every drought"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Low crop diversity can increase shared vulnerability."
+        },
+        {
+          "question": "What is a natural predator used for in pest management?",
+          "options": [
+            "Helping control harmful insect populations",
+            "Adding salt to all soil",
+            "Removing all birds",
+            "Turning crops into fuel"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Biological control can use predators of crop pests."
+        },
+        {
+          "question": "Which food waste practice can help a household garden?",
+          "options": [
+            "Mixing batteries into soil",
+            "Pouring engine oil on plants",
+            "Dumping plastic bags",
+            "Composting suitable plant scraps"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Suitable biodegradable scraps can become compost."
+        },
+        {
+          "question": "What is the purpose of farm-to-market transport?",
+          "options": [
+            "Eliminate the need for packaging in every case",
+            "Change plant species",
+            "Deliver harvested food to buyers safely and efficiently",
+            "Make crops grow without sunlight"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Transport connects producers to processors, sellers and consumers."
+        }
+      ]
+    }
+  ]
+}
