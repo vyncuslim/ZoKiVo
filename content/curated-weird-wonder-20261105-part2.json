@@ -1,0 +1,925 @@
+{
+  "schema": "zokivo-weird-wonder-2026-11-05-v1",
+  "packs": [
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000005",
+      "title": "Animals That Sound Made Up",
+      "subject": "Weird Animals",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 genuinely strange animal facts, explained without myths or exaggeration.",
+      "questions": [
+        {
+          "question": "How many hearts does a typical octopus have?",
+          "options": [
+            "Three",
+            "One",
+            "Seven",
+            "Zero"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Octopuses have two hearts serving the gills and one pumping blood through the body."
+        },
+        {
+          "question": "Why can an octopus's blood look blue?",
+          "options": [
+            "It drinks blue seawater",
+            "It contains blue ink",
+            "Its blood has no oxygen carrier",
+            "It uses copper-containing hemocyanin"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Hemocyanin uses copper in oxygen transport, giving the blood a blue appearance."
+        },
+        {
+          "question": "Which animal is a mammal that lays eggs?",
+          "options": [
+            "Tiger",
+            "Bat",
+            "Platypus",
+            "Dolphin"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Platypuses are monotremes, a small group of egg-laying mammals."
+        },
+        {
+          "question": "In seahorses, which parent typically carries developing young in a brood pouch?",
+          "options": [
+            "Neither parent",
+            "Male",
+            "Female",
+            "Both in the same shared pouch"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Male seahorses carry embryos in a specialised brood pouch."
+        },
+        {
+          "question": "Why are many flamingos pink?",
+          "options": [
+            "Pigments obtained through their diet",
+            "Their bones glow pink",
+            "They produce pink light",
+            "They paint their feathers"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Carotenoid pigments from food influence their feather colour."
+        },
+        {
+          "question": "What are a pangolin's protective scales mostly made of?",
+          "options": [
+            "Glass",
+            "Calcium carbonate crystals only",
+            "Metal",
+            "Keratin"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Pangolin scales consist of keratin, a protein also found in hair and nails."
+        },
+        {
+          "question": "Which body part do butterflies use to sense some tastes?",
+          "options": [
+            "Antennae only",
+            "Eyes only",
+            "Feet",
+            "Wings only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Taste receptors on butterfly feet help detect suitable plants."
+        },
+        {
+          "question": "What is unusual about a starfish or sea star's usual movement?",
+          "options": [
+            "It jumps using springs",
+            "It uses many tiny tube feet",
+            "It flies using feathers",
+            "It has rolling wheels"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Sea stars use a water vascular system and tube feet for movement."
+        },
+        {
+          "question": "What feature helps a gecko grip many smooth surfaces?",
+          "options": [
+            "Tiny specialised structures on its toe pads",
+            "Permanent glue on its claws",
+            "Magnetic shoes",
+            "Electric suction motors"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Microscopic structures on gecko toes enable strong contact with surfaces."
+        },
+        {
+          "question": "What is a narwhal's famous long tusk actually?",
+          "options": [
+            "A horn made of bone alone",
+            "A branch stuck to its head",
+            "A second tail",
+            "An elongated tooth"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A narwhal tusk develops from a specialised tooth."
+        },
+        {
+          "question": "Which bird is famous for running fast but cannot fly?",
+          "options": [
+            "Hummingbird",
+            "Albatross",
+            "Ostrich",
+            "Penguin"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Ostriches are large flightless birds capable of rapid running."
+        },
+        {
+          "question": "What helps many chameleons see in different directions at once?",
+          "options": [
+            "Transparent bones",
+            "Eyes that move largely independently",
+            "A second head",
+            "Mirrors attached to ears"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Many chameleons can move their eyes independently to survey surroundings."
+        },
+        {
+          "question": "What is an axolotl widely known for?",
+          "options": [
+            "Regenerating some lost body parts",
+            "Breathing fire",
+            "Turning into a bird",
+            "Producing electricity like a battery"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Axolotls can regenerate limbs and other tissues."
+        },
+        {
+          "question": "What is a tardigrade?",
+          "options": [
+            "A newly discovered moon",
+            "A type of tropical tree",
+            "A giant carnivorous bird",
+            "A tiny eight-legged invertebrate"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Tardigrades are microscopic animals also called water bears."
+        },
+        {
+          "question": "Why are coral reefs built partly by animals?",
+          "options": [
+            "Fish weld metal",
+            "Crabs manufacture plastic",
+            "Coral polyps secrete calcium carbonate skeletons",
+            "Whales arrange stones"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Many reef-building corals make hard skeletons over time."
+        },
+        {
+          "question": "Which mammal is capable of sustained true flight?",
+          "options": [
+            "Koala",
+            "Bat",
+            "Flying squirrel",
+            "Sugar glider"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Bats can fly using powered wing strokes; gliding mammals cannot sustain powered flight."
+        },
+        {
+          "question": "How do many cuttlefish rapidly alter their visible colours?",
+          "options": [
+            "They control pigment-containing skin cells",
+            "They swap entire skins every second",
+            "They spray coloured seawater onto themselves",
+            "Their bones contain LED lights"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Chromatophores and other skin structures help change appearance."
+        },
+        {
+          "question": "Which creature is a close relative of the octopus?",
+          "options": [
+            "Jellyfish",
+            "Sea turtle",
+            "Sea urchin",
+            "Squid"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Octopuses and squids are cephalopod molluscs."
+        },
+        {
+          "question": "What do many bees communicate with a waggle dance?",
+          "options": [
+            "Their age in human years",
+            "Which flower has the loudest sound",
+            "Information about a food source's direction and distance",
+            "Tomorrow's exact weather"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Honeybee dances can convey spatial information about food."
+        },
+        {
+          "question": "Why is a sloth's fur sometimes greenish?",
+          "options": [
+            "Its skin emits green light",
+            "Algae may grow on its fur",
+            "It is made entirely of leaves",
+            "Sloths are actually plants"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Algae living in sloth fur can contribute to a greenish tint."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000006",
+      "title": "Space Has No Chill: Strange Solar System",
+      "subject": "Strange Space",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 surprising but grounded space facts, including bizarre rotation and impossible vacations.",
+      "questions": [
+        {
+          "question": "Which planet's rotation period is longer than its year around the Sun?",
+          "options": [
+            "Earth",
+            "Mars",
+            "Jupiter",
+            "Venus"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Venus takes about 243 Earth days to rotate once and about 225 days to orbit."
+        },
+        {
+          "question": "On which planet would the Sun appear to rise in the west due to retrograde rotation?",
+          "options": [
+            "Earth",
+            "Mercury",
+            "Venus",
+            "Mars"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Venus rotates opposite the direction typical of most planets."
+        },
+        {
+          "question": "Which planet appears to roll on its side because of its extreme axial tilt?",
+          "options": [
+            "Mercury",
+            "Uranus",
+            "Venus",
+            "Earth"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Uranus has an axial tilt near 90 degrees."
+        },
+        {
+          "question": "In a scale-model museum, which Solar System planet needs the largest sphere?",
+          "options": [
+            "Jupiter",
+            "Earth",
+            "Venus",
+            "Mars"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Jupiter has the largest diameter and mass among the planets."
+        },
+        {
+          "question": "Why can astronauts float inside a spacecraft orbiting Earth?",
+          "options": [
+            "Earth's gravity completely disappears",
+            "They have no mass",
+            "Spacecraft generate magical anti-gravity",
+            "They and the spacecraft are in continuous free fall"
+          ],
+          "correct_option_index": 3,
+          "explanation": "An orbit is a form of continuous free fall."
+        },
+        {
+          "question": "Could you safely stand on the Sun's visible surface like solid ground?",
+          "options": [
+            "Yes, because it is made of rock",
+            "Yes, only at night",
+            "No, it is hot plasma without a solid surface",
+            "Yes, with ordinary shoes"
+          ],
+          "correct_option_index": 2,
+          "explanation": "The Sun is a star composed mainly of extremely hot gas and plasma."
+        },
+        {
+          "question": "Which object is Earth's natural satellite?",
+          "options": [
+            "The Sun",
+            "The Moon",
+            "Mars",
+            "Venus"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The Moon is Earth's natural satellite."
+        },
+        {
+          "question": "What is an asteroid?",
+          "options": [
+            "A small rocky or metallic Solar System body",
+            "A new type of cloud",
+            "A black hole inside Earth",
+            "A man-made satellite only"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Asteroids are smaller bodies orbiting the Sun, often rocky."
+        },
+        {
+          "question": "How does sunlight reach Earth through the vacuum of space?",
+          "options": [
+            "By sound waves carried through vacuum",
+            "By ocean currents",
+            "Through a rope from the Sun",
+            "As electromagnetic radiation"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Light travels through vacuum as electromagnetic waves."
+        },
+        {
+          "question": "Why do stars appear to twinkle when viewed from Earth?",
+          "options": [
+            "They shake Earth's ground",
+            "Their colour disappears every second",
+            "Our atmosphere bends their light unevenly",
+            "They repeatedly turn off and on"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Atmospheric turbulence changes the path of starlight."
+        },
+        {
+          "question": "Why might a person weigh less on the Moon than on Earth?",
+          "options": [
+            "Space suits contain weight-removing magnets",
+            "The Moon's gravitational pull at its surface is weaker",
+            "The person's mass disappears",
+            "The Moon has no gravity"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Weight depends on local gravity, but mass remains nearly the same."
+        },
+        {
+          "question": "What causes the phases of the Moon?",
+          "options": [
+            "We see differing portions of its sunlit half",
+            "Earth changes the Moon's shape",
+            "The Moon turns its lamp on and off",
+            "Moon rocks change colour weekly"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Lunar phase depends on Sun-Moon-Earth geometry."
+        },
+        {
+          "question": "Why does a comet often develop a tail near the Sun?",
+          "options": [
+            "It is a rocket with a permanent exhaust",
+            "It catches fire like wood",
+            "It leaves ink in space",
+            "Solar heating releases gas and dust pushed away by sunlight and solar wind"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Heat-driven outgassing creates a coma and tails."
+        },
+        {
+          "question": "Which planet is known for a prominent system of icy rings?",
+          "options": [
+            "Earth",
+            "Mars",
+            "Saturn",
+            "Mercury"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Saturn's rings contain abundant ice particles."
+        },
+        {
+          "question": "Where is the main asteroid belt located?",
+          "options": [
+            "Beyond the observable universe",
+            "Between Mars and Jupiter",
+            "Between Earth and the Moon",
+            "Inside the Sun"
+          ],
+          "correct_option_index": 1,
+          "explanation": "The main belt occupies orbits between Mars and Jupiter."
+        },
+        {
+          "question": "What is a light-year?",
+          "options": [
+            "A distance travelled by light in one year",
+            "A type of calendar month",
+            "A single day on Venus",
+            "The age of all stars"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A light-year is a unit of distance, not time."
+        },
+        {
+          "question": "Why is Mars often called the Red Planet?",
+          "options": [
+            "Its seas are filled with red paint",
+            "It reflects only radio waves",
+            "Every rock there is hot lava",
+            "Iron-rich dust and minerals give it a reddish appearance"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Iron oxide contributes to Mars's colour."
+        },
+        {
+          "question": "How many Sun-like stars are at the centre of our Solar System?",
+          "options": [
+            "Eight",
+            "None",
+            "One",
+            "Two"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Our planetary system orbits one star, the Sun."
+        },
+        {
+          "question": "Why is space not completely empty even far from Earth?",
+          "options": [
+            "All galaxies have identical density",
+            "Sparse particles and radiation can still exist",
+            "Every region contains breathable air",
+            "Space is filled with liquid water everywhere"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Interplanetary and interstellar space contain thin matter and radiation."
+        },
+        {
+          "question": "What would an ordinary unprotected human hear from a distant explosion in the vacuum of space?",
+          "options": [
+            "No sound transmitted through vacuum",
+            "A louder bang than on Earth",
+            "A low rumble travelling faster than light",
+            "Only an echo from the Moon"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Sound needs a material medium to carry pressure waves."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000007",
+      "title": "Impossible Physics: What If...? ",
+      "subject": "Physics What-Ifs",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 absurd imaginary experiments with real scientific reasoning and clearly stated assumptions.",
+      "questions": [
+        {
+          "question": "If you drop a hammer and a feather together in a perfect vacuum, which hits first from the same height?",
+          "options": [
+            "The feather",
+            "Neither object falls",
+            "They land together",
+            "The hammer"
+          ],
+          "correct_option_index": 2,
+          "explanation": "In a vacuum both have the same free-fall acceleration."
+        },
+        {
+          "question": "If Earth suddenly had no atmosphere, could ordinary speech travel through open air?",
+          "options": [
+            "Only speech in English",
+            "No",
+            "Yes, at exactly the same speed",
+            "Only whispered speech"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Sound pressure waves require a medium."
+        },
+        {
+          "question": "If you place a working magnet near a plastic spoon, what should happen in normal conditions?",
+          "options": [
+            "The spoon is not strongly attracted like iron",
+            "It always flies to the magnet",
+            "It turns into steel",
+            "It starts glowing"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Most ordinary plastics are not ferromagnetic."
+        },
+        {
+          "question": "A sealed transparent jar contains a plant. Can the plant receive light through the glass?",
+          "options": [
+            "No, all glass blocks visible light",
+            "Only if the jar is blue",
+            "Only at midnight",
+            "Yes, if the glass transmits that light"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Ordinary transparent glass lets much visible light through."
+        },
+        {
+          "question": "You place an object in a mirror's reflection. Does the reflected object have real physical mass behind the mirror?",
+          "options": [
+            "Twice the object's mass",
+            "It depends on the time",
+            "No",
+            "Yes, equal to the object's mass"
+          ],
+          "correct_option_index": 2,
+          "explanation": "A mirror image is a virtual image, not a physical duplicate."
+        },
+        {
+          "question": "If a submarine dives deeper, what generally happens to the surrounding water pressure?",
+          "options": [
+            "It changes to air pressure only",
+            "It increases",
+            "It goes to zero",
+            "It always decreases"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Hydrostatic pressure generally rises with depth."
+        },
+        {
+          "question": "Why does a helium-filled balloon tend to rise in ordinary air?",
+          "options": [
+            "Its total average density is lower than displaced air",
+            "Helium has no mass",
+            "Air has no gravity",
+            "The balloon is secretly a rocket"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Buoyancy exceeds the total weight of a light balloon."
+        },
+        {
+          "question": "Could an ordinary flashlight beam be heard as a spoken sentence in vacuum by itself?",
+          "options": [
+            "Yes, because light is sound",
+            "Yes, if the beam is red",
+            "Only if you travel faster than it",
+            "No"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Electromagnetic radiation and sound waves are different phenomena."
+        },
+        {
+          "question": "If you put an ice cube in a glass of pure water, what usually happens first?",
+          "options": [
+            "The ice disappears instantly",
+            "The ice turns into salt",
+            "The ice floats",
+            "The ice sinks like steel"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Ice is usually less dense than liquid water."
+        },
+        {
+          "question": "If you break a bar magnet in half, how many separate magnetic poles does each ordinary fragment have?",
+          "options": [
+            "No poles in every case",
+            "A north and a south pole",
+            "Only a north pole",
+            "Only a south pole"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Breaking a conventional magnet produces smaller dipoles."
+        },
+        {
+          "question": "If you push a wheeled cart on a smoother floor with the same force, friction is usually...?",
+          "options": [
+            "Lower",
+            "Always higher",
+            "Exactly infinite",
+            "Unrelated to contact surfaces"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Less friction typically opposes motion on smoother matched surfaces."
+        },
+        {
+          "question": "What happens to a shadow when an opaque object blocks a beam of light?",
+          "options": [
+            "The object converts light into liquid",
+            "Light turns into gravity",
+            "All surfaces turn black permanently",
+            "A darker region appears behind it"
+          ],
+          "correct_option_index": 3,
+          "explanation": "An object prevents some light from reaching the surface."
+        },
+        {
+          "question": "If you put a hot metal spoon into cooler water, which way does heat naturally flow at first?",
+          "options": [
+            "No heat can transfer",
+            "From the spoon directly into sunlight",
+            "From the spoon toward the water",
+            "From the cooler water into the hotter spoon only"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Heat transfer occurs from higher to lower temperature."
+        },
+        {
+          "question": "If a rubber band stretches, where is energy stored while it is held stretched?",
+          "options": [
+            "Only chemical fuel",
+            "Elastic potential energy",
+            "Only nuclear energy",
+            "Nothing stores energy"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Deformation stores recoverable elastic energy."
+        },
+        {
+          "question": "Why can a prism split white light into colours?",
+          "options": [
+            "Different wavelengths refract by different amounts",
+            "Light has tiny paint droplets",
+            "The prism generates new colours from nothing",
+            "White light contains no wavelengths"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Dispersion separates light wavelengths due to different refractive indices."
+        },
+        {
+          "question": "An astronaut takes off their boots while orbiting. Does their body stop having mass?",
+          "options": [
+            "Yes",
+            "Only if shoes are white",
+            "Only during sleep",
+            "No"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Mass is intrinsic; weightlessness does not remove mass."
+        },
+        {
+          "question": "In a vacuum chamber, an electric bell visibly vibrates. What does a person outside hear through the chamber walls if well isolated acoustically?",
+          "options": [
+            "The bell speaks a language",
+            "A sound that travels without matter",
+            "Little or no sound from the vibrating bell through vacuum",
+            "A louder bell than in air"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Ordinary sound cannot cross vacuum; structure-borne leakage depends on isolation."
+        },
+        {
+          "question": "Would a solar panel generate its usual electrical output in complete darkness with no other illumination?",
+          "options": [
+            "Only on cloudy days",
+            "No",
+            "Yes, at full power",
+            "Yes, because it stores infinite sunlight"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Photovoltaic panels need incident light to generate power."
+        },
+        {
+          "question": "If you double the time a constant-speed robot moves while keeping its speed unchanged, its travel distance...?",
+          "options": [
+            "Doubles",
+            "Halves",
+            "Becomes zero",
+            "Stays identical"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Distance equals speed times time."
+        },
+        {
+          "question": "If you use a perfect balance to compare 2 kg of sand and 2 kg of marshmallows, which has greater mass?",
+          "options": [
+            "The marshmallows",
+            "The sand",
+            "The lighter-looking one",
+            "Neither; masses are equal"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Both samples have a mass of 2 kg."
+        }
+      ]
+    },
+    {
+      "id": "c8202611-05c0-4a9b-9f00-000000000008",
+      "title": "Ridiculous Inventions, Sensible Engineering",
+      "subject": "Wacky Inventions",
+      "grade_level": "Year 7",
+      "language": "en",
+      "description": "20 comically odd inventions that teach practical engineering trade-offs and safety.",
+      "questions": [
+        {
+          "question": "You invent a hat that catches rainwater. What should you consider first?",
+          "options": [
+            "How to promise it cures disease",
+            "Whether collected water is clean and safe",
+            "How to make it weigh 50 kg",
+            "How to hide its weight from wearers"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Collected rainwater can be contaminated and needs proper treatment before drinking."
+        },
+        {
+          "question": "A robot spoon keeps spilling soup. Which design improvement is most useful?",
+          "options": [
+            "Add a steadier gripping and motion control system",
+            "Make the spoon invisible",
+            "Remove all sensors",
+            "Increase motion speed without testing"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Controlled movements can reduce spills."
+        },
+        {
+          "question": "Your shoes have tiny fans. Which factor limits how long they can run?",
+          "options": [
+            "The colour of the laces",
+            "The wearer's favourite number",
+            "The day of the week",
+            "Available battery energy"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Powered fans need an energy source."
+        },
+        {
+          "question": "A backpack automatically lights up at night. Which sensor could help?",
+          "options": [
+            "A compass that measures weight",
+            "A ruler",
+            "Ambient light sensor",
+            "Only a thermometer"
+          ],
+          "correct_option_index": 2,
+          "explanation": "A light sensor detects low illumination."
+        },
+        {
+          "question": "A smart umbrella keeps opening in strong wind. What design challenge matters?",
+          "options": [
+            "How many stickers fit on a handle",
+            "Wind loads on its frame and hinges",
+            "The number of emojis on it",
+            "Whether it has a catchy name"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Wind produces forces that can damage an umbrella."
+        },
+        {
+          "question": "You invent a quiet alarm for a deaf user. Which alternative output could help?",
+          "options": [
+            "A strong vibration or flashing visual signal",
+            "Only a very soft sound",
+            "A hidden audio recording",
+            "A message in invisible ink"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Multimodal alerts improve accessibility."
+        },
+        {
+          "question": "A solar-powered toy works only in sunlight. What is a practical way to use it after dark?",
+          "options": [
+            "Paint the toy yellow",
+            "Remove its solar panel",
+            "Cover its battery compartment",
+            "Add a rechargeable energy store"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Stored electrical energy can power the toy when illumination is absent."
+        },
+        {
+          "question": "An automatic pencil sharpener jams when a pencil is crooked. What could improve reliability?",
+          "options": [
+            "Remove all safety stops",
+            "Force users to push harder",
+            "Guide the pencil into the correct position",
+            "Use weaker materials without testing"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Alignment and protective stops can prevent jams."
+        },
+        {
+          "question": "You invent a floating chair for a swimming pool. What must be tested?",
+          "options": [
+            "How many hashtags it gets",
+            "Buoyancy, stability and user safety",
+            "Only its colour",
+            "Whether it has music"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Water devices need stability and safety checks."
+        },
+        {
+          "question": "A robot planter waters crops every hour even when soil is wet. What should you add?",
+          "options": [
+            "Soil moisture sensing and threshold logic",
+            "A louder speaker",
+            "Random watering times only",
+            "More decorative wheels"
+          ],
+          "correct_option_index": 0,
+          "explanation": "Sensors can reduce unnecessary irrigation."
+        },
+        {
+          "question": "An absurd giant straw is 20 metres long. What may make drinking through it difficult?",
+          "options": [
+            "The colour of the straw",
+            "Whether it has stripes",
+            "The person's hairstyle",
+            "Pressure differences and fluid resistance"
+          ],
+          "correct_option_index": 3,
+          "explanation": "A long tube increases resistance and may exceed practical suction limits."
+        },
+        {
+          "question": "A bicycle helmet is designed like a pineapple. What matters more than its appearance?",
+          "options": [
+            "Adding the tallest decorative leaf",
+            "Increasing weight as much as possible",
+            "Impact protection and proper fit",
+            "Matching the bicycle colour exactly"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Helmet safety depends on certified protection and fit."
+        },
+        {
+          "question": "A phone-controlled toaster accidentally heats while unattended. What safety feature is important?",
+          "options": [
+            "Making the heating element exposed",
+            "Automatic shutoff and temperature limits",
+            "More notification sounds only",
+            "Removing the power indicator"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Fail-safe shutdown reduces fire risk."
+        },
+        {
+          "question": "Your robotic pencil case keeps opening in a bag. Which sensor or mechanism helps?",
+          "options": [
+            "A secure latch with intentional opening control",
+            "An always-on motor",
+            "Loose hinges",
+            "A bigger logo"
+          ],
+          "correct_option_index": 0,
+          "explanation": "A latch prevents accidental opening."
+        },
+        {
+          "question": "An elevator can play music but its emergency button is hidden. What is the highest-priority fix?",
+          "options": [
+            "Add more songs",
+            "Change the background wallpaper",
+            "Increase speaker volume",
+            "Make emergency controls accessible and visible"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Safety controls outrank entertainment features."
+        },
+        {
+          "question": "An AI-powered fridge guesses every meal incorrectly. How should the team improve it?",
+          "options": [
+            "Delete all error reports",
+            "Ask users for passwords",
+            "Test real needs and correct unreliable assumptions",
+            "Claim 100% accuracy anyway"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Feedback and measurable testing support improvement."
+        },
+        {
+          "question": "A paper bridge collapses under a stack of books. What should you do?",
+          "options": [
+            "Increase the stack without analysis",
+            "Test stronger folds and load paths",
+            "Keep using the same shape without change",
+            "Hide the collapse"
+          ],
+          "correct_option_index": 1,
+          "explanation": "Fold geometry can improve strength and load distribution."
+        },
+        {
+          "question": "An umbrella follows its owner using GPS but collides with people. Which capability is missing?",
+          "options": [
+            "Reliable local obstacle detection and avoidance",
+            "A longer product name",
+            "More decorative colours",
+            "A louder motor only"
+          ],
+          "correct_option_index": 0,
+          "explanation": "GPS alone does not detect nearby moving obstacles."
+        },
+        {
+          "question": "A classroom scoreboard updates slowly on bad Wi-Fi. What design helps?",
+          "options": [
+            "Infinite retries without limits",
+            "Hiding all error messages",
+            "Requiring users to click 100 times",
+            "Graceful offline/error states and recovery"
+          ],
+          "correct_option_index": 3,
+          "explanation": "Explicit recovery and bounded retry improve reliability."
+        },
+        {
+          "question": "A robot cat has ten blinking lights but no privacy policy. What should a responsible designer prioritise?",
+          "options": [
+            "Collect all nearby contacts silently",
+            "Store plaintext passwords",
+            "Explain data collection and protect user information",
+            "Make lights blink faster"
+          ],
+          "correct_option_index": 2,
+          "explanation": "Privacy and security are essential even for playful devices."
+        }
+      ]
+    }
+  ]
+}

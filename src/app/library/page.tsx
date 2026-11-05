@@ -2,7 +2,7 @@
 import Link from "next/link";
 import {useEffect,useState,type FormEvent} from "react";
 type Quiz={id:string;title:string;subject:string;grade_level:string;language:string;description:string;status:string;question_count:number;publisher_name?:string};
-const subjects=["All subjects","Mathematics","Science","English","Geography","History","Computing","Logic","Robotics","General Knowledge","Bahasa Melayu","中文","Environment","Space","Sports","Art","Music","Health","AI Basics","Internet Safety","Physics","Chemistry","生活理财","Entrepreneurship","Media Literacy","Agriculture","Ocean Science","Engineering","World Cultures","Civics","Food & Nutrition","Weather","Animals & Nature","Critical Thinking"];
+const subjects=["All subjects","Mathematics","Science","English","Geography","History","Computing","Logic","Robotics","General Knowledge","Bahasa Melayu","中文","Environment","Space","Sports","Art","Music","Health","AI Basics","Internet Safety","Physics","Chemistry","生活理财","Entrepreneurship","Media Literacy","Agriculture","Ocean Science","Engineering","World Cultures","Civics","Food & Nutrition","Weather","Animals & Nature","Critical Thinking","脑洞谜题","反常识科学","搞怪数学","外星逻辑","Weird Animals","Strange Space","Physics What-Ifs","Wacky Inventions","Funny Mysteries","Weird Everyday Science","Teka-Teki Pelik","Sains Pelik"];
 const palettes:Record<string,{icon:string;color:string}>={
  "Mathematics":{icon:"∑",color:"math"},"Science":{icon:"⚗",color:"science"},
  "English":{icon:"Aa",color:"english"},"Geography":{icon:"🌍",color:"geography"},
@@ -16,7 +16,13 @@ const palettes:Record<string,{icon:string;color:string}>={
  "Ocean Science":{icon:"🌊",color:"science"},"Engineering":{icon:"⚙",color:"robotics"},
  "World Cultures":{icon:"🌏",color:"geography"},"Civics":{icon:"🏛",color:"history"},
  "Food & Nutrition":{icon:"🥗",color:"health"},"Weather":{icon:"☁",color:"science"},
- "Animals & Nature":{icon:"🦋",color:"environment"},"Critical Thinking":{icon:"🧠",color:"logic"}
+ "Animals & Nature":{icon:"🦋",color:"environment"},"Critical Thinking":{icon:"🧠",color:"logic"},
+ "脑洞谜题":{icon:"🌀",color:"logic"},"反常识科学":{icon:"🧪",color:"science"},
+ "搞怪数学":{icon:"👾",color:"math"},"外星逻辑":{icon:"🛸",color:"computing"},
+ "Weird Animals":{icon:"🐙",color:"environment"},"Strange Space":{icon:"🪐",color:"space"},
+ "Physics What-Ifs":{icon:"🧲",color:"physics"},"Wacky Inventions":{icon:"🧰",color:"robotics"},
+ "Funny Mysteries":{icon:"🕵️",color:"logic"},"Weird Everyday Science":{icon:"🫧",color:"science"},
+ "Teka-Teki Pelik":{icon:"🤹",color:"bm"},"Sains Pelik":{icon:"🔬",color:"science"}
 };
 function cover(subject:string){return palettes[subject]||{icon:"✦",color:"general"}}
 export default function Library(){
@@ -62,7 +68,7 @@ export default function Library(){
     <button type="submit">Search</button>
    </form>
    <nav className="zk-popular-subjects" aria-label="Popular subjects">
-    {["Mathematics","Science","English","Logic","Robotics","中文","Music","Art","生活理财","Ocean Science","Media Literacy","Critical Thinking"].map(s=><button type="button" key={s}
+    {["Mathematics","Science","English","Logic","Robotics","中文","Music","Art","生活理财","Ocean Science","Media Literacy","Critical Thinking","脑洞谜题","搞怪数学","Weird Animals","Teka-Teki Pelik"].map(s=><button type="button" key={s}
       className={subject===s?"selected":""} aria-pressed={subject===s}
       onClick={()=>{setSubject(s);setPage(1)}}>{s==="Mathematics"?"Maths":s==="Logic"?"IQ & Logic":s}</button>)}
    </nav>
