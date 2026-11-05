@@ -1,5 +1,6 @@
 import {NextRequest} from "next/server";
 import {db} from "@/lib/store";
+import {readBoundedJson} from "@/lib/limited-json";
 import {isId,authUser,validateQuiz,questionRows} from "@/lib/quizzes";
 import {findUser,checkOrigin,noCache,authError,AuthError,applyRenew} from "@/lib/mother-auth";
 export const runtime="nodejs";
@@ -24,7 +25,10 @@ export async function GET(req:NextRequest,{params}:Args){
 export async function PATCH(req:NextRequest,{params}:Args){
  try{
   checkOrigin(req);const {id}=await params;if(!isId(id))throw new AuthError("Invalid quiz ID.");
-  const {user,renew}=await authUser(req),quiz=validateQuiz(await req.json().catch(()=>null)),sql=db();
+  const {user,renew}=await authUser(req);
+  const payload=await readBoundedJson(req,192*1024);
+  if(!payload.ok)return noCache({error:payload.error},payload.status);
+  const quiz=validateQuiz(payload.value),sql=db();
   const owns=await sql`SELECT id FROM quiz_sets WHERE id=${id} AND owner_user_id=${user!.id} AND status='draft'`;
   if(!owns.length)return noCache({error:"Only your own drafts can be edited."},403);
   const json=questionRows(quiz);
