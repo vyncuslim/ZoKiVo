@@ -1,6 +1,7 @@
 import {emitRoomRefresh} from "@/lib/realtime";
 import {NextRequest} from "next/server";
 import {db,token,hash} from "@/lib/store";
+import {readBoundedJson} from "@/lib/limited-json";
 import {findUser,noCache,applyRenew,checkOrigin,authError,AuthError} from "@/lib/mother-auth";
 import {isId} from "@/lib/quizzes";
 import {randomInt} from "node:crypto";
@@ -12,7 +13,9 @@ export async function POST(req:NextRequest){
   const auth=await findUser(req);
   if(!auth.user)return noCache({error:"Sign in with Vynalth AI to host a game.",code:"AUTH_REQUIRED"},401);
   if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your email before hosting.",code:"EMAIL_UNVERIFIED"},403);
-  const body=await req.json().catch(()=>({})),id=body?.quizId||SAMPLE;
+  const parsed=await readBoundedJson(req,2048);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const body=parsed.value,id=body.quizId||SAMPLE;
   const gameMode=body?.gameMode||"quiz_party";
   if(!["quiz_party","gold_quest","crypto_hack","fishing_frenzy","cafe"].includes(gameMode))throw new AuthError("Invalid game mode.");
   const shuffle=body?.randomQuestionOrder===true;
