@@ -1,9 +1,18 @@
 import {db,hash,same,bad} from "@/lib/store";
-import {NextRequest} from "next/server";
-import {findUser} from "@/lib/mother-auth";
+import {NextRequest,NextResponse} from "next/server";
+import {findUser,setTokens,type Tokens} from "@/lib/mother-auth";
 import {quizPartySnapshot,type QuizPartySnapshot,type QuizRoomMeta} from "@/lib/quiz-party-snapshot";
 import {verifyRoomReadToken} from "@/lib/room-read-token";
 type VerifiedViewer={id:string;answered?:boolean;is_correct?:boolean;points?:number};
+/** Preserve refreshed host auth cookies on GETs; a rotated refresh token must
+ * reach the browser instead of being silently discarded during room polling.
+ */
+function withHostRenew(response:Response,req:NextRequest,renew?:Tokens):Response{
+ if(!renew)return response;
+ const next=new NextResponse(response.body,{status:response.status,headers:response.headers});
+ setTokens(next,req,renew);
+ return next;
+}
 function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolean,me:VerifiedViewer[]){
    const {players,submitted,answers}=snapshot;
    const allAnswered=r.status==="playing"&&players.length>0&&submitted>=players.length;
@@ -98,7 +107,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
    const key=[r.status,r.current_index,r.round_open?"open":"closed",
     r.deadline?new Date(r.deadline).getTime():0].join(":");
    const snapshot=await quizPartySnapshot(pin,key);
-   return quizPartyResponse(r as unknown as QuizRoomMeta,snapshot,host,me);
+   return withHostRenew(quizPartyResponse(r as unknown as QuizRoomMeta,snapshot,host,me),req,session?.renew);
   }
   // Identical score policy for host and player. Do not leak correct answers via current-round score changes.
   // Aggregate answer points and mode-event totals ONCE per room, rather
@@ -180,13 +189,13 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
    choiceCounts:[0,1,2,3].map(index=>answers.filter(a=>Number(a.chosen_index)===index).length),
    playerResults:answers.map(a=>({id:a.player_id,correct:a.is_correct===true}))
   }:null;
-  return Response.json({
+  return withHostRenew(Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
    serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:submitted,
    answeredIds:host?answers.map(a=>a.player_id):(answerSummary[0]?.mine?[me[0].id]:[]),
    ...(host?{hostResults}:{}),
    viewer:{host,playerId:me[0]?.id||null,mode:ownMode[0]||null,result:myResult[0]||null}
-  },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}});
+  },{headers:{"Cache-Control":"no-store, private","X-Content-Type-Options":"nosniff"}}),req,session?.renew);
  }catch(e){console.error("Game status unavailable",e);return bad("Game unavailable",503)}
 }
