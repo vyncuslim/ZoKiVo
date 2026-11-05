@@ -27,7 +27,7 @@ const sql=fs.readFileSync("migrations/020_curated_multilingual_question_bank.sql
 assert(sql.includes("ON CONFLICT (id) DO NOTHING")&&sql.includes("WHERE NOT EXISTS")&&sql.includes("ROLLBACK")===false);
 assert(sql.includes("RAISE EXCEPTION 'ZoKivo curated library integrity mismatch"));
 for(const id of ids)assert(sql.includes(id),"SQL migration missing ID "+id);
-const embedded=sql.match(/WITH payload AS \\(SELECT '([\\s\\S]*?)'::jsonb AS packs\\)/);
+const embedded=sql.match(/WITH payload AS \(SELECT '([\s\S]*?)'::jsonb AS packs\)/);
 assert(embedded,"SQL must embed the exact content bundle");
 assert.deepEqual(JSON.parse(embedded[1].replaceAll("''","'")),packs,
  "SQL seed must exactly match all 200 reviewed questions and answers");
