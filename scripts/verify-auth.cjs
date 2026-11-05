@@ -11,6 +11,19 @@ let checks=0;function ok(value,msg){assert.ok(value,msg);checks++}
 process.env.MOTHER_SUPABASE_URL="https://test-mother-project.supabase.co";
 process.env.MOTHER_SUPABASE_PUBLISHABLE_KEY="sb_publishable_non_secret_for_unit_tests";
 function req(route,headers={}){return new NextRequest("https://zokivo.vercel.app"+route,{headers})}
+const canonicalBefore=process.env.ZOKIVO_PUBLIC_URL,allowedBefore=process.env.ZOKIVO_AUTH_ALLOWED_ORIGINS;
+process.env.ZOKIVO_PUBLIC_URL="https://zokivo.vercel.app";
+ok(a.publicOrigin(new NextRequest("https://zokivo.xyz/api/auth/google"))==="https://zokivo.xyz","OAuth uses entry hostname to retain host-scoped PKCE cookie");
+ok(a.publicOrigin(new NextRequest("https://www.zokivo.xyz/auth/callback"))==="https://www.zokivo.xyz","WWW callback is same-host");
+ok(a.publicOrigin(new NextRequest("https://zokivo.vynalthai.com/api/auth/google"))==="https://zokivo.vynalthai.com","Vynalth alias callback is same-host");
+assert.throws(()=>a.publicOrigin(new NextRequest("https://untrusted.example/api/auth/google")),e=>e.status===403,"Untrusted auth host rejected");checks++;
+process.env.ZOKIVO_AUTH_ALLOWED_ORIGINS="https://qa-preview.example";
+ok(a.publicOrigin(new NextRequest("https://qa-preview.example/api/auth/google"))==="https://qa-preview.example","Only explicitly configured preview hosts permitted");
+assert.throws(()=>a.publicOrigin(new NextRequest("https://qa-preview.example.evil.invalid/api/auth/google")),e=>e.status===403,"Lookalike host rejected");checks++;
+process.env.ZOKIVO_AUTH_ALLOWED_ORIGINS="https://good.example/path";
+assert.throws(()=>a.publicOrigin(req("/api/auth/google")),e=>e.status===503,"Malformed custom callback origin rejects configuration");checks++;
+if(canonicalBefore===undefined)delete process.env.ZOKIVO_PUBLIC_URL;else process.env.ZOKIVO_PUBLIC_URL=canonicalBefore;
+if(allowedBefore===undefined)delete process.env.ZOKIVO_AUTH_ALLOWED_ORIGINS;else process.env.ZOKIVO_AUTH_ALLOWED_ORIGINS=allowedBefore;
 ok(a.nextPath("/host")==="/host","host return path allowed");
 ok(a.nextPath("//evil.example")==="/account","protocol-relative redirect rejected");
 ok(a.nextPath("/api/logout")==="/account","API redirect rejected");
