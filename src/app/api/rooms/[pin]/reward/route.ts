@@ -2,14 +2,17 @@ import {NextRequest} from "next/server";
 import {emitRoomRefresh} from "@/lib/realtime";
 import {checkOrigin,noCache} from "@/lib/mother-auth";
 import {db,hash} from "@/lib/store";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}>}){
  try{checkOrigin(req)}catch{return noCache({error:"Invalid request origin"},403)}
  const {pin}=await params,key=req.headers.get("x-player-token");
  if(!/^\d{6}$/.test(pin)||!key)return noCache({error:"Player credentials are required"},401);
  try{
-  const body=await req.json().catch(()=>null);
-  const action=body?.action,option=body?.option??0,target=body?.target??null;
+  const parsed=await readBoundedJson(req,2048);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const body=parsed.value;
+  const action=body.action,option=body.option??0,target=body.target??null;
   if(!["chest","mine","hack","fish","serve"].includes(action)||!Number.isInteger(option)||option<0||option>2||
     (target!==null&&(typeof target!=="string"||!/^[0-9a-f]{8}-[0-9a-f-]{27,36}$/i.test(target))))
     return noCache({error:"Invalid reward choice"},400);
