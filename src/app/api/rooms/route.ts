@@ -17,18 +17,18 @@ export async function POST(req:NextRequest){
   if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
   const body=parsed.value,id=body.quizId||SAMPLE;
   const gameMode=body?.gameMode||"quiz_party";
-  if(!["quiz_party","gold_quest","crypto_hack","fishing_frenzy","cafe"].includes(gameMode))throw new AuthError("Invalid game mode.");
+  if(typeof gameMode!=="string"||!["quiz_party","gold_quest","crypto_hack","fishing_frenzy","cafe"].includes(gameMode))throw new AuthError("Invalid game mode.");
   const shuffle=body?.randomQuestionOrder===true;
   const muteSounds=body?.muteSounds===true;
   const scoreGoal=body?.scoreGoal??null;
   if(body?.randomQuestionOrder!==undefined&&typeof body.randomQuestionOrder!=="boolean"||
      body?.muteSounds!==undefined&&typeof body.muteSounds!=="boolean"||
-     (scoreGoal!==null&&![500,1000,2000,5000].includes(scoreGoal)))throw new AuthError("Invalid advanced host settings.");
+     (scoreGoal!==null&&(typeof scoreGoal!=="number"||![500,1000,2000,5000].includes(scoreGoal))))throw new AuthError("Invalid advanced host settings.");
   const questionSeconds=body?.questionSeconds===undefined?15:body.questionSeconds;
   const allowLateJoining=body?.allowLateJoining===undefined?false:body.allowLateJoining;
   const randomPlayerNames=body?.randomPlayerNames===undefined?false:body.randomPlayerNames;
   if(typeof allowLateJoining!=="boolean"||typeof randomPlayerNames!=="boolean")throw new AuthError("Invalid host settings.");
-  if(![10,15,20,30,45,60].includes(questionSeconds))throw new AuthError("Invalid question timer.");
+  if(typeof questionSeconds!=="number"||![10,15,20,30,45,60].includes(questionSeconds))throw new AuthError("Invalid question timer.");
   if(typeof id!=="string"||!isId(id))throw new AuthError("Choose a valid quiz.");
   const sql=db(),secret=token();
   const available=await sql`SELECT id FROM quiz_sets WHERE id=${id} AND status='published'
