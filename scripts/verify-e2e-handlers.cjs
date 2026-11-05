@@ -74,6 +74,9 @@ async function main(){
  ok(joined.size===100,"No overflow or duplicate player identities");
  const duplicate=await join.POST(req("/api/rooms/123456/join",{nickname:"QA-000",avatar:"spark"}),params);
  ok(duplicate.status===409,"Duplicated nickname is rejected");
+ ok((await join.POST(req("/api/rooms/123456/join",{nickname:"Evil",avatar:"spark"},{origin:"https://attacker.invalid"}),params)).status===403,"Cross-site player join rejected before DB");
+ ok((await join.POST(req("/api/rooms/123456/join",{nickname:"Huge",avatar:"spark",padding:"x".repeat(6000)}),params)).status===413,"Oversized join payload rejected before DB");
+ ok((await join.POST(req("/api/rooms/123456/join",{nickname:"Plain",avatar:"spark"},{"content-type":"text/plain"}),params)).status===415,"Non-JSON join rejected before DB");
  // Concurrent duplicate answer attempts: the unique answer constraint is modelled in the persistence mock.
  const player={id:"p-001"};let answers=0;
  const answerDb=()=>async(strings,...vars)=>{
@@ -88,6 +91,9 @@ async function main(){
  const answer=load("src/app/api/rooms/[pin]/answer/route.ts",{"@/lib/store":{...mockStore,db:answerDb},"@/lib/realtime":realtime});
  const a=await Promise.all(Array.from({length:16},()=>answer.POST(req("/api/rooms/123456/answer",{choice:1},{"x-player-token":"student-token"}),params).then(r=>r.status)));
  ok(a.filter(x=>x===200).length===1&&a.filter(x=>x===409).length===15,"16 simultaneous repeated answers yield exactly one accepted attempt");
+ ok((await answer.POST(req("/api/rooms/123456/answer",{choice:1},{"x-player-token":"student-token",origin:"https://attacker.invalid"}),params)).status===403,"Cross-site answer rejected before DB");
+ ok((await answer.POST(req("/api/rooms/123456/answer",{choice:1,padding:"x".repeat(6000)},{"x-player-token":"student-token"}),params)).status===413,"Oversized answer rejected before DB");
+ ok((await answer.POST(req("/api/rooms/123456/answer",{choice:1},{"x-player-token":"student-token","content-type":"text/plain"}),params)).status===415,"Non-JSON answer rejected before DB");
  let rewarded=false;
  const rewardDb=()=>async(strings,...vars)=>{
   const s=strings.join("?");
