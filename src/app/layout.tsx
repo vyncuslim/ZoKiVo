@@ -1,3 +1,4 @@
+import { DeviceIdBootstrap } from '@/components/device-id-bootstrap';
 import "./style.css";
 import "./ux.css";
 import "./auth/auth.css";
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
 };
 const links=[{href:"/library",label:"Quiz library"},{href:"/create",label:"Create"},{href:"/ai",label:"ZoKivo AI"},{href:"/study",label:"Study"},{href:"/locker",label:"Locker"},{href:"/reports",label:"Reports"},{href:"/games",label:"Games"},{href:"/how-it-works",label:"How it works"},{href:"/try",label:"Try it"}];
 export default function RootLayout({children}:{children:React.ReactNode}) {
- return <html lang="en"><body><div className="site-shell">
+ return <html lang="en"><body><DeviceIdBootstrap /><div className="site-shell">
    <header className="site-header"><div className="site-header-inner">
      <Brand/>
      <nav className="desktop-nav zk-simple-nav" aria-label="Primary navigation">
