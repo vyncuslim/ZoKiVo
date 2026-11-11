@@ -8,6 +8,7 @@ const secret=process.env.ZOKIVO_SESSION_SECRET,dburl=process.env.DATABASE_URL;
 if(process.env.ZOKIVO_QA_CONFIRM!=="BRANCH_ONLY_1000"||!dburl||!secret||secret.length<32)throw Error("QA guard env is missing");
 const sql=neon(dburl),agent=new http.Agent({keepAlive:true,maxSockets:1024});
 const m={join:[],state:[],answer:[],settled:[],reconnect:[],burst100:[],burst250:[],burst500:[],burst1000:[],stagger1000:[]};
+let httpSequence=0;
 const counts={join:[0,0],state:[0,0],answer:[0,0],settled:[0,0],reconnect:[0,0],burst100:[0,0],burst250:[0,0],burst500:[0,0],burst1000:[0,0],stagger1000:[0,0]};
 const failures=[],statusCodes={},roundOk=[];
 const hash=t=>createHmac("sha256",secret).update(t).digest("hex");
@@ -20,7 +21,9 @@ function httpCall(path,{token,readToken,method="GET",body,timeout=10000}={}){
   const headers={accept:"application/json",...(token?{"x-player-token":token}:{}),...(readToken?{"x-player-read-token":readToken}:{}),...(body?{"content-type":"application/json","content-length":Buffer.byteLength(data)}:{})};
   let done=false;
   const finish=(obj)=>{if(done)return;done=true;resolve({...obj,ms:performance.now()-start})};
-  const req=http.request("http://127.0.0.1:3000"+path,{method,headers,agent,timeout},res=>{
+  const originCount=Math.min(4,Math.max(1,Number(process.env.ZOKIVO_QA_LOCAL_ORIGINS)||1));
+  const chosenPort=3000+((++httpSequence)%originCount);
+  const req=http.request("http://127.0.0.1:"+chosenPort+path,{method,headers,agent,timeout},res=>{
    let buffer="";
    res.on("data",c=>{if(buffer.length<1300000)buffer+=c.toString()});
    res.on("end",()=>{let json=null;try{json=JSON.parse(buffer)}catch{}finish({status:res.statusCode,data:json})});
