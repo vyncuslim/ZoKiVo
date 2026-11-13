@@ -79,3 +79,31 @@ html[data-vyn-gradient='new'] :is(.auth-layout,.quiz-studio,.study-page,.game-pa
 html[data-vyn-gradient='new'] :is(button,input,select,textarea) {accent-color:#315D79;}
 html[data-vyn-gradient='new'] :is(input,textarea,select) {border-color:#B1C9D3;}
 html[data-vyn-gradient='new'] ::selection {background:#F4DC84;color:#24384A;}
+
+
+/* Every ZoKivo screen is cloud-yellow -> sky-blue, including the actual games. */
+html[data-vyn-gradient='new'] {
+  --zk-full-canvas:linear-gradient(125deg,#F4DC84 0%,#D9DCAE 46%,#79BEDF 100%);
+  --paper:#FAF7E9;--cream:#FFFAEA;--ink:#203B4E;--muted:#38586A;
+}
+html[data-vyn-gradient='new'] body,
+html[data-vyn-gradient='new'] :is(.site-shell,main,.site-main,.home-launchpad,.auth-layout,.quiz-studio,.study-page,.game-page,.library-page,.locker-page,.reports-page,.creator-page) {
+  background:var(--zk-full-canvas);
+  background-attachment:fixed;
+  color:#203B4E;
+}
+html[data-vyn-gradient='new'] :is(.site-header,.site-footer,.home-hero,.hero-section,.play-panel,.host-panel,.game-shell) {
+  background:linear-gradient(120deg,rgba(255,250,227,.88),rgba(192,226,242,.79));
+  border-color:rgba(38,85,112,.22);
+  color:#203B4E;
+}
+html[data-vyn-gradient='new'] :is(.site-header-inner,.footer-inner,.home-launchpad) {border-color:rgba(38,85,112,.2);}
+html[data-vyn-gradient='new'] :is(.game-choice,.quiz-card,.study-card,.library-card,.creator-card,.reward-card,.result-card,.lobby-card,.question-card,.report-card,.mode-card,.card,.panel) {
+  background:rgba(255,253,244,.88);border-color:rgba(38,85,112,.2);color:#203B4E;
+}
+html[data-vyn-gradient='new'] :is(input,select,textarea) {
+  background:#FFFDF6;color:#203B4E;border-color:#7AA8BD;
+}
+html[data-vyn-gradient='new'] :is(.nav-host,.nav-join,.launchpad-join,.launchpad-host) {
+  background:linear-gradient(118deg,#F4DC84,#C0DFDF);border-color:#527C8A;color:#203B4E;
+}
