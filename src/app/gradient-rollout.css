@@ -1,0 +1,19 @@
+/* ZoKivo · 40% cohort, fixed cloud-yellow → sky-blue palette. */
+html[data-vyn-gradient='new'] {
+  --zk-brand-gradient: linear-gradient(135deg,#F4DC84 0%,#79BEDF 100%);
+  --yellow:#F4DC84; --purple:#315A80; --cream:#FFFCF2; --paper:#F8FBFD; --ink:#24344A;
+}
+html[data-vyn-gradient='new'] body { background:#F8FBFD; color:#24344A; }
+html[data-vyn-gradient='new'] .site-shell { background:linear-gradient(165deg,rgba(244,220,132,.13),rgba(121,190,223,.11) 65%,#F8FBFD); }
+html[data-vyn-gradient='new'] .home-hero {
+  margin-top:24px; border:2px solid rgba(36,52,74,.19); border-radius:22px;
+  background:var(--zk-brand-gradient); padding:clamp(26px,4vw,60px);
+  box-shadow:0 16px 45px rgba(36,52,74,.11);
+}
+html[data-vyn-gradient='new'] .site-header {background:#F9FCFD;border-bottom-color:rgba(36,52,74,.2);}
+html[data-vyn-gradient='new'] .hero-pop {color:#234F73;}
+html[data-vyn-gradient='new'] .hero-line-outline {color:#FFF8E8;}
+html[data-vyn-gradient='new'] .hero-description {color:#314357;}
+html[data-vyn-gradient='new'] .launchpad-join {background:#F4DC84;}
+html[data-vyn-gradient='new'] .launchpad-host {background:#79BEDF;}
+@media(max-width:760px){html[data-vyn-gradient='new'] .home-hero {margin-top:12px;padding:22px;border-radius:15px;}}
