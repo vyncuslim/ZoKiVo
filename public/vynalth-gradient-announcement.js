@@ -5,18 +5,39 @@
 (() => {
   'use strict';
   if (typeof document === 'undefined' || document.documentElement.dataset.vynGradient !== 'new') return;
-  const seenKey = 'vynalth-gradient-celebrated-v2';
+  // Each product gets its own announcement, instead of suppressing all
+  // products after the very first website. Cohort odds are unchanged.
+  const host = location.hostname.toLowerCase();
+  const chat = host === 'vynalthai.com' && /^\/(?:en\/|cn\/|ms\/)?c(?:\/|$)/.test(location.pathname);
+  const product = chat ? 'vynalth-chat' : host;
+  const seenKey = 'vynalth-gradient-celebrated-v3-' + product.replace(/[^a-z0-9-]/g, '-');
+  const replayRequested = new URLSearchParams(location.search).get('vyn_celebrate') === '1';
   let alreadySeen = document.cookie.split(';').some(part => part.trim() === seenKey + '=1');
   try { alreadySeen ||= localStorage.getItem(seenKey) === '1'; } catch (_) {}
-  if (alreadySeen) return;
 
+  // Already-seen visitors still get an unobtrusive, optional replay control.
+
+  const palettes = {
+    'vynalthai.com':['#9FB6D9','#D9F0E3'],
+    'search.vynalthai.com':['#9FB6D9','#D9F0E3'],
+    'vynalth-chat':['#8FC9BD','#EEDDF9'],
+    'vynchapp.vynalthai.com':['#BA8DB9','#FFF0E1'],
+    'zokivo.xyz':['#F4DC84','#79BEDF'],
+    'zokivo.vynalthai.com':['#F4DC84','#79BEDF'],
+    'vynova.vynalthai.com':['#FFA6A0','#C0D392'],
+    'utility.vynalthai.com':['#8A8D8E','#FAF2D9'],
+    'pedia.vynalthai.com':['#729A93','#FBFFE5'],
+    'dict.vynalthai.com':['#73AE52','#FBF1D7'],
+    'vpn.page.vynalthai.com':['#0E61AC','#FAF2E0']
+  };
+  const [brandStart, brandEnd] = palettes[product] || ['#9FB6D9','#D9F0E3'];
   const css = document.createElement('style');
   css.dataset.vynalthCelebration = 'true';
   css.textContent = `
     #vyn-gradient-announce {position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(17,28,41,.43);font:inherit;color:#182737}
     #vyn-gradient-announce * {box-sizing:border-box}
     #vyn-gradient-announce .vyn-ga-dialog {position:relative;width:min(510px,100%);background:#fffdf9;border:1px solid #c6d4d0;border-radius:14px;box-shadow:0 20px 60px rgba(20,36,51,.22);padding:clamp(24px,5vw,38px);outline:none}
-    #vyn-gradient-announce .vyn-ga-rule {width:100%;height:5px;background:linear-gradient(90deg,#9FB6D9 0%,#D9F0E3 25%,#8FC9BD 45%,#EEDDF9 65%,#BA8DB9 82%,#F4DC84 100%);margin:0 0 27px}
+    #vyn-gradient-announce .vyn-ga-rule {width:100%;height:5px;background:linear-gradient(90deg,var(--ga-brand-start),var(--ga-brand-end));margin:0 0 27px}
     #vyn-gradient-announce .vyn-ga-label {font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#4D6570;font-weight:750;margin:0 0 16px}
     #vyn-gradient-announce h2 {font-family:Georgia,'Times New Roman',serif;font-size:clamp(27px,5vw,36px);font-weight:500;letter-spacing:-.035em;line-height:1.11;margin:0 28px 16px 0;color:#142B36}
     #vyn-gradient-announce .vyn-ga-desc {font-size:15px;line-height:1.7;color:#415966;margin:0 0 24px}
@@ -29,8 +50,18 @@
     #vyn-gradient-announce .vyn-ga-actions button:hover {background:#F0F5F2}
     #vyn-gradient-announce .vyn-ga-close {position:absolute;right:17px;top:18px;background:transparent;color:#48616D;border:0;border-radius:5px;font-size:23px;line-height:1;padding:6px 9px;cursor:pointer}
     #vyn-gradient-announce :focus-visible {outline:3px solid #315D73;outline-offset:3px}
+    #vyn-gradient-replay{position:fixed;right:16px;bottom:16px;z-index:2147482999;border:1px solid rgba(33,76,90,.23);border-radius:999px;background:linear-gradient(110deg,var(--ga-brand-start),var(--ga-brand-end));padding:10px 15px;color:#172F3A;font:650 12px/1.4 ui-sans-serif,system-ui,sans-serif;box-shadow:0 3px 18px rgba(20,50,60,.14);cursor:pointer}
+    #vyn-gradient-replay[hidden]{display:none}
+    #vyn-gradient-replay:focus-visible{outline:3px solid #315D73;outline-offset:3px}
     @media(prefers-reduced-motion:no-preference){#vyn-gradient-announce .vyn-ga-dialog {animation:vyn-ga-appear .2s ease-out both}@keyframes vyn-ga-appear{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}}
   `;
+  const replay = document.createElement('button');
+  replay.id = 'vyn-gradient-replay';
+  replay.type = 'button';
+  replay.textContent = '🎉 Your lucky 40% card';
+  replay.setAttribute('aria-label', 'Show your new look celebration again');
+  replay.style.setProperty('--ga-brand-start', brandStart);
+  replay.style.setProperty('--ga-brand-end', brandEnd);
   const markSeen = () => {
     const host = location.hostname.toLowerCase();
     const domain = host === 'vynalthai.com' || host.endsWith('.vynalthai.com') ? '; Domain=.vynalthai.com' : '';
@@ -42,9 +73,11 @@
   };
   const show = () => {
     if (document.getElementById('vyn-gradient-announce')) return;
-    document.head.append(css);
+    replay.hidden = true;
     const overlay = document.createElement('div');
     overlay.id = 'vyn-gradient-announce';
+    overlay.style.setProperty('--ga-brand-start', brandStart);
+    overlay.style.setProperty('--ga-brand-end', brandEnd);
     const dialog = document.createElement('section');
     dialog.className = 'vyn-ga-dialog';
     dialog.setAttribute('role', 'dialog');
@@ -60,11 +93,11 @@
     label.textContent = 'VYNALTH AI · THE NEW LOOK';
     const title = document.createElement('h2');
     title.id = 'vyn-ga-title';
-    title.textContent = 'You got the new look.';
+    title.textContent = '🎉 Congratulations! You got the new look!';
     const description = document.createElement('p');
     description.className = 'vyn-ga-desc';
     description.id = 'vyn-ga-desc';
-    description.textContent = 'Congratulations! You’re among the 40% selected to see Vynalth AI’s new visual design. Share it with your friends and see who else gets lucky.';
+    description.textContent = 'You were randomly selected! Only 40% of visitors get the new Vynalth AI colors. Celebrate your lucky new look on Instagram, X or LinkedIn, and see whether your friends get selected too!';
     const note = document.createElement('p');
     note.className = 'vyn-ga-note';
     note.textContent = 'Your experience is yours to explore. Sharing is entirely optional.';
@@ -97,13 +130,15 @@
         instagram.textContent = 'Copy unavailable';
       }
     });
+    [x, linkedIn, instagram].forEach(el => el.addEventListener('click', markSeen));
     actions.append(x, linkedIn, instagram);
     dialog.append(rule, label, title, description, actions, note, close);
     overlay.append(dialog);
     const previousFocus = document.activeElement;
     const dismiss = () => {
+      markSeen();
       overlay.remove();
-      css.remove();
+      replay.hidden = false;
       document.removeEventListener('keydown', onKeyDown);
       if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
     };
@@ -119,12 +154,18 @@
     overlay.addEventListener('click', event => { if (event.target === overlay) dismiss(); });
     document.addEventListener('keydown', onKeyDown);
     document.body.append(overlay);
-    markSeen();
     close.focus();
   };
+  replay.addEventListener('click', show);
   const begin = () => {
-    const randomMs = 1000 + Math.random() * 4000;
-    window.setTimeout(show, randomMs);
+    // Attach after DOM ready. This button permits revisiting a missed card,
+    // without re-randomizing or letting an old-cohort visitor change cohort.
+    document.head.append(css);
+    document.body.append(replay);
+    if (!alreadySeen || replayRequested) {
+      const randomMs = 1000 + Math.random() * 4000;
+      window.setTimeout(show, randomMs);
+    }
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', begin, { once: true });
   else begin();
