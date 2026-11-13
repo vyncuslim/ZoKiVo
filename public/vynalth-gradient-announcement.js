@@ -12,7 +12,7 @@
 
   const css = document.createElement('style');
   css.dataset.vynalthCelebration = 'true';
-  css.textContent = \`
+  css.textContent = `
     #vyn-gradient-announce {position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(17,28,41,.43);font:inherit;color:#182737}
     #vyn-gradient-announce * {box-sizing:border-box}
     #vyn-gradient-announce .vyn-ga-dialog {position:relative;width:min(510px,100%);background:#fffdf9;border:1px solid #c6d4d0;border-radius:14px;box-shadow:0 20px 60px rgba(20,36,51,.22);padding:clamp(24px,5vw,38px);outline:none}
@@ -30,7 +30,7 @@
     #vyn-gradient-announce .vyn-ga-close {position:absolute;right:17px;top:18px;background:transparent;color:#48616D;border:0;border-radius:5px;font-size:23px;line-height:1;padding:6px 9px;cursor:pointer}
     #vyn-gradient-announce :focus-visible {outline:3px solid #315D73;outline-offset:3px}
     @media(prefers-reduced-motion:no-preference){#vyn-gradient-announce .vyn-ga-dialog {animation:vyn-ga-appear .2s ease-out both}@keyframes vyn-ga-appear{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}}
-  \`;
+  `;
   const markSeen = () => {
     const host = location.hostname.toLowerCase();
     const domain = host === 'vynalthai.com' || host.endsWith('.vynalthai.com') ? '; Domain=.vynalthai.com' : '';
