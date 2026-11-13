@@ -45,3 +45,37 @@ html[data-vyn-gradient='new'] .home-launchpad {background:#F7FBFD;}
 @media(prefers-reduced-motion:reduce) {
   html[data-vyn-gradient='new'] :is(.button,.nav-host,.nav-join) {transition:none;}
 }
+
+
+/* Site-wide classroom design contract: apply to every route, not only the landing page. */
+html[data-vyn-gradient='new'] {
+  --zk-brand-from:#F4DC84;--zk-brand-to:#79BEDF;
+  --ink:#24384A;--muted:#405B68;--paper:#F9FCFC;--cream:#FFFBED;
+  --purple:#285671;--yellow:#F4DC84;--pink:#C8DBE8;--line:#527083;
+  color-scheme:light;
+}
+html[data-vyn-gradient='new'] body,
+html[data-vyn-gradient='new'] .site-shell {background:#F9FCFC;color:#24384A;}
+html[data-vyn-gradient='new'] :is(main,.site-header,.site-footer,.wrap) {border-color:#C7D9DB;}
+html[data-vyn-gradient='new'] .site-header {background:#F9FCFC;}
+html[data-vyn-gradient='new'] .site-footer {background:#EFF7F7;color:#24384A;}
+html[data-vyn-gradient='new'] :is(.ticker,.eyebrow-star) {background:#315D79;color:#FFFFFF;}
+html[data-vyn-gradient='new'] :is(.nav-host,.nav-join,.button-yellow,.launchpad-join) {
+  background:#F4DC84;color:#24384A;border-color:#456476;box-shadow:none;
+}
+html[data-vyn-gradient='new'] :is(.button-outline,.button-dark) {box-shadow:none;border-color:#456476;}
+html[data-vyn-gradient='new'] :is(.home-hero,.hero-section) {
+  background:linear-gradient(120deg,rgba(244,220,132,.34),rgba(121,190,223,.36));
+  border-radius:12px;
+}
+html[data-vyn-gradient='new'] :is(.game-choice,.auth-card,.quiz-card,.study-card,.library-card,.creator-card,.reward-card,.result-card,.lobby-card,.question-card,.report-card,.mode-card) {
+  background:#FFFFFF;border-color:#C7D9DB;color:#24384A;
+  box-shadow:none;border-radius:10px;
+}
+html[data-vyn-gradient='new'] :is(.auth-layout,.quiz-studio,.study-page,.game-page,.library-page,.locker-page,.reports-page,.creator-page) {
+  background:linear-gradient(150deg,rgba(244,220,132,.1),rgba(121,190,223,.12)),#F9FCFC;
+  color:#24384A;
+}
+html[data-vyn-gradient='new'] :is(button,input,select,textarea) {accent-color:#315D79;}
+html[data-vyn-gradient='new'] :is(input,textarea,select) {border-color:#B1C9D3;}
+html[data-vyn-gradient='new'] ::selection {background:#F4DC84;color:#24384A;}
