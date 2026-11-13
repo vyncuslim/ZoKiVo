@@ -17,3 +17,31 @@ html[data-vyn-gradient='new'] .hero-description {color:#314357;}
 html[data-vyn-gradient='new'] .launchpad-join {background:#F4DC84;}
 html[data-vyn-gradient='new'] .launchpad-host {background:#79BEDF;}
 @media(max-width:760px){html[data-vyn-gradient='new'] .home-hero {margin-top:12px;padding:22px;border-radius:15px;}}
+
+/* Cohesive full-site, editorial classroom surfaces. */
+html[data-vyn-gradient='new'] {
+  --line:#344A5B; --muted:#3D5565; --pink:#F7C4BA;
+}
+html[data-vyn-gradient='new'] .site-shell {
+  background:#F7FBFD; color:#24344A;
+}
+html[data-vyn-gradient='new'] .site-header,
+html[data-vyn-gradient='new'] .site-footer {background:#F7FBFD;}
+html[data-vyn-gradient='new'] .hero-section {box-shadow:none;}
+html[data-vyn-gradient='new'] .hero-section.home-hero {
+  border-width:1px;border-radius:12px;
+  box-shadow:none;
+}
+html[data-vyn-gradient='new'] :is(.button,.nav-host,.nav-join) {
+  box-shadow:none;border-radius:8px;
+}
+html[data-vyn-gradient='new'] .hero-pop {color:#254D6C;}
+html[data-vyn-gradient='new'] :is(h1,h2,h3) {letter-spacing:-.045em;}
+html[data-vyn-gradient='new'] :is(button,a,input,select,textarea):focus-visible {
+  outline:3px solid #245570;outline-offset:3px;
+}
+html[data-vyn-gradient='new'] .ticker {background:#2D5B76;color:#FFFFFF;}
+html[data-vyn-gradient='new'] .home-launchpad {background:#F7FBFD;}
+@media(prefers-reduced-motion:reduce) {
+  html[data-vyn-gradient='new'] :is(.button,.nav-host,.nav-join) {transition:none;}
+}
