@@ -4,7 +4,44 @@
  */
 (() => {
   'use strict';
-  if (typeof document === 'undefined' || document.documentElement.dataset.vynGradient !== 'new') return;
+  if (typeof document === 'undefined') return;
+  // Visiting ?vyn_celebrate=1 is a production cohort check, never a way to
+  // override the 40% lottery. The 60% legacy group gets an honest explanation.
+  if (document.documentElement.dataset.vynGradient !== 'new') {
+    if (new URLSearchParams(location.search).get('vyn_celebrate') === '1') {
+      const explainLegacy = () => {
+        if (document.getElementById('vyn-gradient-legacy-status')) return;
+        const surface = document.createElement('section');
+        surface.id = 'vyn-gradient-legacy-status';
+        surface.setAttribute('role', 'dialog');
+        surface.setAttribute('aria-modal', 'true');
+        surface.setAttribute('aria-labelledby', 'vyn-gradient-legacy-title');
+        surface.style.cssText = 'position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:20px;background:rgba(17,28,41,.4);font-family:ui-sans-serif,system-ui,sans-serif;color:#1b3441';
+        const box = document.createElement('div');
+        box.style.cssText = 'width:min(480px,100%);padding:clamp(22px,5vw,36px);background:#fffdf9;border:1px solid #ccd9d4;border-radius:14px;box-shadow:0 16px 60px rgba(20,36,51,.22)';
+        const title = document.createElement('h2');
+        title.id = 'vyn-gradient-legacy-title';
+        title.textContent = 'You’re viewing the classic design.';
+        title.style.cssText = 'font-size:clamp(23px,5vw,30px);line-height:1.2;margin:0 0 12px';
+        const body = document.createElement('p');
+        body.textContent = 'Your browser is in the 60% classic group. Only the randomly selected 40% see the new colors and celebration card. Your original assignment stays the same.';
+        body.style.cssText = 'font-size:15px;line-height:1.65;color:#445c65;margin:0 0 22px';
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.textContent = 'Got it';
+        close.style.cssText = 'padding:12px 18px;background:#1B3C48;color:white;border:0;border-radius:8px;cursor:pointer;min-height:44px';
+        const dismiss = () => { surface.remove(); document.removeEventListener('keydown', keyHandler); };
+        const keyHandler = event => { if (event.key === 'Escape') dismiss(); };
+        close.addEventListener('click', dismiss);
+        surface.addEventListener('click', event => { if (event.target === surface) dismiss(); });
+        document.addEventListener('keydown', keyHandler);
+        box.append(title,body,close);surface.append(box);document.body.append(surface);close.focus();
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', explainLegacy, {once:true});
+      else explainLegacy();
+    }
+    return;
+  }
   // Each product gets its own announcement, instead of suppressing all
   // products after the very first website. Cohort odds are unchanged.
   const host = location.hostname.toLowerCase();
