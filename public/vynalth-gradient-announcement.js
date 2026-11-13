@@ -57,7 +57,7 @@
     rule.setAttribute('aria-hidden', 'true');
     const label = document.createElement('p');
     label.className = 'vyn-ga-label';
-    label.textContent = 'VYNALTH AI · DESIGN PREVIEW';
+    label.textContent = 'VYNALTH AI · THE NEW LOOK';
     const title = document.createElement('h2');
     title.id = 'vyn-ga-title';
     title.textContent = 'You got the new look.';
