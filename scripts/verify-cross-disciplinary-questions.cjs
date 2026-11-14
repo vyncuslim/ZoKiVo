@@ -35,6 +35,6 @@ assert(hit,"Migration must embed exact reviewed data");
 const embedded=JSON.parse(hit[1].replaceAll("''","'"));
 assert.deepEqual(embedded,packs,"Source JSON and deployable migration must match exactly");
 for(const p of packs)assert(migration.includes(p.id),"Pack ID missing in SQL");
-const ui=fs.readFileSync("src/app/library/page.tsx","utf8");
+const ui=fs.readFileSync("src/app/library/page.client.tsx","utf8");
 for(const subject of subjects)assert(ui.includes('"'+subject+'"'),"New subject missing from filter: "+subject);
 console.log("CROSS_DISCIPLINARY_QUESTION_BANK_PASS: 12 packs, 240 original questions, 12 categories, explanations, balanced answer keys, migration/source parity, discovery mapping. No live DB writes.");
