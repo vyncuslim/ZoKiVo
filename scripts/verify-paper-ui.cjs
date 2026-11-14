@@ -5,11 +5,11 @@ for(const name of ["paper.css","camera-test.css","wayground.css","multi-scanner.
 const fixes=read("src/app/paper/layout-fixes.css");
 ok(fixes.includes(".paper-preview-hidden{display:none}"),"Card previews paginated on-screen");
 ok(fixes.includes(".paper-qr-card.paper-preview-hidden{display:flex!important}"),"Printed sheets contain every card");
-const cards=read("src/app/paper/cards/page.tsx");
+const cards=read("src/app/paper/cards/page.client.tsx");
 ok(cards.includes('cards.map(c=>'),"All 60 cards remain in printable markup");
 ok(cards.includes("Math.floor((c.n-1)/6)!==page"),"Six-card page preview");
 ok(cards.includes("window.print()"),"Print button retained");
-const paper=read("src/app/paper/page.tsx");
+const paper=read("src/app/paper/page.client.tsx");
 ok(paper.includes('fetch("/api/paper/status"'),"Paper availability read from server");
 ok(paper.includes("modeEnabled!==true"),"Disabled session cannot be launched from UI");
 const status=read("src/app/api/paper/status/route.ts");

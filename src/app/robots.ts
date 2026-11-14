@@ -10,7 +10,7 @@ export default function robots():MetadataRoute.Robots {
         "/create","/ai","/paper/scan/","/paper/board/","/paper/check"
       ]
     }],
-    sitemap:"https://zokivo.vynalthai.com/sitemap.xml",
-    host:"https://zokivo.vynalthai.com"
+    sitemap:"https://zokivo.xyz/sitemap.xml",
+    host:"https://zokivo.xyz"
   };
 }

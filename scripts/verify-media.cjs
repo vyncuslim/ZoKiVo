@@ -19,5 +19,5 @@ ok(src("src/app/api/rooms/[pin]/start/route.ts").includes("question[0].time_limi
 ok(src("src/app/api/rooms/[pin]/answer/route.ts").includes("q.point_value"),"Server calculates customizable points");
 ok(src("src/app/api/rooms/[pin]/route.ts").includes("formula_text"),"Game state includes safe media descriptors");
 ok(src("src/app/api/study/[id]/route.ts").includes("formula_text"),"Study supplies question media");
-for(const p of ["src/app/create/page.tsx","src/app/study/page.tsx","src/app/game/[pin]/page.tsx"])ok(src(p).includes("QuestionMedia"),"Media renderer used by "+p);
+for(const p of ["src/app/create/page.tsx","src/app/study/page.client.tsx","src/app/game/[pin]/page.tsx"])ok(src(p).includes("QuestionMedia"),"Media renderer used by "+p);
 console.log("ZOKIVO_MEDIA_TEST_PASS: "+n+" checks.");
