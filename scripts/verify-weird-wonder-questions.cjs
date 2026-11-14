@@ -35,6 +35,6 @@ const match=sql.match(/WITH payload AS \(SELECT '([\s\S]*?)'::jsonb AS packs\)/)
 assert(match,"SQL content bundle missing");
 assert.deepEqual(JSON.parse(match[1].replaceAll("''","'")),packs,"JSON and SQL content must be byte-for-byte equivalent after parsing");
 for(const id of ids)assert(sql.includes(id),"SQL missing pack "+id);
-const ui=fs.readFileSync("src/app/library/page.tsx","utf8");
+const ui=fs.readFileSync("src/app/library/page.client.tsx","utf8");
 for(const subject of subjects)assert(ui.includes('"'+subject+'"'),"Quiz discovery missing category "+subject);
 console.log("WEIRD_WONDER_QUIZ_PASS: 12 packs, 240 unique questions, balanced answers, 80 Chinese / 120 English / 40 Malay, explanations, SQL parity, subject filters; no live writes.");
