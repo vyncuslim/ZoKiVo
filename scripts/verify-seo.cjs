@@ -4,16 +4,22 @@ const sitemap=fs.readFileSync("src/app/sitemap.ts","utf8");
 const robots=fs.readFileSync("src/app/robots.ts","utf8");
 let checks=0;
 function test(v,msg){assert.ok(v,msg);checks++}
-test(root.includes('metadataBase:new URL("https://zokivo.vynalthai.com")'),"Public canonical origin");
+test(root.includes('metadataBase:new URL("https://zokivo.xyz")'),"Public canonical origin");
 test(root.includes('uYmJ_568JPu-rjsyRzA2KU2vQpiQDOvN97G5Qgd5-38'),"Google verification preserved");
-test(sitemap.includes('https://zokivo.vynalthai.com'),"Sitemap matches canonical host");
-test(robots.includes('https://zokivo.vynalthai.com/sitemap.xml'),"Robots sitemap points at canonical host");
-for(const p of ["/","/games","/how-it-works","/try","/paper","/paper/cards","/library"]){
+test(sitemap.includes('https://zokivo.xyz'),"Sitemap matches canonical host");
+test(robots.includes('https://zokivo.xyz/sitemap.xml'),"Robots sitemap points at canonical host");
+for(const p of ["/","/games","/how-it-works","/try","/paper","/paper/cards","/library","/study"]){
  test(sitemap.includes('path:"'+p+'"'),"Public page in sitemap: "+p);
 }
 for(const p of ["/auth/","/account","/game/","/api/","/paper/scan/","/paper/board/"]){
  test(!sitemap.includes('path:"'+p+'"'),"Private page excluded: "+p);
  test(robots.includes('"'+p+'"'),"Private path disallowed: "+p);
+}
+test(robots.includes('host:"https://zokivo.xyz"'),"Robots Host matches primary domain");
+for(const p of ["/","/games","/how-it-works","/try","/paper","/paper/cards","/library","/study"]){
+ const file="src/app"+(p==="/"?"/page.tsx":p+"/page.tsx");
+ const contents=fs.readFileSync(file,"utf8");
+ test(contents.includes('canonical:'+JSON.stringify(p)) || contents.includes('canonical: '+JSON.stringify(p)), "Self-referencing canonical exists for public route "+p);
 }
 for(const p of ["src/app/sitemap.ts","src/app/robots.ts"]){
  const file=fs.readFileSync(p,"utf8");
