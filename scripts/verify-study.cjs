@@ -1,6 +1,6 @@
 const fs=require("node:fs"),ts=require("typescript"),assert=require("node:assert/strict");
 let n=0;const check=(x,m)=>{assert.ok(x,m);n++},read=p=>fs.readFileSync(p,"utf8");
-const details=read("src/app/api/study/[id]/route.ts"),answer=read("src/app/api/study/[id]/answer/route.ts"),history=read("src/app/api/study/history/route.ts"),page=read("src/app/study/page.tsx");
+const details=read("src/app/api/study/[id]/route.ts"),answer=read("src/app/api/study/[id]/answer/route.ts"),history=read("src/app/api/study/history/route.ts"),page=read("src/app/study/page.client.tsx");
 check(details.includes("status='published'"),"Only published quizzes usable for study");
 check(details.includes("SELECT position,question,choices"),"Public question data excludes correct index");
 check(!details.includes("SELECT position,question,choices,correct_index"),"GET never sends answer key");
@@ -16,6 +16,6 @@ check(page.includes('"/api/study/"+encodeURIComponent(id)+"/answer"'),"Client po
 check(!page.includes("correct_option_index"),"Client practice does not load private answer key before submission");
 const sql=read("migrations/011_study_attempts.sql");
 check(sql.includes("study_attempts")&&sql.includes("REFERENCES quiz_sets(id)"),"Study attempts schema uses quiz FK");
-const apps=["src/app/api/study/[id]/route.ts","src/app/api/study/[id]/answer/route.ts","src/app/api/study/history/route.ts","src/app/study/page.tsx"];
+const apps=["src/app/api/study/[id]/route.ts","src/app/api/study/[id]/answer/route.ts","src/app/api/study/history/route.ts","src/app/study/page.client.tsx"];
 for(const f of apps){const r=ts.transpileModule(read(f),{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}});check((r.diagnostics||[]).length===0,"TypeScript syntax valid: "+f)}
 console.log("ZOKIVO_STUDY_TEST_PASS: "+n+" assertions.");
