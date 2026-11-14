@@ -1,6 +1,6 @@
 import type {MetadataRoute} from "next";
 
-const BASE = "https://zokivo.vynalthai.com";
+const BASE = "https://zokivo.xyz";
 
 /**
  * Public, crawlable website pages only.
