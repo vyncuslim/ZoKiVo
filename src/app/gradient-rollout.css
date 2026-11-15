@@ -187,3 +187,12 @@ html[data-vyn-gradient='new'] #vyn-gradient-legacy-status > div {
   html[data-vyn-gradient='new'] :is(table,pre) {display:block;max-width:100%;overflow-x:auto;}
   html[data-vyn-gradient='new'] :is(input:not([type='checkbox']):not([type='radio']),textarea,select) {max-width:100%;}
 }
+
+
+/* Keep ZoKivo's two familiar action colors on every page. */
+html[data-vyn-gradient='new'] :is(.button-yellow,.nav-join,.launchpad-join) {
+  background:#F4DC84;color:#203B4E;border-color:#527C8A;
+}
+html[data-vyn-gradient='new'] :is(.nav-host,.launchpad-host) {
+  background:#79BEDF;color:#203B4E;border-color:#527C8A;
+}
