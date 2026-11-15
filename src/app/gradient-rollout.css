@@ -107,3 +107,92 @@ html[data-vyn-gradient='new'] :is(input,select,textarea) {
 html[data-vyn-gradient='new'] :is(.nav-host,.nav-join,.launchpad-join,.launchpad-host) {
   background:linear-gradient(118deg,#F4DC84,#C0DFDF);border-color:#527C8A;color:#203B4E;
 }
+
+
+/* GRADIENT COVERAGE V4 — 2026-11-15
+ * Single full-page product canvas. Existing old-cohort UI remains untouched.
+ * Previous page-local opaque backgrounds must not mask the full-site brand.
+ * Preserve semantic feedback (errors/warnings), text legibility and form state.
+ */
+html[data-vyn-gradient='new'] {
+  --vyn-unified-canvas:linear-gradient(125deg,#F4DC84 0%,#D9DCAE 50%,#79BEDF 100%);
+  --vyn-unified-card:rgba(255,253,244,.9);
+  --vyn-unified-chrome:rgba(255,250,227,.88);
+  --vyn-unified-ink:#203B4E;
+  --vyn-unified-border:rgba(38,85,112,.23);
+  --vyn-unified-accent:#315D79;
+}
+html[data-vyn-gradient='new'] body {
+  min-height:100vh;
+  background:var(--vyn-unified-canvas) !important;
+  background-attachment:fixed !important;
+  color:var(--vyn-unified-ink);
+}
+/* The page gets its gradient from body ONCE; don't restart it on each nested frame. */
+html[data-vyn-gradient='new'] :is(.site-shell,main,.home-launchpad,.auth-layout,.quiz-studio,.study-page,.game-page,.library-page,.locker-page,.reports-page,.creator-page,.game-shell,.study-layout) {
+  background:transparent !important;
+  color:var(--vyn-unified-ink);
+}
+html[data-vyn-gradient='new'] :is(.site-shell > section,.site-shell > main,.home-launchpad,.auth-layout,.quiz-studio,.study-page,.game-page,.library-page,.locker-page,.reports-page,.creator-page,.mode-page) {
+  background:transparent !important;
+}
+/* Only top-level page shells with legacy Tailwind background utilities. */
+html[data-vyn-gradient='new'] main > :is(div,section)[class*='bg-']:not([role='dialog']),
+html[data-vyn-gradient='new'] #root > :is(div,section)[class*='bg-']:not([role='dialog']) {
+  background:transparent !important;
+}
+html[data-vyn-gradient='new'] :is(.site-header,.site-footer,.mobile-menu,.mobile-menu nav,.site-header-inner,.quiz-toolbar,.game-header) {
+  background:var(--vyn-unified-chrome);
+  border-color:var(--vyn-unified-border);
+  color:var(--vyn-unified-ink);
+}
+html[data-vyn-gradient='new'] :is(.game-choice,.auth-card,.quiz-card,.study-card,.library-card,.creator-card,.reward-card,.result-card,.lobby-card,.question-card,.report-card,.mode-card,.game-panel,.player-card,.card,.panel) {
+  background:var(--vyn-unified-card);
+  border-color:var(--vyn-unified-border);
+  color:var(--vyn-unified-ink);
+}
+html[data-vyn-gradient='new'] :is(.nav-host,.nav-join,.launchpad-join,.launchpad-host,.button-yellow,.button-primary) {
+  background:var(--vyn-unified-accent);
+  border-color:var(--vyn-unified-accent);
+  color:#fff;
+}
+html[data-vyn-gradient='new'] :is(input:not([type='checkbox']):not([type='radio']),textarea,select) {
+  background:rgba(255,255,255,.94);
+  color:var(--vyn-unified-ink);
+  border-color:var(--vyn-unified-border);
+}
+html[data-vyn-gradient='new'] :is(dialog,[role='dialog'],[role='alertdialog'],[role='menu'],[role='listbox'],[data-radix-popper-content-wrapper]) {
+  color:var(--vyn-unified-ink);
+}
+/* Mobile: scroll normally and contain long code, translations and tables. */
+html[data-vyn-gradient='new'] :is(main,section,article,.card,.panel,.grid,.flex,.prose) {
+  min-width:0;
+}
+html[data-vyn-gradient='new'] :is(pre,code,textarea,[role='textbox']) {
+  max-width:100%;
+}
+html[data-vyn-gradient='new'] :is(pre,[data-language],[class*='code-block']) {
+  overflow-x:auto;
+}
+html[data-vyn-gradient='new'] :is(img,video,canvas,svg) {max-width:100%;}
+html[data-vyn-gradient='new'] :is(.prose,article,.card,.panel,[role='dialog']) {overflow-wrap:anywhere;}
+html[data-vyn-gradient='new'] #vyn-gradient-announce .vyn-ga-dialog,
+html[data-vyn-gradient='new'] #vyn-gradient-legacy-status > div {
+  max-height:calc(100dvh - 32px);
+  overflow-y:auto;
+}
+@media(max-width:767px) {
+  html[data-vyn-gradient='new'] body {background-attachment:scroll !important;}
+  html[data-vyn-gradient='new'] :is(main,section,article,.container,.page-content,.content-area,.card,.panel) {min-width:0;max-width:100%;}
+  html[data-vyn-gradient='new'] :is(table,pre) {display:block;max-width:100%;overflow-x:auto;}
+  html[data-vyn-gradient='new'] :is(input:not([type='checkbox']):not([type='radio']),textarea,select) {max-width:100%;}
+}
+
+
+/* Keep ZoKivo's two familiar action colors on every page. */
+html[data-vyn-gradient='new'] :is(.button-yellow,.nav-join,.launchpad-join) {
+  background:#F4DC84;color:#203B4E;border-color:#527C8A;
+}
+html[data-vyn-gradient='new'] :is(.nav-host,.launchpad-host) {
+  background:#79BEDF;color:#203B4E;border-color:#527C8A;
+}
