@@ -196,3 +196,42 @@ html[data-vyn-gradient='new'] :is(.button-yellow,.nav-join,.launchpad-join) {
 html[data-vyn-gradient='new'] :is(.nav-host,.launchpad-host) {
   background:#79BEDF;color:#203B4E;border-color:#527C8A;
 }
+
+
+/* ZoKivo new-cohort page-level polish: the mobile navigation and game screens
+   must remain usable in narrow portrait viewports without clipping controls. */
+html[data-vyn-gradient='new'] :is(.site-header-inner,.header-actions,
+    .mobile-menu,.mobile-menu nav,.zk-more-menu,.zk-more-links) {
+  min-width:0;
+}
+html[data-vyn-gradient='new'] :is(.mobile-menu nav,.zk-more-links) {
+  max-width:min(440px,calc(100vw - 24px));
+  max-height:calc(100dvh - 110px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+html[data-vyn-gradient='new'] :is(.mobile-menu summary,.zk-more-menu summary,
+    .nav-join,.nav-host) {
+  touch-action:manipulation;
+}
+html[data-vyn-gradient='new'] :is(.mobile-menu summary,.zk-more-menu summary,
+    .mobile-menu a,.zk-more-links a):focus-visible {
+  outline:3px solid #244E6A;
+  outline-offset:3px;
+}
+html[data-vyn-gradient='new'] :is(.quiz-studio,.study-page,.game-page,
+    .library-page,.question-card,.result-card) {
+  min-width:0;
+}
+html[data-vyn-gradient='new'] :is(.quiz-studio,.study-page,.game-page,
+    .library-page) :is(pre,table) {
+  max-width:100%;
+  overflow-x:auto;
+}
+@media(max-width:650px){
+  html[data-vyn-gradient='new'] :is(.header-actions,.site-header-inner,.mobile-menu) {
+    max-width:100%;
+  }
+  html[data-vyn-gradient='new'] :is(input:not([type='checkbox']):not([type='radio']),
+     textarea,select){font-size:max(16px,1rem);}
+}
