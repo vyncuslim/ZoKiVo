@@ -1,0 +1,5 @@
+/* ZoKivo: accessibility refinements; keep the product's own gradient palette. */
+:where(a,button,input,textarea,select,summary,[role="button"]):focus-visible{outline:3px solid #2c617c;outline-offset:3px}
+:where(input,textarea,select){max-width:100%}
+@media(max-width:700px){.mobile-menu summary{min-height:44px;display:flex;align-items:center;gap:8px}.mobile-menu nav a{min-height:44px;display:flex;align-items:center;justify-content:space-between}.hero-actions{flex-wrap:wrap}.hero-actions .button{min-height:44px}.launchpad-grid{min-width:0}.launchpad-card{min-width:0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
