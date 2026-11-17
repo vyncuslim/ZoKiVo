@@ -17,3 +17,6 @@
 /* Cloudflare Turnstile: layout only; the public site key is injected at build time. */
 .auth-captcha{display:grid;gap:7px;min-height:64px;align-content:center;overflow:visible}
 .auth-captcha p,.auth-captcha-config{font-size:12px;line-height:1.6;color:#86613b;background:#fff2d1;border:1px solid #d9b777;border-radius:9px;padding:10px;margin:0}
+
+/* Mobile registration: make password visibility toggles easier to activate. */
+.auth-password button { min-height: 40px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
