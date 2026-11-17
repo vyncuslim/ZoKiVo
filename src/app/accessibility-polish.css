@@ -3,3 +3,6 @@
 :where(input,textarea,select){max-width:100%}
 @media(max-width:700px){.mobile-menu summary{min-height:44px;display:flex;align-items:center;gap:8px}.mobile-menu nav a{min-height:44px;display:flex;align-items:center;justify-content:space-between}.hero-actions{flex-wrap:wrap}.hero-actions .button{min-height:44px}.launchpad-grid{min-width:0}.launchpad-card{min-width:0}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Shared site links and Paper Mode actions: reliable mobile touch areas. */
+.header-actions .nav-auth,.header-actions .nav-join,.footer-links a,.paper-crumbs a,.zk-paper-simple .zk-paper-easy article a,.zk-paper-simple .zk-paper-extra a{min-height:40px;display:inline-flex;align-items:center}
