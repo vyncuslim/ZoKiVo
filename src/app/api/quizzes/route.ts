@@ -62,5 +62,9 @@ export async function POST(req:NextRequest){
   ) SELECT id FROM new_quiz`;
   if(!rows.length)return noCache({error:"Could not save quiz."},503);
   return applyRenew(noCache({ok:true,id:rows[0].id,status:"draft"},201),req,renew);
- }catch(e){return authError(e)}
+ }catch(e){
+  if(e instanceof Error&&e.message.includes("ZOKIVO_QUIZ_LIMIT"))
+   return noCache({error:"Maximum 100 quizzes per account."},429);
+  return authError(e);
+ }
 }

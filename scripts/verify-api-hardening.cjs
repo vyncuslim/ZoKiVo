@@ -30,4 +30,8 @@ assert(vercel.git?.deploymentEnabled?.main===true&&vercel.git.deploymentEnabled[
 const announce=read("public/vynalth-gradient-announcement.js");
 assert(!announce.includes("60% classic"),"Old cohort popup");n++;
 assert(announce.includes("host === 'www.zokivo.xyz'")&&announce.includes("host === 'zokivo.vercel.app'"),"Public ZoKivo aliases must retain product palette");n++;
+const quota24=read("migrations/024_quiz_ai_atomic_quotas.sql");
+for(const tag of ["ZOKIVO_QUIZ_LIMIT","ZOKIVO_AI_SESSION_LIMIT","lease_expires_at","zokivo_quiz_count_guard","zokivo_ai_session_count_guard"]){assert(quota24.includes(tag),"Missing new quota "+tag);n++}
+assert(read("src/app/api/ai/voice/session/route.ts").includes("finally"),"Reservation cleanup must be unconditional");n++;
+assert(read("src/lib/use-room-realtime.ts").includes("refreshCoalesced(2500)"),"Broadcast must be rate bounded");n++;
 console.log("ZOKIVO_API_HARDENING_PASS: "+n+" assertions.");

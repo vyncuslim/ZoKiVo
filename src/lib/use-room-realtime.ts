@@ -34,9 +34,9 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
   let fallback:Transport[]=[];
   let original:Transport[]=[];
 
-  const refreshCoalesced=()=>{
+  const refreshCoalesced=(minimumInterval=0)=>{
    if(!active)return;
-   const now=Date.now(),interval=kind==="quiz"?1500:250;
+   const now=Date.now(),interval=Math.max(kind==="quiz"?1500:250,minimumInterval);
    const delay=Math.max(0,interval-(now-lastRefresh),lastRefresh===0?jitter:0);
    if(delay===0&&!refreshTimer){
     lastRefresh=now;latest.current.refresh();
@@ -76,7 +76,11 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
     let done:(value:boolean)=>void=()=>{};
     const ready=new Promise<boolean>(resolve=>{done=resolve});
     const watchdog=setTimeout(()=>{if(!settled){settled=true;done(false)}},7000);
-    channel.on("broadcast",{event:"refresh"},()=>refreshCoalesced());
+    // Public broadcasts are untrusted refresh hints, never authoritative game state.
+    // Throttle fan-out to limit extra Vercel/Neon reads on noisy channels.
+    channel.on("broadcast",{event:"refresh"},message=>{
+     if(message?.payload?.v===1)refreshCoalesced(2500);
+    });
     channel.subscribe(status=>{
      if(!active)return;
      if(status==="SUBSCRIBED"){
