@@ -2,7 +2,7 @@ const fs=require("node:fs"),assert=require("node:assert/strict"),ts=require("typ
 const file=p=>fs.readFileSync(p,"utf8");
 const creator=file("src/app/create/page.tsx"),game=file("src/app/game/[pin]/page.tsx"),
  view=file("src/app/api/rooms/[pin]/route.ts"),start=file("src/app/api/rooms/[pin]/start/route.ts"),
- paper=file("src/app/paper/page.tsx"),check=file("src/app/paper/check/page.tsx");
+ paper=file("src/app/paper/page.client.tsx"),check=file("src/app/paper/check/page.tsx");
 let count=0;const ok=(v,label)=>{assert.ok(v,label);count++;console.log("UX_TEST",label)};
 for(const p of ["src/app/create/page.tsx","src/app/game/[pin]/page.tsx","src/app/api/rooms/[pin]/route.ts","src/app/api/rooms/[pin]/start/route.ts","src/app/paper/page.tsx","src/app/paper/check/page.tsx"]){
  const ds=ts.transpileModule(file(p),{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).diagnostics||[];
