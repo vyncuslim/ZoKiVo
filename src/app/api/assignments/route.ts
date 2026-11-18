@@ -24,7 +24,7 @@ export async function POST(req:NextRequest){
   if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
   const raw=parsed.value;
   const title=typeof raw.title==="string"?raw.title.trim():"";
-  if(title.length<3||title.length>120||!isId(raw.quizId))throw new AuthError("Choose a published quiz and a title between 3 and 120 characters.");
+  if(title.length<3||title.length>120||!(typeof raw.quizId==="string"&&isId(raw.quizId)))throw new AuthError("Choose a published quiz and a title between 3 and 120 characters.");
   let due:string|null=null;
   if(raw.dueAt!==undefined&&raw.dueAt!==null&&raw.dueAt!==""){
    const ms=typeof raw.dueAt==="string"?Date.parse(raw.dueAt):NaN;

@@ -29,7 +29,7 @@ export async function POST(req:NextRequest){
   if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
   const data=parsed.value;
   const info=avatarInfo(data?.avatar);
-  if(!info||!["unlock","equip"].includes(data?.action))return noCache({error:"Invalid avatar action"},400);
+  if(!info||!(data.action==="unlock"||data.action==="equip"))return noCache({error:"Invalid avatar action"},400);
   const sql=db(),owner=user.id;
   await sql`INSERT INTO avatar_profiles(owner_user_id) VALUES(${owner}) ON CONFLICT DO NOTHING`;
   if(data.action==="unlock"){
