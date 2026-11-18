@@ -58,7 +58,7 @@ export default function Game(){
    }catch(e){setError(e instanceof Error?e.message:"Failed to download report")}
    finally{setDownloading(false)}
  }
- const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload);
+ const realtimeConnected=useRoomRealtime("quiz",pin,headers,reload,state?.status!=="finished");
  useEffect(()=>{if(!copiedPin)return;const timer=window.setTimeout(()=>setCopiedPin(false),2200);return()=>window.clearTimeout(timer)},[copiedPin]);
  async function copyPin(){try{if(!navigator.clipboard?.writeText)throw new Error("Clipboard unavailable");await navigator.clipboard.writeText(pin);setCopiedPin(true)}catch{setError("Could not copy the PIN. Share the six digits shown above manually.")}}
  useEffect(()=>{

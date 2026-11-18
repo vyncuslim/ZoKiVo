@@ -15,13 +15,13 @@ type Plan={providers?:Transport[]};
  * projection. The authenticated room GET is always authoritative.
  * Polling remains active when both providers are disconnected.
  */
-export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<string,string>,refresh:()=>void){
+export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<string,string>,refresh:()=>void,enabled=true){
  const latest=useRef({getHeaders,refresh});
  latest.current={getHeaders,refresh};
  const [connected,setConnected]=useState(false);
 
  useEffect(()=>{
-  if(!/^\d{6}$/.test(pin))return;
+  if(!enabled||!/^\d{6}$/.test(pin))return;
   let active=true;
   let fallbackTimer:ReturnType<typeof setTimeout>|null=null;
   let refreshTimer:ReturnType<typeof setTimeout>|null=null;
@@ -246,6 +246,6 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
    if(fallbackTimer)clearTimeout(fallbackTimer);
    setConnected(false);
   };
- },[kind,pin]);
+ },[kind,pin,enabled]);
  return connected;
 }

@@ -23,4 +23,11 @@ ok(game.includes('data-role={host?"host":"player"}'),"Host-only legibility scope
 ok(game.includes("game-host-instructions"),"Host preview instructions rendered");
 const check=read("src/app/paper/check/page.tsx");
 ok(check.includes("zk-camera-links")&&check.includes("zk-camera-step-help")&&check.includes("camera-choice-group"),"Camera test gives printable-card links and easy A-D instructions");
+const board=read("src/app/paper/board/[pin]/page.tsx");
+const scanner=read("src/app/paper/scan/[pin]/page.tsx");
+const gameLive=read("src/app/game/[pin]/page.tsx");
+const liveHook=read("src/lib/use-room-realtime.ts");
+ok(board.includes('if(board?.status==="finished")return')&&board.includes('board?.status!=="finished"'),"Projector stops polling and websocket subscriptions after finish");
+ok(scanner.includes('if(session?.status==="finished")return')&&scanner.includes('session?.status!=="finished"'),"Teacher scanner stops polling and websocket subscriptions after finish");
+ok(gameLive.includes('state?.status!=="finished"')&&liveHook.includes("if(!enabled||"),"Quiz game closes realtime after finishing");
 console.log("PAPER_UI_TEST_PASS: "+n+" assertions.");
