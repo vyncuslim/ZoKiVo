@@ -14,6 +14,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const r=rows[0];
   if(!r.owner_user_id||r.owner_user_id!==auth.user.id)return noCache({error:"Only the original host account may control this room."},403);
   if(r.status==="finished")return noCache({error:"Game already finished."},409);
+  if(r.status==="playing"&&r.deadline&&new Date(r.deadline).getTime()<Date.now()-86400000)
+   return noCache({error:"Old classroom requires host review. Finish the game from the original host account; automatic or manual next-round advancement is disabled."},409);
   // All connected participants may finish early. Correctly answered reward rounds
   // must wait for their bonus claims, even when every answer has been submitted.
   const readiness=r.status==="playing"?await sql`SELECT
@@ -34,6 +36,8 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
    if(reached.length){
     const finalized=await sql`UPDATE rooms SET status='finished',deadline=NULL
       WHERE pin=${pin} AND current_index=${r.current_index} AND status='playing'
+       AND owner_user_id=${auth.user.id} AND host_token_hash=${hash(hostToken)}::char(64)
+       AND deadline>=now()-interval '24 hours'
         AND (deadline<=now() OR (EXISTS(SELECT 1 FROM players p WHERE p.room_pin=rooms.pin)
           AND NOT EXISTS(SELECT 1 FROM players p WHERE p.room_pin=rooms.pin AND NOT EXISTS(
            SELECT 1 FROM answers a WHERE a.room_pin=rooms.pin AND a.player_id=p.id AND a.question_index=rooms.current_index))
@@ -50,11 +54,17 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const position=Array.isArray(r.question_order)?r.question_order[next]:next;
   const question=await sql`SELECT time_limit FROM questions WHERE quiz_set_id=${r.quiz_set_id} AND position=${position??next}`;
   if(!question.length){
-   await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin} AND status='playing'`;
+   const ended=await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin}
+    AND status='playing' AND current_index=${r.current_index}
+    AND owner_user_id=${auth.user.id} AND host_token_hash=${hash(hostToken)}::char(64)
+    AND deadline>=now()-interval '24 hours' RETURNING pin`;
+   if(!ended.length)return noCache({error:"Room changed or host credential was rotated. Refresh before continuing."},409);
    await emitRoomRefresh('quiz',pin);return applyRenew(noCache({status:"finished"}),req,auth.renew);
   }
   const updated=await sql`UPDATE rooms SET status='playing',current_index=${next},deadline=now()+make_interval(secs => ${question[0].time_limit??r.question_seconds})
    WHERE pin=${pin} AND current_index=${r.current_index} AND status=${r.status}
+    AND owner_user_id=${auth.user.id} AND host_token_hash=${hash(hostToken)}::char(64)
+    AND (rooms.status='lobby' OR (rooms.deadline IS NOT NULL AND rooms.deadline>=now()-interval '24 hours'))
     AND (rooms.status='lobby' OR rooms.deadline<=now() OR
      (EXISTS(SELECT 1 FROM players p WHERE p.room_pin=rooms.pin)
       AND NOT EXISTS(SELECT 1 FROM players p WHERE p.room_pin=rooms.pin AND NOT EXISTS(

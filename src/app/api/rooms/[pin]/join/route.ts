@@ -47,8 +47,10 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const body=parsed.value;
   const desired=typeof body.nickname==="string"?body.nickname.trim().replace(/[<>\x00-\x1f]/g,"").slice(0,24):"";
   const sql=db();
-  const config=await sql`SELECT status,allow_late_joining,random_player_names FROM rooms WHERE pin=${pin}`;
+  const config=await sql`SELECT status,allow_late_joining,random_player_names,deadline FROM rooms WHERE pin=${pin}`;
   if(!config.length)return bad("Room not found",404);
+  if(config[0].status==="playing"&&config[0].deadline&&new Date(config[0].deadline).getTime()<Date.now()-86400000)
+   return bad("This classroom has expired and is awaiting the original host's review.",409);
   if(config[0].status!=="lobby"&&!(config[0].status==="playing"&&config[0].allow_late_joining))return bad("Room is not accepting new players.",409);
   if(!config[0].random_player_names&&desired.length<2)return bad("Nickname too short");
   const selected=avatarInfo(body.avatar);
@@ -76,7 +78,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
  }catch(e){
   const message=e instanceof Error?e.message:"";
   if(/Room is full/i.test(message))return bad("Room is full (maximum 100 players).",409);
-  if(/Room is not accepting|Room closed/i.test(message))return bad("Room is not accepting new players.",409);
+  if(/Room is not accepting|Room closed|Room needs host review/i.test(message))return bad("Room is not accepting new players.",409);
   if(/Room not found/i.test(message))return bad("Room not found",404);
   if(/duplicate key|players_room_pin_nickname_key|unique constraint/i.test(message))return bad("Nickname already taken. Try another.",409);
   console.error("Unable to join ZoKivo room",e);return bad("Unable to join",503)

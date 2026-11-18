@@ -12,7 +12,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
   const sql=db();const r=await sql`SELECT host_token_hash,owner_user_id,status FROM rooms WHERE pin=${pin}`;
   if(!r.length||!same(r[0].host_token_hash,hash(hostToken)))return noCache({error:"Not authorized"},403);
   if(!r[0].owner_user_id||r[0].owner_user_id!==session.user.id)return noCache({error:"Original host account required"},403);
-  const saved=await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin} AND status IN ('lobby','playing') RETURNING pin`;
+  const saved=await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin} AND status IN ('lobby','playing') AND owner_user_id=${session.user.id} AND host_token_hash=${hash(hostToken)}::char(64) RETURNING pin`;
   if(!saved.length)return noCache({error:"Game already finished"},409);
   await emitRoomRefresh("quiz",pin);
   return applyRenew(noCache({status:"finished"}),req,session.renew);
