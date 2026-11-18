@@ -10,7 +10,7 @@ function load(path,mocks){
    compilerOptions:{module:ts.ModuleKind.CommonJS,esModuleInterop:true,target:ts.ScriptTarget.ES2022}
  }).outputText;
  const module={exports:{}};
- new Function("require","module","exports",js)((name)=>Object.prototype.hasOwnProperty.call(mocks,name)?mocks[name]:require(name),module,module.exports);
+ new Function("require","module","exports",js)((name)=>Object.prototype.hasOwnProperty.call(mocks,name)?mocks[name]:(name==="@/lib/limited-json"?limitedJson:require(name)),module,module.exports);
  return module.exports;
 }
 const bad=(msg,status=400)=>Response.json({error:msg},{status});
