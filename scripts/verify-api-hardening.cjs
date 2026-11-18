@@ -3,7 +3,7 @@ const fs=require("node:fs"),assert=require("node:assert/strict");
 let n=0;const read=p=>fs.readFileSync(p,"utf8");
 const caps={
  "src/app/api/study/[id]/answer/route.ts":1024,
- "src/app/api/ai/conversations/[id]/messages/route.ts":16384,
+ "src/app/api/ai/conversations/[id]/messages/route.ts":45000,
  "src/app/api/assignments/route.ts":4096,
  "src/app/api/auth/signin/route.ts":16384,
  "src/app/api/auth/signup/route.ts":16384,

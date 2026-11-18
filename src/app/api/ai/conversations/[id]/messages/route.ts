@@ -8,7 +8,7 @@ export const runtime="nodejs";
 export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>}){
  try{checkOrigin(req);const {id}=await params;if(!aiMessageId(id))return noCache({error:"Invalid conversation."},400);
   const {user,renew}=await authUser(req);
-  const parsed=await readBoundedJson(req,16384);
+  const parsed=await readBoundedJson(req,45000);
   if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
   const msg=validChatMessage(parsed.value);const sql=db();
   const chat=await sql`SELECT id,title FROM ai_chat_conversations WHERE id=${id} AND owner_user_id=${user!.id}`;

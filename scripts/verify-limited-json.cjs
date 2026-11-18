@@ -27,6 +27,9 @@ function post(body,headers={"content-type":"application/json"}){
  eq((await readBoundedJson(new Request(url,{method:"POST",headers:{"content-type":"application/json"}}),1024)).status,400,"Missing body rejected");
  const near=await readBoundedJson(post(JSON.stringify({padding:"x".repeat(980)})),1024);
  eq(near.ok,true,"Valid near-limit body accepted");
+ const longChinese=JSON.stringify({role:"assistant",clientMessageId:"11111111-1111-4111-8111-111111111111",text:"学习".repeat(5000)});
+ eq((await readBoundedJson(post(longChinese),45000)).ok,true,"10k-character Chinese AI reply remains valid under byte cap");
+ eq((await readBoundedJson(post(longChinese),16384)).status,413,"Chinese AI reply correctly exceeds the smaller byte cap");
  await assert.rejects(()=>readBoundedJson(post("{}"),300000));checks++;
  console.log("LIMITED_JSON_TEST_PASS: "+checks+" assertions for strict JSON API body limits and parser safety.");
 })().catch(e=>{console.error("LIMITED_JSON_TEST_FAILED",e.stack||e);process.exitCode=1});
