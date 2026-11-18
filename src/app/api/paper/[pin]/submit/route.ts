@@ -2,6 +2,7 @@ import {emitRoomRefresh} from "@/lib/realtime";
 import {NextRequest} from "next/server";
 import {findUser,checkOrigin,noCache,authError} from "@/lib/mother-auth";
 import {db,hash,same,bad} from "@/lib/store";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 type CardSource="zokivo"|"wayground";
 type Answer={card:number;choice:number;card_source:CardSource};
@@ -13,7 +14,9 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{pin:string}
  const{pin}=await params,t=req.headers.get("x-host-token");
  if(!/^\d{6}$/.test(pin))return bad("Invalid Paper Mode PIN",400);
  try{
-  const body=await req.json() as {index?:unknown;responses?:unknown};
+  const parsed=await readBoundedJson(req,16384);
+  if(!parsed.ok)return bad(parsed.error,parsed.status);
+  const body=parsed.value;
   const index=body.index,raw=body.responses;
   if(!Number.isInteger(index)||typeof index!=="number"||index<0||!Array.isArray(raw)||raw.length<1||raw.length>120)return bad("Submit 1 to 120 valid cards for this question");
   const responses:Answer[]=[];

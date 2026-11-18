@@ -3,12 +3,14 @@ import {db} from "@/lib/store";
 import {authUser} from "@/lib/quizzes";
 import {aiMessageId,validChatMessage,encryptMessage} from "@/lib/ai-history";
 import {AuthError,checkOrigin,noCache,authError,applyRenew} from "@/lib/mother-auth";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>}){
  try{checkOrigin(req);const {id}=await params;if(!aiMessageId(id))return noCache({error:"Invalid conversation."},400);
   const {user,renew}=await authUser(req);
-  const raw=await req.text();if(raw.length>14000)throw new AuthError("Message too large.",413);
-  const msg=validChatMessage(JSON.parse(raw));const sql=db();
+  const parsed=await readBoundedJson(req,16384);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const msg=validChatMessage(parsed.value);const sql=db();
   const chat=await sql`SELECT id,title FROM ai_chat_conversations WHERE id=${id} AND owner_user_id=${user!.id}`;
   if(!chat.length)return noCache({error:"Conversation not found."},404);
   const limit=await sql`SELECT count(*)::integer AS n FROM ai_chat_messages WHERE conversation_id=${id}`;
@@ -26,5 +28,9 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>
    await sql`UPDATE ai_chat_conversations SET title=${msg.text.slice(0,100)},updated_at=now() WHERE id=${id} AND owner_user_id=${user!.id} AND title='New conversation'`;
   else await sql`UPDATE ai_chat_conversations SET updated_at=now() WHERE id=${id} AND owner_user_id=${user!.id}`;
   return applyRenew(noCache({ok:true,clientMessageId:msg.clientMessageId}),req,renew);
- }catch(e){return authError(e)}
+ }catch(e){
+  if(e instanceof Error&&e.message.includes("ZOKIVO_AI_MESSAGE_LIMIT"))
+   return noCache({error:"Conversation has reached 200 messages. Start a new conversation."},429);
+  return authError(e);
+ }
 }

@@ -2,6 +2,7 @@ import {NextRequest} from "next/server";
 import {db} from "@/lib/store";
 import {authUser,isId} from "@/lib/quizzes";
 import {chosenRole,checkOrigin,AuthError,noCache,authError,applyRenew} from "@/lib/mother-auth";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 export async function GET(req:NextRequest){
  try{
@@ -19,7 +20,9 @@ export async function POST(req:NextRequest){
   checkOrigin(req);
   const {user,renew}=await authUser(req);
   if(chosenRole(user!)!=="teacher")throw new AuthError("Switch to Teacher Account to create assignments.",403);
-  const raw=await req.json().catch(()=>({}));
+  const parsed=await readBoundedJson(req,4096);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const raw=parsed.value;
   const title=typeof raw.title==="string"?raw.title.trim():"";
   if(title.length<3||title.length>120||!isId(raw.quizId))throw new AuthError("Choose a published quiz and a title between 3 and 120 characters.");
   let due:string|null=null;
@@ -36,5 +39,9 @@ export async function POST(req:NextRequest){
    RETURNING id,title,due_at,created_at`;
   if(!created.length)return noCache({error:"Quiz must be published, or your 100-assignment limit was reached."},409);
   return applyRenew(noCache({assignment:created[0]},201),req,renew);
- }catch(e){return authError(e)}
+ }catch(e){
+  if(e instanceof Error&&e.message.includes("ZOKIVO_ASSIGNMENT_LIMIT"))
+   return noCache({error:"Your 100-assignment limit was reached."},409);
+  return authError(e);
+ }
 }

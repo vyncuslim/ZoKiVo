@@ -2,6 +2,7 @@ import {NextRequest} from "next/server";
 import {AVATARS,avatarInfo} from "@/lib/avatars";
 import {db} from "@/lib/store";
 import {findUser,checkOrigin,noCache,authError,applyRenew} from "@/lib/mother-auth";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 export async function GET(req:NextRequest){
  try{
@@ -24,7 +25,9 @@ export async function POST(req:NextRequest){
   const auth=await findUser(req),user=auth.user;
   if(!user)return noCache({error:"Sign in to collect avatars"},401);
   if(!user.email_confirmed_at)return noCache({error:"Verify email to collect avatars"},403);
-  const data=await req.json().catch(()=>null);
+  const parsed=await readBoundedJson(req,2048);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const data=parsed.value;
   const info=avatarInfo(data?.avatar);
   if(!info||!["unlock","equip"].includes(data?.action))return noCache({error:"Invalid avatar action"},400);
   const sql=db(),owner=user.id;

@@ -2,12 +2,14 @@ import {NextRequest} from "next/server";
 import {db} from "@/lib/store";
 import {authUser,isId} from "@/lib/quizzes";
 import {checkOrigin,noCache,authError,AuthError,applyRenew} from "@/lib/mother-auth";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>}){
  try{checkOrigin(req);
   const {id}=await params;if(!isId(id))throw new AuthError("Invalid quiz ID");
-  const raw=await req.text();if(raw.length>1024)throw new AuthError("Answer request too large",413);
-  const data=JSON.parse(raw) as {position?:unknown;choice?:unknown};
+  const parsed=await readBoundedJson(req,1024);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const data=parsed.value;
   if(!data||typeof data.position!=="number"||!Number.isInteger(data.position)||data.position<0||
     typeof data.choice!=="number"||!Number.isInteger(data.choice)||data.choice<0||data.choice>3)
    throw new AuthError("Invalid study answer");
@@ -30,5 +32,9 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>
     SELECT owner_user_id,20,1 FROM reward
     ON CONFLICT(owner_user_id) DO UPDATE SET xp=avatar_profiles.xp+20,tokens=avatar_profiles.tokens+1,updated_at=now()`;
   return applyRenew(noCache({correct,correctIndex:question[0].correct_index,explanation:question[0].explanation||""}),req,renew);
- }catch(e){return authError(e)}
+ }catch(e){
+  if(e instanceof Error&&e.message.includes("ZOKIVO_STUDY_RATE_LIMIT"))
+   return noCache({error:"Too many answers. Please wait one minute."},429);
+  return authError(e);
+ }
 }

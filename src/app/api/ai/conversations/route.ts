@@ -16,5 +16,9 @@ export async function POST(req:NextRequest){
   ) SELECT * FROM new_chat`;
   if(!rows.length)return noCache({error:"Maximum of 40 saved chats reached. Delete an old chat to create another."},429);
   return applyRenew(noCache({conversation:rows[0]},201),req,renew);
- }catch(e){return authError(e)}
+ }catch(e){
+  if(e instanceof Error&&e.message.includes("ZOKIVO_AI_CONVERSATION_LIMIT"))
+   return noCache({error:"Maximum of 40 saved chats reached. Delete an old chat to create another."},429);
+  return authError(e);
+ }
 }

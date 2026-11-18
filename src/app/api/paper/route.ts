@@ -4,6 +4,7 @@ import {db,token,hash} from "@/lib/store";
 import {findUser,noCache,applyRenew,checkOrigin,authError,AuthError} from "@/lib/mother-auth";
 import {isId} from "@/lib/quizzes";
 import {randomInt} from "node:crypto";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 const SAMPLE="b91f4600-1000-4000-8000-000000000001";
 export async function POST(req:NextRequest){
@@ -13,7 +14,9 @@ export async function POST(req:NextRequest){
   const auth=await findUser(req);
   if(!auth.user)return noCache({error:"Sign in with Vynalth AI to host Paper Mode.",code:"AUTH_REQUIRED"},401);
   if(!auth.user.email_confirmed_at)return noCache({error:"Confirm your email before hosting.",code:"EMAIL_UNVERIFIED"},403);
-  const body=await req.json().catch(()=>({})),id=body?.quizId||SAMPLE;
+  const parsed=await readBoundedJson(req,2048);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const body=parsed.value,id=body.quizId||SAMPLE;
   if(typeof id!=="string"||!isId(id))throw new AuthError("Invalid quiz selected.");
   const sql=db(),secret=token();
   const ok=await sql`SELECT id FROM quiz_sets WHERE id=${id} AND status='published'
