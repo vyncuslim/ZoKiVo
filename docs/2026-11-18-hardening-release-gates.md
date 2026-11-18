@@ -22,3 +22,10 @@ Apply `migrations/024_quiz_ai_atomic_quotas.sql` to a separate QA Neon database 
 - The owner-only Reports page offers a return link to that room. The existing authenticated host can explicitly use `Finish game` to preserve the score and unlock results. The host token remains browser-session scoped; missing tokens require a separate authorized recovery design.
 - Prevent the host's automatic round advancement in stale rooms, and stop expensive stale polling/realtime connections. GET remains read-only and does **not** auto-finish, delete or recycle a production PIN.
 - Full server-side stale-room maintenance/archival is not yet implemented; assess retention, backup and manual approval before any production cleanup. Keep Issue #55 open until archived report and consented cleanup tests pass.
+
+## Recover a lost host token for stale classrooms (no schema change)
+- New `POST /api/rooms/[pin]/recover-host` requires same-origin request, Mother Auth verified email, exact original `owner_user_id`, status `playing`, and deadline older than 24h.
+- An explicit confirmation rotates *only* the stored HMAC of the host token, returning a fresh cryptographically random token. The old token immediately stops working. This is intentionally account-owner recovery for abandoned rooms, not a general ability for the public to take over a room by knowing its PIN.
+- Reports UI stores returned secret in `sessionStorage` (never URL, logs or `localStorage`). The original owner can reopen the classroom and explicitly finish to unlock reports. The new endpoint cannot update scores, status, answers, or PINs.
+- Protect this feature with negative security tests (wrong owner, unverified owner, unauthenticated, wrong PIN, active room, finished room, cross-site requests) and mocked successful recovery. Current scope excludes finished-room historical report restoration.
+- A recovered token can be rotated again by the same verified owner while the room is stale; stronger independent re-authentication or cooldown/audit fields could be added only in a future approved migration. Do not deploy without reviewing this risk.

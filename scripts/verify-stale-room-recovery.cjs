@@ -15,4 +15,9 @@ ok(reports.includes("AS needs_host_review")&&reports.includes("r.deadline<now()-
 const ui=read("src/app/reports/page.tsx");
 ok(ui.includes("Review old classroom")&&ui.includes('r.needs_host_review&&r.kind==="quiz"'),"Reports offer safe host recovery link");
 ok(!api.includes("UPDATE rooms SET status='finished'"),"GET remains read-only; no automated production write");
+const recoveryRoute=read("src/app/api/rooms/[pin]/recover-host/route.ts");
+ok(recoveryRoute.includes("checkOrigin(req)")&&recoveryRoute.includes("email_confirmed_at"),"Recovery requires same origin and verified account");
+ok(recoveryRoute.includes("owner_user_id=")&&recoveryRoute.includes("deadline<now()-interval '24 hours'"),"Recovery is scoped by owner and 24-hour age");
+ok(recoveryRoute.includes("SET host_token_hash=")&&!recoveryRoute.includes("SET status="),"Recovery only rotates host credential, never changes scores or room status");
+ok(ui.includes("Lost host token? Recover access")&&ui.includes('sessionStorage.setItem("host:"+pin,data.hostToken)'),"Original host explicitly stores recovered token in sessionStorage");
 console.log("ZOKIVO_STALE_ROOM_RECOVERY_STATIC_PASS: "+n+" checks; no production state modified.");
