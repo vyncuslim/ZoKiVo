@@ -17,6 +17,7 @@ function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolea
    const {players,submitted,answers}=snapshot;
    const allAnswered=r.status==="playing"&&players.length>0&&submitted>=players.length;
    const expired=r.status==="playing"&&r.deadline&&new Date(r.deadline).getTime()<=new Date(r.server_time).getTime();
+   const needsHostReview=r.status==="playing"&&!!r.deadline&&new Date(r.deadline).getTime()<new Date(r.server_time).getTime()-86400000;
    const canShowResult=r.status==="finished"||Boolean(expired)||allAnswered;
    const playerAnswer=me[0];
    // Each player's own answer is obtained from the authenticated lookup,
@@ -42,7 +43,7 @@ function quizPartyResponse(r:QuizRoomMeta,snapshot:QuizPartySnapshot,host:boolea
    return Response.json({
     status:r.status,index:r.current_index,deadline:r.deadline,
     gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
-    serverTime:r.server_time,allAnswered,roundReady:r.status==="playing"&&(Boolean(expired)||allAnswered),
+    serverTime:r.server_time,allAnswered,needsHostReview,roundReady:r.status==="playing"&&(Boolean(expired)||allAnswered),
     rewardsPending:false,scoreboardPhase:r.round_open?"previous-round":"settled",
     total:snapshot.total,question:allowedQuestion,players,answeredCount:submitted,
     answeredIds:host?answers.map(a=>a.player_id):(playerAnswer?.answered?[playerAnswer.id]:[]),
@@ -170,6 +171,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
     AND NOT EXISTS(SELECT 1 FROM mode_events e WHERE e.room_pin=${pin} AND e.question_index=${r.current_index} AND e.player_id=a.player_id)`:[];
   const rewardsPending=(outstandingRewards[0]?.n||0)>0;
   const expired=r.status==='playing'&&r.deadline&&new Date(r.deadline).getTime()<=new Date(r.server_time).getTime();
+  const needsHostReview=r.status==='playing'&&!!r.deadline&&new Date(r.deadline).getTime()<new Date(r.server_time).getTime()-86400000;
   // An individual result is revealed only when EVERY player is done or time is up.
   const canShowResult=r.status==='finished'||Boolean(expired)||allAnswered;
   const myResult=canShowResult&&me.length?await sql`SELECT is_correct,points FROM answers
@@ -191,7 +193,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{pin:string}>
   }:null;
   return withHostRenew(Response.json({
    status:r.status,index:r.current_index,deadline:r.deadline,gameMode:r.game_mode,muteSounds:r.mute_sounds,scoreGoal:r.score_goal,
-   serverTime:r.server_time,allAnswered,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
+   serverTime:r.server_time,allAnswered,needsHostReview,roundReady:canAdvance,rewardsPending,scoreboardPhase:r.round_open?"previous-round":"settled",
    total:count[0].n,question:question[0]||null,players,answeredCount:submitted,
    answeredIds:host?answers.map(a=>a.player_id):(answerSummary[0]?.mine?[me[0].id]:[]),
    ...(host?{hostResults}:{}),

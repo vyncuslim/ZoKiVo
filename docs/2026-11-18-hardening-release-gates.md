@@ -16,3 +16,9 @@ See `docs/2026-11-05-release-gates.md`. A green CI build cannot establish these.
 
 ## Migration 024 (manual QA first)
 Apply `migrations/024_quiz_ai_atomic_quotas.sql` to a separate QA Neon database AFTER 023. It guards 100 quizzes/account and 10 issued/reserved AI sessions/account per 24 hours. Unsuccessful ElevenLabs signed-URL requests release reservations; a crash leaves a lease that stops counting after 90 seconds. Never deploy the new AI handler before 024 exists in production following explicit backup and approval. Verify 99/100 and 9/10 boundaries under real concurrency on disposable QA users. This batch limits public Realtime Broadcast amplification only; #57 remains open until sender authorization is independently verified.
+
+## Abandoned room host recovery (Issue #55)
+- Game and authenticated Reports APIs mark a room `needsHostReview`/`needs_host_review` only when it remains `playing` over 24 hours after its last question deadline.
+- The owner-only Reports page offers a return link to that room. The existing authenticated host can explicitly use `Finish game` to preserve the score and unlock results. The host token remains browser-session scoped; missing tokens require a separate authorized recovery design.
+- Prevent the host's automatic round advancement in stale rooms, and stop expensive stale polling/realtime connections. GET remains read-only and does **not** auto-finish, delete or recycle a production PIN.
+- Full server-side stale-room maintenance/archival is not yet implemented; assess retention, backup and manual approval before any production cleanup. Keep Issue #55 open until archived report and consented cleanup tests pass.
