@@ -235,3 +235,39 @@ html[data-vyn-gradient='new'] :is(.quiz-studio,.study-page,.game-page,
   html[data-vyn-gradient='new'] :is(input:not([type='checkbox']):not([type='radio']),
      textarea,select){font-size:max(16px,1rem);}
 }
+
+
+/* Auth-specific 2026 colors: legacy purple artwork/controls were outside the
+   shared .auth-card selectors, even when the whole page used the new canvas. */
+html[data-vyn-gradient='new'] .auth-illustration {
+  background: linear-gradient(135deg, #F4DC84 0%, #79BEDF 100%);
+  border-color: #263D55;
+  box-shadow: 8px 9px 0 rgba(38, 61, 85, 0.2);
+}
+html[data-vyn-gradient='new'] .auth-illustration > div {
+  background: rgba(255, 251, 236, 0.96);
+  border-color: #263D55;
+  box-shadow: 7px 8px 0 rgba(38, 61, 85, 0.21);
+}
+html[data-vyn-gradient='new'] :is(.auth-illustration span,
+  .auth-eyebrow, .auth-forgot a, .auth-switch a,
+  .auth-disclaimer a, .auth-success a, .nav-auth, .auth-back) {
+  color: #254D6C;
+}
+html[data-vyn-gradient='new'] :is(.auth-role-picker,
+  .auth-account-profile, .auth-google) {
+  background: rgba(255, 252, 240, 0.93);
+  border-color: rgba(38, 61, 85, 0.5);
+  color: #24344A;
+}
+html[data-vyn-gradient='new'] .auth-submit {
+  background: #F4DC84;
+  color: #24344A;
+  border-color: #263D55;
+  box-shadow: 4px 5px 0 rgba(38, 61, 85, 0.55);
+}
+html[data-vyn-gradient='new'] .auth-password button {
+  min-width: 44px;
+  min-height: 40px;
+  color: #254D6C;
+}
