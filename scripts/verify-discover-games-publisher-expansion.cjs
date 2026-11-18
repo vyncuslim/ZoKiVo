@@ -1,5 +1,5 @@
 const fs=require("node:fs"),assert=require("node:assert/strict"),ts=require("typescript");
-const read=p=>fs.readFileSync(p,"utf8");const ui=read("src/app/library/page.tsx"),css=read("src/app/discover-library.css"),
+const read=p=>fs.readFileSync(p,"utf8");const ui=read("src/app/library/page.client.tsx"),css=read("src/app/discover-library.css"),
 games=read("src/app/games/page.tsx"),gcss=read("src/app/simple-games.css"),api=read("src/app/api/quizzes/route.ts"),
 manifest=JSON.parse(read("data/discover-20261018-expansion-manifest.json"));let total=0;
 function ok(x,msg){assert.ok(x,msg);total++;console.log("UI_ACCEPTANCE "+msg)}
@@ -21,7 +21,7 @@ ok(games.includes('id:"quiz_party"')&&games.includes('id:"gold_quest"')&&games.i
 ok(games.includes("Team Clash and Speed Run are in development"),"Future modes are not misrepresented as playable");
 ok(gcss.includes("@media(max-width:650px)")&&css.includes("@media(max-width:600px)"),"Mobile responsive styles exist for both pages");
 ok(read("src/app/layout.tsx").includes('import "./simple-games.css"'),"Games style imported in production layout");
-for(const p of ["src/app/library/page.tsx","src/app/api/quizzes/route.ts","src/app/games/page.tsx"]){
+for(const p of ["src/app/library/page.client.tsx","src/app/api/quizzes/route.ts","src/app/games/page.tsx"]){
  const d=ts.transpileModule(read(p),{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).diagnostics||[];
  ok(d.length===0,p+" TSX parses");
 }

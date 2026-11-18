@@ -12,6 +12,7 @@ check(answer.includes("count[0].count>=45"),"High-volume answer requests are thr
 check(answer.includes("INSERT INTO study_attempts"),"Server calculates correct answer, then records attempt");
 check(history.includes("a.owner_user_id="),"Learning history scoped to verified owner");
 check(page.includes("Review mistakes")&&page.includes("study-history"),"Solo study offers progress and wrong-answer review");
+check(page.includes("setReviewPositions(mistakesOnly?[...progress.mistakes]:[])")&&page.includes("reviewPositions.includes(q.position)"),"Review session uses a frozen mistake queue so corrected questions do not shift the active question");
 check(page.includes('"/api/study/"+encodeURIComponent(id)+"/answer"'),"Client posts answer to server");
 check(!page.includes("correct_option_index"),"Client practice does not load private answer key before submission");
 const sql=read("migrations/011_study_attempts.sql");

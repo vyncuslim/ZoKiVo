@@ -1,10 +1,13 @@
 import {NextRequest} from "next/server";
 import {authFetch,beginFlow,clearFlow,parseTokens,setTokens,checkOrigin,noCache,authError,emailValue,passwordValue,publicOrigin,AuthError,captchaSecurity} from "@/lib/mother-auth";
+import {readBoundedJson} from "@/lib/limited-json";
 export const runtime="nodejs";
 export async function POST(req:NextRequest){
  try{
   checkOrigin(req);
-  const body=await req.json().catch(()=>({}));
+  const parsed=await readBoundedJson(req,16384);
+  if(!parsed.ok)return noCache({error:parsed.error},parsed.status);
+  const body=parsed.value;
   const email=emailValue(body.email),password=passwordValue(body.password,8);
   const name=typeof body.name==="string"?body.name.trim().slice(0,100):"";
   const role=body.role==="teacher"?"teacher":body.role==="student"?"student":null;

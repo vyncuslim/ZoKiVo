@@ -2,7 +2,7 @@ const fs=require("node:fs"),assert=require("node:assert/strict"),ts=require("typ
 const file=p=>fs.readFileSync(p,"utf8");
 const creator=file("src/app/create/page.tsx"),game=file("src/app/game/[pin]/page.tsx"),
  view=file("src/app/api/rooms/[pin]/route.ts"),start=file("src/app/api/rooms/[pin]/start/route.ts"),
- paper=file("src/app/paper/page.tsx"),check=file("src/app/paper/check/page.tsx");
+ paper=file("src/app/paper/page.client.tsx"),check=file("src/app/paper/check/page.tsx");
 let count=0;const ok=(v,label)=>{assert.ok(v,label);count++;console.log("UX_TEST",label)};
 for(const p of ["src/app/create/page.tsx","src/app/game/[pin]/page.tsx","src/app/api/rooms/[pin]/route.ts","src/app/api/rooms/[pin]/start/route.ts","src/app/paper/page.tsx","src/app/paper/check/page.tsx"]){
  const ds=ts.transpileModule(file(p),{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).diagnostics||[];
@@ -20,7 +20,7 @@ ok(game.includes("zk-final-podium")&&game.includes("zk-podium-player"),"Original
 ok(game.includes('state.allAnswered?"✓ ALL ANSWERED":seconds+"s TO ANSWER"'),"Timer only represents unanswered players");
 ok(!game.includes('seconds+"s left":"Your teacher is moving on soon…"'),"Answered student no longer forced to watch timer");
 ok(game.includes("},250)")&&game.includes('"/start"'),"Host advances after all players finish, with short transition");
-ok(game.includes('disabled={busy||!state.roundReady}'),"Host next action uses server readiness not time counter");
+ok(game.includes('disabled={busy||!state.roundReady||!!state.needsHostReview}'),"Host next action uses server readiness and prevents advancing an abandoned room");
 ok(view.includes("allAnswered")&&view.includes("rewardsPending")&&view.includes("roundReady"),"Readiness computed server side");
 ok(view.includes('canShowResult')&&view.includes('myResult[0]||null'),"Only settled round reveals individual correctness");
 ok(start.includes("NOT EXISTS(SELECT 1 FROM players p"),"Round cannot advance if any participant lacks an answer");

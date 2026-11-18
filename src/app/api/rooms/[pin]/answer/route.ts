@@ -73,9 +73,19 @@ export async function POST(req:Request,{params}:{params:Promise<{pin:string}>}){
   if(!rows[0]?.accepted)return bad("Answer already submitted or round closed",409);
   // Most Quiz Party rounds have no score goal; do not send another DB request.
   if(rows[0].goal!==null&&rows[0].goal!==undefined){
+   // Finalize only at a settled round boundary. A single high-scoring player
+   // must not close the room while other students are still answering.
    await sql`UPDATE rooms SET status='finished',deadline=NULL WHERE pin=${pin}
-    AND game_mode='quiz_party' AND score_goal IS NOT NULL
-    AND EXISTS(SELECT 1 FROM players WHERE room_pin=${pin} AND score>=rooms.score_goal)`;
+    AND status='playing' AND game_mode='quiz_party' AND score_goal IS NOT NULL
+    AND EXISTS(SELECT 1 FROM players WHERE room_pin=${pin} AND score>=rooms.score_goal)
+    AND (deadline<=now() OR (
+      EXISTS(SELECT 1 FROM players WHERE room_pin=rooms.pin)
+      AND NOT EXISTS(
+       SELECT 1 FROM players p WHERE p.room_pin=rooms.pin AND NOT EXISTS(
+        SELECT 1 FROM answers a WHERE a.room_pin=rooms.pin
+         AND a.player_id=p.id AND a.question_index=rooms.current_index
+       ))
+    ))`;
   }
   await emitRoomRefresh("quiz",pin);
   return Response.json({accepted:true});

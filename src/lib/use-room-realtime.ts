@@ -15,13 +15,13 @@ type Plan={providers?:Transport[]};
  * projection. The authenticated room GET is always authoritative.
  * Polling remains active when both providers are disconnected.
  */
-export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<string,string>,refresh:()=>void){
+export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<string,string>,refresh:()=>void,enabled=true){
  const latest=useRef({getHeaders,refresh});
  latest.current={getHeaders,refresh};
  const [connected,setConnected]=useState(false);
 
  useEffect(()=>{
-  if(!/^\d{6}$/.test(pin))return;
+  if(!enabled||!/^\d{6}$/.test(pin))return;
   let active=true;
   let fallbackTimer:ReturnType<typeof setTimeout>|null=null;
   let refreshTimer:ReturnType<typeof setTimeout>|null=null;
@@ -34,9 +34,9 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
   let fallback:Transport[]=[];
   let original:Transport[]=[];
 
-  const refreshCoalesced=()=>{
+  const refreshCoalesced=(minimumInterval=0)=>{
    if(!active)return;
-   const now=Date.now(),interval=kind==="quiz"?1500:250;
+   const now=Date.now(),interval=Math.max(kind==="quiz"?1500:250,minimumInterval);
    const delay=Math.max(0,interval-(now-lastRefresh),lastRefresh===0?jitter:0);
    if(delay===0&&!refreshTimer){
     lastRefresh=now;latest.current.refresh();
@@ -76,7 +76,11 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
     let done:(value:boolean)=>void=()=>{};
     const ready=new Promise<boolean>(resolve=>{done=resolve});
     const watchdog=setTimeout(()=>{if(!settled){settled=true;done(false)}},7000);
-    channel.on("broadcast",{event:"refresh"},()=>refreshCoalesced());
+    // Public broadcasts are untrusted refresh hints, never authoritative game state.
+    // Throttle fan-out to limit extra Vercel/Neon reads on noisy channels.
+    channel.on("broadcast",{event:"refresh"},message=>{
+     if(message?.payload?.v===1)refreshCoalesced(2500);
+    });
     channel.subscribe(status=>{
      if(!active)return;
      if(status==="SUBSCRIBED"){
@@ -246,6 +250,6 @@ export function useRoomRealtime(kind:RoomKind,pin:string,getHeaders:()=>Record<s
    if(fallbackTimer)clearTimeout(fallbackTimer);
    setConnected(false);
   };
- },[kind,pin]);
+ },[kind,pin,enabled]);
  return connected;
 }

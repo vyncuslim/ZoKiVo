@@ -12,7 +12,7 @@ export default function Study(){
  const [list,setList]=useState<Listing[]>([]),[id,setId]=useState(""),[title,setTitle]=useState("");
  const [questions,setQuestions]=useState<Question[]>([]),[progress,setProgress]=useState<Progress>({completed:0,correct:0,mistakes:[]});
  const [signedIn,setSignedIn]=useState(false),[history,setHistory]=useState<History[]>([]);
- const [review,setReview]=useState(false),[number,setNumber]=useState(0),[result,setResult]=useState<Answer|null>(null);
+ const [review,setReview]=useState(false),[reviewPositions,setReviewPositions]=useState<number[]>([]),[number,setNumber]=useState(0),[result,setResult]=useState<Answer|null>(null);
  const [busy,setBusy]=useState(false),[loading,setLoading]=useState(true),[error,setError]=useState(""),[done,setDone]=useState(false);
  const refreshHistory=async()=>{
   const r=await fetch("/api/study/history",{cache:"no-store"});
@@ -34,7 +34,7 @@ export default function Study(){
  useEffect(()=>{
   if(!id)return;
   let alive=true;
-  setLoading(true);setError("");setNumber(0);setResult(null);setReview(false);setDone(false);
+  setLoading(true);setError("");setNumber(0);setResult(null);setReview(false);setReviewPositions([]);setDone(false);
   void fetch("/api/study/"+encodeURIComponent(id),{cache:"no-store"}).then(async r=>{
    const j=await r.json();if(!r.ok)throw Error(j.error||"Quiz unavailable");return j;
   }).then(j=>{if(!alive)return;setQuestions(j.questions||[]);setTitle(j.quiz.title);setProgress(j.progress);setSignedIn(j.signedIn);window.history.replaceState(null,"","/study?quiz="+id)})
@@ -42,7 +42,7 @@ export default function Study(){
     .finally(()=>{if(alive)setLoading(false)});
   return()=>{alive=false};
  },[id]);
- const queue=useMemo(()=>review?questions.filter(q=>progress.mistakes.includes(q.position)):questions,[questions,progress.mistakes,review]);
+ const queue=useMemo(()=>review?questions.filter(q=>reviewPositions.includes(q.position)):questions,[questions,reviewPositions,review]);
  const q=queue[number];
  async function answer(choice:number){
   if(!q||result||busy||!signedIn)return;
@@ -63,6 +63,9 @@ export default function Study(){
   if(number+1>=queue.length){setDone(true);setResult(null)}else{setNumber(n=>n+1);setResult(null)}
  }
  function restart(mistakesOnly:boolean){
+  // Freeze this session's review queue. Removing a corrected mistake from
+  // progress must never swap the displayed question or skip the next one.
+  setReviewPositions(mistakesOnly?[...progress.mistakes]:[]);
   setReview(mistakesOnly);setNumber(0);setResult(null);setDone(false);setError("");
  }
  return <main className="study-page wrap">

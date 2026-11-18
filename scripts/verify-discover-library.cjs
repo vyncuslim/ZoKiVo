@@ -1,6 +1,6 @@
 const fs=require("node:fs"),assert=require("node:assert/strict"),ts=require("typescript");
 const file=p=>fs.readFileSync(p,"utf8");
-const api=file("src/app/api/quizzes/route.ts"),ui=file("src/app/library/page.tsx"),css=file("src/app/discover-library.css"),layout=file("src/app/layout.tsx");
+const api=file("src/app/api/quizzes/route.ts"),ui=file("src/app/library/page.client.tsx"),css=file("src/app/discover-library.css"),layout=file("src/app/layout.tsx");
 const catalog=JSON.parse(file("data/discover-topics-manifest.json"));
 let checks=0;function ok(cond,msg){assert.ok(cond,msg);checks++}
 ok(catalog.publicQuizSets===15&&catalog.originalQuestions===255,"Catalog correctly summarizes 15 independently authored quizzes and 255 questions");
@@ -27,7 +27,7 @@ ok(ui.includes("quiz-discover")===false&&ui.includes("zk-quiz-cover"),"Original 
 ok(css.includes("grid-template-columns:repeat(4")&&css.includes("max-width:720px"),"Desktop and mobile responsive card grids");
 ok(layout.includes('import "./discover-library.css"'),"Original Discover CSS included in production");
 ok(!ui.includes("Teacher Verified"),"Self-declared teachers are not misrepresented as independently verified");
-for(const [path,source] of [["src/app/api/quizzes/route.ts",api],["src/app/library/page.tsx",ui]]){
+for(const [path,source] of [["src/app/api/quizzes/route.ts",api],["src/app/library/page.client.tsx",ui]]){
  const result=ts.transpileModule(source,{reportDiagnostics:true,compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}});
  ok((result.diagnostics||[]).length===0,"Typescript parses: "+path);
 }

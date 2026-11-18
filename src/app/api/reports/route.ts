@@ -7,6 +7,7 @@ export async function GET(req:NextRequest){
  try{
   const auth=await authUser(req),owner=auth.user!.id,sql=db();
   const rooms=await sql`SELECT r.pin,r.created_at,r.status,r.game_mode,q.title,
+   (r.status='playing' AND r.deadline IS NOT NULL AND r.deadline<now()-interval '24 hours') AS needs_host_review,
    (SELECT count(*)::integer FROM players p WHERE p.room_pin=r.pin) AS players,
    (SELECT count(*)::integer FROM answers a WHERE a.room_pin=r.pin) AS submissions,
    (SELECT count(*) FILTER(WHERE is_correct)::integer FROM answers a WHERE a.room_pin=r.pin) AS correct
