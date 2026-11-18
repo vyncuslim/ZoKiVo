@@ -20,7 +20,7 @@ ok(game.includes("zk-final-podium")&&game.includes("zk-podium-player"),"Original
 ok(game.includes('state.allAnswered?"✓ ALL ANSWERED":seconds+"s TO ANSWER"'),"Timer only represents unanswered players");
 ok(!game.includes('seconds+"s left":"Your teacher is moving on soon…"'),"Answered student no longer forced to watch timer");
 ok(game.includes("},250)")&&game.includes('"/start"'),"Host advances after all players finish, with short transition");
-ok(game.includes('disabled={busy||!state.roundReady}'),"Host next action uses server readiness not time counter");
+ok(game.includes('disabled={busy||!state.roundReady||!!state.needsHostReview}'),"Host next action uses server readiness and prevents advancing an abandoned room");
 ok(view.includes("allAnswered")&&view.includes("rewardsPending")&&view.includes("roundReady"),"Readiness computed server side");
 ok(view.includes('canShowResult')&&view.includes('myResult[0]||null'),"Only settled round reveals individual correctness");
 ok(start.includes("NOT EXISTS(SELECT 1 FROM players p"),"Round cannot advance if any participant lacks an answer");
