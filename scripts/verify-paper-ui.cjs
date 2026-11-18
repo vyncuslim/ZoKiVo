@@ -30,4 +30,6 @@ const liveHook=read("src/lib/use-room-realtime.ts");
 ok(board.includes('if(board?.status==="finished")return')&&board.includes('board?.status!=="finished"'),"Projector stops polling and websocket subscriptions after finish");
 ok(scanner.includes('if(session?.status==="finished")return')&&scanner.includes('session?.status!=="finished"'),"Teacher scanner stops polling and websocket subscriptions after finish");
 ok(gameLive.includes('state?.status!=="finished"')&&liveHook.includes("if(!enabled||"),"Quiz game closes realtime after finishing");
+ok(gameLive.includes('https://zokivo.xyz/play?pin='),"Invitation QR uses primary ZoKivo domain");
+ok(scanner.includes('https://zokivo.xyz/paper/scan/'),"Camera help uses primary ZoKivo domain");
 console.log("PAPER_UI_TEST_PASS: "+n+" assertions.");

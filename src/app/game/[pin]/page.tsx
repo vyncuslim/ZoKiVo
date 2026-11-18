@@ -41,7 +41,7 @@ export default function Game(){
  useEffect(()=>{
    if(!host||!/^\d{6}$/.test(pin))return;
    let active=true;
-   void QRCode.toDataURL("https://zokivo.vynalthai.com/play?pin="+pin,{margin:2,width:240})
+   void QRCode.toDataURL("https://zokivo.xyz/play?pin="+pin,{margin:2,width:240})
      .then(uri=>{if(active)setJoinQr(uri)}).catch(()=>{});
    return()=>{active=false};
  },[host,pin]);

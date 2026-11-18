@@ -39,7 +39,7 @@ export default function PaperScanner(){
  useEffect(()=>{if(session?.status==="finished"&&stream.current)stop()},[session?.status,stop]);
  async function startCamera(){
   if(cameraPending.current||cameraActive)return;
-  if(!window.isSecureContext){setError("Camera requires a secure HTTPS page. Open https://zokivo.vynalthai.com/paper/scan/"+pin);return}
+  if(!window.isSecureContext){setError("Camera requires a secure HTTPS page. Open https://zokivo.xyz/paper/scan/"+pin);return}
   if(!navigator.mediaDevices?.getUserMedia){setError("Camera API is unavailable. Open this page directly in Chrome, Safari or Edge, not inside an embedded browser.");return}
   cameraPending.current=true;setCameraRequesting(true);setError("");
   const generation=++cameraGeneration.current;
