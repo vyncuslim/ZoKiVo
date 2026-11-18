@@ -13,7 +13,7 @@
   // products after the very first website. No random design cohorts.
   const host = location.hostname.toLowerCase();
   const chat = host === 'vynalthai.com' && /^\/(?:en\/|cn\/|ms\/)?c(?:\/|$)/.test(location.pathname);
-  const product = chat ? 'vynalth-chat' : host;
+  const product = chat ? 'vynalth-chat' : (host === 'www.zokivo.xyz' || host === 'zokivo.vercel.app' ? 'zokivo.xyz' : host);
   const seenKey = 'vynalth-gradient-celebrated-v3-' + product.replace(/[^a-z0-9-]/g, '-');
   const replayRequested = new URLSearchParams(location.search).get('vyn_celebrate') === '1';
   let alreadySeen = document.cookie.split(';').some(part => part.trim() === seenKey + '=1');

@@ -27,5 +27,7 @@ for(const marker of ["ZOKIVO_STUDY_RATE_LIMIT","ZOKIVO_AI_CONVERSATION_LIMIT","Z
 assert((sql.match(/pg_advisory_xact_lock/g)||[]).length>=4,"Missing DB advisory-lock protections");n++;
 const vercel=JSON.parse(read("vercel.json"));
 assert(vercel.git?.deploymentEnabled?.main===true&&vercel.git.deploymentEnabled["*"]===false,"Disable PR preview");n++;
-assert(!read("public/vynalth-gradient-announcement.js").includes("60% classic"),"Old cohort popup");n++;
+const announce=read("public/vynalth-gradient-announcement.js");
+assert(!announce.includes("60% classic"),"Old cohort popup");n++;
+assert(announce.includes("host === 'www.zokivo.xyz'")&&announce.includes("host === 'zokivo.vercel.app'"),"Public ZoKivo aliases must retain product palette");n++;
 console.log("ZOKIVO_API_HARDENING_PASS: "+n+" assertions.");
